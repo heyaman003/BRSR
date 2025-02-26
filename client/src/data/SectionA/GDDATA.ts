@@ -110,7 +110,6 @@ export const sections = [
     progress: [37, 178],
     inProgress: true,
     tabletype: 3,
-
     questions: [
       {
         id: "doba1",
@@ -128,30 +127,98 @@ export const sections = [
       {
         id: "doba111",
         colFirstData: ["Location", "National", "International"],
+        label: "a. Number of locations",
+        tabulardata: [["Number", "number"]],
+        defaultLength: 3,
+      },
+    ],
+  },
+  {
+    type: "tabular",
+    id: "employees",
+    title: "IV. Employees",
+    questions: [
+      {
+        id: "q1",
+        label: "20. Details as at the end of Financial Year:",
+        employee:{colFirstData: ["Permanent (D)", "Other than Permanent (E)", "Total employees (D + E)"]},
+        worker: {colFirstData: ["Permanent (F)", "Other than Permanent (G)", "Total employees (F + G)"]}
+      },
+    ],
+    tabletype: 4,
+  },
+  {
+    inProgress: true,
+    progress: [30, 100],
+    type: "tabular",
+    tabletype: 1,
+    id: "holding",
+    isFixedLength: true,
+    title:
+      "V. Holding, Subsidiary and Associate Companies (including joint ventures)",
+    questions: [
+      {
+        id: "q1",
         label:
-          "a. Number of locations",
+          "23. (a) Names of holding / subsidiary / associate companies / joint ventures",
         tabulardata: [
-          ["Number", "number"]
+          ["Sr. No.", "number"],
+          ["a", "text"],
+          ["b", "text"],
+          ["c", "text"],
+          ["d", "text"],
         ],
         defaultLength: 3,
       },
-      
     ],
   },
-  { type: "normal", id: "employees", title: "IV. Employees", questions: [] },
   {
     type: "normal",
-    id: "holding",
-    title:
-      "V. Holding, Subsidiary and Associate Companies (including joint ventures)",
-    questions: [],
+    id: "csr",
+    title: "VI. CSR Details",
+    progress: [30, 100],
+    inPropgress: true,
+    questions: [
+      {
+        id: "1",
+        type: "confirm",
+        label:
+          "24. (i) Whether CSR is applicable as per section 135 of Companies Act, 2013",
+      },
+      {
+        id: "1",
+        label: "(ii) Turnover (in Rs.)",
+        type: "text",
+      },
+      {
+        id: "2",
+        label: "(iii) Net worth (in Rs.)",
+        type: "text",
+      },
+    ],
   },
-  { type: "normal", id: "csr", title: "VI. CSR Details", questions: [] },
   {
-    type: "normal",
+    inProgress: true,
+    progress: [30, 100],
+    type: "tabular",
     id: "compliance",
     title: "VII. Transparency and Disclosures Compliances",
-    questions: [],
+    tabletype: 1,
+    questions: [
+      {
+        id: "q1",
+        label:
+          "23. Complaints/Grievances on any of the principles (Principles 1 to 9) under the National Guidelines on Responsible Business Conduct:",
+        tabulardata: [
+          ["Sr. No.", "number"],
+          ["a", "text"],
+          ["b", "text"],
+          ["c", "text"],
+          ["d", "text"],
+        ],
+        defaultLength: 7,
+      },
+    ],
   },
   { type: "normal", id: "other", title: "VIII. Other Details", questions: [] },
 ];

@@ -4,6 +4,7 @@ import Horizontalscroll from "@/components/ui/Horizontalscroll";
 import { sections } from "@/data/SectionA/GDDATA";
 import TableHelper from "../components/pages/Table.helper";
 import TableHelper2 from "@/components/pages/Table.helper2";
+import TableHelper3 from "@/components/pages/Table.helper3";
 type NormalQuestion = {
   id: string;
   label: string;
@@ -44,7 +45,13 @@ export default function QuestionnairePage() {
             {/* Progress Circle */}
             <div className="relative w-32 h-32 m-auto">
               <svg className="w-full h-full" viewBox="0 0 100 100">
-                <circle className="stroke-muted fill-none" strokeWidth="8" cx="50" cy="50" r="46" />
+                <circle
+                  className="stroke-muted fill-none"
+                  strokeWidth="8"
+                  cx="50"
+                  cy="50"
+                  r="46"
+                />
                 <circle
                   className="stroke-green-500 fill-none"
                   strokeWidth="8"
@@ -55,7 +62,14 @@ export default function QuestionnairePage() {
                   strokeDasharray={`${percentage * 2.89} 289`}
                   transform="rotate(-90 50 50)"
                 />
-                <text x="50" y="50" className="text-2xl font-bold" textAnchor="middle" dy="0.3em" fill="currentColor">
+                <text
+                  x="50"
+                  y="50"
+                  className="text-2xl font-bold"
+                  textAnchor="middle"
+                  dy="0.3em"
+                  fill="currentColor"
+                >
                   {percentage}%
                 </text>
               </svg>
@@ -73,12 +87,17 @@ export default function QuestionnairePage() {
                   className={cn(
                     "w-full text-left px-4 py-2 rounded-lg text-sm",
                     "hover:bg-muted transition-colors",
-                    activeSection === section.id && "bg-green-100 text-green-600"
+                    activeSection === section.id &&
+                      "bg-green-100 text-green-600"
                   )}
                 >
-                  <div className="font-medium text-primary">{section.title}</div>
+                  <div className="font-medium text-primary">
+                    {section.title}
+                  </div>
                   <div className="flex justify-between">
-                    <div className="text-xs px-2 py-[1px] text-green-700 rounded-md bg-green-200">In progress</div>
+                    <div className="text-xs px-2 py-[1px] text-green-700 rounded-md bg-green-200">
+                      In progress
+                    </div>
                     <div className="text-xs font-bold text-green-500">
                       2/{section.questions.length}
                     </div>
@@ -95,15 +114,17 @@ export default function QuestionnairePage() {
             {/* Render based on section type */}
             {activeSectionData?.type === "normal" ? (
               <form className="space-y-6">
-                {activeQuestions.map((question) => (
-                  <div key={question.id} className="space-y-2">
-                    <label
-                      htmlFor={question.id}
-                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                    >
-                      {question.label}
-                    </label>
-                    <input
+                {activeQuestions.map((question) =>
+                  question["type"] === "confirm" ? (
+                    <span>
+                      <div key={question.id} className="space-y-2">
+                        <label
+                          htmlFor={question.id}
+                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                          {question.label}
+                        </label>
+                        {/* <input
                       // type={question.type}
                       id={question.id}
                       className={cn(
@@ -114,63 +135,89 @@ export default function QuestionnairePage() {
                         "focus-visible:ring-ring focus-visible:ring-offset-2",
                         "disabled:cursor-not-allowed disabled:opacity-50"
                       )}
-                    />
-                  </div>
-                ))}
+                    /> */}
+                        <div className={cn("flex gap-6")}>
+                          <button className={cn("py-1 px-8 text-white bg-green-500 rounded-sm text-sm")}>Yes</button>
+                          <button className={cn("py-1 px-8 text-white bg-red-500 rounded-sm text-sm")}>No</button>
+                        </div>
+                      </div>
+                    </span>
+                  ) : (
+                    <div key={question.id} className="space-y-2">
+                      <label
+                        htmlFor={question.id}
+                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      >
+                        {question.label}
+                      </label>
+                      <input
+                        // type={question.type}
+                        id={question.id}
+                        className={cn(
+                          "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm",
+                          "ring-offset-background file:border-0 file:bg-transparent",
+                          "file:text-sm file:font-medium placeholder:text-muted-foreground",
+                          "focus-visible:outline-none focus-visible:ring-2",
+                          "focus-visible:ring-ring focus-visible:ring-offset-2",
+                          "disabled:cursor-not-allowed disabled:opacity-50"
+                        )}
+                      />
+                    </div>
+                  )
+                )}
               </form>
-            ) :activeSectionData?.type === "tabular" ? (
+            ) : activeSectionData?.type === "tabular" ? (
               <>
-                {activeSectionData?.tabletype === 1 && <TableHelper section={activeSectionData} />}
-                {activeSectionData?.tabletype === 3 && <div><TableHelper2 section={activeSectionData} />
-                <form className="space-y-6">
-                  <div  className="space-y-2">
-                    <label
-                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                    >
-                                           b. What is the contribution of exports as a percentage of the total turnover of the entity?
-
-                    </label>
-                    <input
-                      type='text'
-                      
-                      className={cn(
-                        "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm",
-                        "ring-offset-background file:border-0 file:bg-transparent",
-                        "file:text-sm file:font-medium placeholder:text-muted-foreground",
-                        "focus-visible:outline-none focus-visible:ring-2",
-                        "focus-visible:ring-ring focus-visible:ring-offset-2",
-                        "disabled:cursor-not-allowed disabled:opacity-50"
-                      )}
-                    />
+                {activeSectionData?.tabletype === 1 && (
+                  <TableHelper section={activeSectionData} />
+                )}
+                {activeSectionData?.tabletype === 3 && (
+                  <div>
+                    <TableHelper2 section={activeSectionData} />
+                    <form className="space-y-6">
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                          b. What is the contribution of exports as a percentage
+                          of the total turnover of the entity?
+                        </label>
+                        <input
+                          type="text"
+                          className={cn(
+                            "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm",
+                            "ring-offset-background file:border-0 file:bg-transparent",
+                            "file:text-sm file:font-medium placeholder:text-muted-foreground",
+                            "focus-visible:outline-none focus-visible:ring-2",
+                            "focus-visible:ring-ring focus-visible:ring-offset-2",
+                            "disabled:cursor-not-allowed disabled:opacity-50"
+                          )}
+                        />
+                      </div>
+                    </form>
+                    <form className="space-y-6">
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                          c. A brief on types of customers
+                        </label>
+                        <input
+                          type="text"
+                          className={cn(
+                            "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm",
+                            "ring-offset-background file:border-0 file:bg-transparent",
+                            "file:text-sm file:font-medium placeholder:text-muted-foreground",
+                            "focus-visible:outline-none focus-visible:ring-2",
+                            "focus-visible:ring-ring focus-visible:ring-offset-2",
+                            "disabled:cursor-not-allowed disabled:opacity-50 "
+                          )}
+                        />
+                      </div>
+                    </form>
                   </div>
-              </form>
-                <form className="space-y-6">
-                  <div  className="space-y-2">
-                    <label
-                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                    >
-                                           c. A brief on types of customers
-
-                    </label>
-                    <input
-                      type='text'
-                       
-                      className={cn(
-                        "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm",
-                        "ring-offset-background file:border-0 file:bg-transparent",
-                        "file:text-sm file:font-medium placeholder:text-muted-foreground",
-                        "focus-visible:outline-none focus-visible:ring-2",
-                        "focus-visible:ring-ring focus-visible:ring-offset-2",
-                        "disabled:cursor-not-allowed disabled:opacity-50 "
-                      )}
-                    />
-                  </div>
-              </form>
-                
-                </div>}
+                )}
+                {
+                  activeSectionData?.tabletype === 4 && <TableHelper3 section={activeSectionData}/>
+                }
               </>
             ) : null}
-            
           </div>
         </div>
       </div>
