@@ -1,32 +1,5 @@
-// const sections = [
-//   {
-//     id: "details",
-//     title: "I. Details of the listed entity",
-//     questions: [
-//       { id: "cin", label: "1. Corporate Identity Number (CIN) of the Listed Entity" },
-//       { id: "name", label: "2. Name of the Listed Entity" },
-//       { id: "year", label: "3. Year of incorporation" },
-//       { id: "registered", label: "4. Registered office address" },
-//       { id: "corporate", label: "5. Corporate address" },
-//     ],
-//   },
-//   { id: "products", title: "II. Products/services", questions: [] },
-//   { id: "operations", title: "III. Operations", questions: [] },
-//   { id: "employees", title: "IV. Employees", questions: [] },
-//   {
-//     id: "holding",
-//     title: "V. Holding, Subsidiary and Associate Companies (including joint ventures)",
-//     questions: [],
-//   },
-//   { id: "csr", title: "VI. CSR Details", questions: [] },
-//   {
-//     id: "compliance",
-//     title: "VII. Transparency and Disclosures Compliances",
-//     questions: [],
-//   },
-//   { id: "other", title: "VIII. Other Details", questions: [] },
-// ]
-export const sections = [
+export const sections = {
+  A :[
   {
     title: "I. Collective input required ",
     id: "Collectiveinput",
@@ -220,5 +193,9 @@ export const sections = [
       },
     ],
   },
-  { type: "normal", id: "other", title: "VIII. Other Details", questions: [] },
-];
+  
+  { type: "normal", id: "other", title: "VIII. Other Details", questions: [] }
+],
+
+};
+

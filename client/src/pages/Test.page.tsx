@@ -5,6 +5,7 @@ import { sections } from "@/data/SectionA/GDDATA";
 import TableHelper from "../components/pages/Table.helper";
 import TableHelper2 from "@/components/pages/Table.helper2";
 import TableHelper3 from "@/components/pages/Table.helper3";
+import { Button } from "@/components/ui/button";
 type NormalQuestion = {
   id: string;
   label: string;
@@ -28,8 +29,9 @@ type Section = {
 };
 
 export default function QuestionnairePage() {
+
   const [activeSection, setActiveSection] = useState("Collectiveinput");
-  const activeSectionData = sections.find((s) => s.id === activeSection);
+  const activeSectionData = sections['A'].find((s) => s.id === activeSection);
   const activeQuestions = activeSectionData?.questions || [];
   const progress: number = 44;
   const total: number = 178;
@@ -80,7 +82,7 @@ export default function QuestionnairePage() {
 
             {/* Section Navigation */}
             <nav className="space-y-1 py-10 pt-5">
-              {sections.map((section) => (
+              {sections['A'].map((section) => (
                 <button
                   key={section.id}
                   onClick={() => setActiveSection(section.id)}
@@ -105,6 +107,8 @@ export default function QuestionnairePage() {
                 </button>
               ))}
             </nav>
+             <Button type="submit" 
+              className="w-full bg-yellow-500 hover:bg-yellow-600 text-white"> Send for approval </Button>
           </div>
 
           {/* Main Content */}
@@ -124,18 +128,7 @@ export default function QuestionnairePage() {
                         >
                           {question.label}
                         </label>
-                        {/* <input
-                      // type={question.type}
-                      id={question.id}
-                      className={cn(
-                        "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm",
-                        "ring-offset-background file:border-0 file:bg-transparent",
-                        "file:text-sm file:font-medium placeholder:text-muted-foreground",
-                        "focus-visible:outline-none focus-visible:ring-2",
-                        "focus-visible:ring-ring focus-visible:ring-offset-2",
-                        "disabled:cursor-not-allowed disabled:opacity-50"
-                      )}
-                    /> */}
+    
                         <div className={cn("flex gap-6")}>
                           <button className={cn("py-1 px-8 text-white bg-green-500 rounded-sm text-sm")}>Yes</button>
                           <button className={cn("py-1 px-8 text-white bg-red-500 rounded-sm text-sm")}>No</button>
