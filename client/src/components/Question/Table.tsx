@@ -45,7 +45,7 @@ const TableUI = ({
   );
 
   const addRow = () => {
-    const cellCount = tableState.rows[0].cells.length;
+    const cellCount = tableState.rows[tableState.rows.length-1].cells.length;
     setTableState((table: TableType) => {
       table.rows = [
         ...table.rows,

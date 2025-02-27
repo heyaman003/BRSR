@@ -1,9 +1,12 @@
 // import SectionCTable2 from "@/components/sectionC/SectionCTable2";
+import SustainabilityLoader from "@/components/component/SustainabiltyLoader";
 import BooleanInput from "@/components/Question/BooleanInput";
 import TableUI from "@/components/Question/Table";
 import TextQuestionUI from "@/components/Question/Text";
+import { Button } from "@/components/ui/button";
 import { Question, SubSection, Table } from "@/models/models";
 import { plainToInstance } from "class-transformer";
+import { Loader2 } from "lucide-react";
 import React, { memo, useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -12,7 +15,11 @@ interface SectionUiArgs {
 }
 
 const Section: React.FC<SectionUiArgs> = ({ subsectionId }) => {
+  const [loaderProgress, setLoaderProgress] = useState<number>(10);
+  const [isLoaderVisible, setIsLoaderVisible] = useState(true);
+
   const [subsectionData, setSubsectionData] = useState<SubSection | null>(null);
+  const [isSaving, setIsSaving] = useState<boolean>(false);
 
   const updateTableData = (questionId: string, tableData: Table) => {
     setSubsectionData(
@@ -48,14 +55,31 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId }) => {
   };
 
   useEffect(() => {
-    if (subsectionId)
-      fetchSubsectionData(subsectionId).then((res: Object) => {
-        setSubsectionData(plainToInstance(SubSection, res));
-      });
+    let timer: NodeJS.Timeout | null = null;
+    if (subsectionId) {
+      setIsLoaderVisible(true);
+      setLoaderProgress(0);
+      fetchSubsectionData(subsectionId, setLoaderProgress)
+        .then((res: Object) => {
+          setSubsectionData(plainToInstance(SubSection, res));
+        })
+        .finally(() => {
+          setLoaderProgress(100);
+          timer = setTimeout(() => setIsLoaderVisible(false), 500);
+        });
+    }
+
+    return () => {
+      if (timer) {
+        clearTimeout(timer);
+      }
+    };
   }, [subsectionId]);
 
-  return (
-    <section className="pt-6">
+  return isLoaderVisible ? (
+    <SustainabilityLoader progress={loaderProgress} />
+  ) : (
+    <section className="pt-6 relative h-full">
       {subsectionData && (
         <div>
           <h1 className="font-bold text-md bg-yellow-200 w-fit px-4 rounded-lg   my-3 mb-5 ">
@@ -64,7 +88,13 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId }) => {
           {subsectionData.questions &&
             subsectionData.questions.map((question: Question) => (
               <div className="mb-5" key={question.id}>
-                <p className={ `text-sm  font-bold   mb-2  ${question.type === "table"&& "text-green-700 font-semibold"}`}>{question.desc}</p>
+                <p
+                  className={`text-sm  font-bold   mb-2  ${
+                    question.type === "table" && "text-green-700 font-semibold"
+                  }`}
+                >
+                  {question.desc}
+                </p>
                 {question.type === "table" &&
                   question.answer_table &&
                   question.answer_table.map((table: Table) => (
@@ -85,19 +115,33 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId }) => {
                     }
                   />
                 )}
-                {question.type === "boolean" && <BooleanInput />}
+                {question.type === "boolean" && (
+                  <BooleanInput
+                    updateAnswer={(answer: string) =>
+                      updateTextAnswer(question.id, answer)
+                    }
+                    answer={question.answer_text}
+                  />
+                )}
               </div>
             ))}
         </div>
       )}
       {subsectionData && (
         <div>
-          <button
-            onClick={() => updateSubsectionData(subsectionData).then((res)=>toast(res.message)).catch(err=>toast(err.message))}
-            className=" bg-yellow-500 text-white font-bold px-8 py-2 rounded-sm"
+          <Button
+            disabled={isSaving}
+            onClick={() => {
+              setIsSaving(true);
+              updateSubsectionData(subsectionData)
+                .then((res) => toast(res.message))
+                .catch((err) => toast(err.message))
+                .finally(() => setIsSaving(false));
+            }}
+            className=" bg-yellow-500 hover:bg-yellow-600 w-24 text-white font-bold px-8 py-2 rounded-sm"
           >
-            Save
-          </button>
+            {isSaving ? <Loader2 className="animate-spin" /> : "Save"}
+          </Button>
         </div>
       )}
     </section>
@@ -106,30 +150,40 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId }) => {
 
 export default memo(Section);
 
-const fetchSubsectionData = async (subsectionId: string) => {
-
+const fetchSubsectionData = async (
+  subsectionId: string,
+  updateProgress: (value: number) => void
+) => {
+  updateProgress(10);
   const raw = await fetch(
     `http://localhost:8000/section/subsection/${subsectionId}`,
     { credentials: "include" }
   );
+  updateProgress(50);
   const res = await raw.json();
+  await new Promise((res: any, rej: any) =>
+    setTimeout(() => {
+      updateProgress(90);
+      res();
+    }, 1000)
+  );
+
   return res.data;
 };
 
 const updateSubsectionData = async (subsectionData: SubSection) => {
-    const raw = await fetch(
-      `http://localhost:8000/section/subsection/${subsectionData.id}`,
-      {
-        credentials: "include",
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(subsectionData),
-      }
-    );
-    const res = await raw.json();
-    if(raw.status<200 || raw.status>=400)
-      throw new Error(res.message)
-    return res;
+  const raw = await fetch(
+    `http://localhost:8000/section/subsection/${subsectionData.id}`,
+    {
+      credentials: "include",
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(subsectionData),
+    }
+  );
+  const res = await raw.json();
+  if (raw.status < 200 || raw.status >= 400) throw new Error(res.message);
+  return res;
 };
