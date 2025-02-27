@@ -29,7 +29,7 @@ type Section = {
 
 export default function QuestionnairePage() {
   const [activeSection, setActiveSection] = useState("Collectiveinput");
-  const activeSectionData = sections.find((s) => s.id === activeSection);
+  const activeSectionData = sections.A.find((s) => s.id === activeSection);
   const activeQuestions = activeSectionData?.questions || [];
   const progress: number = 44;
   const total: number = 178;
@@ -80,7 +80,7 @@ export default function QuestionnairePage() {
 
             {/* Section Navigation */}
             <nav className="space-y-1 py-10 pt-5">
-              {sections.map((section) => (
+              {sections.A.map((section) => (
                 <button
                   key={section.id}
                   onClick={() => setActiveSection(section.id)}
