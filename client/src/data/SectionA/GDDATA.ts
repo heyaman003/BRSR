@@ -214,6 +214,8 @@ export const sections = {
   ],
   B: [
     {
+      id:"B1",
+      title:"I. Policy and Process",
       heading:
         "This section is aimed at helping businesses demonstrate the structures, policies and processes put in place towards adopting the NGRBC Principles and Core Elements.",
       questions: [
@@ -227,17 +229,25 @@ export const sections = {
         `Performance of the entity against the specific commitments, goals and targets along-with reasons in case the same are not met.`,
       ],
       numberOfPolicies: 9,
+      type:"tabular",
+      tabletype:1
     },
-    {},
+    { id:"B2",title:"II. Implementation and Monitoring",type:"normal",tabletype:1, questions: []},
     {
+      id:"B3",
       heading: "Details of Review of NGRBCs by the Company:",
+      title:"III. Review",
       questions: [
         `Performance against above policies and follow up action`,
         `Compliance with statutory requirements of relevance to the principles, and, rectification of any non-compliances`,
         `Has the entity carried out independent assessment/ evaluation of the working of its policies by an external agency? (Yes/No). If yes, provide name of the agency.`,
       ],
+      type:"tabular",
+      tabletype:1,
     },
     {
+      id:"B4",
+      title:"IV. Reporting",
       heading:
         "If answer to question (1) above is “No” i.e. not all Principles are covered by a policy, reasons to be stated: ",
       numberOfPolicies: 9,
@@ -249,6 +259,18 @@ policies on specified principles (Yes/No) `,
         `It is planned to be done in the next financial year (Yes/No) `,
         `Any other reason (please specify) `,
       ],
+      type:"tabular",
+      tabletype:1,
     },
   ],
+  C:[
+    { id:"c1",  type:"tabular",tabletype:1, title:"I. Policy and Process", questions: [
+      `The entity does not consider the Principles material to its business (Yes/No) `,
+      `The entity is not at a stage where it is in a position to formulate and implement the
+policies on specified principles (Yes/No) `,
+      `The entity does not have the financial or/human and technical resources available for the task (Yes/No) `,
+      `It is planned to be done in the next financial year (Yes/No) `,
+      `Any other reason (please specify) `,
+    ],},
+  ]
 };

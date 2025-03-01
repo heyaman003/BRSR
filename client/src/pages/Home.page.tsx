@@ -1,10 +1,8 @@
-import SectionB from "./SectionB";
-import FormPage from "./Test.page";
+import EntrySectionMain from "./EntrySection";
 const Homepage = () => {
   return (
-    <div className="w-[95vw] m-auto ">
-      <FormPage />
-      {/* <SectionB/> */}
+    <div className="h-[100vh]">
+      <EntrySectionMain  />
     </div>
   );
 };
