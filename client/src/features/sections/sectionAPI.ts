@@ -1,7 +1,10 @@
 export const sectionfetchAPI = async (companyDesc:{companyID:String}): Promise<Object[]> => {
-    const response = await fetch(`http://localhost:8000/company/${companyDesc.companyID}/sections`, {
+    const response = await fetch(`${import.meta.env.VITE_SERVER_URI}/company/${companyDesc.companyID}/sections`, {
       method: "GET",
       credentials:"include",
+      headers: {
+        'X-Csrf-Token': localStorage.getItem('X-Csrf-Token') || ''
+      }
     });
     if (!response.ok) {
       console.log(companyDesc.companyID)

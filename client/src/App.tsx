@@ -19,6 +19,16 @@ function App() {
     if (storedLoginStatus === "true") {
       setIsLoggedIn(true);
     }
+
+    fetch(import.meta.env.VITE_SERVER_URI + "/csrf", {
+      method: "HEAD",
+      credentials: "include",
+    }).then((res) =>
+      localStorage.setItem(
+        "X-Csrf-Token",
+        res.headers.get("X-Csrf-Token") || ""
+      )
+    );
   }, []);
 
   // Handle login
@@ -30,7 +40,7 @@ function App() {
 
   return (
     <div>
-      <Toaster richColors/>
+      <Toaster richColors />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route

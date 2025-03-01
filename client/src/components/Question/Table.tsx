@@ -68,11 +68,12 @@ const TableUI = ({
     try {
       setIsSavingTableData(true);
       const raw = await fetch(
-        `http://localhost:8000/section/table/${table.id}`,
+        `${import.meta.env.VITE_SERVER_URI}/section/table/${table.id}`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            'X-Csrf-Token': localStorage.getItem('X-Csrf-Token') || ''
           },
           credentials: "include",
           body: JSON.stringify(tableState),

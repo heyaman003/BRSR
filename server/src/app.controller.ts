@@ -1,12 +1,32 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Head, Options, Post, Req, Res } from '@nestjs/common';
 import { AppService } from './app.service';
+import { Public } from './utils/auth/public.decorator';
+import { doubleCsrf } from 'csrf-csrf';
+import { Response } from 'express';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  generateCsrfToken: Function;
+  constructor(private readonly appService: AppService) {
+    const {generateToken} = doubleCsrf({
+      getSecret: () => 'hello world',
+      ignoredMethods: []
+    })
 
-  @Get()
+    this.generateCsrfToken = generateToken;
+  }
+
+  @Post()
+  @Public()
   getHello(): string {
     return this.appService.getHello();
+  }
+
+  @Head('/csrf')
+  @Public()
+  generateToken(@Req() request: any, @Res() response: Response) : void {
+    const token =  request.csrfToken();
+    response.set('X-Csrf-Token', token);
+    response.send();
   }
 }

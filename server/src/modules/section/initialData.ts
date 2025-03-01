@@ -116,18 +116,17 @@ export const companySectionsTemplate: Section[] = [
                 [
                   new Row(
                     [
-                      'Sr. No.',
                       'Description of Main Activity',
                       'Description of Business Activity',
                       '% of Turnover of the entity',
                     ].map((cell) => new Cell(cell, false, 1, 1)),
                     true,
                   ),
-                  ...Array.from({ length: 7 }).map(
+                  ...Array.from({ length: 2 }).map(
                     (_) =>
                       new Row(
                         [
-                          ...Array.from({ length: 4 }).map(
+                          ...Array.from({ length: 3 }).map(
                             () => new Cell('', true, 1, 1),
                           ),
                         ],
@@ -148,7 +147,6 @@ export const companySectionsTemplate: Section[] = [
                   new Row(
                     [
                       ...[
-                        'Sr. No.',
                         'Product/Service',
                         'NIC Code',
                         '% of total Turnover contribute',
@@ -156,11 +154,11 @@ export const companySectionsTemplate: Section[] = [
                     ],
                     true,
                   ),
-                  ...Array.from({ length: 7 }).map(
+                  ...Array.from({ length: 2 }).map(
                     (_) =>
                       new Row(
                         [
-                          ...Array.from({ length: 4 }).map(
+                          ...Array.from({ length: 3 }).map(
                             () => new Cell('', true, 1, 1),
                           ),
                         ],
@@ -298,7 +296,6 @@ export const companySectionsTemplate: Section[] = [
                       ),
                   ),
                   new Row([new Cell('WORKERS', false, 1, 6)], false),
-                  new Row([new Cell('EMPLOYEES', false, 1, 6)], false),
                   ...[
                     'Permanent (F)',
                     'Other than Permanent (G)',

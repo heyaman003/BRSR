@@ -24,10 +24,11 @@ const CreateCompanyForm: React.FC<CreateCompanyFormProps> = ({ setCompanies, add
     }
     setLoading(true);
     try {
-      const res = await fetch(`http://localhost:8000/company`, {
+      const res = await fetch(`${import.meta.env.VITE_SERVER_URI}/company`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'X-Csrf-Token': localStorage.getItem('X-Csrf-Token') || ''
         },
         credentials: 'include',
         body: JSON.stringify({ name: companyName }),

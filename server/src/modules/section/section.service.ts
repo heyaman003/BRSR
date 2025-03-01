@@ -1,6 +1,7 @@
 import { Injectable } from "@nestjs/common";
-import { Section, SubSection } from "./initialData";
+import { Section } from "./initialData";
 import { SectionRepository } from "./section.repository";
+import { SubSectionModel, TableModel } from "./section.dtos";
 
 @Injectable()
 export class SectionService {
@@ -10,10 +11,14 @@ export class SectionService {
     }
 
     async createSection(section: Section){
-        return await this.sectionRepository.createSection(section);
+        return await this.sectionRepository. createSection(section);
     }
 
-    async updateSubsectionData(id: string, data: SubSection) {
+    async createTable(id: string, table: TableModel){
+        return await this.sectionRepository.saveTableData(id, table);
+    }
+
+    async updateSubsectionData(id: string, data: SubSectionModel) {
         return await this.sectionRepository.updateSubsectionData(id, data);
     }
 }
