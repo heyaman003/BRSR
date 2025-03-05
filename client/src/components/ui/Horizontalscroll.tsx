@@ -5,6 +5,7 @@ const sectionsd = {
   B: "Section B",
   C:"Section C",
 };
+
 type HorizontalscrollProps = {
   activeSection: keyof typeof sectionsd; // Ensures activeSection is a valid key
   setActiveSection: (section: keyof typeof sectionsd) => void;
@@ -17,7 +18,7 @@ const Horizontalscroll = ({
 }: HorizontalscrollProps) => {
   return (
     <div>
-      <div className="w-[90%] ">
+      <div className="w-[90%]">
         <div className="overflow-y-auto flex justify-betwwen gap-10 w-[90%] rw-full  pt-7">
           {topSections.map((section) => (
             <button
