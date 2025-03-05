@@ -40,7 +40,7 @@ export class Table {
   }
 }
 
-export const sectionsA = {
+export const sections = {
   A: [
     {
       title: "I. Collective input required ",
