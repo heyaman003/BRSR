@@ -1,5 +1,3 @@
-"use client"
-
 import { motion } from "framer-motion"
 import { ArrowRight, CheckCircle, BarChart2, FileText, Users } from "lucide-react"
 import { Button } from "@/components/ui/button"

@@ -13,8 +13,6 @@ export default function TableHelper2({ section }: { section: any }) {
   return (
     <div>
       {section?.questions.map((questionTable: any) => {
-        type RowType = number | "";
-
         // Initializing rows with fixed first column values from colFirstData
         const [rows, setRows] = useState<(string | number)[][]>(
             questionTable.colFirstData.slice(1).map((colFirstData: string) => [
