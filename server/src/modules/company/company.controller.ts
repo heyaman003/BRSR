@@ -36,4 +36,10 @@ export class CompanyController{
         return new ResponseModel(200, "Deleted company successfully.");
     }
 
+    @Get("/:companyId/sections")
+    async listSections(@Param("companyId", ParseMongoIdPipe) companyId: string):Promise<ResponseModel> {
+        const sections = await this.companyService.listSections(companyId);
+        return new ResponseModel(200, "Success.", sections);
+    }
+
 }

@@ -2,13 +2,25 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { CompanyDto } from "src/modules/company/company.dtos";
 import { CompanyRepository } from "src/modules/company/company.repository";
 import { Company } from "./company.schema";
+import { companySectionsTemplate, Section} from "../section/initialData";
+import { SectionRepository } from "../section/section.repository";
+import { SectionService } from "../section/section.service";
 
 @Injectable()
 export class CompanyService {
-    constructor(private readonly companyRepository: CompanyRepository){}
+    constructor(private readonly companyRepository: CompanyRepository, private readonly sectionService: SectionService){}
+
+    async listSections(companyId: string): Promise<any> {
+        const company = await this.companyRepository.listSections(companyId);
+        if(!company)
+            throw new NotFoundException('Company does not exist.')
+        
+        return company.sections;
+    }
 
     async createCompany(companyName: string): Promise<CompanyDto> {
-        const newCompany = await this.companyRepository.createCompany(companyName);
+        const companySections = await Promise.all(companySectionsTemplate.map(async (section: Section)=> await this.sectionService.createSection(section)));
+        const newCompany = await this.companyRepository.createCompany(companyName, companySections);
         return this.convertToDto(newCompany);
     }
 
