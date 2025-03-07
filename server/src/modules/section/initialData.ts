@@ -167,7 +167,7 @@ export const companySectionsTemplate: Section[] = [
         ],
       },
       {
-        title: 'III. Compliance admistration ',
+        title: 'III. Compliance administration ',
         // id: 'ComplianceAdmistration ',
         // type: 'tabular',
         // isFixedLength: true,
@@ -224,10 +224,7 @@ export const companySectionsTemplate: Section[] = [
                 ...['National', 'International'].map(
                   (firstColData) =>
                     new Row(
-                      Array.from({ length: 5 }).map(
-                        (_, ind: number) =>
-                          new Cell(ind ? '' : firstColData, ind > 0, 1, 1),
-                      ),
+                      [new Cell(firstColData, false, 1, 1), new Cell('', true, 1, 1)],
                       false,
                     ),
                 ),
@@ -275,7 +272,7 @@ export const companySectionsTemplate: Section[] = [
                 ].map(
                   (firstCol) =>
                     new Row(
-                      Array.from({ length: 6 }).map(
+                      Array.from({ length: 7 }).map(
                         (_, ind: number) =>
                           new Cell(ind === 0 ? firstCol : '', ind > 0, 1, 1),
                       ),
@@ -525,7 +522,7 @@ export const companySectionsTemplate: Section[] = [
                         (_, ind: number) =>
                           new Cell(ind === 0 ? question : '', ind > 0, 1, 1),
                       )
-                    ], true),
+                    ], false),
                 ),
               ]),
 
@@ -542,7 +539,7 @@ export const companySectionsTemplate: Section[] = [
                   ...Array.from({ length: 9 }).map(
                     (_) => new Cell(``, true, 1, 1),
                   ),
-                ], true),
+                ], false),
               ])
             ],
           },
@@ -1481,7 +1478,7 @@ export const companySectionsTemplate: Section[] = [
                       1,
                     ),
                     new Cell('', true, 1, 1),
-                    new Cell('', false, 1, 1),
+                    new Cell('', true, 1, 1),
                   ],
                   false,
                 ),
