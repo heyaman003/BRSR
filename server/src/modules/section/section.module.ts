@@ -14,6 +14,9 @@ import {
   Table,
   tableSchema,
 } from './section.schemas';
+import { SectionRepository } from './section.repository';
+import { SectionService } from './section.service';
+import { SectionController } from './section.controller';
 
 @Module({
   imports: [
@@ -26,5 +29,8 @@ import {
       { name: Cell.name, schema: cellSchema },
     ]),
   ],
+  providers: [SectionRepository, SectionService],
+  exports: [SectionService],
+  controllers: [SectionController]
 })
 export class SectionModule {}

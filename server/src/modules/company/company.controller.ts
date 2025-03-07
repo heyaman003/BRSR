@@ -5,6 +5,7 @@ import { CompanyDto } from "src/modules/company/company.dtos";
 import { ParseMongoIdPipe } from "src/utils/pipes/ParseMongoIdPipe";
 import { Role } from "src/utils/auth/roles.decorator";
 import { UserRole } from "../user/user.dtos";
+import { Public } from "src/utils/auth/public.decorator";
 
 @Controller('company')
 export class CompanyController{
@@ -34,6 +35,13 @@ export class CompanyController{
     async deleteCompany(@Param("companyId", ParseMongoIdPipe) companyId: string): Promise<ResponseModel> {
         await this.companyService.deleteCompany(companyId);
         return new ResponseModel(200, "Deleted company successfully.");
+    }
+
+    @Get("/:companyId/sections")
+    @Public()
+    async listSections(@Param("companyId", ParseMongoIdPipe) companyId: string):Promise<ResponseModel> {
+        const sections = await this.companyService.listSections(companyId);
+        return new ResponseModel(200, "Success.", sections);
     }
 
 }

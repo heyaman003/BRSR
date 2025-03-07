@@ -1,28 +1,23 @@
 import { cn } from "@/lib/utils";
 import { Button } from "../ui/button"
-type Section = {
-    id: string;
-    title: string;
-    questions: { id: string; label: string; type: string; }[]; // Updated from string[]
-  };
-  
+import { SubSection } from "@/models/models";
+import { useEffect } from "react";
+
   type LeftcontainerProps = {
-    sections: any; // Ensures sections is an object where each key holds an array of Section
-    activeSection: string;
-    // sections:any[];
-    setActiveSectionTab: (sectionId: string) => void;
-    activeSectionTab: string;
+    subsections: SubSection[] | undefined; // Ensures sections is an object where each key holds an array of Section
+    setActiveSubsection: (sectionId: string) => void;
+    activeSubsection: string;
   };
   
   const Leftcontainer: React.FC<LeftcontainerProps> = ({
-    sections,
-    activeSection,
-    setActiveSectionTab,
-    activeSectionTab,
+    subsections,
+    setActiveSubsection,
+    activeSubsection,
   }) => {
     const progress: number = 44;
     const total: number = 178;
     const percentage: number = Math.round((progress / total) * 100);
+    
   return (
     <div className="space-y-10 bg-green-50 px-4 pt-5 h-[100vh] overflow-y-auto border-r-4 border-yellow-400 scrollbar-hide [&::-webkit-scrollbar]:hidden">
     {/* Progress Circle */}
@@ -62,26 +57,26 @@ type Section = {
     </div>
 
       <nav className="space-y-5 py-10 pt-5">
-        {sections[activeSection].map((section: Section) => (
+        {subsections?.map((subsection: SubSection) => (
         <button
-          key={section.id}
-          onClick={() => setActiveSectionTab(section.id)}
+          key={subsection.id}
+          onClick={() => setActiveSubsection(subsection.id)}
           className={cn(
           "w-full text-left px-4 py-2 rounded-lg text-sm",
           "hover:bg-muted transition-colors",
-          activeSectionTab === section.id &&
+          activeSubsection === subsection.id &&
             "bg-green-100 text-green-600"
           )}
         >
           <div className="font-medium text-primary">
-          {section.title}
+          {subsection.title}
           </div>
           <div className="flex justify-between">
           <div className="text-xs px-2 py-[1px] text-green-700 rounded-md bg-green-200">
             In progress
           </div>
           <div className="text-xs font-bold text-green-500">
-            2/{section?.questions?.length}
+            2/{subsection?.questions?.length}
           </div>
           </div>
         </button>

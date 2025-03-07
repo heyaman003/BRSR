@@ -24,3 +24,11 @@ export class User {
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
+
+UserSchema.set('toJSON', {
+  versionKey: false,
+  transform(doc, ret, options) {
+    ret.id = ret._id;
+    delete ret._id
+  },
+})

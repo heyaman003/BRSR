@@ -9,11 +9,28 @@ export class CompanyRepository {
     @InjectModel(Company.name) private companyModel: Model<Company>,
   ) {}
 
-  async createCompany(companyName: string) {
+  async listSections(companyId: string) {
+    try {
+      return await this.companyModel
+        .findById(companyId, { sections: true })
+        .populate({
+          path: "sections",
+          populate: {
+            path: "subSections",
+            select: "-questions"
+          }
+        })
+    } catch (e) {
+      throw new BadRequestException(e);
+    }
+  }
+
+  async createCompany(companyName: string, initialData: any) {
     try {
       const company = await this.companyModel.create({
         name: companyName,
         users: [],
+        sections: initialData,
       });
       return company;
     } catch (e) {

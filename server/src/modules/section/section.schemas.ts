@@ -12,7 +12,7 @@ export class Cell {
   data: string;
 
   @Prop({ type: Boolean, default: false })
-  updateable: boolean;
+  isUpdateable: boolean;
 
   @Prop({ type: Number, default: 1 })
   rowSpan: number;
@@ -30,7 +30,7 @@ export class Row {
     ref: 'Cell',
     required: true,
   })
-  rows: Cell[];
+  cells: Cell[];
 
   @Prop({ type: Boolean, required: true })
   isHeading: boolean;
@@ -69,15 +69,17 @@ export class Question {
   @Prop({
     type: String,
     required: false,
+    default: null
   })
   answer_text: string;
 
   @Prop({
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Table',
+    type: [{type: mongoose.Schema.Types.ObjectId}],
+    ref:'Table',
     required: false,
+    default: null
   })
-  answer_table: Table;
+  answer_table: Table[];
 }
 
 export const questionSchema = SchemaFactory.createForClass(Question);
@@ -92,7 +94,7 @@ export class SubSection {
     ref: 'Question',
     required: true,
   })
-  question: Question[];
+  questions: Question[];
 }
 
 export const subSectionSchema = SchemaFactory.createForClass(SubSection);
@@ -111,3 +113,55 @@ export class Section {
 }
 
 export const sectionSchema = SchemaFactory.createForClass(Section);
+
+
+sectionSchema.set('toJSON', {
+  versionKey: false,
+  transform(doc, ret, options) {
+    ret.id = ret._id;
+    delete ret._id
+  },
+})
+
+subSectionSchema.set('toJSON', {
+  versionKey: false,
+  transform(doc, ret, options) {
+    ret.id = ret._id;
+    delete ret._id
+  },
+})
+
+questionSchema.set('toJSON', {
+  versionKey: false,
+  transform(doc, ret, options) {
+    ret.id = ret._id;
+    delete ret._id
+  },
+})
+
+tableSchema.set('toJSON', {
+  versionKey: false,
+  transform(doc, ret, options) {
+    ret.id = ret._id;
+    delete ret._id
+  },
+})
+
+
+rowSchema.set('toJSON', {
+  versionKey: false,
+  transform(doc, ret, options) {
+    ret.id = ret._id;
+    delete ret._id
+  },
+})
+
+
+cellSchema.set('toJSON', {
+  versionKey: false,
+  transform(doc, ret, options) {
+    ret.id = ret._id;
+    delete ret._id
+  },
+})
+

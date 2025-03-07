@@ -10,6 +10,8 @@ import {
 import { Cell, Row, Table as TableType } from "@/types";
 
 const SectionCTable2 = ({ table }: { table: TableType }) => {
+
+
   return (
     <Table>
       <TableHeader>
