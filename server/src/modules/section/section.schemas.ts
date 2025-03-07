@@ -48,6 +48,8 @@ export class Table {
     required: true,
   })
   rows: Row[];
+  @Prop({type: Boolean, default: false})
+  isDynamic: boolean
 }
 
 export const tableSchema = SchemaFactory.createForClass(Table);

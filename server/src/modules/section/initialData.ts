@@ -30,9 +30,11 @@ export class Row {
 }
 
 export class Table {
+  isDynamic: boolean;
   rows: Row[];
-  constructor(rows: Row[]) {
+  constructor(rows: Row[], isDynamic: boolean) {
     this.rows = rows;
+    this.isDynamic = isDynamic;
   }
 }
 
@@ -132,7 +134,7 @@ export const companySectionsTemplate: Section[] = [
                       false,
                     ),
                 ),
-              ]),
+              ], true),
             ],
           },
           {
@@ -162,7 +164,7 @@ export const companySectionsTemplate: Section[] = [
                       false,
                     ),
                 ),
-              ]),
+              ], true),
             ],
           },
         ],
@@ -200,7 +202,7 @@ export const companySectionsTemplate: Section[] = [
                       false,
                     ),
                 ),
-              ]),
+              ], false),
             ],
             // colFirstData: ['Location', 'National', 'International'],
             desc: '1.Details of business activities (accounting for 90% of the turnover):',
@@ -229,7 +231,7 @@ export const companySectionsTemplate: Section[] = [
                       false,
                     ),
                 ),
-              ]),
+              ], false),
             ],
             // colFirstData: ['Location', 'National', 'International'],
             desc: 'a. Number of locations',
@@ -281,7 +283,7 @@ export const companySectionsTemplate: Section[] = [
                     ),
                 ),
                 new Row([new Cell('WORKERS', false, 1, 6)], false),
-              ]),
+              ], false),
             ],
             // employee: {
             //   colFirstData: [
@@ -332,7 +334,7 @@ export const companySectionsTemplate: Section[] = [
                       false,
                     ),
                 ),
-              ]),
+              ], true),
             ],
             // tabulardata: [
             //   ['Sr. No.', 'number'],
@@ -400,7 +402,7 @@ export const companySectionsTemplate: Section[] = [
                       false,
                     ),
                 ),
-              ]),
+              ], true),
             ],
             // tabulardata: [
             //   ['Sr. No.', 'number'],
@@ -461,13 +463,13 @@ export const companySectionsTemplate: Section[] = [
                       false,
                     ),
                 ),
-              ]),
+              ], false),
               new Table([
                 new Row([new Cell('Governance, leadership and oversight', false, 1, 2)], true),
                 new Row([new Cell('7. Statement by director responsible for the business responsibility report, highlighting ESG related challenges, targets and achievements (listed entity has flexibility regarding the placement of this disclosure)', false, 1, 2)], false),
                 new Row([new Cell('8. Details of the highest authority responsible for implementation and oversight of the Business Responsibility policy (ies).', false, 1, 1), new Cell('', true, 1, 1)], false),
                 new Row([new Cell('9. Does the entity have a specified Committee of the Board/ Director responsible for decision making on sustainability related issues? (Yes / No). If yes, provide details.', false, 1, 1), new Cell('', true, 1, 1)], false)
-              ])
+              ], false)
             ],
           },
         ],
@@ -522,7 +524,7 @@ export const companySectionsTemplate: Section[] = [
                       )
                     ], false),
                 ),
-              ]),
+              ], false),
 
 
               new Table([
@@ -538,7 +540,7 @@ export const companySectionsTemplate: Section[] = [
                     (_) => new Cell(``, true, 1, 1),
                   ),
                 ], false),
-              ])
+              ], false)
             ],
           },
         ],
@@ -576,7 +578,7 @@ export const companySectionsTemplate: Section[] = [
                       false,
                     ),
                 ),
-              ]),
+              ], false),
             ],
           },
         ],
@@ -636,7 +638,7 @@ export const companySectionsTemplate: Section[] = [
                       false,
                     ),
                 ),
-              ]),
+              ], false),
             ],
           },
           {
@@ -673,7 +675,7 @@ export const companySectionsTemplate: Section[] = [
                       false,
                     ),
                 ),
-              ]),
+              ], false),
 
               new Table([
                 new Row([new Cell('Non-Monetary', true, 1, 5)], true),
@@ -704,7 +706,7 @@ export const companySectionsTemplate: Section[] = [
                       false,
                     ),
                 ),
-              ]),
+              ], false),
             ],
           },
           {
@@ -728,7 +730,7 @@ export const companySectionsTemplate: Section[] = [
                   [new Cell('', true, 1, 1), new Cell('', true, 1, 1)],
                   false,
                 ),
-              ]),
+              ], true),
             ],
           },
           {
@@ -773,7 +775,7 @@ export const companySectionsTemplate: Section[] = [
                 //   ],
                 //   false
                 // ),
-              ]),
+              ], false),
             ],
           },
           {
@@ -818,7 +820,7 @@ export const companySectionsTemplate: Section[] = [
                       false,
                     ),
                 ),
-              ]),
+              ], false),
             ],
           },
           {
@@ -855,7 +857,7 @@ export const companySectionsTemplate: Section[] = [
                       false,
                     ),
                 ),
-              ]),
+              ], false),
             ],
           },
           {
@@ -1019,7 +1021,7 @@ export const companySectionsTemplate: Section[] = [
                   ],
                   false,
                 ),
-              ]),
+              ], false),
             ],
           },
           {
@@ -1048,7 +1050,7 @@ export const companySectionsTemplate: Section[] = [
                   ],
                   false,
                 ),
-              ]),
+              ], true),
             ],
           },
           {
@@ -1092,7 +1094,7 @@ export const companySectionsTemplate: Section[] = [
                       false,
                     ),
                 ),
-              ]),
+              ], false),
             ],
           },
           {
@@ -1139,7 +1141,7 @@ export const companySectionsTemplate: Section[] = [
                       false,
                     ),
                 ),
-              ]),
+              ], true),
             ],
           },
           {
@@ -1171,7 +1173,7 @@ export const companySectionsTemplate: Section[] = [
                       false,
                     ),
                 ),
-              ]),
+              ], true),
             ],
           },
           {
@@ -1209,7 +1211,7 @@ export const companySectionsTemplate: Section[] = [
                       false,
                     ),
                 ),
-              ]),
+              ], true),
             ],
           },
           {
@@ -1253,7 +1255,7 @@ export const companySectionsTemplate: Section[] = [
                       false,
                     ),
                 ),
-              ]),
+              ], false),
             ],
           },
           {
@@ -1284,7 +1286,7 @@ export const companySectionsTemplate: Section[] = [
                       false,
                     ),
                 ),
-              ]),
+              ], true),
             ],
           },
         ],
@@ -1371,7 +1373,7 @@ export const companySectionsTemplate: Section[] = [
                       false,
                     ),
                 ),
-              ]),
+              ], false),
             ],
           },
           {
@@ -1451,7 +1453,7 @@ export const companySectionsTemplate: Section[] = [
                       false,
                     ),
                 ),
-              ]),
+              ], false),
             ],
           },
           {
@@ -1480,7 +1482,7 @@ export const companySectionsTemplate: Section[] = [
                   ],
                   false,
                 ),
-              ]),
+              ],false),
             ],
           },
           {
@@ -1549,7 +1551,7 @@ export const companySectionsTemplate: Section[] = [
                       false,
                     ),
                 ),
-              ]),
+              ], false),
             ],
           },
           {
@@ -1595,7 +1597,7 @@ export const companySectionsTemplate: Section[] = [
                       false,
                     ),
                 ),
-              ]),
+              ], false),
             ],
           },
         ],

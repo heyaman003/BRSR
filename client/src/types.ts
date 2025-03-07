@@ -32,10 +32,12 @@ export class Cell {
   }
   
   export class Table {
+    isDynamic: boolean;
     id: string;
     rows: Row[];
-    constructor(id: string, rows: Row[]) {
+    constructor(id: string, rows: Row[], isDynamic: boolean) {
       this.id = id;
       this.rows = rows;
+      this.isDynamic = isDynamic
     }
   }
