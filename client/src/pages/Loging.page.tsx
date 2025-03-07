@@ -4,11 +4,12 @@ import { selectIsLoading, selectAuthError } from '@/features/auth/authSelectors'
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, AlertCircle } from 'lucide-react';
 import logo from '@/assets/logo.png';
 import { useDispatch } from 'react-redux';
 import { loginUser } from '../features/auth/authSlice';
 import type { AppDispatch } from '@/store/store.ts';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 interface LoginFormProps {
   onLogin: () => void; // Define handleLogin as a function with no arguments and no return value
@@ -50,13 +51,13 @@ export default function LoginForm({onLogin}:LoginFormProps) {
         <div className="w-full max-w-[400px] space-y-6 backdrop-blur-sm rounded-lg p-8 shadow-xl">
           <h1 className="text-2xl font-bold text-center">BRSR</h1>
 
-          {/* {error && (
+          {error && (
             <Alert variant="destructive">
               <AlertCircle className="h-4 w-4" />
               <AlertTitle>Error</AlertTitle>
               <AlertDescription>{error}</AlertDescription>
             </Alert>
-          )} */}
+          )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">

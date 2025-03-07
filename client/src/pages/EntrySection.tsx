@@ -61,7 +61,7 @@ export default function QuestionnairePage() {
 
 const listSections = async (companyId: string): Promise<Object[]> => {
   const raw = await fetch(
-    `http://172.16.16.68:8000/company/${companyId}/sections`
+    `http://172.16.16.68:8000/company/${companyId}/sections`,{credentials:"include"}
   );
   const res = await raw.json();
   return res.data;

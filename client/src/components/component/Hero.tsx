@@ -38,7 +38,7 @@ const Hero = () => {
 
                         <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                             <Link
-                                to="#get-started"
+                                to="/login"
                                 className="inline-block px-8 py-3 bg-[#4eba8b] text-white font-medium rounded-full hover:bg-[#45a77f] transition-colors"
                             >
                                 Get Started

@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import './App.css';
 import LoginForm from '@/pages/Loging.page';
-// import LandingPage from '@/pages/Landing.page';
 import Homepage from '@/pages/Home.page';
 import Home from '@/components/pages/Home';
+import ProtectedRoute from '@/components/ProtectedRoute'; // Import the new component
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -12,7 +12,7 @@ function App() {
 
   // Check login state on component mount
   useEffect(() => {
-    const storedLoginStatus = localStorage.getItem('isLoggedIn');
+    const storedLoginStatus = localStorage.getItem('isLoggedInEmailer');
     if (storedLoginStatus === 'true') {
       setIsLoggedIn(true);
     }
@@ -22,17 +22,15 @@ function App() {
   const handleLogin = () => {
     setIsLoggedIn(true);
     localStorage.setItem('isLoggedInEmailer', 'true'); // Persist login state
-    navigate('/'); 
+    navigate('/brsr-making');
   };
 
   return (
     <div>
       <Routes>
-        {/* Show Landing Page when logged in, otherwise redirect to login */}
-        {/* <Route path="/" element={isLoggedIn ? <LandingPage /> : <LoginForm onLogin={handleLogin} />} /> */}
-        <Route path="/" element={isLoggedIn ? <Home /> : <LoginForm onLogin={handleLogin} />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/brsr-making" element={<ProtectedRoute element={<Homepage />} />} />
         <Route path="/login" element={<LoginForm onLogin={handleLogin} />} />
-        <Route path="/home" element={<Homepage/>} />
       </Routes>
     </div>
   );
