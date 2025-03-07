@@ -26,6 +26,7 @@ export default function QuestionnairePage() {
       }
     }
   }, [activeSection]);
+
   return (
     <div className="h-full bg-background">
       <div className=" mx-auto ">
@@ -41,11 +42,15 @@ export default function QuestionnairePage() {
           />
 
           <div className="h-screen overflow-auto pr-4">
+
+            {/* Top bar containing the section buttons e.g. 'Section A' */}
             <Horizontalscroll
               sections={sections}
               activeSection={activeSection}
               setActiveSection={setActiveSection}
             />
+
+            {/* Main container for questions */}
             <SectionUI subsectionId={activeSubsection} />
           </div>
         </div>
