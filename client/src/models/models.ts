@@ -48,12 +48,15 @@ export class Row {
 
 export class Table {
   @Expose()
+  isDynamic: boolean;
+  @Expose()
   id: string;
   @Type(()=>Row)
   rows: Row[];
-  constructor(id: string, rows: Row[]) {
+  constructor(id: string, rows: Row[], isDynamic: boolean) {
     this.id = id;
     this.rows = rows;
+    this.isDynamic = isDynamic;
   }
 }
 
