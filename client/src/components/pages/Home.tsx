@@ -1,11 +1,11 @@
-import Applicability from '../component/Applicability'
-import BRSRFormat from '../component/BRSRFormat'
-import Footer from '../component/Footer'
-import Hero from '../component/Hero'
-import KeyPrinciples from '../component/KeyPrinciples'
-import Navbar from '../component/Navbar'
-import Overview from '../component/Overview'
-import ReportPrep from '../component/ReportPrep'
+import Applicability from '@/components/component/Applicability'
+import BRSRFormat from '@/components/component/BRSRFormat'
+import Footer from '@/components/component/Footer'
+import Hero from '@/components/component/Hero'
+import KeyPrinciples from '@/components/component/KeyPrinciples'
+import Navbar from '@/components/component/Navbar'
+import Overview from '@/components/component/Overview'
+import ReportPrep from '@/components/component/ReportPrep'
 
 const Home = () => {
   return (

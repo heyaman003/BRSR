@@ -9,10 +9,10 @@ const boxes = [
 ];
 const Applicability = () => {
     const images = [
-        { src: "./public/app1.png", alt: "App 1" },
-        { src: "./public/app2.png", alt: "App 2" },
-        { src: "./public/app3.png", alt: "App 3" },
-        { src: "./public/app4.png", alt: "App 4" },
+        { src: "./app1.png", alt: "App 1" },
+        { src: "./app2.png", alt: "App 2" },
+        { src: "./app3.png", alt: "App 3" },
+        { src: "./app4.png", alt: "App 4" },
     ];
 
     return (
@@ -54,7 +54,7 @@ const Applicability = () => {
                     Advantages of BRSR
                 </p>
                 <div className="mx-auto my-16">
-                    <img src="./public/business-val.svg" className="w-full" alt="" />
+                    <img src="./business-val.svg" className="w-full" alt="" />
                 </div>
             </div>
 

@@ -8,7 +8,7 @@ const ReportPrep = () => {
                 Steps for preparing BRSR
             </p>
             <div className='my-10 py-2'>
-                <img src="./public/brsr-rep-prep.svg" className='w-full' alt="" />
+                <img src="./brsr-rep-prep.svg" className='w-full' alt="" />
             </div>
             <div className='my-16 mx-auto text-center'>
                 <h1 className="text-4xl mb-4 font-semibold ">OUR EXPERTISE</h1>

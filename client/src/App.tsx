@@ -4,7 +4,7 @@ import './App.css';
 import LoginForm from '@/pages/Loging.page';
 // import LandingPage from '@/pages/Landing.page';
 import Homepage from '@/pages/Home.page';
-import Home from './components/pages/home';
+import Home from '@/components/pages/Home';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -12,7 +12,7 @@ function App() {
 
   // Check login state on component mount
   useEffect(() => {
-    const storedLoginStatus = localStorage.getItem('isLoggedInEmailer');
+    const storedLoginStatus = localStorage.getItem('isLoggedIn');
     if (storedLoginStatus === 'true') {
       setIsLoggedIn(true);
     }
@@ -22,15 +22,8 @@ function App() {
   const handleLogin = () => {
     setIsLoggedIn(true);
     localStorage.setItem('isLoggedInEmailer', 'true'); // Persist login state
-    navigate('/'); // Redirect to home after login
+    navigate('/'); 
   };
-
-  // // Handle logout
-  // const handleLogout = () => {
-  //   setIsLoggedIn(false);
-  //   localStorage.removeItem('isLoggedInEmailer'); // Clear login state
-  //   navigate('/login'); // Redirect to login page
-  // };
 
   return (
     <div>

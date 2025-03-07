@@ -25,7 +25,7 @@ export default function Navbar() {
       <div className="container mx-auto flex justify-between items-center p-4">
         {/* Logo */}
         <div className="text-2xl flex items-center gap-4 font-bold text-gray-800">
-          <img src="./public/logo.svg" alt="Logo" />
+          <img src="./logo.svg" alt="Logo" />
           <span className="md:text-3xl text-3xl text-[#14532D]">BRSR Reporter</span>
         </div>
 

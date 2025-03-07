@@ -68,7 +68,7 @@ const Hero = () => {
                         {/* Main image */}
                         <div className="relative md:w-[50vh] rounded-2xl overflow-hidden shadow-md -z-2">
                             <img
-                                src="./public/banner.jpg"
+                                src="./banner.jpg"
                                 alt=""
                                 width={600}
                                 height={450}

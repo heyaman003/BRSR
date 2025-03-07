@@ -24,8 +24,8 @@ const Overview = () => {
             <div className="md:flex items-center justify-center container mx-auto">
                 <div className="md:w-[40%]">
                     <div className="relative w-fit border-2 border-black">
-                        <img src="./public/overview1.jpg" alt="" />
-                        <img src="./public/overview2.png" className="absolute top-1/3 left-[60%]" alt="" />
+                        <img src="./overview1.jpg" alt="" />
+                        <img src="./overview2.png" className="absolute top-1/3 left-[60%]" alt="" />
                     </div>
                 </div>
                 <div className="md:w-[60%]">

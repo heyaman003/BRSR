@@ -5,6 +5,14 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
+type CollapsibleCardtype={
+    id:String,
+    principle:{
+        title:String,
+        title2:String,
+        details:String[]
+    }
+}
 
 export default function PrinciplesSlider() {
     const principles = {
@@ -60,16 +68,16 @@ export default function PrinciplesSlider() {
         },
     };
 
-    const CustomPrevArrow = ({ onClick }) => (
+    const CustomPrevArrow = ({ onClick }: { onClick: () => void }) => (
         <button
-          onClick={onClick}
-          className="absolute left-[-50px] top-1/2 transform -translate-y-1/2 border-2 border-[#4C8C68] text-[#4C8C68] p-3 rounded-full shadow-lg hover:bg-[#94C0AFE8] transition-all z-10"
+            onClick={onClick}
+            className="absolute left-[-50px] top-1/2 transform -translate-y-1/2 border-2 border-[#4C8C68] text-[#4C8C68] p-3 rounded-full shadow-lg hover:bg-[#94C0AFE8] transition-all z-10"
         >
-          <ChevronLeft size={20} />
+            <ChevronLeft size={20} />
         </button>
-      );
+    );
     
-      const CustomNextArrow = ({ onClick }) => (
+      const CustomNextArrow = ({ onClick }: { onClick: () => void }) => (
         <button
           onClick={onClick}
           className="absolute right-[-50px] top-1/2 transform -translate-y-1/2 border-2 border-[#4C8C68] text-[#4C8C68] p-3 rounded-full shadow-lg hover:bg-[#94C0AFE8] transition-all z-10"
@@ -86,8 +94,8 @@ export default function PrinciplesSlider() {
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 3000,
-    prevArrow: <CustomPrevArrow />,
-    nextArrow: <CustomNextArrow />,
+    prevArrow: <CustomPrevArrow onClick={() => {}} />,
+    nextArrow: <CustomNextArrow onClick={() => {}} />,
     responsive: [
             {
                 breakpoint: 1024,
@@ -115,7 +123,7 @@ export default function PrinciplesSlider() {
     );
 }
 
-function CollapsibleCard({ id, principle }) {
+function CollapsibleCard({ id, principle }:CollapsibleCardtype) {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
