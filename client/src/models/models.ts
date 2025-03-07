@@ -3,6 +3,7 @@ import { Expose, Type } from 'class-transformer';
 export enum QuestionType {
   TABLE = 'table',
   TEXT = 'text',
+  BOOLEAN = 'boolean'
 }
 
 export class Cell {

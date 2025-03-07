@@ -4,6 +4,7 @@ import * as mongoose from 'mongoose';
 export enum QuestionType {
   TABLE = 'table',
   TEXT = 'text',
+  BOOLEAN = 'boolean'
 }
 
 @Schema()

@@ -1,5 +1,7 @@
 // import SectionCTable2 from "@/components/sectionC/SectionCTable2";
-import SectionCTable2 from "@/components/sectionC/SectionCTable2";
+import BooleanInput from "@/components/Question/BooleanInput";
+import TableUI from "@/components/Question/Table";
+import TextQuestionUI from "@/components/Question/Text";
 import { Question, SubSection, Table } from "@/models/models";
 import { plainToInstance } from "class-transformer";
 import { useEffect, useState } from "react";
@@ -28,22 +30,16 @@ const Section = ({ subsectionId }: { subsectionId: string }) => {
                 {question.type === "table" &&
                   question.answer_table &&
                   question.answer_table.map((table: Table, ind: number) => (
-                    <SectionCTable2 key={ind} table={table} />
+                    <TableUI key={ind} table={table} />
                   ))}
                 {question.type === "text" && (
-                  <>
-                    <input
-                      // type={question.type}
-                      id={question.id}
-                      className={`flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm
-                                                  ring-offset-background file:border-0 file:bg-transparent
-                                                  file:text-sm file:font-medium placeholder:text-muted-foreground
-                                                  focus-visible:outline-none focus-visible:ring-2
-                                                  focus-visible:ring-ring focus-visible:ring-offset-2
-                                                  disabled:cursor-not-allowed disabled:opacity-50`}
-                    />
-                  </>
+                  <TextQuestionUI key={question.id}/>
                 )}
+                {
+                  question.type === "boolean" && (
+                    <BooleanInput/>
+                  )
+                }
               </div>
             ))}
         </div>
