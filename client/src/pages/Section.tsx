@@ -52,7 +52,7 @@ export default Section;
 
 const fetchSubsectionData = async (subsectionId: string) => {
   const raw = await fetch(
-    `http://localhost:8000/section/subsection/${subsectionId}`
+    `http://172.16.16.68:8000/section/subsection/${subsectionId}`
   );
   const res = await raw.json();
   return res.data;
