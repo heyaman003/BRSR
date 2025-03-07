@@ -1,5 +1,6 @@
 import { QuestionType } from './section.schemas';
 
+
 export class Cell {
   data: string;
   isUpdateable: boolean;
@@ -353,18 +354,15 @@ export const companySectionsTemplate: Section[] = [
         // inPropgress: true,
         questions: [
           {
-            // id: '1',
-            type: QuestionType.TEXT,
+            type: QuestionType.BOOLEAN,
             desc: '24. (i) Whether CSR is applicable as per section 135 of Companies Act, 2013',
           },
           {
-            // id: '1',
             type: QuestionType.TEXT,
             desc: '(ii) Turnover (in Rs.)',
             answer_text: '',
           },
           {
-            // id: '2',
             type: QuestionType.TEXT,
             desc: '(iii) Net worth (in Rs.)',
             answer_text: '',
