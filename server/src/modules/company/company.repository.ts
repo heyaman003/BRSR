@@ -17,7 +17,6 @@ export class CompanyRepository {
           path: "sections",
           populate: {
             path: "subSections",
-            select: "-questions"
           }
         })
     } catch (e) {
