@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Injectable,
+  InternalServerErrorException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { UserService } from '../user/user.service';
@@ -45,7 +46,7 @@ export class AuthService {
         role: user.role,
       });
     } catch (e) {
-      throw new BadRequestException(e.message);
+      throw new InternalServerErrorException(e.message);
     }
   }
 
@@ -58,5 +59,11 @@ export class AuthService {
     } catch (e) {
       throw new BadRequestException(e.message);
     }
+  }
+
+
+  async getUserdetails(userId: string):Promise<GetUserDto> {
+    const userdetails: GetUserDto = await this.userService.getUser(userId);
+    return userdetails;
   }
 }

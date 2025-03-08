@@ -44,6 +44,9 @@ const Section = ({ subsectionId }: { subsectionId: string }) => {
             ))}
         </div>
       )}
+      <div>
+        <button className="bg-yellow-500 text-white font-bold px-8 py-2 rounded-sm">Save</button>
+      </div>
     </section>
   );
 };
@@ -52,7 +55,7 @@ export default Section;
 
 const fetchSubsectionData = async (subsectionId: string) => {
   const raw = await fetch(
-    `http://172.16.16.68:8000/section/subsection/${subsectionId}`,{credentials:"include"}
+    `http://localhost:8000/section/subsection/${subsectionId}`,{credentials:"include"}
   );
   const res = await raw.json();
   return res.data;

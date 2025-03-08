@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { Model } from 'mongoose';
 import {
   Cell as CellModel,
@@ -23,6 +23,17 @@ export class SectionRepository {
     @InjectModel(SubSectionModel.name)
     private subSectionModel: Model<SubSectionModel>,
   ) {}
+
+  async updateSubsectionData(id: string, data: SubSection) {
+    try{
+      const subsection: SubSectionModel | null  = await this.subSectionModel.findByIdAndUpdate(id, data, {runValidators: true, new: true});
+      if(!subsection)
+        throw new NotFoundException("Subsection not found.")
+      return subsection;
+    }catch(e){
+      throw new BadRequestException(e);
+    }
+  }
 
   async getSubsectionData(id: string) {
     try {
