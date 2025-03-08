@@ -20,13 +20,13 @@ const Section = ({ subsectionId }: { subsectionId: string }) => {
     <section className="pt-6">
       {subsectionData && (
         <div>
-          <h1 className="font-bold text-2xl text-center mb-5 text-green-700">
+          <h1 className="font-bold text-md bg-yellow-200 w-fit px-4 rounded-lg   my-3 mb-5 ">
             {subsectionData.title}
           </h1>
           {subsectionData.questions &&
             subsectionData.questions.map((question: Question) => (
-              <div className="mb-14" key={question.id}>
-                <p className="text-sm text-gray-500 mb-4">{question.desc}</p>
+              <div className="mb-5" key={question.id}>
+                <p className="text-sm font-bold   mb-2 ">{question.desc}</p>
                 {question.type === "table" &&
                   question.answer_table &&
                   question.answer_table.map((table: Table, ind: number) => (
@@ -58,5 +58,6 @@ const fetchSubsectionData = async (subsectionId: string) => {
     `http://localhost:8000/section/subsection/${subsectionId}`,{credentials:"include"}
   );
   const res = await raw.json();
+  console.log('subsection data is ',res.data);
   return res.data;
 };

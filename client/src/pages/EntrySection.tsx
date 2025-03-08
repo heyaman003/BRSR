@@ -1,21 +1,34 @@
 import { useEffect, useState } from "react";
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { getSectiondata } from '../features/sections/sectionSlice';
+import type { AppDispatch } from '@/store/store.ts';
 import Leftcontainer from "@/components/dashboard/Leftcontainer";
 import Horizontalscroll from "@/components/ui/Horizontalscroll";
 import { Section } from "@/models/models";
 import { plainToInstance } from "class-transformer";
 import SectionUI from "./Section";
+import {listSections} from "@/lib/utils"
+import { selectIsLoading, selectSectionError } from '@/features/sections/sectionSelectors';
 
 export default function QuestionnairePage() {
   const [sections, setSections] = useState<Section[] | null>(null);
   const [activeSection, setActiveSection] = useState<string>("");
   const [activeSubsection, setActiveSubsection] = useState<string>("");
-
+  const dispatch = useDispatch<AppDispatch>(); // Properly typed dispatch
+  const isLoading = useSelector(selectIsLoading);
+  const error = useSelector(selectSectionError);
+  const id='67cae71f8266cd0ccb7015da';
   useEffect(() => {
-    listSections("67cae71f8266cd0ccb7015da").then((res) => {
-      const sections: Section[] = plainToInstance(Section, res);
-      setSections(sections);
-      setActiveSection(sections[0].id);
-    });
+   const sectionDataHandler=async()=>{
+    const resultAction = await dispatch(getSectiondata({companyID:id}));
+    console.log(resultAction?.payload?.data,"the main thing-----------")
+    const sections: Section[] = plainToInstance(Section, resultAction?.payload?.data);
+    setSections(sections);
+    console.log(sections,"the section data is ----")
+    setActiveSection(sections[0].id);
+   }
+   sectionDataHandler();
   }, []);
 
   useEffect(() => {
@@ -59,10 +72,3 @@ export default function QuestionnairePage() {
   );
 }
 
-const listSections = async (companyId: string): Promise<Object[]> => {
-  const raw = await fetch(
-    `http://localhost:8000/company/${companyId}/sections`,{credentials:"include"}
-  );
-  const res = await raw.json();
-  return res.data;
-};
