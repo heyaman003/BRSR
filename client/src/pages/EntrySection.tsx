@@ -11,7 +11,7 @@ export default function QuestionnairePage() {
   const [activeSubsection, setActiveSubsection] = useState<string>("");
 
   useEffect(() => {
-    listSections("67cacb1dcc99821024bdff3e").then((res) => {
+    listSections("67cae71f8266cd0ccb7015da").then((res) => {
       const sections: Section[] = plainToInstance(Section, res);
       setSections(sections);
       setActiveSection(sections[0].id);
@@ -61,7 +61,7 @@ export default function QuestionnairePage() {
 
 const listSections = async (companyId: string): Promise<Object[]> => {
   const raw = await fetch(
-    `http://172.16.16.68:8000/company/${companyId}/sections`,{credentials:"include"}
+    `http://localhost:8000/company/${companyId}/sections`,{credentials:"include"}
   );
   const res = await raw.json();
   return res.data;

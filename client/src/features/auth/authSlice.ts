@@ -5,9 +5,9 @@ interface LoginCredentials {
   email: string;
   password: string;
 }
-interface UserInformation extends LoginCredentials{
-  role:string;
-}
+// interface UserInformation extends LoginCredentials{
+//   role:string;
+// }
 
 interface AuthState {
   user: { [key: string]: any } | null;

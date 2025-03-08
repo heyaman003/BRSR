@@ -10,6 +10,7 @@ import { useDispatch } from 'react-redux';
 import { loginUser } from '../features/auth/authSlice';
 import type { AppDispatch } from '@/store/store.ts';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { RootState } from '@/store/store.ts';
 
 interface LoginFormProps {
   onLogin: () => void; // Define handleLogin as a function with no arguments and no return value
@@ -23,7 +24,7 @@ export default function LoginForm({onLogin}:LoginFormProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-
+  
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
   
