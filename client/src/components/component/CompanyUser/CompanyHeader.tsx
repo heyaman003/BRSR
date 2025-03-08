@@ -23,7 +23,7 @@ const CompanyHeader: React.FC<CompanyHeaderProps> = ({ company }) => {
                 className="w-12 h-12 object-contain" 
               />
             ) : (
-              <span className="text-3xl font-bold text-white">
+              <span className="text-3xl font-bold text-white capitalize">
                 {company.name.charAt(0)}
               </span>
             )}
@@ -31,7 +31,7 @@ const CompanyHeader: React.FC<CompanyHeaderProps> = ({ company }) => {
         </div>
         
         <div className="space-y-2 animate-fade-up" style={{ animationDelay: '100ms' }}>
-          <h1 className="text-4xl font-bold tracking-tight text-emerald-800 dark:text-emerald-300">{company.name}</h1>
+          <h1 className="text-4xl font-bold tracking-tight text-emerald-800 dark:text-emerald-300 capitalize">{company.name}</h1>
         </div>
       </div>
     </header>

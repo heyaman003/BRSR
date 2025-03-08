@@ -8,7 +8,7 @@ export class Company {
     @Prop({type: String, required: [true, "Company name can't be empty."]})
     name: String;
 
-    @Prop({type: [{type: mongoose.Schema.Types.ObjectId, ref: Company.name}]})
+    @Prop({type: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}]})
     users: User[];
 
     @Prop({type: [{type: mongoose.Schema.Types.ObjectId, ref: Section.name}]})
