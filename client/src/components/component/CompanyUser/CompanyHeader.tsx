@@ -7,7 +7,7 @@ interface CompanyHeaderProps {
 
 const CompanyHeader: React.FC<CompanyHeaderProps> = ({ company }) => {
   return (
-    <header className="w-full mb-12">
+    <header className="w-full mb-4">
       <div className="flex flex-col items-center justify-center text-center py-10 px-4 space-y-4">
         <div className="relative">
           {/* Animated background circles */}

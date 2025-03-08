@@ -37,7 +37,7 @@ export default function CreateUserForm({ companyId }: { companyId: string }) {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-      createClient(companyId, values).then(res=>{
+      createClient(companyId, values).then((res)=>{
         form.resetField("name")
         form.resetField("email")
         form.resetField("password")
