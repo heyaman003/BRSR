@@ -18,6 +18,14 @@ const testdata = [
   { id: 6, name: "Apple" }
 ];
 
+const fetchAllCompanies = async() => {
+  const raw = await fetch(`http://localhost:8000/company/all`, {credentials: 'include'});
+
+  const res = await raw.json();
+
+  return res.data;
+}
+
 const Index: React.FC = () => {
   const [companies, setCompanies] = useState<Company[]>([]);
   const [isLoading, setIsLoading] = useState<Boolean>(true);
@@ -28,13 +36,10 @@ const Index: React.FC = () => {
     setCompanies((prev) => ([...prev, company])); // ✅ Handles null case
       }
   useEffect(() => {
-    // Simulate loading delay for smooth animations
-    const timer = setTimeout(() => {
-      setCompanies(testdata);
-      setIsLoading(false);
-    }, 800);
-
-    return () => clearTimeout(timer);
+    fetchAllCompanies().then((companies)=>{
+      setCompanies(companies)
+      setIsLoading(false)
+    });
   }, []);
 
   return (
@@ -66,7 +71,7 @@ const Index: React.FC = () => {
           <div className="mt-6 w-24 h-1 bg-gradient-to-r from-green-400 to-green-600 mx-auto rounded-full"></div>
         </motion.div>
          <CompanyTabs setViewMode={setViewMode} />
-        {viewMode==='list'&&isLoading ? (
+        {viewMode==='list' && isLoading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[...Array(6)].map((_, index) => (
               <div 

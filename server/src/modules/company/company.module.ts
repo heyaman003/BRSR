@@ -9,6 +9,7 @@ import { SectionModule } from "../section/section.module";
 @Module({
     controllers: [CompanyController],
     providers: [CompanyService, CompanyRepository],
-    imports: [MongooseModule.forFeature([{name: Company.name, schema: CompanySchema}]), SectionModule]
+    imports: [MongooseModule.forFeature([{name: Company.name, schema: CompanySchema}]), SectionModule],
+    exports: [CompanyService]
 })
 export class CompanyModule {}

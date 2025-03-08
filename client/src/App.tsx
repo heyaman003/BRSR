@@ -5,6 +5,8 @@ import LoginForm from '@/pages/Loging.page';
 import Homepage from '@/pages/Home.page';
 import Home from '@/components/pages/Home';
 import ProtectedRoute from '@/components/ProtectedRoute'; // Import the new component
+import CompanyUser from './pages/CompanyUser';
+import { Toaster } from 'sonner';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -27,10 +29,12 @@ function App() {
 
   return (
     <div>
+      <Toaster />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/brsr-making" element={<ProtectedRoute element={<Homepage />} />} />
         <Route path="/login" element={<LoginForm onLogin={handleLogin} />} />
+        <Route path="/company" element={<CompanyUser />} />
       </Routes>
     </div>
   );

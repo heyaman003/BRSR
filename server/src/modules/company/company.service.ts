@@ -51,4 +51,8 @@ export class CompanyService {
             updatedAt: company['updatedAt']
         }
     }
+
+    async addUser(user, companyId: string) {
+       return await this.companyRepository.addUser(user, companyId);
+    }
 }

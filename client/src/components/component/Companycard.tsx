@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import IconAnimation from './IconAnimation';
+import { useNavigate } from 'react-router-dom';
 
 interface CompanyCardProps {
   id: number;
@@ -11,7 +12,7 @@ interface CompanyCardProps {
 
 const CompanyCard: React.FC<CompanyCardProps> = ({ id, name, className }) => {
   const [isHovered, setIsHovered] = useState(false);
-  console.log(id, name)
+  const navigate = useNavigate()
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -24,6 +25,7 @@ const CompanyCard: React.FC<CompanyCardProps> = ({ id, name, className }) => {
       )}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      onClick={()=>navigate('/company?id='+id)}
     >
       <div className="relative w-full">
         <IconAnimation id={id} />
@@ -53,14 +55,6 @@ const CompanyCard: React.FC<CompanyCardProps> = ({ id, name, className }) => {
           </div>
         </div>
       </div>
-      
-      <motion.div 
-        className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-green-400 to-green-600"
-        initial={{ scaleX: 0 }}
-        animate={{ scaleX: isHovered ? 1 : 0 }}
-        transition={{ duration: 0.3 }}
-        style={{ transformOrigin: "left" }}
-      />
     </motion.div>
   );
 };
