@@ -9,8 +9,12 @@ import {
 } from "@/components/component/SustainabilityElements";
 import { Company, User } from "@/lib/types";
 import { plainToInstance } from "class-transformer";
+import { useSearchParams } from "react-router-dom";
 
 const CompanyUser = () => {
+  // Reading the company id from the query string
+  const[searchParams, setSearchParams] = useSearchParams();
+
   const [mounted, setMounted] = useState(false);
   const [companyData, setCompanyData] = useState<Company>();
   // Generate random leaves for animation
@@ -47,7 +51,8 @@ const CompanyUser = () => {
     }
     setLeaves(leafElements);
 
-    loadUserData().then((res)=>{
+    
+    loadUserData(searchParams.get('id')).then((res)=>{
       if(res){
         const company: Company = plainToInstance(Company, res);
         setCompanyData(company);
@@ -96,10 +101,13 @@ const CompanyUser = () => {
 
 export default CompanyUser;
 
-const loadUserData = async (): Promise<Object | void> => {
+const loadUserData = async (companyId: string | null): Promise<Object | void> => {
   try {
+    if(!companyId)
+      throw new Error('Company not found.')
+
     const raw = await fetch(
-      `http://localhost:8000/company/67cacb1dcc99821024bdff3e`,
+      `http://localhost:8000/company/${companyId}`,
       { credentials: "include" }
     );
     const res = await raw.json();
