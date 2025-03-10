@@ -275,7 +275,7 @@ export const companySectionsTemplate: Section[] = [
                 ].map(
                   (firstCol) =>
                     new Row(
-                      Array.from({ length: 7 }).map(
+                      Array.from({ length: 6 }).map(
                         (_, ind: number) =>
                           new Cell(ind === 0 ? firstCol : '', ind > 0, 1, 1),
                       ),
@@ -283,6 +283,21 @@ export const companySectionsTemplate: Section[] = [
                     ),
                 ),
                 new Row([new Cell('WORKERS', false, 1, 6)], false),
+                new Row([new Cell('EMPLOYEES', false, 1, 6)], false),
+                ...[
+                  'Permanent (F)',
+                  'Other than Permanent (G)',
+                  'Total employees (F + G)',
+                ].map(
+                  (firstCol) =>
+                    new Row(
+                      Array.from({ length: 6 }).map(
+                        (_, ind: number) =>
+                          new Cell(ind === 0 ? firstCol : '', ind > 0, 1, 1),
+                      ),
+                      false,
+                    ),
+                ),
               ], false),
             ],
             // employee: {

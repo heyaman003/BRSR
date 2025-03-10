@@ -2,15 +2,16 @@ import React, { useEffect, useState } from "react";
 
 interface TextQuestionUIArgs {
   updateTextAnswer: (answer: string) => void;
+  value: string | undefined;
 }
 
-const TextQuestionUI: React.FC<TextQuestionUIArgs> = ({ updateTextAnswer }) => {
-  const [answer, setAnswer] = useState("");
+const TextQuestionUI: React.FC<TextQuestionUIArgs> = ({ updateTextAnswer, value }) => {
+  const [answer, setAnswer] = useState(value || '');
 
   useEffect(() => {
     updateTextAnswer(answer);
   }, [answer]);
-  
+
   return (
     <input
       // type={question.type}
