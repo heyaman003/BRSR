@@ -9,14 +9,6 @@ interface Company {
   name: string;
 }
 
-const testdata = [
-  { id: 1, name: "Tata-communication" },
-  { id: 2, name: "Colgate" },
-  { id: 3, name: "Microsoft" },
-  { id: 4, name: "Google" },
-  { id: 5, name: "Amazon" },
-  { id: 6, name: "Apple" }
-];
 
 const fetchAllCompanies = async() => {
   const raw = await fetch(`http://localhost:8000/company/all`, {credentials: 'include'});

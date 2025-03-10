@@ -49,6 +49,12 @@ const authSlice = createSlice({
       localStorage.removeItem("user");
       localStorage.removeItem("isLoggedIn");
     },
+    updateCompany: (state,action) => {
+      if (state.user) {
+        state.user.data.companyId = action.payload; // Update only the companyId
+        localStorage.setItem("user", JSON.stringify(state.user)); // Save updated user
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -68,5 +74,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { logout } = authSlice.actions;
+export const { logout,updateCompany } = authSlice.actions;
 export default authSlice.reducer;

@@ -8,25 +8,26 @@ import Horizontalscroll from "@/components/ui/Horizontalscroll";
 import { Section } from "@/models/models";
 import { plainToInstance } from "class-transformer";
 import SectionUI from "./Section";
-import {listSections} from "@/lib/utils"
 import { selectIsLoading, selectSectionError } from '@/features/sections/sectionSelectors';
-
+import { RootState } from "@/store/store";
 export default function QuestionnairePage() {
   const [sections, setSections] = useState<Section[] | null>(null);
   const [activeSection, setActiveSection] = useState<string>("");
   const [activeSubsection, setActiveSubsection] = useState<string>("");
   const dispatch = useDispatch<AppDispatch>(); // Properly typed dispatch
+
   const isLoading = useSelector(selectIsLoading);
   const error = useSelector(selectSectionError);
-  const id='67cae71f8266cd0ccb7015da';
+  const companyId =useSelector((state: RootState) => state?.auth?.user?.data?.companyId);
+ 
   useEffect(() => {
    const sectionDataHandler=async()=>{
-    const resultAction = await dispatch(getSectiondata({companyID:id}));
+    const resultAction = await dispatch(getSectiondata({companyID:companyId}));
     console.log(resultAction?.payload?.data,"the main thing-----------")
     const sections: Section[] = plainToInstance(Section, resultAction?.payload?.data);
     setSections(sections);
     console.log(sections,"the section data is ----")
-    setActiveSection(sections[0].id);
+    setActiveSection(sections[0]?.id);
    }
    sectionDataHandler();
   }, []);

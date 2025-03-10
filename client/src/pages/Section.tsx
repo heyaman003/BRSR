@@ -26,7 +26,7 @@ const Section = ({ subsectionId }: { subsectionId: string }) => {
           {subsectionData.questions &&
             subsectionData.questions.map((question: Question) => (
               <div className="mb-5" key={question.id}>
-                <p className="text-sm font-bold   mb-2 ">{question.desc}</p>
+                <p className={ `text-sm  font-bold   mb-2  ${question.type === "table"&& "text-green-700 font-semibold"}`}>{question.desc}</p>
                 {question.type === "table" &&
                   question.answer_table &&
                   question.answer_table.map((table: Table, ind: number) => (
@@ -54,7 +54,7 @@ const Section = ({ subsectionId }: { subsectionId: string }) => {
 export default Section;
 
 const fetchSubsectionData = async (subsectionId: string) => {
-  const raw = await fetch(
+  const raw = await fetch( 
     `http://localhost:8000/section/subsection/${subsectionId}`,{credentials:"include"}
   );
   const res = await raw.json();

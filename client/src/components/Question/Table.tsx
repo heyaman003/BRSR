@@ -33,7 +33,7 @@ const TableUI = ({ table }: { table: TableType }) => {
   };
 
   return (
-    <>
+    <div className="mb-10 bg-blue-50 p-3 rounded-md">
       <Table>
         <TableHeader>
           {tableState.rows
@@ -74,7 +74,7 @@ const TableUI = ({ table }: { table: TableType }) => {
       {table.isDynamic && <div className="flex justify-end">
         <button className=" px-8 py-2 text-white bg-green-500 font-bold rounded-sm mr-5 mt-2" onClick={addRow}>Add Row</button>
       </div>}
-    </>
+    </div>
   );
 };
 
