@@ -58,13 +58,13 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId }) => {
     <section className="pt-6">
       {subsectionData && (
         <div>
-          <h1 className="font-bold text-2xl text-center mb-5 text-green-700">
+          <h1 className="font-bold text-md bg-yellow-200 w-fit px-4 rounded-lg   my-3 mb-5 ">
             {subsectionData.title}
           </h1>
           {subsectionData.questions &&
             subsectionData.questions.map((question: Question) => (
-              <div className="mb-14" key={question.id}>
-                <p className="text-sm text-gray-500 mb-4">{question.desc}</p>
+              <div className="mb-5" key={question.id}>
+                <p className={ `text-sm  font-bold   mb-2  ${question.type === "table"&& "text-green-700 font-semibold"}`}>{question.desc}</p>
                 {question.type === "table" &&
                   question.answer_table &&
                   question.answer_table.map((table: Table) => (
@@ -107,6 +107,7 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId }) => {
 export default memo(Section);
 
 const fetchSubsectionData = async (subsectionId: string) => {
+
   const raw = await fetch(
     `http://localhost:8000/section/subsection/${subsectionId}`,
     { credentials: "include" }

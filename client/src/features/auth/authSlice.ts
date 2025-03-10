@@ -5,19 +5,18 @@ interface LoginCredentials {
   email: string;
   password: string;
 }
-// interface UserInformation extends LoginCredentials{
-//   role:string;
-// }
+
+interface UserInformation extends LoginCredentials{
+  role:string;
+}
 
 interface AuthState {
   user: { [key: string]: any } | null;
   isLoading: boolean;
   error: string | null | undefined;
 }
-// const initalStateUser:UserInformation={
-//   role:'',
 
-// }
+
 const initialState: AuthState = {
   user: JSON.parse(localStorage.getItem("user") || "null"),
   isLoading: false,
@@ -50,6 +49,12 @@ const authSlice = createSlice({
       localStorage.removeItem("user");
       localStorage.removeItem("isLoggedIn");
     },
+    updateCompany: (state,action) => {
+      if (state.user) {
+        state.user.data.companyId = action.payload; // Update only the companyId
+        localStorage.setItem("user", JSON.stringify(state.user)); // Save updated user
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -60,6 +65,7 @@ const authSlice = createSlice({
       .addCase(loginUser.fulfilled, (state, action) => {
         state.isLoading = false;
         state.user = action.payload;
+        console.log("logging user detailks and seeting---",action.payload)
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.isLoading = false;
@@ -68,5 +74,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { logout } = authSlice.actions;
+export const { logout,updateCompany } = authSlice.actions;
 export default authSlice.reducer;

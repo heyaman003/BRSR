@@ -62,7 +62,7 @@ const TableUI = ({
   };
 
   return (
-    <>
+    <div className="mb-10 bg-blue-50 p-3 rounded-md">
       <Table>
         <TableHeader>
           {tableState.rows
@@ -119,7 +119,8 @@ const TableUI = ({
           </button>
         </div>
       )}
-    </>
+    </div>
+
   );
 };
 
