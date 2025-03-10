@@ -5,7 +5,7 @@ import { getSectiondata } from '../features/sections/sectionSlice';
 import type { AppDispatch } from '@/store/store.ts';
 import Leftcontainer from "@/components/dashboard/Leftcontainer";
 import Horizontalscroll from "@/components/ui/Horizontalscroll";
-import { Section } from "@/models/models";
+import { Section, SubSection } from "@/models/models";
 import { plainToInstance } from "class-transformer";
 import SectionUI from "./Section";
 import { selectIsLoading, selectSectionError } from '@/features/sections/sectionSelectors';
@@ -34,7 +34,9 @@ export default function QuestionnairePage() {
 
   useEffect(() => {
     if (sections && activeSection) {
-      const activeSec = sections.find((section: Section) => section.id === activeSection);
+      const activeSec = sections.find(
+        (section: Section) => section.id === activeSection
+      );
       if (activeSec && activeSec.subSections.length > 0) {
         setActiveSubsection(activeSec.subSections[0].id);
       }
@@ -56,7 +58,6 @@ export default function QuestionnairePage() {
           />
 
           <div className="h-screen overflow-auto pr-4">
-
             {/* Top bar containing the section buttons e.g. 'Section A' */}
             <Horizontalscroll
               sections={sections}
@@ -72,4 +73,14 @@ export default function QuestionnairePage() {
     </div>
   );
 }
+
+
+const listSections = async (companyId: string): Promise<Object[]> => {
+  const raw = await fetch(
+    `http://localhost:8000/company/${companyId}/sections`,
+    { credentials: "include" }
+  );
+  const res = await raw.json();
+  return res.data;
+};
 

@@ -7,9 +7,11 @@ import {
   Table as TableModel,
   Question as QuestionModel,
   SubSection as SubSectionModel,
+  QuestionType,
 } from './section.schemas';
 import { Cell, Row, Section, Table, Question, SubSection } from './initialData';
 import { InjectModel } from '@nestjs/mongoose';
+import path from 'path';
 
 @Injectable()
 export class SectionRepository {
@@ -26,12 +28,36 @@ export class SectionRepository {
 
   async updateSubsectionData(id: string, data: SubSection) {
     try{
-      const subsection: SubSectionModel | null  = await this.subSectionModel.findByIdAndUpdate(id, data, {runValidators: true, new: true});
+      const subsection  = await this.subSectionModel.findById(id).populate({path:'questions', populate: {
+        path: 'answer_table',
+        populate: {
+          path: 'rows',
+          populate: {
+            path: 'cells'
+          }
+        }
+      }});
       if(!subsection)
         throw new NotFoundException("Subsection not found.")
+      
+      // data.questions.forEach((question:Question)=>{
+      //   if(question.type===QuestionType.TABLE){
+      //     question.answer_table?.forEach((table: Table)=>{
+      //       table.rows.forEach((row: Row)=>{
+      //         row.cells.forEach(async (cell: Cell)=>{
+      //           await this.cellModel.findByIdAndUpdate(cell['id'], cell, {runValidators: true, new: true})
+      //         })
+      //       })
+      //     })
+      //   }else if(question.type === QuestionType.TEXT){
+
+      //   }
+      // })
+
       return subsection;
     }catch(e){
-      throw new BadRequestException(e);
+      console.log(e)
+      throw new BadRequestException(e.message);
     }
   }
 
