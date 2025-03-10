@@ -27,6 +27,7 @@ export class SectionRepository {
   ) {}
 
   async updateSubsectionData(id: string, data: SubSection) {
+    console.log("i'm being called for updateSubsectionData ",id,data)
     try{
       const subsection  = await this.subSectionModel.findById(id).populate({path:'questions', populate: {
         path: 'answer_table',
@@ -40,19 +41,19 @@ export class SectionRepository {
       if(!subsection)
         throw new NotFoundException("Subsection not found.")
       
-      // data.questions.forEach((question:Question)=>{
-      //   if(question.type===QuestionType.TABLE){
-      //     question.answer_table?.forEach((table: Table)=>{
-      //       table.rows.forEach((row: Row)=>{
-      //         row.cells.forEach(async (cell: Cell)=>{
-      //           await this.cellModel.findByIdAndUpdate(cell['id'], cell, {runValidators: true, new: true})
-      //         })
-      //       })
-      //     })
-      //   }else if(question.type === QuestionType.TEXT){
+      data.questions.forEach((question:Question)=>{
+        if(question.type===QuestionType.TABLE){
+          question.answer_table?.forEach((table: Table)=>{
+            table.rows.forEach((row: Row)=>{
+              row.cells.forEach(async (cell: Cell)=>{
+                await this.cellModel.findByIdAndUpdate(cell['id'], cell, {runValidators: true, new: true})
+              })
+            })
+          })
+        }else if(question.type === QuestionType.TEXT){
 
-      //   }
-      // })
+        }
+      })
 
       return subsection;
     }catch(e){

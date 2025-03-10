@@ -123,6 +123,6 @@ const updateSubsectionData = async (subsectionData: SubSection) => {
 
   );
   const res = await raw.json();
-  console.log('subsection data is ',res.data);
+  console.log('subsection data is ',res);
   return res.data;
 };

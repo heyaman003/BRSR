@@ -106,7 +106,7 @@ const TableUI = ({ table, updateTableData }: { table: TableType, updateTableData
           </button>
         </div>
       )}
-    </>
+    </div>
 
   );
 };
