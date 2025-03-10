@@ -1,12 +1,20 @@
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 
+interface TextQuestionUIArgs {
+  updateTextAnswer: (answer: string) => void;
+}
 
-const TextQuestionUI = () => {
-    const [answer, setAnswer] = useState('')
+const TextQuestionUI: React.FC<TextQuestionUIArgs> = ({ updateTextAnswer }) => {
+  const [answer, setAnswer] = useState("");
+
+  useEffect(() => {
+    updateTextAnswer(answer);
+  }, [answer]);
+  
   return (
     <input
       // type={question.type}
-      onChange={(e)=>setAnswer(e.target.value)}
+      onChange={(e) => setAnswer(e.target.value)}
       value={answer}
       className={`flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm
                                                   ring-offset-background file:border-0 file:bg-transparent

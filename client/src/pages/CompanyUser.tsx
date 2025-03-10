@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import CompanyHeader from "@/components/component/CompanyUser/CompanyHeader";
 import UserList from "@/components/component/CompanyUser/UserList";
-// import { companyData } from "@/lib/mock-data";
+
 import {
   Leaf,
   Flower,

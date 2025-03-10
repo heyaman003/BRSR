@@ -1,7 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-const CellInput = () => {
+interface CellInputArgs {
+  updateTableCell: (newValue: string) => void
+}
+
+const CellInput: React.FC<CellInputArgs> = ({updateTableCell}) => {
   const [cellData, setCellData] = useState("");
+
+  useEffect(()=>{
+    updateTableCell(cellData);
+  }, [cellData])
   return (
     <input
       onChange={(e) => setCellData(e.target.value)}
