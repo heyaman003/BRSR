@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { Model } from 'mongoose';
 import {
   Cell as CellModel,
@@ -11,7 +15,6 @@ import {
 } from './section.schemas';
 import { Cell, Row, Section, Table, Question, SubSection } from './initialData';
 import { InjectModel } from '@nestjs/mongoose';
-import path from 'path';
 
 @Injectable()
 export class SectionRepository {
@@ -27,36 +30,75 @@ export class SectionRepository {
   ) {}
 
   async updateSubsectionData(id: string, data: SubSection) {
-    try{
-      const subsection  = await this.subSectionModel.findById(id).populate({path:'questions', populate: {
-        path: 'answer_table',
+    try {
+      const subsection = await this.subSectionModel.findById(id).populate({
+        path: 'questions',
         populate: {
-          path: 'rows',
+          path: 'answer_table',
           populate: {
-            path: 'cells'
+            path: 'rows',
+            populate: {
+              path: 'cells',
+            },
+          },
+        },
+      });
+      if (!subsection) throw new NotFoundException('Subsection not found.');
+
+      // Traversing through all the questions received in data
+      await Promise.all(
+        data.questions.map(async (question: Question) => {
+          if (question.type === QuestionType.TABLE) {
+            if (question.answer_table)
+              // Looping through all the tables
+              await Promise.all(
+                question.answer_table.map(async (table: Table) => {
+                  table.rows.forEach(async (row: Row) => {
+                    const existingRow = await this.rowModel.findById(row['id']);
+
+                    // If new Row create the new row
+                    if (!existingRow) {
+                      const rowId = await this.createRow(row);
+                      await this.tableModel.findByIdAndUpdate(table['id'], {
+                        $push: {
+                          rows: rowId,
+                        },
+                      });
+                    }
+                    // If row exists then update each cell
+                    else {
+                      await Promise.all(
+                        row.cells.map(async (cell: Cell) => {
+                          await this.cellModel.findByIdAndUpdate(
+                            cell['id'],
+                            cell,
+                            {
+                              runValidators: true,
+                              new: true,
+                            },
+                          );
+                        }),
+                      );
+                    }
+                  });
+                }),
+              );
+          } else if (question.type === QuestionType.TEXT) {
+            await this.questionModel.findByIdAndUpdate(
+              question['id'],
+              question,
+              {
+                runValidators: true,
+                new: true,
+              },
+            );
           }
-        }
-      }});
-      if(!subsection)
-        throw new NotFoundException("Subsection not found.")
-      
-      // data.questions.forEach((question:Question)=>{
-      //   if(question.type===QuestionType.TABLE){
-      //     question.answer_table?.forEach((table: Table)=>{
-      //       table.rows.forEach((row: Row)=>{
-      //         row.cells.forEach(async (cell: Cell)=>{
-      //           await this.cellModel.findByIdAndUpdate(cell['id'], cell, {runValidators: true, new: true})
-      //         })
-      //       })
-      //     })
-      //   }else if(question.type === QuestionType.TEXT){
+        }),
+      );
 
-      //   }
-      // })
-
-      return subsection;
-    }catch(e){
-      console.log(e)
+      return data;
+    } catch (e) {
+      console.log(e);
       throw new BadRequestException(e.message);
     }
   }
@@ -70,7 +112,7 @@ export class SectionRepository {
           populate: {
             path: 'rows',
             populate: {
-              path: 'cells'
+              path: 'cells',
             },
           },
         },

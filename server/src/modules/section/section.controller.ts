@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Patch } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import { SectionService } from './section.service';
 import ResponseModel from 'src/utils/ResponseModel';
 import { ParseMongoIdPipe } from 'src/utils/pipes/ParseMongoIdPipe';
@@ -14,8 +14,8 @@ export class SectionController {
     return new ResponseModel(200, 'Success', subsectionData);
   }
 
-  @Patch('/subsection/:subsectionId')
+  @Post('/subsection/:subsectionId')
   async updateSubsectionData(@Param('subsectionId', ParseMongoIdPipe) id: string,@Body() data: SubSection) {
-    return await this.sectionService.updateSubsectionData(id, data);
+    return new ResponseModel(201, "Saved table data successfully", await this.sectionService.updateSubsectionData(id, data));
   }
 }
