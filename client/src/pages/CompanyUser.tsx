@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import CompanyHeader from "@/components/component/CompanyUser/CompanyHeader";
 import UserList from "@/components/component/CompanyUser/UserList";
 
+import { useDispatch } from "react-redux";
+// import { companyData } from "@/lib/mock-data";
 import {
   Leaf,
   Flower,
@@ -9,7 +11,29 @@ import {
 } from "@/components/component/SustainabilityElements";
 import { Company, User } from "@/lib/types";
 import { plainToInstance } from "class-transformer";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { updateCompany} from "@/features/auth/authSlice"
+
+const loadUserData = async (companyId: string | null): Promise<Object | void> => {
+  try {
+    if(!companyId)
+      throw new Error('Company not found.')
+
+    const raw = await fetch(
+      `http://localhost:8000/company/${companyId}`,
+      { credentials: "include" }
+    );
+    const res = await raw.json();
+
+    if (raw.status > 399 || raw.status < 200) throw new Error(res.message);
+
+    return res.data;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 
 const CompanyUser = () => {
   // Reading the company id from the query string
@@ -19,6 +43,8 @@ const CompanyUser = () => {
   const [companyData, setCompanyData] = useState<Company>();
   // Generate random leaves for animation
   const [leaves, setLeaves] = useState<React.ReactNode[]>([]);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Animate fade in for the entire page
@@ -73,6 +99,14 @@ const CompanyUser = () => {
     });
   }
 
+  const activeCompanyDetails=()=>{
+    const companyId =searchParams.get('id');
+    if (companyId) {
+      dispatch(updateCompany(companyId)); // Dispatch the action with companyId
+      navigate(`/admin/brsr/company?id=${companyId}`); // Navigate to the report page
+    }
+  }
+
   return (
     <div className="bg-green-100 min-h-screen bg-gradient-to-b from-background to-accent/50 pb-16 overflow-hidden relative">
       {/* Background decorative elements */}
@@ -92,6 +126,7 @@ const CompanyUser = () => {
 
       {/* Content */}
       <div className="container max-w-5xl mx-auto relative z-10">
+        <Button onClick={activeCompanyDetails}  className="absolute right-0 w-[200px] top-[10px] capitalize bg-green-500 hover:bg-green-600">view company data</Button>
         {companyData && <CompanyHeader company={companyData} />}
         {companyData && <UserList companyId={companyData.id} deleteUserFromState={deleteUserFromState} users={companyData.users} />}
       </div>
@@ -101,21 +136,4 @@ const CompanyUser = () => {
 
 export default CompanyUser;
 
-const loadUserData = async (companyId: string | null): Promise<Object | void> => {
-  try {
-    if(!companyId)
-      throw new Error('Company not found.')
 
-    const raw = await fetch(
-      `http://localhost:8000/company/${companyId}`,
-      { credentials: "include" }
-    );
-    const res = await raw.json();
-
-    if (raw.status > 399 || raw.status < 200) throw new Error(res.message);
-
-    return res.data;
-  } catch (e) {
-    console.log(e);
-  }
-};

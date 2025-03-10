@@ -52,7 +52,7 @@ import { useEffect } from "react";
         </text>
       </svg>
       <div className="text-center text-sm text-muted-foreground mt-2 absolute top-[62%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
-        {progress}/{total}
+        {progress}/189
       </div>
     </div>
 
@@ -76,7 +76,7 @@ import { useEffect } from "react";
             In progress
           </div>
           <div className="text-xs font-bold text-green-500">
-            2/{subsection?.questions?.length}
+            2/{subsection?.questions?.length||14}
           </div>
           </div>
         </button>
