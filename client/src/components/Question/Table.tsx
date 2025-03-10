@@ -8,33 +8,41 @@ import {
 } from "../ui/table";
 import { Cell, Row, Table as TableType } from "@/types";
 import CellInput from "./CellInput";
-import { useEffect, useState } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 import * as BSON from "bson";
 const generateId = () => new BSON.ObjectId().toString();
 
-const TableUI = ({ table, updateTableData }: { table: TableType, updateTableData: (updatedTableData: TableType)=>void }) => {
+const TableUI = ({
+  table,
+  updateTableData,
+}: {
+  table: TableType;
+  updateTableData: (updatedTableData: TableType) => void;
+}) => {
   const [tableState, setTableState] = useState<TableType>(table);
 
+  useEffect(() => {
+    updateTableData(tableState);
+  }, [tableState]);
 
-  useEffect(()=>{
-    updateTableData(tableState)
-  }, [tableState])
-
-  const updateTableCell = (rowId: string, cellId: string, newValue: string) => {
-    setTableState((table: TableType) => ({
-      ...table,
-      rows: table.rows.map((row: Row) =>
-        rowId === row.id
-          ? {
-              ...row,
-              cells: row.cells.map((cell: Cell) =>
-                cell.id === cellId ? { ...cell, data: newValue } : cell
-              ),
-            }
-          : row
-      ),
-    }));
-  };
+  const updateTableCell = useCallback(
+    (rowId: string, cellId: string, newValue: string) => {
+      setTableState((table: TableType) => ({
+        ...table,
+        rows: table.rows.map((row: Row) =>
+          rowId === row.id
+            ? {
+                ...row,
+                cells: row.cells.map((cell: Cell) =>
+                  cell.id === cellId ? { ...cell, data: newValue } : cell
+                ),
+              }
+            : row
+        ),
+      }));
+    },
+    []
+  );
 
   const addRow = () => {
     const cellCount = tableState.rows[0].cells.length;
@@ -88,7 +96,12 @@ const TableUI = ({ table, updateTableData }: { table: TableType, updateTableData
                     {!cell.isUpdateable ? (
                       cell.data
                     ) : (
-                      <CellInput updateTableCell={(newCellData: string)=>updateTableCell(row.id, cell.id, newCellData)} />
+                      <CellInput
+                        value={cell.data}
+                        rowId={row.id}
+                        cellId={cell.id}
+                        updateTableCell={updateTableCell}
+                      />
                     )}
                   </TableCell>
                 ))}
@@ -111,4 +124,4 @@ const TableUI = ({ table, updateTableData }: { table: TableType, updateTableData
   );
 };
 
-export default TableUI;
+export default memo(TableUI);

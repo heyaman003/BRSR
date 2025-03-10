@@ -1,15 +1,20 @@
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 
 interface CellInputArgs {
-  updateTableCell: (newValue: string) => void
+  updateTableCell: (rowId: string, cellId: string, newValue: string) => void;
+  value: string;
+  rowId: string;
+  cellId: string;
 }
 
-const CellInput: React.FC<CellInputArgs> = ({updateTableCell}) => {
-  const [cellData, setCellData] = useState("");
+const CellInput: React.FC<CellInputArgs> = ({value, updateTableCell, rowId, cellId}) => {
+  const [cellData, setCellData] = useState(value);
 
   useEffect(()=>{
-    updateTableCell(cellData);
-  }, [cellData])
+    updateTableCell(rowId, cellId, cellData);
+  }, [cellData]);
+
+  console.log(1)
   return (
     <input
       onChange={(e) => setCellData(e.target.value)}
@@ -21,4 +26,4 @@ const CellInput: React.FC<CellInputArgs> = ({updateTableCell}) => {
   );
 };
 
-export default CellInput;
+export default memo(CellInput);
