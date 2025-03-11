@@ -17,7 +17,7 @@ const CompanyCard: React.FC<CompanyCardProps> = ({ id, name, className }) => {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: id * 0.1 }}
+      transition={{ duration: 0.5, delay: 0.1 }}
       className={cn(
         "card-container border p-6 flex flex-col items-center justify-center transition-all duration-500 bg-green-50 cursor-pointer rounded-md",
         isHovered ? "transform -trangreen-y-2" : "",

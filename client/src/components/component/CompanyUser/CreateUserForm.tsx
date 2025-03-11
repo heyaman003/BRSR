@@ -47,9 +47,9 @@ export default function CreateUserForm({ companyId }: { companyId: string }) {
   return (
     <Dialog>
       <DialogTrigger className="bg-green-500 text-white  rounded-sm py-2 px-8 font-bold my-2">Create User</DialogTrigger>
-      <DialogContent className={"px-10"}>
+      <DialogContent className={"px-10 bg-green-50"}>
         <DialogHeader>
-          <DialogTitle> Add User</DialogTitle>
+          <DialogTitle className="text-green-600 text-2xl font-sans"> Add User</DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form
@@ -92,6 +92,7 @@ export default function CreateUserForm({ companyId }: { companyId: string }) {
                   <FormLabel>Password</FormLabel>
                   <FormControl>
                     <Input
+                    className={"outline-green-100 outline-1"}
                       placeholder={"Password"}
                       type="password"
                       {...field}
@@ -101,7 +102,7 @@ export default function CreateUserForm({ companyId }: { companyId: string }) {
                 </FormItem>
               )}
             />
-            <Button type="submit">Submit</Button>
+            <Button className="bg-green-600 hover:bg-green-700 px-5" type="submit">Submit</Button>
           </form>
         </Form>
       </DialogContent>

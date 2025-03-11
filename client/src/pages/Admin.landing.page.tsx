@@ -23,10 +23,10 @@ const Index: React.FC = () => {
   const [isLoading, setIsLoading] = useState<Boolean>(true);
   const [viewMode,setViewMode]=useState<String>('list');
 
-  const onCompanyCreated=(company:{ id: number; name: string })=>{
-    console.log("new company created",company);
-    setCompanies((prev) => ([...prev, company])); // ✅ Handles null case
-      }
+  // const onCompanyCreated=(company:{ id: number; name: string })=>{
+  //   console.log("new company created",company);
+  //   setCompanies((prev) => ([...prev, company])); // ✅ Handles null case
+  //     }
   useEffect(() => {
     fetchAllCompanies().then((companies)=>{
       setCompanies(companies)
@@ -79,7 +79,7 @@ const Index: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.3 }}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 "
           >
             {companies?.map((company) => (
               <CompanyCard 
@@ -92,7 +92,7 @@ const Index: React.FC = () => {
           </motion.div>
         )}
         {
-          viewMode==='create'&&<CreateCompanyForm onCompanyCreated={onCompanyCreated}/>
+          viewMode==='create'&&<CreateCompanyForm setCompanies={setCompanies}/>
         }
       </div>
     </div>
