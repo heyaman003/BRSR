@@ -13,7 +13,7 @@ import {
   SubSection as SubSectionModel,
   QuestionType,
 } from './section.schemas';
-import { Cell, Row, Section, Table, Question, SubSection } from './initialData';
+import { Row, Section, Table, Question, SubSection } from './initialData';
 import { InjectModel } from '@nestjs/mongoose';
 
 @Injectable()
@@ -53,37 +53,37 @@ export class SectionRepository {
               // Looping through all the tables
               await Promise.all(
                 question.answer_table.map(async (table: Table) => {
-                  table.rows.forEach(async (row: Row) => {
-                    const existingRow = await this.rowModel.findById(row['id']);
-
-                    // If new Row create the new row
-                    if (!existingRow) {
-                      const rowId = await this.createRow(row);
-                      await this.tableModel.findByIdAndUpdate(table['id'], {
-                        $push: {
-                          rows: rowId,
-                        },
-                      });
-                    }
-                    // If row exists then update each cell
-                    else {
-                      await Promise.all(
-                        row.cells.map(async (cell: Cell) => {
-                          await this.cellModel.findByIdAndUpdate(
-                            cell['id'],
-                            cell,
-                            {
-                              runValidators: true,
-                              new: true,
-                            },
-                          );
-                        }),
+                  await Promise.all(
+                    table.rows.map(async (row: Row) => {
+                      const existingRow = await this.rowModel.findById(
+                        row['id'],
                       );
-                    }
-                  });
+
+                      // If row does not exist, create a new row
+                      if (!existingRow) {
+                        const rowId = await this.createRow(row);
+                        await this.tableModel.findByIdAndUpdate(table['id'], {
+                          $push: {
+                            rows: rowId,
+                          },
+                        });
+                      }
+                      // If row exists then update each cell
+                      else {
+                        await this.cellModel.bulkWrite(
+                          row.cells.map((cell) => ({
+                            updateOne: {
+                              filter: { _id: cell['id'] },
+                              update: { $set: cell },
+                            },
+                          })),
+                        );
+                      }
+                    }),
+                  );
                 }),
               );
-          } else if (question.type === QuestionType.TEXT) {
+          } else if (question.type === QuestionType.TEXT || question.type === QuestionType.BOOLEAN) {
             await this.questionModel.findByIdAndUpdate(
               question['id'],
               question,
@@ -91,7 +91,7 @@ export class SectionRepository {
                 runValidators: true,
                 new: true,
               },
-            );
+            ) 
           }
         }),
       );
@@ -199,22 +199,19 @@ export class SectionRepository {
    * @returns Mongodb object id
    */
   async createRow(row: Row): Promise<string> {
+    const cells = await this.cellModel.bulkWrite(
+      row.cells.map((cell) => ({
+        insertOne: {
+          document: cell,
+        },
+      })),
+    );
+
     const newRow: RowModel = await this.rowModel.create({
       ...row,
-      cells: await Promise.all(
-        row.cells.map(async (cell: Cell) => await this.createCell(cell)),
-      ),
+      cells: Object.values(cells.insertedIds),
     });
-    return newRow['id'];
-  }
 
-  /**
-   * Creates a Cell in mongo collection
-   * @param cell Cell data
-   * @returns Mongodb object id
-   */
-  async createCell(cell: Cell): Promise<string> {
-    const newCell: CellModel = await this.cellModel.create(cell);
-    return newCell['id'];
+    return newRow['id'];
   }
 }

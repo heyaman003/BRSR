@@ -14,7 +14,6 @@ const CellInput: React.FC<CellInputArgs> = ({value, updateTableCell, rowId, cell
     updateTableCell(rowId, cellId, cellData);
   }, [cellData]);
 
-  console.log(1)
   return (
     <input
       onChange={(e) => setCellData(e.target.value)}
