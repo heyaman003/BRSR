@@ -65,7 +65,7 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId }) => {
         })
         .finally(() => {
           setLoaderProgress(100);
-          timer = setTimeout(() => setIsLoaderVisible(false), 500);
+          timer = setTimeout(() => setIsLoaderVisible(false), 300);
         });
     }
 
@@ -134,8 +134,8 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId }) => {
             onClick={() => {
               setIsSaving(true);
               updateSubsectionData(subsectionData)
-                .then((res) => toast(res.message))
-                .catch((err) => toast(err.message))
+                .then((res) => toast.success(res.message))
+                .catch((err) => toast.error(err.message))
                 .finally(() => setIsSaving(false));
             }}
             className=" bg-yellow-500 hover:bg-yellow-600 w-24 text-white font-bold px-8 py-2 rounded-sm"
@@ -165,7 +165,7 @@ const fetchSubsectionData = async (
     setTimeout(() => {
       updateProgress(90);
       res();
-    }, 1000)
+    }, 500)
   );
 
   return res.data;

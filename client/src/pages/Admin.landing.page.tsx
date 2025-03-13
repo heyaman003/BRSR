@@ -5,7 +5,7 @@ import CompanyTabs from '@/components/component/CompanyTabs';
 import CreateCompanyForm from '@/components/component/CreateCompanyForm';
 
 interface Company {
-  id: number;
+  id: string;
   name: string;
 }
 
@@ -33,6 +33,14 @@ const Index: React.FC = () => {
       setIsLoading(false)
     });
   }, []);
+
+  const removeCompanyFromLocalState = (companyId: string) => {
+    setCompanies((companies: Company[])=>companies.filter(company=>company.id!==companyId))
+  }
+
+  const addCompanyToLocalState=(companyData: Company) => {
+    setCompanies(companies=>[...companies, companyData])
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-green-100 px-4 py-12 sm:px-6 lg:px-8">
@@ -83,16 +91,17 @@ const Index: React.FC = () => {
           >
             {companies?.map((company) => (
               <CompanyCard 
+              removeCompanyFromLocalState={removeCompanyFromLocalState}
                 key={company.id} 
                 id={company.id} 
                 name={company.name} 
-                className="h-48"
+                className="h-48 hover:bg-white"
               />
             ))}
           </motion.div>
         )}
         {
-          viewMode==='create'&&<CreateCompanyForm setCompanies={setCompanies}/>
+          viewMode==='create'&&<CreateCompanyForm addCompanyToLocalState={addCompanyToLocalState} setCompanies={setCompanies}/>
         }
       </div>
     </div>

@@ -3,15 +3,16 @@ import { motion } from 'framer-motion';
 import { toast } from 'sonner';
 
 interface Company {
-  id: number;
+  id: string;
   name: string;
 }
 
 interface CreateCompanyFormProps {
   setCompanies: React.Dispatch<React.SetStateAction<Company[]>>;
+  addCompanyToLocalState: (companyData: any)=>void
 }
 
-const CreateCompanyForm: React.FC<CreateCompanyFormProps> = ({ setCompanies }) => {
+const CreateCompanyForm: React.FC<CreateCompanyFormProps> = ({ setCompanies, addCompanyToLocalState }) => {
   const [companyName, setCompanyName] = useState('');
   const [loading, setLoading] = useState(false); 
 
@@ -37,7 +38,7 @@ const CreateCompanyForm: React.FC<CreateCompanyFormProps> = ({ setCompanies }) =
       }
 
       const data = await res.json();
-      console.log(data);
+      addCompanyToLocalState(data.data)
       setCompanies((prev) => [{ id: data?.data?.id, name: companyName }, ...prev]);
       setCompanyName('');
       toast.success(`Company "${companyName}" created successfully!`);
