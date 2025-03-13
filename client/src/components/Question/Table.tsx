@@ -63,6 +63,13 @@ const TableUI = ({
       return { ...table };
     });
   };
+  const deleteRow = () => {
+    // const cellCount = tableState.rows[0].cells.length;
+    setTableState((table: TableType) => {
+      table.rows =table?.rows.slice(0,table?.rows.length-1);
+      return { ...table };
+    });
+  };
 
   const saveTable = async () => {
     try {
@@ -153,8 +160,14 @@ const TableUI = ({
           >
             Add Row
           </button>
-        )}
-      </div>
+          <button
+            className=" px-8 py-2 text-white bg-red-500 hover:bg-red-600 font-bold rounded-sm mr-5 mt-2"
+            onClick={deleteRow}
+          >
+            Delete Row
+          </button>
+        </div>
+      )}
     </div>
   );
 };
