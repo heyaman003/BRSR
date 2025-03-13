@@ -73,10 +73,10 @@ const deleteUser = async (userId: string) => {
     const raw = await fetch(`http://localhost:8000/user/${userId}`, {method: 'DELETE', credentials: 'include'});
     const res = await raw.json();
     if (raw.status < 200 || raw.status >= 400) throw new Error(res.message);
-    toast(res.message)
+    toast.success(res.message)
   } catch (e) {
     if(e instanceof Error)
-      toast('User deletion failed: '+e.message);
+      toast.error('User deletion failed: '+e.message);
     console.log(e);
     throw(e);
   }

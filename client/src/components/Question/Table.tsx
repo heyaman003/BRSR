@@ -10,6 +10,8 @@ import { Cell, Row, Table as TableType } from "@/types";
 import CellInput from "./CellInput";
 import { memo, useCallback, useEffect, useState } from "react";
 import * as BSON from "bson";
+import { toast } from "sonner";
+import { Loader2 } from "lucide-react";
 const generateId = () => new BSON.ObjectId().toString();
 
 const TableUI = ({
@@ -20,6 +22,7 @@ const TableUI = ({
   updateTableData: (updatedTableData: TableType) => void;
 }) => {
   const [tableState, setTableState] = useState<TableType>(table);
+  const [isSavingTableData, setIsSavingTableData] = useState<boolean>(false)
 
   useEffect(() => {
     updateTableData(tableState);
@@ -45,7 +48,7 @@ const TableUI = ({
   );
 
   const addRow = () => {
-    const cellCount = tableState.rows[tableState.rows.length-1].cells.length;
+    const cellCount = tableState.rows[tableState.rows.length - 1].cells.length;
     setTableState((table: TableType) => {
       table.rows = [
         ...table.rows,
@@ -66,6 +69,33 @@ const TableUI = ({
       table.rows =table?.rows.slice(0,table?.rows.length-1);
       return { ...table };
     });
+  };
+
+  const saveTable = async () => {
+    try {
+      setIsSavingTableData(true);
+      const raw = await fetch(
+        `http://localhost:8000/section/table/${table.id}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify(tableState),
+        }
+      );
+
+      const res = await raw.json();
+
+      if (raw.status < 200 || raw.status > 399) throw new Error(res.message);
+
+      toast.success(res.message);
+    } catch (e) {
+      if (e instanceof Error) toast.error(e.message);
+    } finally {
+      setIsSavingTableData(false);
+    }
   };
 
   return (
@@ -116,8 +146,14 @@ const TableUI = ({
             ))}
         </TableBody>
       </Table>
-      {table.isDynamic && (
-        <div className="flex justify-end">
+      <div className="flex justify-end">
+        <button
+          className=" px-8 py-2 text-white bg-yellow-500 font-bold rounded-sm mr-5 mt-2"
+          onClick={saveTable}
+        >
+          {isSavingTableData?<Loader2 className="animate-spin" />:'Save Table'}
+        </button>
+        {table.isDynamic && (
           <button
             className=" px-8 py-2 text-white bg-green-500 font-bold rounded-sm mr-5 mt-2"
             onClick={addRow}
@@ -132,9 +168,7 @@ const TableUI = ({
           </button>
         </div>
       )}
-     
     </div>
-
   );
 };
 

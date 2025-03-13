@@ -127,9 +127,9 @@ const createClient = async (
     const res = await raw.json();
 
     if (raw.status < 200 || raw.status >= 400) throw new Error(Array.isArray(res.message)?res.message[0]: res.message);
-    toast(res.message)
+    toast.success(res.message)
     return res.data
   } catch (e) {
-    if (e instanceof Error) toast(e.message);
+    if (e instanceof Error) toast.error(e.message);
   }
 };

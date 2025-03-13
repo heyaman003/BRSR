@@ -30,7 +30,7 @@ function App() {
 
   return (
     <div>
-      <Toaster />
+      <Toaster richColors/>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route
