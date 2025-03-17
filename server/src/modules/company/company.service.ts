@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { CompanyDto } from "src/modules/company/company.dtos";
 import { CompanyRepository } from "src/modules/company/company.repository";
 import { Company } from "./company.schema";
+<<<<<<< HEAD
 import { companySectionsTemplate, Section} from "../section/initialData";
 import { SectionService } from "../section/section.service";
 
@@ -20,6 +21,15 @@ export class CompanyService {
     async createCompany(companyName: string): Promise<CompanyDto> {
         const companySections = await Promise.all(companySectionsTemplate.map(async (section: Section)=> await this.sectionService.createSection(section)));
         const newCompany = await this.companyRepository.createCompany(companyName, companySections);
+=======
+
+@Injectable()
+export class CompanyService {
+    constructor(private readonly companyRepository: CompanyRepository){}
+
+    async createCompany(companyName: string): Promise<CompanyDto> {
+        const newCompany = await this.companyRepository.createCompany(companyName);
+>>>>>>> 969c5c9 (backend changes)
         return this.convertToDto(newCompany);
     }
 
@@ -50,8 +60,11 @@ export class CompanyService {
             updatedAt: company['updatedAt']
         }
     }
+<<<<<<< HEAD
 
     async addUser(user, companyId: string) {
        return await this.companyRepository.addUser(user, companyId);
     }
+=======
+>>>>>>> 969c5c9 (backend changes)
 }

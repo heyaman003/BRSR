@@ -3,11 +3,18 @@ import { UserRepository } from "src/modules/user/user.repository";
 import { User } from "./user.schema";
 import { CreateUserDto, GetUserDto, UserRole } from "./user.dtos";
 import {hash} from 'bcryptjs'
+<<<<<<< HEAD
 import { CompanyService } from "../company/company.service";
 
 @Injectable()
 export class UserService {
     constructor(private userRepository: UserRepository,  private readonly companyService: CompanyService){}
+=======
+
+@Injectable()
+export class UserService {
+    constructor(private userRepository: UserRepository){}
+>>>>>>> 969c5c9 (backend changes)
 
     login(data: any) {
        console.log(data); 
@@ -50,9 +57,13 @@ export class UserService {
         
         const user: User = await this.userRepository.createUser(newUser, role);
 
+<<<<<<< HEAD
         await this.companyService.addUser(user['id'], newUser.company);
 
         return this.convertToDto(user)
+=======
+        return this.convertToDto(user);
+>>>>>>> 969c5c9 (backend changes)
     }
 
     async deleteUser(userId: string):Promise<void> {

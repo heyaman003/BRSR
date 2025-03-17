@@ -5,7 +5,10 @@ import { CompanyDto } from "src/modules/company/company.dtos";
 import { ParseMongoIdPipe } from "src/utils/pipes/ParseMongoIdPipe";
 import { Role } from "src/utils/auth/roles.decorator";
 import { UserRole } from "../user/user.dtos";
+<<<<<<< HEAD
 import { Public } from "src/utils/auth/public.decorator";
+=======
+>>>>>>> 969c5c9 (backend changes)
 
 @Controller('company')
 export class CompanyController{
@@ -37,10 +40,13 @@ export class CompanyController{
         return new ResponseModel(200, "Deleted company successfully.");
     }
 
+<<<<<<< HEAD
     @Get("/:companyId/sections")
     async listSections(@Param("companyId", ParseMongoIdPipe) companyId: string):Promise<ResponseModel> {
         const sections = await this.companyService.listSections(companyId);
         return new ResponseModel(200, "Success.", sections);
     }
 
+=======
+>>>>>>> 969c5c9 (backend changes)
 }
