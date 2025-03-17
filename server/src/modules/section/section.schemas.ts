@@ -4,10 +4,7 @@ import * as mongoose from 'mongoose';
 export enum QuestionType {
   TABLE = 'table',
   TEXT = 'text',
-<<<<<<< HEAD
   BOOLEAN = 'boolean'
-=======
->>>>>>> 969c5c9 (backend changes)
 }
 
 @Schema()
@@ -16,11 +13,7 @@ export class Cell {
   data: string;
 
   @Prop({ type: Boolean, default: false })
-<<<<<<< HEAD
   isUpdateable: boolean;
-=======
-  updateable: boolean;
->>>>>>> 969c5c9 (backend changes)
 
   @Prop({ type: Number, default: 1 })
   rowSpan: number;
@@ -38,11 +31,7 @@ export class Row {
     ref: 'Cell',
     required: true,
   })
-<<<<<<< HEAD
   cells: Cell[];
-=======
-  rows: Cell[];
->>>>>>> 969c5c9 (backend changes)
 
   @Prop({ type: Boolean, required: true })
   isHeading: boolean;
@@ -59,11 +48,8 @@ export class Table {
     required: true,
   })
   rows: Row[];
-<<<<<<< HEAD
   @Prop({type: Boolean, default: false})
   isDynamic: boolean
-=======
->>>>>>> 969c5c9 (backend changes)
 }
 
 export const tableSchema = SchemaFactory.createForClass(Table);
@@ -86,28 +72,17 @@ export class Question {
   @Prop({
     type: String,
     required: false,
-<<<<<<< HEAD
     default: null
-=======
->>>>>>> 969c5c9 (backend changes)
   })
   answer_text: string;
 
   @Prop({
-<<<<<<< HEAD
     type: [{type: mongoose.Schema.Types.ObjectId}],
     ref:'Table',
     required: false,
     default: null
   })
   answer_table: Table[];
-=======
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Table',
-    required: false,
-  })
-  answer_table: Table;
->>>>>>> 969c5c9 (backend changes)
 }
 
 export const questionSchema = SchemaFactory.createForClass(Question);
@@ -122,11 +97,7 @@ export class SubSection {
     ref: 'Question',
     required: true,
   })
-<<<<<<< HEAD
   questions: Question[];
-=======
-  question: Question[];
->>>>>>> 969c5c9 (backend changes)
 }
 
 export const subSectionSchema = SchemaFactory.createForClass(SubSection);
@@ -145,7 +116,6 @@ export class Section {
 }
 
 export const sectionSchema = SchemaFactory.createForClass(Section);
-<<<<<<< HEAD
 
 
 sectionSchema.set('toJSON', {
@@ -198,5 +168,3 @@ cellSchema.set('toJSON', {
   },
 })
 
-=======
->>>>>>> 969c5c9 (backend changes)

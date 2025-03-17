@@ -23,7 +23,6 @@ export class User {
 
 }
 
-<<<<<<< HEAD
 export const UserSchema = SchemaFactory.createForClass(User);
 
 UserSchema.set('toJSON', {
@@ -33,6 +32,3 @@ UserSchema.set('toJSON', {
     delete ret._id
   },
 })
-=======
-export const UserSchema = SchemaFactory.createForClass(User);
->>>>>>> 969c5c9 (backend changes)

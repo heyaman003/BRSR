@@ -14,12 +14,9 @@ import {
   Table,
   tableSchema,
 } from './section.schemas';
-<<<<<<< HEAD
 import { SectionRepository } from './section.repository';
 import { SectionService } from './section.service';
 import { SectionController } from './section.controller';
-=======
->>>>>>> 969c5c9 (backend changes)
 
 @Module({
   imports: [
@@ -32,11 +29,8 @@ import { SectionController } from './section.controller';
       { name: Cell.name, schema: cellSchema },
     ]),
   ],
-<<<<<<< HEAD
   providers: [SectionRepository, SectionService],
   exports: [SectionService],
   controllers: [SectionController]
-=======
->>>>>>> 969c5c9 (backend changes)
 })
 export class SectionModule {}

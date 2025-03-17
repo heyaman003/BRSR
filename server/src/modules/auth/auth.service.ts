@@ -1,10 +1,7 @@
 import {
   BadRequestException,
   Injectable,
-<<<<<<< HEAD
   InternalServerErrorException,
-=======
->>>>>>> 969c5c9 (backend changes)
   UnauthorizedException,
 } from '@nestjs/common';
 import { UserService } from '../user/user.service';
@@ -49,11 +46,7 @@ export class AuthService {
         role: user.role,
       });
     } catch (e) {
-<<<<<<< HEAD
       throw new InternalServerErrorException(e.message);
-=======
-      throw new BadRequestException(e.message);
->>>>>>> 969c5c9 (backend changes)
     }
   }
 
@@ -67,13 +60,10 @@ export class AuthService {
       throw new BadRequestException(e.message);
     }
   }
-<<<<<<< HEAD
 
 
   async getUserdetails(userId: string):Promise<GetUserDto> {
     const userdetails: GetUserDto = await this.userService.getUser(userId);
     return userdetails;
   }
-=======
->>>>>>> 969c5c9 (backend changes)
 }

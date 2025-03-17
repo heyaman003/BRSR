@@ -1,6 +1,5 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-<<<<<<< HEAD
 import * as cookieparser from 'cookie-parser';
 import helmet from 'helmet';
 import { doubleCsrf } from 'csrf-csrf';
@@ -30,13 +29,6 @@ async function bootstrap() {
   });
   app.use(doubleCsrfProtection);
 
-=======
-import * as cookieparser from 'cookie-parser'
-
-async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  app.use(cookieparser())
->>>>>>> 969c5c9 (backend changes)
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();
