@@ -115,10 +115,11 @@ const createClient = async (
   data: { name: string; email: string; password: string }
 ) => {
   try {
-    const raw = await fetch("http://localhost:8000/user/create/client", {
+    const raw = await fetch(`${import.meta.env.VITE_SERVER_URI}/user/create/client`, {
       method: "POST",
       headers: {
-        "Content-Type": 'application/json'
+        "Content-Type": 'application/json',
+        'X-Csrf-Token': sessionStorage.getItem('X-Csrf-Token') || ''
       },
       body: JSON.stringify({ ...data, company: companyId }),
       credentials: 'include'

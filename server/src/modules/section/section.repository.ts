@@ -15,6 +15,7 @@ import {
 } from './section.schemas';
 import { Row, Section, Table, Question, SubSection } from './initialData';
 import { InjectModel } from '@nestjs/mongoose';
+import { TableModel as TableDTO, RowModel as RowDTO, SubSectionModel as SubSectionDTO, QuestionModel as QuestionDTO } from './section.dtos';
 
 @Injectable()
 export class SectionRepository {
@@ -29,7 +30,30 @@ export class SectionRepository {
     private subSectionModel: Model<SubSectionModel>,
   ) {}
 
-  async updateSubsectionData(id: string, data: SubSection) {
+  async retrieveAllSectionData(sectionId: string): Promise<Section> {
+    const data = await this.sectionModel.findById(sectionId).populate({
+      path: 'subSections',
+      populate: {
+        path: 'questions',
+        populate: {
+          path: 'answer_table',
+          populate: {
+            path: 'rows',
+            populate: {
+              path: 'cells',
+            },
+          },
+        },
+      }
+    })
+
+    if(!data)
+      throw new NotFoundException('Section does not exist.')
+
+    return data;
+  }
+
+  async updateSubsectionData(id: string, data: SubSectionDTO) {
     try {
       const subsection = await this.subSectionModel.findById(id).populate({
         path: 'questions',
@@ -47,14 +71,14 @@ export class SectionRepository {
 
       // Traversing through all the questions received in data
       await Promise.all(
-        data.questions.map(async (question: Question) => {
+        data.questions.map(async (question: QuestionDTO) => {
           if (question.type === QuestionType.TABLE) {
             if (question.answer_table)
               // Looping through all the tables
               await Promise.all(
-                question.answer_table.map(async (table: Table) => {
+                question.answer_table.map(async (table: TableDTO) => {
                   await Promise.all(
-                    table.rows.map(async (row: Row) => {
+                    table.rows.map(async (row: RowDTO) => {
                       const existingRow = await this.rowModel.findById(
                         row['id'],
                       );
@@ -83,7 +107,10 @@ export class SectionRepository {
                   );
                 }),
               );
-          } else if (question.type === QuestionType.TEXT || question.type === QuestionType.BOOLEAN) {
+          } else if (
+            question.type === QuestionType.TEXT ||
+            question.type === QuestionType.BOOLEAN
+          ) {
             await this.questionModel.findByIdAndUpdate(
               question['id'],
               question,
@@ -91,7 +118,7 @@ export class SectionRepository {
                 runValidators: true,
                 new: true,
               },
-            ) 
+            );
           }
         }),
       );
@@ -99,6 +126,47 @@ export class SectionRepository {
       return data;
     } catch (e) {
       console.log(e);
+      throw new BadRequestException(e.message);
+    }
+  }
+
+  async saveTableData(id: string, data: TableDTO) {
+    try {
+      const table = await this.tableModel.findById(id).populate({
+        path: 'rows',
+        populate: {
+          path: 'cells',
+        },
+      });
+      if (!table) throw new NotFoundException('Table not found.');
+
+      await Promise.all(
+        data.rows.map(async (row: RowDTO) => {
+          const existingRow = await this.rowModel.findById(row['id']);
+
+          // If row does not exist, create a new row
+          if (!existingRow) {
+            const rowId = await this.createRow(row);
+            await this.tableModel.findByIdAndUpdate(table['id'], {
+              $push: {
+                rows: rowId,
+              },
+            });
+          }
+          // If row exists then update each cell
+          else {
+            await this.cellModel.bulkWrite(
+              row.cells.map((cell) => ({
+                updateOne: {
+                  filter: { _id: cell['id'] },
+                  update: { $set: cell },
+                },
+              })),
+            );
+          }
+        }),
+      );
+    } catch (e) {
       throw new BadRequestException(e.message);
     }
   }
@@ -124,7 +192,7 @@ export class SectionRepository {
 
   /**
    * Creates a Section in mongo collection
-   * @param section Section data
+   * @param section Section datatable
    * @returns Mongodb object id
    */
   async createSection(section: Section) {
@@ -198,7 +266,7 @@ export class SectionRepository {
    * @param row Row data
    * @returns Mongodb object id
    */
-  async createRow(row: Row): Promise<string> {
+  async createRow(row: Row | RowDTO): Promise<string> {
     const cells = await this.cellModel.bulkWrite(
       row.cells.map((cell) => ({
         insertOne: {

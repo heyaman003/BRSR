@@ -15,22 +15,32 @@ function App() {
 
   // Check login state on component mount
   useEffect(() => {
-    const storedLoginStatus = localStorage.getItem("isLoggedInEmailer");
+    const storedLoginStatus = sessionStorage.getItem("isLoggedInEmailer");
     if (storedLoginStatus === "true") {
       setIsLoggedIn(true);
     }
+
+    fetch(import.meta.env.VITE_SERVER_URI + "/csrf", {
+      method: "HEAD",
+      credentials: "include",
+    }).then((res) =>
+      sessionStorage.setItem(
+        "X-Csrf-Token",
+        res.headers.get("X-Csrf-Token") || ""
+      )
+    );
   }, []);
 
   // Handle login
   const handleLogin = () => {
     setIsLoggedIn(true);
-    localStorage.setItem("isLoggedInEmailer", "true"); // Persist login state
+    sessionStorage.setItem("isLoggedInEmailer", "true"); // Persist login state
     navigate("/brsr-making");
   };
 
   return (
     <div>
-      <Toaster richColors/>
+      <Toaster richColors />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route

@@ -18,7 +18,7 @@ interface AuthState {
 
 
 const initialState: AuthState = {
-  user: JSON.parse(localStorage.getItem("user") || "null"),
+  user: JSON.parse(sessionStorage.getItem("user") || "null"),
   isLoading: false,
   error: null,
 };
@@ -31,8 +31,8 @@ export const loginUser = createAsyncThunk<
   try {
     const response = await loginUserAPI(credentials);
     console.log("auth slice response--",response);
-    localStorage.setItem("user", JSON.stringify(response));
-    localStorage.setItem("isLoggedIn", "true");
+    sessionStorage.setItem("user", JSON.stringify(response));
+    sessionStorage.setItem("isLoggedIn", "true");
     return response;
   } catch (error: any) {
     return rejectWithValue(error.message);
@@ -46,13 +46,13 @@ const authSlice = createSlice({
     logout: (state) => {
       state.user = null;
       state.error = null;
-      localStorage.removeItem("user");
-      localStorage.removeItem("isLoggedIn");
+      sessionStorage.removeItem("user");
+      sessionStorage.removeItem("isLoggedIn");
     },
     updateCompany: (state,action) => {
       if (state.user) {
         state.user.data.companyId = action.payload; // Update only the companyId
-        localStorage.setItem("user", JSON.stringify(state.user)); // Save updated user
+        sessionStorage.setItem("user", JSON.stringify(state.user)); // Save updated user
       }
     },
   },

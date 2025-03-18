@@ -6,7 +6,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 export const listSections = async (companyId: string): Promise<Object[]> => {
   const raw = await fetch(
-    `http://localhost:8000/company/${companyId}/sections`,{credentials:"include"}
+    `${import.meta.env.VITE_SERVER_URI}/company/${companyId}/sections`,{credentials:"include", headers: {'X-Csrf-Token': sessionStorage.getItem('X-Csrf-Token') || ''}}
   );
   const res = await raw.json();
   console.log(res.data,"the data is")

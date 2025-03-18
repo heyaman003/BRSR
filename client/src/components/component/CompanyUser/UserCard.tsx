@@ -70,7 +70,7 @@ export default UserCard;
 
 const deleteUser = async (userId: string) => {
   try {
-    const raw = await fetch(`http://localhost:8000/user/${userId}`, {method: 'DELETE', credentials: 'include'});
+    const raw = await fetch(`${import.meta.env.VITE_SERVER_URI}/user/${userId}`, {method: 'DELETE', credentials: 'include', headers:{'X-Csrf-Token': sessionStorage.getItem('X-Csrf-Token') || ''}});
     const res = await raw.json();
     if (raw.status < 200 || raw.status >= 400) throw new Error(res.message);
     toast.success(res.message)

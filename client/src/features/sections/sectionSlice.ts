@@ -42,8 +42,8 @@ const sectionSlice = createSlice({
         //some logic for the updatingsection will be here 
     //   state.user = null;
     //   state.error = null;
-    //   localStorage.removeItem("user");
-    //   localStorage.removeItem("isLoggedIn");
+    //   sessionStorage.removeItem("user");
+    //   sessionStorage.removeItem("isLoggedIn");
     },
 
   },

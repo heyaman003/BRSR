@@ -3,7 +3,6 @@ import { CompanyDto } from "src/modules/company/company.dtos";
 import { CompanyRepository } from "src/modules/company/company.repository";
 import { Company } from "./company.schema";
 import { companySectionsTemplate, Section} from "../section/initialData";
-import { SectionRepository } from "../section/section.repository";
 import { SectionService } from "../section/section.service";
 
 @Injectable()

@@ -21,8 +21,8 @@ const loadUserData = async (companyId: string | null): Promise<Object | void> =>
       throw new Error('Company not found.')
 
     const raw = await fetch(
-      `http://localhost:8000/company/${companyId}`,
-      { credentials: "include" }
+      `${import.meta.env.VITE_SERVER_URI}/company/${companyId}`,
+      { credentials: "include", headers: {'X-Csrf-Token': sessionStorage.getItem('X-Csrf-Token') || ''} },
     );
     const res = await raw.json();
 
