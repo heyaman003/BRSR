@@ -2,6 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { Section } from "./initialData";
 import { SectionRepository } from "./section.repository";
 import { SubSectionModel, TableModel } from "./section.dtos";
+import { generatePdf } from "src/utils/convertToPdf";
 
 @Injectable()
 export class SectionService {
@@ -20,5 +21,11 @@ export class SectionService {
 
     async updateSubsectionData(id: string, data: SubSectionModel) {
         return await this.sectionRepository.updateSubsectionData(id, data);
+    }
+
+    async extractSectionToPDF(sectionId: string): Promise<string> {
+        const data = await this.sectionRepository.retrieveAllSectionData(sectionId);
+        const pdfPath = await generatePdf(data);
+        return pdfPath;
     }
 }

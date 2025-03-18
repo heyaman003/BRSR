@@ -157,7 +157,7 @@ const fetchSubsectionData = async (
   updateProgress(10);
   const raw = await fetch(
     `${import.meta.env.VITE_SERVER_URI}/section/subsection/${subsectionId}`,
-    { credentials: "include", headers: {'X-Csrf-Token': localStorage.getItem('X-Csrf-Token') || ''} }
+    { credentials: "include", headers: {'X-Csrf-Token': sessionStorage.getItem('X-Csrf-Token') || ''} }
   );
   updateProgress(50);
   const res = await raw.json();
@@ -179,7 +179,7 @@ const updateSubsectionData = async (subsectionData: SubSection) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        'X-Csrf-Token': localStorage.getItem('X-Csrf-Token') || ''
+        'X-Csrf-Token': sessionStorage.getItem('X-Csrf-Token') || ''
       },
       body: JSON.stringify(subsectionData),
     }

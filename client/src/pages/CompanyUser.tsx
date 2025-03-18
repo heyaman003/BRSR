@@ -22,7 +22,7 @@ const loadUserData = async (companyId: string | null): Promise<Object | void> =>
 
     const raw = await fetch(
       `${import.meta.env.VITE_SERVER_URI}/company/${companyId}`,
-      { credentials: "include", headers: {'X-Csrf-Token': localStorage.getItem('X-Csrf-Token') || ''} },
+      { credentials: "include", headers: {'X-Csrf-Token': sessionStorage.getItem('X-Csrf-Token') || ''} },
     );
     const res = await raw.json();
 

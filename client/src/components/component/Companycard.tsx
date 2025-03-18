@@ -111,7 +111,7 @@ const deleteCompany = async (companyId: string) => {
   const raw = await fetch(`${import.meta.env.VITE_SERVER_URI}/company/${companyId}`, {
     method: "DELETE",
     credentials: "include",
-    headers:{'X-Csrf-Token': localStorage.getItem('X-Csrf-Token') || ''}
+    headers:{'X-Csrf-Token': sessionStorage.getItem('X-Csrf-Token') || ''}
   });
   const res = await raw.json();
   if (raw.status < 200 || raw.status >= 400) throw new Error(res.message);

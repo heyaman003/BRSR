@@ -49,6 +49,7 @@ export default function QuestionnairePage() {
         <div className="grid grid-cols-1 md:grid-cols-[350px_1fr] gap-8 h-[100vh] overflow-y-auto bg-[#f2f9fa]">
           {/* Left Sidebar */}
           <Leftcontainer
+            activeSection={activeSection}
             subsections={
               sections?.find((section) => section.id === activeSection)
                 ?.subSections

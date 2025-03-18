@@ -28,7 +28,7 @@ const CreateCompanyForm: React.FC<CreateCompanyFormProps> = ({ setCompanies, add
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-Csrf-Token': localStorage.getItem('X-Csrf-Token') || ''
+          'X-Csrf-Token': sessionStorage.getItem('X-Csrf-Token') || ''
         },
         credentials: 'include',
         body: JSON.stringify({ name: companyName }),

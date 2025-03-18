@@ -7,7 +7,7 @@ export const loginUserAPI = async (credentials: {
     credentials: "include",
     headers: {
       "Content-Type": "application/json",
-      "X-Csrf-Token": localStorage.getItem("X-Csrf-Token") || "",
+      "X-Csrf-Token": sessionStorage.getItem("X-Csrf-Token") || "",
     },
     body: JSON.stringify(credentials),
   });

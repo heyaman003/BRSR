@@ -15,7 +15,7 @@ function App() {
 
   // Check login state on component mount
   useEffect(() => {
-    const storedLoginStatus = localStorage.getItem("isLoggedInEmailer");
+    const storedLoginStatus = sessionStorage.getItem("isLoggedInEmailer");
     if (storedLoginStatus === "true") {
       setIsLoggedIn(true);
     }
@@ -24,7 +24,7 @@ function App() {
       method: "HEAD",
       credentials: "include",
     }).then((res) =>
-      localStorage.setItem(
+      sessionStorage.setItem(
         "X-Csrf-Token",
         res.headers.get("X-Csrf-Token") || ""
       )
@@ -34,7 +34,7 @@ function App() {
   // Handle login
   const handleLogin = () => {
     setIsLoggedIn(true);
-    localStorage.setItem("isLoggedInEmailer", "true"); // Persist login state
+    sessionStorage.setItem("isLoggedInEmailer", "true"); // Persist login state
     navigate("/brsr-making");
   };
 

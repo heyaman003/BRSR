@@ -3,7 +3,7 @@ export const sectionfetchAPI = async (companyDesc:{companyID:String}): Promise<O
       method: "GET",
       credentials:"include",
       headers: {
-        'X-Csrf-Token': localStorage.getItem('X-Csrf-Token') || ''
+        'X-Csrf-Token': sessionStorage.getItem('X-Csrf-Token') || ''
       }
     });
     if (!response.ok) {

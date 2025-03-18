@@ -275,7 +275,7 @@ export const companySectionsTemplate: Section[] = [
                     [
                       new Cell('No. (B)', false, 2, 1),
                       new Cell('% (B / A)', false, 2, 1),
-                      new Cell('No. (C)', false, 1, 2),
+                      new Cell('No. (C)', false, 1, 1),
                       new Cell('% (C / A)', false, 1, 2),
                     ],
                     true,
@@ -1857,7 +1857,7 @@ export const companySectionsTemplate: Section[] = [
                         1,
                         1,
                       ),
-                      new Cell('% (B / A) T', false, 1, 3),
+                      new Cell('% (B / A) T', false, 1, 1),
                       new Cell(
                         'Total employees / workers in respective category (C)',
                         false,
@@ -1870,7 +1870,7 @@ export const companySectionsTemplate: Section[] = [
                         1,
                         1,
                       ),
-                      new Cell('% (D / C) T', false, 1, 3),
+                      new Cell('% (D / C) T', false, 1, 1),
                     ],
                     true,
                   ),
@@ -1886,7 +1886,7 @@ export const companySectionsTemplate: Section[] = [
                       new Row(
                         [
                           new Cell(firstCol, false, 1, 1),
-                          ...Array.from({ length: 5 }).map(
+                          ...Array.from({ length: 8 }).map(
                             (_) => new Cell('', true, 1, 1),
                           ),
                         ],
@@ -2240,7 +2240,7 @@ export const companySectionsTemplate: Section[] = [
           },
           {
             type: QuestionType.TABLE,
-            desc: '3. Provide the number of employees / workers having suffered high consequence workrelated injury / ill-health / fatalities (as reported in Q11 of Essential Indicators above), who have been are rehabilitated and placed in suitable employment or whose family members have been placed in suitable employment:',
+            desc: '19. Provide the number of employees / workers having suffered high consequence workrelated injury / ill-health / fatalities (as reported in Q11 of Essential Indicators above), who have been are rehabilitated and placed in suitable employment or whose family members have been placed in suitable employment:',
             answer_table: [
               new Table(
                 [
@@ -2251,13 +2251,13 @@ export const companySectionsTemplate: Section[] = [
                         'Total no. of affected employees/ workers',
                         false,
                         1,
-                        1,
+                        2,
                       ),
                       new Cell(
                         'No. of employees/workers that are rehabilitated and placed in suitable employment or whose family members have been placed in suitable employment',
                         false,
                         1,
-                        1,
+                        2,
                       ),
                     ],
                     true,
@@ -2616,8 +2616,8 @@ export const companySectionsTemplate: Section[] = [
                   new Row(
                     [
                       new Cell('', false, 2, 1),
-                      new Cell('Male', false, 1, 1),
-                      new Cell('Female', false, 1, 1),
+                      new Cell('Male', false, 1, 2),
+                      new Cell('Female', false, 1, 2),
                     ],
                     true,
                   ),
@@ -2711,8 +2711,8 @@ export const companySectionsTemplate: Section[] = [
                   new Row(
                     [
                       new Cell('', false, 2, 1),
-                      new Cell('FY _____ Current Financial Year', false, 1, 2),
-                      new Cell('FY _____ Current Financial Year', false, 1, 2),
+                      new Cell('FY _____ Current Financial Year', false, 1, 3),
+                      new Cell('FY _____ Current Financial Year', false, 1, 3),
                     ],
                     true,
                   ),

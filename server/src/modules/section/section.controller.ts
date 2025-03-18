@@ -1,9 +1,18 @@
-import { Body, Controller, Get, Param, Patch, Post, ValidationPipe } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  Post,
+  StreamableFile,
+  ValidationPipe,
+} from '@nestjs/common';
 import { SectionService } from './section.service';
 import ResponseModel from 'src/utils/ResponseModel';
 import { ParseMongoIdPipe } from 'src/utils/pipes/ParseMongoIdPipe';
-import { SubSection, Table } from './initialData';
 import { SubSectionModel, TableModel } from './section.dtos';
+import { createReadStream, rm } from 'fs';
 
 @Controller('section')
 export class SectionController {
@@ -16,13 +25,42 @@ export class SectionController {
   }
 
   @Post('/subsection/:subsectionId')
-  async updateSubsectionData(@Param('subsectionId', ParseMongoIdPipe) id: string,@Body(ValidationPipe) data: SubSectionModel) {
-    return new ResponseModel(201, "Saved table data successfully", await this.sectionService.updateSubsectionData(id, data));
+  async updateSubsectionData(
+    @Param('subsectionId', ParseMongoIdPipe) id: string,
+    @Body(ValidationPipe) data: SubSectionModel,
+  ) {
+    return new ResponseModel(
+      201,
+      'Saved table data successfully',
+      await this.sectionService.updateSubsectionData(id, data),
+    );
   }
 
   @Post('/table/:tableId')
-  async updateTableData(@Param('tableId', ParseMongoIdPipe) id: string,@Body(ValidationPipe) data: TableModel) {
-    await this.sectionService.createTable(id, data)
-    return new ResponseModel(201, "Saved table data successfully");
+  async updateTableData(
+    @Param('tableId', ParseMongoIdPipe) id: string,
+    @Body(ValidationPipe) data: TableModel,
+  ) {
+    await this.sectionService.createTable(id, data);
+    return new ResponseModel(201, 'Saved table data successfully');
+  }
+
+  @Get(':sectionId/extract')
+  async extractSectionToPDF(
+    @Param('sectionId', ParseMongoIdPipe) sectionId: string,
+  ): Promise<StreamableFile> {
+    const path: string =
+      await this.sectionService.extractSectionToPDF(sectionId);
+    try {
+      const stream = createReadStream(path);
+      return new StreamableFile(stream, {
+        type: 'application/pdf',
+      });
+    } finally {
+      rm(path, (err)=>{
+        if(err)
+          console.log(err)
+      })
+    }
   }
 }

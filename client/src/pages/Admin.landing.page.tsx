@@ -11,7 +11,7 @@ interface Company {
 
 
 const fetchAllCompanies = async() => {
-  const raw = await fetch(`${import.meta.env.VITE_SERVER_URI}/company/all`, {credentials: 'include', headers: {'X-Csrf-Token': localStorage.getItem('X-Csrf-Token') || ''}});
+  const raw = await fetch(`${import.meta.env.VITE_SERVER_URI}/company/all`, {credentials: 'include', headers: {'X-Csrf-Token': sessionStorage.getItem('X-Csrf-Token') || ''}});
 
   const res = await raw.json();
 

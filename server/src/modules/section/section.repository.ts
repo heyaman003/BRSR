@@ -30,6 +30,29 @@ export class SectionRepository {
     private subSectionModel: Model<SubSectionModel>,
   ) {}
 
+  async retrieveAllSectionData(sectionId: string): Promise<Section> {
+    const data = await this.sectionModel.findById(sectionId).populate({
+      path: 'subSections',
+      populate: {
+        path: 'questions',
+        populate: {
+          path: 'answer_table',
+          populate: {
+            path: 'rows',
+            populate: {
+              path: 'cells',
+            },
+          },
+        },
+      }
+    })
+
+    if(!data)
+      throw new NotFoundException('Section does not exist.')
+
+    return data;
+  }
+
   async updateSubsectionData(id: string, data: SubSectionDTO) {
     try {
       const subsection = await this.subSectionModel.findById(id).populate({
