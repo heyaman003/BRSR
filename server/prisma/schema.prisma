@@ -60,7 +60,7 @@ model Question {
   answer_table Table[] @relation(name: "answer-to")
   subsection Subsection @relation(name:"question-belongs-to", fields: [subsectionId], references: [id], onDelete: Cascade)
   subsectionId String
-  index Int @default(0)
+  index Int
 }
 
 model Table {

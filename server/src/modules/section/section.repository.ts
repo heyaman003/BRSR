@@ -47,72 +47,33 @@ export class SectionRepository {
 
   async updateSubsectionData(id: string, data: SubSectionDTO) {
     try {
-      // const subsection = await this.db.findById(id).populate({
-      //   path: 'questions',
-      //   populate: {
-      //     path: 'answer_table',
-      //     populate: {
-      //       path: 'rows',
-      //       populate: {
-      //         path: 'cells',
-      //       },
-      //     },
-      //   },
-      // });
-      // if (!subsection) throw new NotFoundException('Subsection not found.');
-      // // Traversing through all the questions received in data
-      // await Promise.all(
-      //   data.questions.map(async (question: QuestionDTO) => {
-      //     if (question.type === QuestionType.TABLE) {
-      //       if (question.answer_table)
-      //         // Looping through all the tables
-      //         await Promise.all(
-      //           question.answer_table.map(async (table: TableDTO) => {
-      //             await Promise.all(
-      //               table.rows.map(async (row: RowDTO) => {
-      //                 const existingRow = await this.rowModel.findById(
-      //                   row['id'],
-      //                 );
-      //                 // If row does not exist, create a new row
-      //                 if (!existingRow) {
-      //                   const rowId = await this.createRow(row);
-      //                   await this.tableModel.findByIdAndUpdate(table['id'], {
-      //                     $push: {
-      //                       rows: rowId,
-      //                     },
-      //                   });
-      //                 }
-      //                 // If row exists then update each cell
-      //                 else {
-      //                   await this.cellModel.bulkWrite(
-      //                     row.cells.map((cell) => ({
-      //                       updateOne: {
-      //                         filter: { _id: cell['id'] },
-      //                         update: { $set: cell },
-      //                       },
-      //                     })),
-      //                   );
-      //                 }
-      //               }),
-      //             );
-      //           }),
-      //         );
-      //     } else if (
-      //       question.type === QuestionType.TEXT ||
-      //       question.type === QuestionType.BOOLEAN
-      //     ) {
-      //       await this.questionModel.findByIdAndUpdate(
-      //         question['id'],
-      //         question,
-      //         {
-      //           runValidators: true,
-      //           new: true,
-      //         },
-      //       );
-      //     }
-      //   }),
-      // );
-      // return data;
+      await this.db.$transaction(async (tx) => {
+        await tx.subsection.update({
+          where: { id: id },
+          data: {
+            questions: {
+              updateMany: data.questions.map((question) => ({
+                where: {
+                  id: question.id,
+                },
+                data: {
+                  answer_text: question.answer_text || null,
+                },
+              })),
+            },
+          },
+        });
+        await Promise.all(
+          data.questions.map(
+            async (question) =>
+              await Promise.all(
+                question.answer_table.map(
+                  async (table) => await this.updateTableData(table.id, table, tx),
+                ),
+              ),
+          ),
+        );
+      });
     } catch (e) {
       console.log(e);
       throw new BadRequestException(e.message);
@@ -120,93 +81,67 @@ export class SectionRepository {
   }
 
   async saveTableData(id: string, data: TableDTO) {
+    this.updateTableData(id, data, this.db);
+  }
+
+  private async updateTableData(id: string, data: TableDTO, obj){
     try {
-      await this.db.table.update({
+      await obj.table.update({
         where: {
-          id
+          id,
         },
         data: {
           rows: {
             deleteMany: {
               id: {
-                notIn: data.rows.map(row=>row.id)
-              }
+                notIn: data.rows.map((row) => row.id),
+              },
             },
-            upsert: data.rows.map((row, ind: number)=>({
+            upsert: data.rows.map((row, ind: number) => ({
               create: {
                 isHeading: false,
                 index: ind,
                 cells: {
-                  createMany:{
-                    data: row.cells.map(cell=>({
+                  createMany: {
+                    data: row.cells.map((cell) => ({
                       data: cell.data,
                       rowSpan: cell['rowSpan'],
                       colSpan: cell['colSpan'],
                       id: cell.id,
                       isUpdateable: true,
-                      index: cell['index']
-                    }))
-                  }
-                }
+                      index: cell['index'],
+                    })),
+                  },
+                },
               },
               update: {
                 cells: {
-                  update: row.cells.map(cell=>({
-                    where: {id: cell.id},
+                  update: row.cells.map((cell) => ({
+                    where: { id: cell.id },
                     data: {
                       data: cell.data,
                       rowSpan: cell['rowSpan'],
                       colSpan: cell['colSpan'],
-                      isUpdateable: cell['isUpdateable']
-                    }
-                  }))
-                }
+                      isUpdateable: cell['isUpdateable'],
+                    },
+                  })),
+                },
               },
-              where: {id: row.id}
-            }))
-          }
-        }
-      })
-      //   path: 'rows',
-      //   populate: {
-      //     path: 'cells',
-      //   },
-      // });
-      // if (!table) throw new NotFoundException('Table not found.');
-      // await Promise.all(
-      //   data.rows.map(async (row: RowDTO) => {
-      //     const existingRow = await this.rowModel.findById(row['id']);
-      //     // If row does not exist, create a new row
-      //     if (!existingRow) {
-      //       const rowId = await this.createRow(row);
-      //       await this.tableModel.findByIdAndUpdate(table['id'], {
-      //         $push: {
-      //           rows: rowId,
-      //         },
-      //       });
-      //     }
-      //     // If row exists then update each cell
-      //     else {
-      //       await this.cellModel.bulkWrite(
-      //         row.cells.map((cell) => ({
-      //           updateOne: {
-      //             filter: { _id: cell['id'] },
-      //             update: { $set: cell },
-      //           },
-      //         })),
-      //       );
-      //     }
-      //   }),
-      // );
+              where: { id: row.id },
+            })),
+          },
+        },
+      });
+      console.log('Yo');
     } catch (e) {
-      console.log(e)
+      console.log(e);
       throw new BadRequestException(e.message);
     }
   }
 
   async getSubsectionData(id: string) {
     try {
-      console.log(id)
+      console.log(id);
       return await this.db.subsection.findUnique({
         where: {
           id,
@@ -238,7 +173,6 @@ export class SectionRepository {
         data: {
           title: section.title,
           companyId,
-          
         },
         select: {
           id: true,
@@ -252,7 +186,6 @@ export class SectionRepository {
       ),
     );
   }
-
 
   async createSubSection(
     subSection: SubSection,
@@ -277,7 +210,7 @@ export class SectionRepository {
   async createQuestion(
     question: Question,
     subsectionId: string,
-    index: number
+    index: number,
   ): Promise<void> {
     const questionId: string = (
       await this.db.question.create({
@@ -286,7 +219,7 @@ export class SectionRepository {
           subsectionId: subsectionId,
           type: question.type,
           answer_text: question.answer_text,
-          index
+          index,
         },
       })
     ).id;
@@ -297,7 +230,6 @@ export class SectionRepository {
         ),
       );
   }
-
 
   async createTable(table: Table, questionId: string): Promise<void> {
     const tableId = (
@@ -313,12 +245,18 @@ export class SectionRepository {
     ).id;
 
     await Promise.all(
-      table.rows.map(async (row: Row | RowDTO, ind: number) => await this.createRow(row, tableId, ind)),
+      table.rows.map(
+        async (row: Row | RowDTO, ind: number) =>
+          await this.createRow(row, tableId, ind),
+      ),
     );
   }
 
-
-  async createRow(row: Row | RowDTO, tableId: string, ind: number): Promise<void> {
+  async createRow(
+    row: Row | RowDTO,
+    tableId: string,
+    ind: number,
+  ): Promise<void> {
     await this.db.row.create({
       data: {
         isHeading: row.isHeading,
@@ -328,7 +266,7 @@ export class SectionRepository {
             data: row.cells.map((cell) => cell),
           },
         },
-        index: ind
+        index: ind,
       },
     });
   }
