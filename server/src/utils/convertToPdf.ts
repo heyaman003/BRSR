@@ -9,7 +9,7 @@ import {
   Row,
   Table,
 } from 'src/modules/section/initialData';
-import { QuestionType } from 'src/modules/section/section.schemas';
+import { QuestionType } from '@prisma/client'
 
 export async function generatePdf(section: Section) {
   const browser = await puppeteer.launch();
@@ -41,7 +41,7 @@ export async function generatePdf(section: Section) {
 function generateHtml(section: Section): string {
   // Section title
   let html = `<html><body style="width:100%; font-family: Arial;"><h1>${section.title}</h1>`;
-  section.subSections.forEach((subSection: SubSection) => {
+  section.subsections.forEach((subSection: SubSection) => {
     // Subsection container
     html += `<div style="width: 100%;"><h3 style="margin-left:9px;">${subSection.title}</h3>`;
     subSection.questions.forEach((question: Question) => {

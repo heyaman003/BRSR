@@ -1,13 +1,14 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { CompanyDto } from "src/modules/company/company.dtos";
 import { CompanyRepository } from "src/modules/company/company.repository";
-import { Company } from "./company.schema";
+import { Company, User } from "@prisma/client";
 import { companySectionsTemplate, Section} from "../section/initialData";
 import { SectionService } from "../section/section.service";
+import { UserService } from "../user/user.service";
 
 @Injectable()
 export class CompanyService {
-    constructor(private readonly companyRepository: CompanyRepository, private readonly sectionService: SectionService){}
+    constructor(private readonly companyRepository: CompanyRepository, private readonly sectionService: SectionService, private readonly userService: UserService){}
 
     async listSections(companyId: string): Promise<any> {
         const company = await this.companyRepository.listSections(companyId);
@@ -18,8 +19,7 @@ export class CompanyService {
     }
 
     async createCompany(companyName: string): Promise<CompanyDto> {
-        const companySections = await Promise.all(companySectionsTemplate.map(async (section: Section)=> await this.sectionService.createSection(section)));
-        const newCompany = await this.companyRepository.createCompany(companyName, companySections);
+        const newCompany = await this.companyRepository.createCompany(companyName, companySectionsTemplate);
         return this.convertToDto(newCompany);
     }
 
@@ -45,7 +45,7 @@ export class CompanyService {
         return {
             id: company['id'],
             name: company.name,
-            users: company.users,
+            users: company['users'] ? company['users'].map((user: User) => this.userService.convertToDto(user)) : [],
             createdAt: company['createdAt'],
             updatedAt: company['updatedAt']
         }

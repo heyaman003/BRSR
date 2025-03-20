@@ -1,13 +1,12 @@
 import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { UserRepository } from "src/modules/user/user.repository";
-import { User } from "./user.schema";
+import { User } from "@prisma/client";
 import { CreateUserDto, GetUserDto, UserRole } from "./user.dtos";
 import {hash} from 'bcryptjs'
-import { CompanyService } from "../company/company.service";
 
 @Injectable()
 export class UserService {
-    constructor(private userRepository: UserRepository,  private readonly companyService: CompanyService){}
+    constructor(private userRepository: UserRepository){}
 
     login(data: any) {
        console.log(data); 
@@ -28,11 +27,6 @@ export class UserService {
         return this.convertToDto(user);
     }
 
-    /**
-     * 
-     * @param email 
-     * @returns User object from MongoSchema.
-     */
     async getUserdetails(email: string): Promise<User> {
         const user: User | null = await this.userRepository.getUserdetailsByEmail(email);
 
@@ -50,7 +44,7 @@ export class UserService {
         
         const user: User = await this.userRepository.createUser(newUser, role);
 
-        await this.companyService.addUser(user['id'], newUser.company);
+        // await this.companyService.addUser(user['id'], newUser.company);
 
         return this.convertToDto(user)
     }
@@ -61,10 +55,11 @@ export class UserService {
 
     convertToDto(user: User): GetUserDto{
         return {
+            id: user.id,
             name: user.name,
             email: user.email,
             role: user.role,
-            companyId: user.company,
+            companyId: user.companyId || '',
         }
     }
 }

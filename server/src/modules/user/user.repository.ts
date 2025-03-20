@@ -1,20 +1,26 @@
 import {
   BadRequestException,
-  ConflictException,
   Injectable,
 } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { CreateUserDto, UserRole } from 'src/modules/user/user.dtos';
-import { User } from 'src/modules/user/user.schema';
+import { Role, User } from '@prisma/client';
+import { CreateUserDto } from 'src/modules/user/user.dtos';
+import { DbService } from 'src/utils/db.connections';
 
 @Injectable()
 export class UserRepository {
-  constructor(@InjectModel(User.name) private userModel: Model<User>) {}
+  constructor(private db: DbService) {}
 
-  async createUser(userDto: CreateUserDto, role: UserRole): Promise<User> {
+  async createUser(userData: CreateUserDto, role: Role): Promise<User> {
     try {
-      const user = await this.userModel.create({ ...userDto, role });
+      const user: User = await this.db.user.create({
+        data: {
+          name: userData.name,
+          password: userData.password,
+          email: userData.email,
+          role: role,
+          companyId: userData.company,
+        },
+      })
       return user;
     } catch (e) {
       throw new BadRequestException(e.message);
@@ -23,7 +29,7 @@ export class UserRepository {
 
   async getUserdetails(userId: string): Promise<User | null> {
     try {
-      const user: User | null = await this.userModel.findById(userId);
+      const user: User | null = await this.db.user.findUnique({ where: { id: userId } })
       return user;
     } catch (e) {
       throw new BadRequestException(e.message);
@@ -32,7 +38,7 @@ export class UserRepository {
 
   async getUserdetailsByEmail(email: string): Promise<User | null> {
     try {
-      const user: User | null = await this.userModel.findOne({ email: email });
+      const user: User | null = await this.db.user.findUnique({where: { email: email }});
       return user;
     } catch (e) {
       throw new BadRequestException(e.message);
@@ -41,12 +47,14 @@ export class UserRepository {
 
   async deleteUser(userId: string): Promise<void> {
     try {
-      await this.userModel.deleteOne({
-        _id: userId,
+      await this.db.user.delete({where:{
+        id: userId,
         role:{
-          $ne: UserRole.SUPERADMIN
+          not: {
+            equals: Role.SUPERADMIN
+          }
         }
-      });
+      }});
     } catch (e) {
       throw new BadRequestException(e.message);
     }

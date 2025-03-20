@@ -23,10 +23,8 @@ export default function QuestionnairePage() {
   useEffect(() => {
    const sectionDataHandler=async()=>{
     const resultAction = await dispatch(getSectiondata({companyID:companyId}));
-    console.log(resultAction?.payload?.data,"the main thing-----------")
     const sections: Section[] = plainToInstance(Section, resultAction?.payload?.data);
     setSections(sections);
-    console.log(sections,"the section data is ----")
     setActiveSection(sections[0]?.id);
    }
    sectionDataHandler();
@@ -37,8 +35,8 @@ export default function QuestionnairePage() {
       const activeSec = sections.find(
         (section: Section) => section.id === activeSection
       );
-      if (activeSec && activeSec.subSections.length > 0) {
-        setActiveSubsection(activeSec.subSections[0].id);
+      if (activeSec && activeSec?.subsections?.length > 0) {
+        setActiveSubsection(activeSec.subsections[0].id);
       }
     }
   }, [activeSection]);
@@ -52,7 +50,7 @@ export default function QuestionnairePage() {
             activeSection={activeSection}
             subsections={
               sections?.find((section) => section.id === activeSection)
-                ?.subSections
+                ?.subsections
             }
             activeSubsection={activeSubsection}
             setActiveSubsection={setActiveSubsection}

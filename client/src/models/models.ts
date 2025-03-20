@@ -1,9 +1,9 @@
 import { Expose, Type } from 'class-transformer';
 
 export enum QuestionType {
-  TABLE = 'table',
-  TEXT = 'text',
-  BOOLEAN = 'boolean'
+  TABLE = 'TABLE',
+  TEXT = 'TEXT',
+  BOOLEAN = 'BOOLEAN'
 }
 
 export class Cell {
@@ -17,18 +17,22 @@ export class Cell {
   rowSpan: number;
   @Expose()
   colSpan: number;
+  @Expose()
+  index: number
 
   constructor(
     id: string,
     data: string,
     isUpdateable: boolean,
     rowSpan: number,
-    colSpan: number
+    colSpan: number,
+    index: number
   ) {
     (this.id = id), (this.data = data);
     this.isUpdateable = isUpdateable;
     this.rowSpan = rowSpan;
     this.colSpan = colSpan;
+    this.index = index
   }
 }
 
@@ -39,10 +43,13 @@ export class Row {
   id: string;
   @Expose()
   isHeading: boolean;
-  constructor(id: string, cells: Cell[], isHeading: boolean) {
+  @Expose()
+  index: number;
+  constructor(id: string, cells: Cell[], isHeading: boolean, index: number) {
     this.isHeading = isHeading;
     this.id = id;
     this.cells = cells;
+    this.index = index
   }
 }
 
@@ -72,9 +79,12 @@ export class Question {
   answer_table?: Table[];
   @Expose()
   answer_text?: string;
-  constructor(id: string, type: QuestionType, desc: string, answer_table: Table[], answer_text: string) {
+  @Expose()
+  index: number
+  constructor(id: string, type: QuestionType, desc: string, answer_table: Table[], answer_text: string, index: number) {
     this.type = type;
     this.id = id;
+    this.index = index;
     this.desc = desc;
     this.answer_table = answer_table;
     this.answer_text = answer_text;
@@ -89,11 +99,13 @@ export class SubSection {
   @Expose()
   @Type(()=>Question)
   questions: Question[];
+  index: number;
 
-  constructor(id: string, title: string, questions: Question[]) {
+  constructor(id: string, title: string, questions: Question[], index: number) {
     this.id = id;
     this.title = title;
     this.questions = questions;
+    this.index = index
   }
 }
 
@@ -104,12 +116,12 @@ export class Section {
   title: string;
   @Expose()
   @Type(()=>SubSection)
-  subSections: SubSection[];
+  subsections: SubSection[];
 
   constructor(id: string, title: string, subSections: SubSection[]) {
     this.id = id;
     this.title = title;
-    this.subSections = subSections;
+    this.subsections = subSections;
   }
 }
 

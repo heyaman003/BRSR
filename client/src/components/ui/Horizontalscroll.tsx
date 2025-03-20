@@ -18,7 +18,7 @@ const Horizontalscroll = ({
     <div>
       <div className="w-[90%]">
         <div className="overflow-y-auto flex justify-betwwen gap-10 w-[90%] rw-full  pt-7">
-          {sections && sections.map((section: Section) => (
+          {sections && sections.sort((a, b)=>a.title.localeCompare(b.title)).map((section: Section) => (
             <button
               onClick={() => setActiveSection(section.id)}
               key={section.id}

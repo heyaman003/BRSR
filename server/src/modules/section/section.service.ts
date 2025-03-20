@@ -11,8 +11,8 @@ export class SectionService {
         return await this.sectionRepository.getSubsectionData(id);
     }
 
-    async createSection(section: Section){
-        return await this.sectionRepository. createSection(section);
+    async createSection(section: Section, companyId: string){
+        return await this.sectionRepository. createSection(section, companyId);
     }
 
     async createTable(id: string, table: TableModel){

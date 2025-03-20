@@ -3,14 +3,13 @@ import {
   Controller,
   Get,
   Param,
-  Patch,
+  ParseUUIDPipe,
   Post,
   StreamableFile,
   ValidationPipe,
 } from '@nestjs/common';
 import { SectionService } from './section.service';
 import ResponseModel from 'src/utils/ResponseModel';
-import { ParseMongoIdPipe } from 'src/utils/pipes/ParseMongoIdPipe';
 import { SubSectionModel, TableModel } from './section.dtos';
 import { createReadStream, rm } from 'fs';
 
@@ -19,14 +18,14 @@ export class SectionController {
   constructor(private readonly sectionService: SectionService) {}
 
   @Get('/subsection/:subsectionId')
-  async getSubsectionData(@Param('subsectionId', ParseMongoIdPipe) id: string) {
+  async getSubsectionData(@Param('subsectionId', ParseUUIDPipe) id: string) {
     const subsectionData = await this.sectionService.getSubsections(id);
     return new ResponseModel(200, 'Success', subsectionData);
   }
 
   @Post('/subsection/:subsectionId')
   async updateSubsectionData(
-    @Param('subsectionId', ParseMongoIdPipe) id: string,
+    @Param('subsectionId', ParseUUIDPipe) id: string,
     @Body(ValidationPipe) data: SubSectionModel,
   ) {
     return new ResponseModel(
@@ -38,7 +37,7 @@ export class SectionController {
 
   @Post('/table/:tableId')
   async updateTableData(
-    @Param('tableId', ParseMongoIdPipe) id: string,
+    @Param('tableId', ParseUUIDPipe) id: string,
     @Body(ValidationPipe) data: TableModel,
   ) {
     await this.sectionService.createTable(id, data);
@@ -47,7 +46,7 @@ export class SectionController {
 
   @Get(':sectionId/extract')
   async extractSectionToPDF(
-    @Param('sectionId', ParseMongoIdPipe) sectionId: string,
+    @Param('sectionId', ParseUUIDPipe) sectionId: string,
   ): Promise<StreamableFile> {
     const path: string =
       await this.sectionService.extractSectionToPDF(sectionId);

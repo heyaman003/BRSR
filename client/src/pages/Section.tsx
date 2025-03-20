@@ -86,16 +86,16 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId }) => {
             {subsectionData.title}
           </h1>
           {subsectionData.questions &&
-            subsectionData.questions.map((question: Question) => (
+            subsectionData.questions.sort((a, b)=>a.index - b.index).map((question: Question) => (
               <div className="mb-5" key={question.id}>
                 <p
                   className={`text-sm  font-bold   mb-2  ${
-                    question.type === "table" && "text-green-700 font-semibold"
+                    question.type === "TABLE" && "text-green-700 font-semibold"
                   }`}
                 >
                   {question.desc}
                 </p>
-                {question.type === "table" &&
+                {question.type === "TABLE" &&
                   question.answer_table &&
                   question.answer_table.map((table: Table) => (
                     <TableUI
@@ -106,7 +106,7 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId }) => {
                       table={table}
                     />
                   ))}
-                {question.type === "text" && (
+                {question.type === "TEXT" && (
                   <TextQuestionUI
                     value={question.answer_text}
                     key={question.id}
@@ -115,7 +115,7 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId }) => {
                     }
                   />
                 )}
-                {question.type === "boolean" && (
+                {question.type === "BOOLEAN" && (
                   <BooleanInput
                     updateAnswer={(answer: string) =>
                       updateTextAnswer(question.id, answer)
@@ -161,7 +161,7 @@ const fetchSubsectionData = async (
   );
   updateProgress(50);
   const res = await raw.json();
-  await new Promise((res: any, rej: any) =>
+  await new Promise((res: any) =>
     setTimeout(() => {
       updateProgress(90);
       res();
