@@ -12,7 +12,6 @@ import { memo, useCallback, useEffect, useState } from "react";
 import * as BSON from "bson";
 import { toast } from "sonner";
 import { Loader2, Trash2 } from "lucide-react";
-import { Button } from "../ui/button";
 const generateId = () => new BSON.ObjectId().toString();
 
 const TableUI = ({
