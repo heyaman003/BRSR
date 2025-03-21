@@ -3,127 +3,77 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { Model } from 'mongoose';
-import {
-  Cell as CellModel,
-  Section as SectionModel,
-  Row as RowModel,
-  Table as TableModel,
-  Question as QuestionModel,
-  SubSection as SubSectionModel,
-  QuestionType,
-} from './section.schemas';
 import { Row, Section, Table, Question, SubSection } from './initialData';
-import { InjectModel } from '@nestjs/mongoose';
-import { TableModel as TableDTO, RowModel as RowDTO, SubSectionModel as SubSectionDTO, QuestionModel as QuestionDTO } from './section.dtos';
+import {
+  TableModel as TableDTO,
+  RowModel as RowDTO,
+  SubSectionModel as SubSectionDTO,
+  QuestionModel as QuestionDTO,
+} from './section.dtos';
+import { DbService } from 'src/utils/db.connections';
 
 @Injectable()
 export class SectionRepository {
-  constructor(
-    @InjectModel(SectionModel.name) private sectionModel: Model<SectionModel>,
-    @InjectModel(CellModel.name) private cellModel: Model<CellModel>,
-    @InjectModel(RowModel.name) private rowModel: Model<RowModel>,
-    @InjectModel(TableModel.name) private tableModel: Model<TableModel>,
-    @InjectModel(QuestionModel.name)
-    private questionModel: Model<QuestionModel>,
-    @InjectModel(SubSectionModel.name)
-    private subSectionModel: Model<SubSectionModel>,
-  ) {}
+  constructor(private readonly db: DbService) {}
 
   async retrieveAllSectionData(sectionId: string): Promise<Section> {
-    const data = await this.sectionModel.findById(sectionId).populate({
-      path: 'subSections',
-      populate: {
-        path: 'questions',
-        populate: {
-          path: 'answer_table',
-          populate: {
-            path: 'rows',
-            populate: {
-              path: 'cells',
+    const data = await this.db.section.findUnique({
+      where: { id: sectionId },
+      include: {
+        subsections: {
+          include: {
+            questions: {
+              include: {
+                answer_table: {
+                  include: {
+                    rows: {
+                      include: {
+                        cells: true,
+                      },
+                    },
+                  },
+                },
+              },
             },
           },
         },
-      }
-    })
+      },
+    });
 
-    if(!data)
-      throw new NotFoundException('Section does not exist.')
+    if (!data) throw new NotFoundException('Section does not exist.');
 
     return data;
   }
 
   async updateSubsectionData(id: string, data: SubSectionDTO) {
     try {
-      const subsection = await this.subSectionModel.findById(id).populate({
-        path: 'questions',
-        populate: {
-          path: 'answer_table',
-          populate: {
-            path: 'rows',
-            populate: {
-              path: 'cells',
+      await this.db.$transaction(async (tx) => {
+        await tx.subsection.update({
+          where: { id: id },
+          data: {
+            questions: {
+              updateMany: data.questions.map((question) => ({
+                where: {
+                  id: question.id,
+                },
+                data: {
+                  answer_text: question.answer_text || null,
+                },
+              })),
             },
           },
-        },
-      });
-      if (!subsection) throw new NotFoundException('Subsection not found.');
-
-      // Traversing through all the questions received in data
-      await Promise.all(
-        data.questions.map(async (question: QuestionDTO) => {
-          if (question.type === QuestionType.TABLE) {
-            if (question.answer_table)
-              // Looping through all the tables
+        });
+        await Promise.all(
+          data.questions.map(
+            async (question) =>
               await Promise.all(
-                question.answer_table.map(async (table: TableDTO) => {
-                  await Promise.all(
-                    table.rows.map(async (row: RowDTO) => {
-                      const existingRow = await this.rowModel.findById(
-                        row['id'],
-                      );
-
-                      // If row does not exist, create a new row
-                      if (!existingRow) {
-                        const rowId = await this.createRow(row);
-                        await this.tableModel.findByIdAndUpdate(table['id'], {
-                          $push: {
-                            rows: rowId,
-                          },
-                        });
-                      }
-                      // If row exists then update each cell
-                      else {
-                        await this.cellModel.bulkWrite(
-                          row.cells.map((cell) => ({
-                            updateOne: {
-                              filter: { _id: cell['id'] },
-                              update: { $set: cell },
-                            },
-                          })),
-                        );
-                      }
-                    }),
-                  );
-                }),
-              );
-          } else if (
-            question.type === QuestionType.TEXT ||
-            question.type === QuestionType.BOOLEAN
-          ) {
-            await this.questionModel.findByIdAndUpdate(
-              question['id'],
-              question,
-              {
-                runValidators: true,
-                new: true,
-              },
-            );
-          }
-        }),
-      );
-
-      return data;
+                question.answer_table.map(
+                  async (table) => await this.updateTableData(table.id, table, tx),
+                ),
+              ),
+          ),
+        );
+      });
     } catch (e) {
       console.log(e);
       throw new BadRequestException(e.message);
@@ -131,56 +81,83 @@ export class SectionRepository {
   }
 
   async saveTableData(id: string, data: TableDTO) {
+    this.updateTableData(id, data, this.db);
+  }
+
+  private async updateTableData(id: string, data: TableDTO, obj){
     try {
-      const table = await this.tableModel.findById(id).populate({
-        path: 'rows',
-        populate: {
-          path: 'cells',
+      await obj.table.update({
+        where: {
+          id,
+        },
+        data: {
+          rows: {
+            deleteMany: {
+              id: {
+                notIn: data.rows.map((row) => row.id),
+              },
+            },
+            upsert: data.rows.map((row, ind: number) => ({
+              create: {
+                isHeading: false,
+                index: ind,
+                cells: {
+                  createMany: {
+                    data: row.cells.map((cell) => ({
+                      data: cell.data,
+                      rowSpan: cell['rowSpan'],
+                      colSpan: cell['colSpan'],
+                      id: cell.id,
+                      isUpdateable: true,
+                      index: cell['index'],
+                    })),
+                  },
+                },
+              },
+              update: {
+                cells: {
+                  update: row.cells.map((cell) => ({
+                    where: { id: cell.id },
+                    data: {
+                      data: cell.data,
+                      rowSpan: cell['rowSpan'],
+                      colSpan: cell['colSpan'],
+                      isUpdateable: cell['isUpdateable'],
+                    },
+                  })),
+                },
+              },
+              where: { id: row.id },
+            })),
+          },
         },
       });
-      if (!table) throw new NotFoundException('Table not found.');
-
-      await Promise.all(
-        data.rows.map(async (row: RowDTO) => {
-          const existingRow = await this.rowModel.findById(row['id']);
-
-          // If row does not exist, create a new row
-          if (!existingRow) {
-            const rowId = await this.createRow(row);
-            await this.tableModel.findByIdAndUpdate(table['id'], {
-              $push: {
-                rows: rowId,
-              },
-            });
-          }
-          // If row exists then update each cell
-          else {
-            await this.cellModel.bulkWrite(
-              row.cells.map((cell) => ({
-                updateOne: {
-                  filter: { _id: cell['id'] },
-                  update: { $set: cell },
-                },
-              })),
-            );
-          }
-        }),
-      );
+      console.log('Yo');
     } catch (e) {
+      console.log(e);
       throw new BadRequestException(e.message);
     }
   }
 
   async getSubsectionData(id: string) {
     try {
-      return await this.subSectionModel.findById(id).populate({
-        path: 'questions',
-        populate: {
-          path: 'answer_table',
-          populate: {
-            path: 'rows',
-            populate: {
-              path: 'cells',
+      console.log(id);
+      return await this.db.subsection.findUnique({
+        where: {
+          id,
+        },
+        include: {
+          questions: {
+            include: {
+              answer_table: {
+                include: {
+                  rows: {
+                    include: {
+                      cells: true,
+                    },
+                  },
+                },
+              },
             },
           },
         },
@@ -190,96 +167,107 @@ export class SectionRepository {
     }
   }
 
-  /**
-   * Creates a Section in mongo collection
-   * @param section Section datatable
-   * @returns Mongodb object id
-   */
-  async createSection(section: Section) {
-    const newSection: SectionModel = await this.sectionModel.create({
-      ...section,
-      subSections: await Promise.all(
-        section.subSections.map(
-          async (subSection: SubSection) =>
-            await this.createSubSection(subSection),
-        ),
-      ),
-    });
-
-    return newSection['id'];
-  }
-
-  /**
-   * Creates a SubSection in mongo collection
-   * @param subSection SubSection data
-   * @returns Mongodb object id
-   */
-  async createSubSection(subSection: SubSection): Promise<string> {
-    const newSubSection: SubSectionModel = await this.subSectionModel.create({
-      ...subSection,
-      questions: await Promise.all(
-        subSection.questions.map(
-          async (question: Question) => await this.createQuestion(question),
-        ),
-      ),
-    });
-
-    return newSubSection['id'];
-  }
-
-  /**
-   * Creates a Question in mongo collection
-   * @param question Question data
-   * @returns Mongodb object id
-   */
-  async createQuestion(question: Question): Promise<string> {
-    const newQuestion: QuestionModel = await this.questionModel.create({
-      ...question,
-      answer_table: question.answer_table
-        ? await Promise.all(
-            question.answer_table.map(
-              async (anwerTable: Table) => await this.createTable(anwerTable),
-            ),
-          )
-        : null,
-    });
-    return newQuestion['id'];
-  }
-
-  /**
-   * Creates a Table in mongo collection
-   * @param row Table data
-   * @returns Mongodb object id
-   */
-  async createTable(table: Table): Promise<string> {
-    const newTable: TableModel = await this.tableModel.create({
-      ...table,
-      rows: await Promise.all(
-        table.rows.map(async (row: Row) => await this.createRow(row)),
-      ),
-    });
-    return newTable['id'];
-  }
-
-  /**
-   * Creates a Row in mongo collection
-   * @param row Row data
-   * @returns Mongodb object id
-   */
-  async createRow(row: Row | RowDTO): Promise<string> {
-    const cells = await this.cellModel.bulkWrite(
-      row.cells.map((cell) => ({
-        insertOne: {
-          document: cell,
+  async createSection(section: Section, companyId: string) {
+    const sectionId = (
+      await this.db.section.create({
+        data: {
+          title: section.title,
+          companyId,
         },
-      })),
+        select: {
+          id: true,
+        },
+      })
+    ).id;
+    await Promise.all(
+      section.subsections.map(
+        async (subsection) =>
+          await this.createSubSection(subsection, sectionId),
+      ),
     );
+  }
 
-    const newRow: RowModel = await this.rowModel.create({
-      ...row,
-      cells: Object.values(cells.insertedIds),
+  async createSubSection(
+    subSection: SubSection,
+    sectionId: string,
+  ): Promise<void> {
+    const subsectionId = (
+      await this.db.subsection.create({
+        data: {
+          title: subSection.title,
+          sectionId,
+        },
+      })
+    ).id;
+
+    await Promise.all(
+      subSection.questions.map(async (question, ind: number) =>
+        this.createQuestion(question, subsectionId, ind),
+      ),
+    );
+  }
+
+  async createQuestion(
+    question: Question,
+    subsectionId: string,
+    index: number,
+  ): Promise<void> {
+    const questionId: string = (
+      await this.db.question.create({
+        data: {
+          desc: question.desc,
+          subsectionId: subsectionId,
+          type: question.type,
+          answer_text: question.answer_text,
+          index,
+        },
+      })
+    ).id;
+    if (question.answer_table)
+      await Promise.all(
+        question.answer_table.map(
+          async (table) => await this.createTable(table, questionId),
+        ),
+      );
+  }
+
+  async createTable(table: Table, questionId: string): Promise<void> {
+    const tableId = (
+      await this.db.table.create({
+        data: {
+          isDynamic: table.isDynamic,
+          questionId,
+        },
+        select: {
+          id: true,
+        },
+      })
+    ).id;
+
+    await Promise.all(
+      table.rows.map(
+        async (row: Row | RowDTO, ind: number) =>
+          await this.createRow(row, tableId, ind),
+      ),
+    );
+  }
+
+  async createRow(
+    row: Row | RowDTO,
+    tableId: string,
+    ind: number,
+  ): Promise<void> {
+    await this.db.row.create({
+      data: {
+        isHeading: row.isHeading,
+        tableId: tableId,
+        cells: {
+          createMany: {
+            data: row.cells.map((cell) => cell),
+          },
+        },
+        index: ind,
+      },
     });
-
-    return newRow['id'];
   }
 }

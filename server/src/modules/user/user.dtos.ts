@@ -1,6 +1,5 @@
-import { IsEmail, IsEnum, IsMongoId, IsNotEmpty, IsOptional, Matches } from "class-validator";
-import { Company } from "../company/company.schema";
-import * as mongoose from 'mongoose'
+import { IsEmail, IsEnum, IsNotEmpty, IsOptional, IsUUID, Matches } from "class-validator";
+import { Company, Role } from "@prisma/client";
 
 
 export enum UserRole {
@@ -22,12 +21,15 @@ export class CreateUserDto {
 
     @IsOptional()
     @IsNotEmpty()
-    @IsMongoId()
+    @IsUUID()
     company: string;
 }
 
 
 export class GetUserDto {
+    @IsUUID()
+    id: string;
+
     @IsNotEmpty()
     @IsEmail()
     email: string;
@@ -35,10 +37,10 @@ export class GetUserDto {
     @IsNotEmpty()
     name: string;
 
-    @IsEnum(UserRole)
-    role: UserRole;
+    @IsEnum(Role)
+    role: Role;
 
     @IsNotEmpty()
-    @IsMongoId()
-    companyId: Company | String | string | mongoose.Schema.Types.ObjectId;
+    @IsUUID()
+    companyId: Company | string;
 }

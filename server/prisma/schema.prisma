@@ -1,0 +1,107 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id String @id @default(uuid())
+  name String
+  email String @unique
+  password String
+  role Role
+  company Company? @relation(fields: [companyId], references: [id], name: "employee-of", onDelete: Cascade)
+  companyId String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Company {
+  id String @id @default(uuid())
+  name String
+  users User[] @relation(name: "employee-of")
+  sections Section[] @relation(name: "section-belongs-to")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Section {
+  id String @id @default(uuid())
+  title String
+  company Company @relation(name: "section-belongs-to", fields: [companyId], references: [id], onDelete: Cascade)
+  companyId String
+  subsections Subsection[] @relation(name: "subsection-belongs-to")
+}
+
+model Subsection {
+  id String @id @default(uuid())
+  title String
+  section Section @relation(name: "subsection-belongs-to", fields: [sectionId], references: [id], onDelete: Cascade)
+  sectionId String
+  questions Question[] @relation(name: "question-belongs-to")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Question {
+  id String @id @default(uuid())
+  desc String
+  type QuestionType
+  answer_text String?
+  answer_table Table[] @relation(name: "answer-to")
+  subsection Subsection @relation(name:"question-belongs-to", fields: [subsectionId], references: [id], onDelete: Cascade)
+  subsectionId String
+  index Int
+}
+
+model Table {
+  id String @id @default(uuid())
+  question Question @relation(name: "answer-to", fields: [questionId], references: [id], onDelete: Cascade)
+  questionId String
+  rows Row[] @relation(name: "table-belongs-to")
+  isDynamic Boolean
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Row {
+  id String @id @default(uuid())
+  isHeading Boolean
+  table Table @relation(name: "table-belongs-to", fields: [tableId], references: [id], onDelete: Cascade)
+  tableId String 
+  cells Cell[] @relation(name: "cell-belongs-to")
+  index Int
+}
+
+model Cell {
+  id String @id @default(uuid())
+  data String @default("")
+  isUpdateable Boolean
+  rowSpan Int @default(1)
+  colSpan Int @default(1)
+  row Row @relation(fields: [rowId], references: [id], name: "cell-belongs-to", onDelete: Cascade)
+  rowId String
+  index Int //Used to order the cells in response
+}
+
+
+enum  Role {
+  ADMIN
+  CLIENT
+  SUPERADMIN
+}
+
+enum QuestionType {
+  TABLE
+  TEXT
+  BOOLEAN
+}

@@ -11,7 +11,7 @@ import CellInput from "./CellInput";
 import { memo, useCallback, useEffect, useState } from "react";
 import * as BSON from "bson";
 import { toast } from "sonner";
-import { Loader2 } from "lucide-react";
+import { Loader2, Trash2 } from "lucide-react";
 const generateId = () => new BSON.ObjectId().toString();
 
 const TableUI = ({
@@ -55,18 +55,18 @@ const TableUI = ({
         new Row(
           generateId(),
           Array.from({ length: cellCount }).map(
-            (_) => new Cell(generateId(), "", true, 1, 1)
+            (_, ind: number) => new Cell(generateId(), "", true, 1, 1, ind)
           ),
-          false
+          false,
+          tableState.rows.length
         ),
       ];
       return { ...table };
     });
   };
-  const deleteRow = () => {
-    // const cellCount = tableState.rows[0].cells.length;
+  const deleteRow = (id: string) => {
     setTableState((table: TableType) => {
-      table.rows = table?.rows.slice(0, table?.rows.length - 1);
+      table.rows = table?.rows.filter((row) => row.id != id);
       return { ...table };
     });
   };
@@ -105,6 +105,7 @@ const TableUI = ({
         <TableHeader>
           {tableState.rows
             .filter((row: Row) => row.isHeading)
+            .sort((a: Row, b: Row) => a.index - b.index)
             .map((row: Row) => (
               <TableRow key={row.id}>
                 {row.cells.map((cell: Cell) => (
@@ -123,26 +124,34 @@ const TableUI = ({
         <TableBody>
           {tableState.rows
             .filter((row: Row) => !row.isHeading)
+            .sort((a: Row, b: Row) => a.index - b.index)
             .map((row: Row) => (
               <TableRow key={row.id}>
-                {row.cells.map((cell: Cell) => (
-                  <TableCell
-                    key={cell.id}
-                    colSpan={cell.colSpan}
-                    rowSpan={cell.rowSpan}
-                  >
-                    {!cell.isUpdateable ? (
-                      cell.data
-                    ) : (
-                      <CellInput
-                        value={cell.data}
-                        rowId={row.id}
-                        cellId={cell.id}
-                        updateTableCell={updateTableCell}
-                      />
-                    )}
-                  </TableCell>
-                ))}
+                {row.cells
+                  .sort((a, b) => a.index - b.index)
+                  .map((cell: Cell) => (
+                    <TableCell
+                      key={cell.id}
+                      colSpan={cell.colSpan}
+                      rowSpan={cell.rowSpan}
+                    >
+                      {!cell.isUpdateable ? (
+                        cell.data
+                      ) : (
+                        <CellInput
+                          value={cell.data}
+                          rowId={row.id}
+                          cellId={cell.id}
+                          updateTableCell={updateTableCell}
+                        />
+                      )}
+                    </TableCell>
+                  ))}
+                {table.isDynamic && (
+                    <button onClick={()=>deleteRow(row.id)} className="mt-1 bg-transparent hover:bg-transparent hover:text-red-500 p-2 rounded-full duration-0 text-red-300">
+                      <Trash2 className="duration-0" size={20}/>
+                    </button>
+                )}
               </TableRow>
             ))}
         </TableBody>
@@ -166,12 +175,12 @@ const TableUI = ({
             >
               Add Row
             </button>
-            <button
+            {/* <button
               className=" px-8 py-2 text-white bg-red-500 hover:bg-red-600 font-bold rounded-sm mr-5 mt-2"
               onClick={deleteRow}
             >
               Delete Row
-            </button>
+            </button> */}
           </div>
         )}
       </div>

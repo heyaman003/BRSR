@@ -5,18 +5,21 @@ export class Cell {
     isUpdateable: boolean;
     rowSpan: number;
     colSpan: number;
+    index: number;
   
     constructor(
       id: string,
       data: string,
       isUpdateable: boolean,
       rowSpan: number,
-      colSpan: number
+      colSpan: number,
+      index: number
     ) {
       (this.id = id), (this.data = data);
       this.isUpdateable = isUpdateable;
       this.rowSpan = rowSpan;
       this.colSpan = colSpan;
+      this.index = index;
     }
   }
   
@@ -24,10 +27,12 @@ export class Cell {
     cells: Cell[];
     id: string;
     isHeading: boolean;
-    constructor(id: string, cells: Cell[], isHeading: boolean) {
+    index: number
+    constructor(id: string, cells: Cell[], isHeading: boolean, index: number) {
       this.isHeading = isHeading;
       this.id = id;
       this.cells = cells;
+      this.index = index
     }
   }
   

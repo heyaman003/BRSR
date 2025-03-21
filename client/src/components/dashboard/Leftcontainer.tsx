@@ -112,7 +112,7 @@ const Leftcontainer: React.FC<LeftcontainerProps> = ({
 
       {/* Subsection buttons */}
       <nav className="space-y-5 py-10 pt-5">
-        {subsections?.map((subsection: SubSection) => (
+        {subsections?.sort((a: SubSection, b: SubSection)=>a.title.localeCompare(b.title)).map((subsection: SubSection) => (
           <button
             key={subsection.id}
             onClick={() => setActiveSubsection(subsection.id)}

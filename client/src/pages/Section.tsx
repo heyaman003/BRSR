@@ -55,10 +55,10 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId }) => {
         }
     );
   };
- const updateComments = (comments: string[]) => {
+  const updateComments = (comments: string[]) => {
     setComments(comments);
-  }
- 
+  };
+
   useEffect(() => {
     let timer: NodeJS.Timeout | null = null;
     if (subsectionId) {
@@ -91,48 +91,55 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId }) => {
             {subsectionData.title}
           </h1>
           {subsectionData.questions &&
-            subsectionData.questions.map((question: Question) => (
-              <div className="mb-5" key={question.id}>
-                
-                 <div className="flex gap-3 justify-between w-[96%]">
-                  <p
-                  className={`text-sm  font-bold    mb-2 max-w-[70%] ${
-                    question.type === "table" && "text-green-700 font-semibold"
-                  }`}
-                >{question.desc} </p>
-                 <CommentSection comments={comments}updateComments={updateComments}  /> </div> 
-        
-                
-                {question.type === "table" &&
-                  question.answer_table &&
-                  question.answer_table.map((table: Table) => (
-                    <TableUI
-                      updateTableData={(updatedTableData: Table) => {
-                        updateTableData(question.id, updatedTableData);
-                      }}
-                      key={table.id}
-                      table={table}
+            subsectionData.questions
+              .sort((a, b) => a.index - b.index)
+              .map((question: Question) => (
+                <div className="mb-5" key={question.id}>
+                  <div className="flex gap-3 justify-between w-[96%]">
+                    <p
+                      className={`text-sm  font-bold    mb-2 max-w-[70%] ${
+                        question.type === "TABLE" &&
+                        "text-green-700 font-semibold"
+                      }`}
+                    >
+                      {question.desc}{" "}
+                    </p>
+                    <CommentSection
+                      comments={comments}
+                      updateComments={updateComments}
                     />
-                  ))}
-                {question.type === "text" && (
-                  <TextQuestionUI
-                    value={question.answer_text}
-                    key={question.id}
-                    updateTextAnswer={(answer: string) =>
-                      updateTextAnswer(question.id, answer)
-                    }
-                  />
-                )}
-                {question.type === "boolean" && (
-                  <BooleanInput
-                    updateAnswer={(answer: string) =>
-                      updateTextAnswer(question.id, answer)
-                    }
-                    answer={question.answer_text}
-                  />
-                )}
-              </div>
-            ))}
+                  </div>
+
+                  {question.type === "TABLE" &&
+                    question.answer_table &&
+                    question.answer_table.map((table: Table) => (
+                      <TableUI
+                        updateTableData={(updatedTableData: Table) => {
+                          updateTableData(question.id, updatedTableData);
+                        }}
+                        key={table.id}
+                        table={table}
+                      />
+                    ))}
+                  {question.type === "TEXT" && (
+                    <TextQuestionUI
+                      value={question.answer_text}
+                      key={question.id}
+                      updateTextAnswer={(answer: string) =>
+                        updateTextAnswer(question.id, answer)
+                      }
+                    />
+                  )}
+                  {question.type === "BOOLEAN" && (
+                    <BooleanInput
+                      updateAnswer={(answer: string) =>
+                        updateTextAnswer(question.id, answer)
+                      }
+                      answer={question.answer_text}
+                    />
+                  )}
+                </div>
+              ))}
         </div>
       )}
       {subsectionData && (
@@ -152,7 +159,7 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId }) => {
           </Button>
         </div>
       )}
-      <ChatBox/>
+      <ChatBox />
     </section>
   );
 };
@@ -166,11 +173,14 @@ const fetchSubsectionData = async (
   updateProgress(10);
   const raw = await fetch(
     `${import.meta.env.VITE_SERVER_URI}/section/subsection/${subsectionId}`,
-    { credentials: "include", headers: {'X-Csrf-Token': sessionStorage.getItem('X-Csrf-Token') || ''} }
+    {
+      credentials: "include",
+      headers: { "X-Csrf-Token": sessionStorage.getItem("X-Csrf-Token") || "" },
+    }
   );
   updateProgress(50);
   const res = await raw.json();
-  await new Promise((res: any, rej: any) =>
+  await new Promise((res: any) =>
     setTimeout(() => {
       updateProgress(90);
       res();
@@ -182,13 +192,15 @@ const fetchSubsectionData = async (
 
 const updateSubsectionData = async (subsectionData: SubSection) => {
   const raw = await fetch(
-    `${import.meta.env.VITE_SERVER_URI}/section/subsection/${subsectionData.id}`,
+    `${import.meta.env.VITE_SERVER_URI}/section/subsection/${
+      subsectionData.id
+    }`,
     {
       credentials: "include",
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        'X-Csrf-Token': sessionStorage.getItem('X-Csrf-Token') || ''
+        "X-Csrf-Token": sessionStorage.getItem("X-Csrf-Token") || "",
       },
       body: JSON.stringify(subsectionData),
     }

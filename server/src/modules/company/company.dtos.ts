@@ -1,4 +1,4 @@
-import { User } from "src/modules/user/user.schema";
+import { User } from "@prisma/client";
 
 export class CompanyDto {
     id: string;

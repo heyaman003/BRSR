@@ -1,29 +1,31 @@
-import { IsBoolean, IsEnum, IsMongoId, IsNotEmpty, IsString } from "class-validator";
-import { QuestionType } from "./section.schemas";
+import { IsBoolean, IsEnum, IsInt, IsNotEmpty, IsString, IsUUID } from "class-validator";
+import { QuestionType } from "@prisma/client";
 
 export class CellModel {
-    @IsMongoId()
+    @IsUUID()
     id: string;
-
+    @IsString()
     data: string;
+    @IsInt()
+    index: number;
 }
 
 export class RowModel {
-    @IsMongoId()
+    @IsUUID()
     id: string;
-
+    @IsBoolean()
+    isHeading: boolean
     cells: CellModel[]
 }
 
 export class TableModel {
-    @IsMongoId()
+    @IsUUID()
     id: string;
-
     rows: RowModel[]
 }
 
 export class QuestionModel {
-    @IsMongoId()
+    @IsUUID()
     id: string;
 
     @IsString()
@@ -41,7 +43,7 @@ export class QuestionModel {
 }
 
 export class SubSectionModel {
-    @IsMongoId()
+    @IsUUID()
     id: string;
 
     @IsString()
