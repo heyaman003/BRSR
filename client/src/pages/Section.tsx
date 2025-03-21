@@ -1,9 +1,11 @@
 // import SectionCTable2 from "@/components/sectionC/SectionCTable2";
+import ChatBox from "@/components/chat/ChatBox";
 import SustainabilityLoader from "@/components/component/SustainabiltyLoader";
 import BooleanInput from "@/components/Question/BooleanInput";
 import TableUI from "@/components/Question/Table";
 import TextQuestionUI from "@/components/Question/Text";
 import { Button } from "@/components/ui/button";
+import CommentSection from "@/components/ui/Comment";
 import { Question, SubSection, Table } from "@/models/models";
 import { plainToInstance } from "class-transformer";
 import { Loader2 } from "lucide-react";
@@ -17,7 +19,7 @@ interface SectionUiArgs {
 const Section: React.FC<SectionUiArgs> = ({ subsectionId }) => {
   const [loaderProgress, setLoaderProgress] = useState<number>(10);
   const [isLoaderVisible, setIsLoaderVisible] = useState(true);
-
+  const [comments, setComments] = useState<string[]>([]);
   const [subsectionData, setSubsectionData] = useState<SubSection | null>(null);
   const [isSaving, setIsSaving] = useState<boolean>(false);
 
@@ -53,7 +55,10 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId }) => {
         }
     );
   };
-
+ const updateComments = (comments: string[]) => {
+    setComments(comments);
+  }
+ 
   useEffect(() => {
     let timer: NodeJS.Timeout | null = null;
     if (subsectionId) {
@@ -88,13 +93,16 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId }) => {
           {subsectionData.questions &&
             subsectionData.questions.map((question: Question) => (
               <div className="mb-5" key={question.id}>
-                <p
-                  className={`text-sm  font-bold   mb-2  ${
+                
+                 <div className="flex gap-3 justify-between w-[96%]">
+                  <p
+                  className={`text-sm  font-bold    mb-2 max-w-[70%] ${
                     question.type === "table" && "text-green-700 font-semibold"
                   }`}
-                >
-                  {question.desc}
-                </p>
+                >{question.desc} </p>
+                 <CommentSection comments={comments}updateComments={updateComments}  /> </div> 
+        
+                
                 {question.type === "table" &&
                   question.answer_table &&
                   question.answer_table.map((table: Table) => (
@@ -144,6 +152,7 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId }) => {
           </Button>
         </div>
       )}
+      <ChatBox/>
     </section>
   );
 };
