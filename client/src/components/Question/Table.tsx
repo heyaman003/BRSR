@@ -8,6 +8,7 @@ import {
 } from "../ui/table";
 import { Cell, Row, Table as TableType } from "@/types";
 import CellInput from "./CellInput";
+import { AgGridReact } from 'ag-grid-react';
 import { memo, useCallback, useEffect, useState } from "react";
 import * as BSON from "bson";
 import { toast } from "sonner";
@@ -100,20 +101,20 @@ const TableUI = ({
   };
 
   return (
-    <div className="mb-10 bg-blue-50 p-3 rounded-md">
+    <div className="mb-1 py-3 rounded-md">
       <Table>
-        <TableHeader>
+        <TableHeader className="bg-green-20">
           {tableState.rows
             .filter((row: Row) => row.isHeading)
             .sort((a: Row, b: Row) => a.index - b.index)
             .map((row: Row) => (
-              <TableRow key={row.id}>
+              <TableRow key={row.id} className="bg-green-50 border-green-300">
                 {row.cells.map((cell: Cell) => (
                   <TableHead
                     key={cell.id}
                     colSpan={cell.colSpan}
                     rowSpan={cell.rowSpan}
-                    className="text-center"
+                    className="text-center text-green-700 hover:bg-green-100 p-2"
                   >
                     {cell.data}
                   </TableHead>
@@ -126,7 +127,7 @@ const TableUI = ({
             .filter((row: Row) => !row.isHeading)
             .sort((a: Row, b: Row) => a.index - b.index)
             .map((row: Row) => (
-              <TableRow key={row.id}>
+              <TableRow key={row.id} className=" hover:bg-white border-green-30 bg-blue-50">
                 {row.cells
                   .sort((a, b) => a.index - b.index)
                   .map((cell: Cell) => (
@@ -134,6 +135,7 @@ const TableUI = ({
                       key={cell.id}
                       colSpan={cell.colSpan}
                       rowSpan={cell.rowSpan}
+                      className="py-3"
                     >
                       {!cell.isUpdateable ? (
                         cell.data

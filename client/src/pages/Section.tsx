@@ -1,13 +1,13 @@
 import ChatBox from "@/components/chat/ChatBox";
+import CommentSidebar from "@/components/component/commentSidebar/CommentSidebar";
 import SustainabilityLoader from "@/components/component/SustainabiltyLoader";
 import BooleanInput from "@/components/Question/BooleanInput";
 import TableUI from "@/components/Question/Table";
 import TextQuestionUI from "@/components/Question/Text";
 import { Button } from "@/components/ui/button";
-import CommentSection from "@/components/ui/Comment";
 import { Question, SubSection, Table } from "@/models/models";
 import { plainToInstance } from "class-transformer";
-import { Loader2 } from "lucide-react";
+import { Loader2, MessageSquareText } from "lucide-react";
 import React, { memo, useEffect, useState } from "react";
 import { toast } from "sonner";
 import {fetchSubsectionData,updateSubsectionData} from '@/utils/dataFetching'
@@ -19,9 +19,9 @@ interface SectionUiArgs {
 const Section: React.FC<SectionUiArgs> = ({ subsectionId,activeSection }) => {
   const [loaderProgress, setLoaderProgress] = useState<number>(10);
   const [isLoaderVisible, setIsLoaderVisible] = useState(true);
-  const [comments, setComments] = useState<string[]>([]);
   const [subsectionData, setSubsectionData] = useState<SubSection | null>(null);
   const [isSaving, setIsSaving] = useState<boolean>(false);
+  const [selectedQuestionForComment, setSelectedQuestionForComment] = useState<string>("");
 
   const updateTableData = (questionId: string, tableData: Table) => {
     setSubsectionData(
@@ -54,9 +54,6 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId,activeSection }) => {
           ),
         }
     );
-  };
-  const updateComments = (comments: string[]) => {
-    setComments(comments);
   };
 
   useEffect(() => {
@@ -94,20 +91,21 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId,activeSection }) => {
             subsectionData.questions
               .sort((a, b) => a.index - b.index)
               .map((question: Question) => (
-                <div className="mb-5" key={question.id}>
+                <div className="mb-5 py-3" key={question.id}>
                   <div className="flex gap-3 justify-between w-[96%]">
                     <p
-                      className={`text-sm  font-bold    mb-2 max-w-[70%] ${
-                        question.type === "TABLE" &&
-                        "text-green-700 font-semibold"
-                      }`}
+                      className={`text-sm mb-2 text-green-800 font-semibold
+                      `}
                     >
-                      {question.desc}{" "}
+                      {question.desc}
                     </p>
-                    <CommentSection
-                      comments={comments}
-                      updateComments={updateComments}
-                    />
+                    <button
+                    onClick={()=>setSelectedQuestionForComment(question.id)}
+                      className="flex items-center gap-1 text-yellow-600 hover:text-yellow-700 transition-colors text-sm font-medium"
+                    >
+                      <MessageSquareText size={18} />
+                      <span className="text-base">{question._count.comments}</span>
+                    </button>
                   </div>
 
                   {question.type === "TABLE" &&
@@ -160,6 +158,7 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId,activeSection }) => {
         </div>
       )}
       <ChatBox />
+      <CommentSidebar closeSidebar={()=>setSelectedQuestionForComment("")} questionId={selectedQuestionForComment}/>
     </section>
   );
 };

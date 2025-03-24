@@ -1,9 +1,9 @@
-import { Expose, Type } from 'class-transformer';
+import { Expose, Transform, Type } from "class-transformer";
 
 export enum QuestionType {
-  TABLE = 'TABLE',
-  TEXT = 'TEXT',
-  BOOLEAN = 'BOOLEAN'
+  TABLE = "TABLE",
+  TEXT = "TEXT",
+  BOOLEAN = "BOOLEAN",
 }
 
 export class Cell {
@@ -18,7 +18,7 @@ export class Cell {
   @Expose()
   colSpan: number;
   @Expose()
-  index: number
+  index: number;
 
   constructor(
     id: string,
@@ -32,12 +32,12 @@ export class Cell {
     this.isUpdateable = isUpdateable;
     this.rowSpan = rowSpan;
     this.colSpan = colSpan;
-    this.index = index
+    this.index = index;
   }
 }
 
 export class Row {
-  @Type(()=>Cell)
+  @Type(() => Cell)
   cells: Cell[];
   @Expose()
   id: string;
@@ -49,7 +49,7 @@ export class Row {
     this.isHeading = isHeading;
     this.id = id;
     this.cells = cells;
-    this.index = index
+    this.index = index;
   }
 }
 
@@ -58,7 +58,7 @@ export class Table {
   isDynamic: boolean;
   @Expose()
   id: string;
-  @Type(()=>Row)
+  @Type(() => Row)
   rows: Row[];
   constructor(id: string, rows: Row[], isDynamic: boolean) {
     this.id = id;
@@ -69,35 +69,50 @@ export class Table {
 
 export class Question {
   @Expose()
-  id:string;
+  id: string;
   @Expose()
   type: QuestionType;
   @Expose()
   desc: string;
   @Expose()
-  @Type(()=>Table)
+  @Type(() => Table)
   answer_table?: Table[];
   @Expose()
   answer_text?: string;
   @Expose()
-  index: number
-  constructor(id: string, type: QuestionType, desc: string, answer_table: Table[], answer_text: string, index: number) {
+  index: number;
+
+  // @Type(()=>({comments: number}))
+  _count: {
+    comments: number;
+  };
+
+  constructor(
+    id: string,
+    type: QuestionType,
+    desc: string,
+    answer_table: Table[],
+    answer_text: string,
+    index: number,
+    _count: { comments: number }
+  ) {
     this.type = type;
     this.id = id;
     this.index = index;
     this.desc = desc;
     this.answer_table = answer_table;
     this.answer_text = answer_text;
+    this._count = _count;
   }
 }
 
 export class SubSection {
   @Expose()
-  id:string;
+  id: string;
   @Expose()
   title: string;
   @Expose()
-  @Type(()=>Question)
+  @Type(() => Question)
   questions: Question[];
   index: number;
 
@@ -105,17 +120,17 @@ export class SubSection {
     this.id = id;
     this.title = title;
     this.questions = questions;
-    this.index = index
+    this.index = index;
   }
 }
 
 export class Section {
   @Expose()
-  id:string;
+  id: string;
   @Expose()
   title: string;
   @Expose()
-  @Type(()=>SubSection)
+  @Type(() => SubSection)
   subsections: SubSection[];
 
   constructor(id: string, title: string, subSections: SubSection[]) {
@@ -126,3 +141,24 @@ export class Section {
   }
 }
 
+export class Comment {
+  @Expose()
+  data?: string;
+  @Expose()
+  createdAt?: Date;
+  @Expose()
+  id?: string;
+
+  @Type(()=>CommentUser)
+  user?: CommentUser
+}
+
+
+class CommentUser {
+  @Expose()
+  id?: string;
+  @Expose()
+  email?: string;
+  @Expose()
+  name?: string;
+};

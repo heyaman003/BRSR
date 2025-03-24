@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
-import { MessageCirclePlus, X } from 'lucide-react';
+import { MessageCirclePlus, MessageSquareText, X } from 'lucide-react';
 import { Button } from "@/components/ui/button";
-import { cn } from '@/lib/utils';
 
 interface CommentSectionProps {
   comments: string[];
   updateComments: (comments: string[]) => void;
+  commentCount: number
 }
 
-const CommentSection: React.FC<CommentSectionProps> = ({ comments, updateComments }) => {
+const CommentSection: React.FC<CommentSectionProps> = ({ comments, updateComments, commentCount }) => {
+  console.log("========>", commentCount)
   const [isAddingComment, setIsAddingComment] = useState(false);
   const [newComment, setNewComment] = useState('');
 
@@ -27,7 +28,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({ comments, updateComment
   };
 
   return (
-    <div className="w-[300px]">
+    <div className="">
       {comments.length > 0 && (
         <div className="mb-3">
           <p className="text-sm text-gray-600 font-medium mb-2">Comments:</p>
@@ -83,8 +84,8 @@ const CommentSection: React.FC<CommentSectionProps> = ({ comments, updateComment
           onClick={() => setIsAddingComment(true)}
           className="flex items-center gap-1 text-yellow-600 hover:text-yellow-700 transition-colors text-sm font-medium"
         >
-          <MessageCirclePlus size={16} />
-          <span></span>
+          <MessageSquareText size={18} />
+          <span className='text-base'>{commentCount}</span>
         </button>
       )}
     </div>

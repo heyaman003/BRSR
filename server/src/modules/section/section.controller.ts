@@ -5,6 +5,7 @@ import {
   Param,
   ParseUUIDPipe,
   Post,
+  Req,
   StreamableFile,
   ValidationPipe,
 } from '@nestjs/common';
@@ -12,6 +13,7 @@ import { SectionService } from './section.service';
 import ResponseModel from 'src/utils/ResponseModel';
 import { SubSectionModel, TableModel } from './section.dtos';
 import { createReadStream, rm } from 'fs';
+import { Request } from 'express';
 
 @Controller('section')
 export class SectionController {
@@ -27,11 +29,13 @@ export class SectionController {
   async updateSubsectionData(
     @Param('subsectionId', ParseUUIDPipe) id: string,
     @Body(ValidationPipe) data: SubSectionModel,
+    @Req() request: Request
   ) {
+    const userId: string = request['user']['sub'];
     return new ResponseModel(
       201,
       'Saved table data successfully',
-      await this.sectionService.updateSubsectionData(id, data),
+      await this.sectionService.updateSubsectionData(id, data, userId),
     );
   }
 
@@ -39,8 +43,10 @@ export class SectionController {
   async updateTableData(
     @Param('tableId', ParseUUIDPipe) id: string,
     @Body(ValidationPipe) data: TableModel,
+    @Req() request: Request
   ) {
-    await this.sectionService.createTable(id, data);
+    const userId: string = request['user']['sub'];
+    await this.sectionService.createTable(id, data, userId);
     return new ResponseModel(201, 'Saved table data successfully');
   }
 
@@ -61,5 +67,11 @@ export class SectionController {
           console.log(err)
       })
     }
+  }
+
+  @Get(':question/history')
+  async getHistory(@Param('question', ParseUUIDPipe) questionId: string) {
+    const history = await this.sectionService.getHistory(questionId);
+    return new ResponseModel(200, "Success", history);
   }
 }

@@ -22,6 +22,7 @@ export class AuthService {
     password: string,
   ): Promise<{ userdetails: GetUserDto; accessToken: string }> {
     try {
+
       const userdetails: User = await this.userService.getUserdetails(email);
 
       if (!(await this.isValidPassword(password, userdetails.password)))

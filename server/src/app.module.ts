@@ -11,6 +11,7 @@ import { SectionModule } from './modules/section/section.module';
 import { ChatController } from './modules/chat/chat.controller';
 import { ChatService } from './modules/chat/chat.service';
 import { ChatModule } from './modules/chat/chat.module';
+import { CommentModule } from './modules/question-comments/comment.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { ChatModule } from './modules/chat/chat.module';
       },
     }),
     ChatModule,
+    CommentModule
   ],
   controllers: [AppController, ChatController],
   providers: [
