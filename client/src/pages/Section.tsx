@@ -91,7 +91,7 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId,activeSection }) => {
             subsectionData.questions
               .sort((a, b) => a.index - b.index)
               .map((question: Question) => (
-                console.log(question),
+               
                 <div className="mb-5 py-3" key={question.id}>
                   <div className="flex gap-3 justify-between w-[96%]">
                     <p
