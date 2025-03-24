@@ -28,6 +28,7 @@ export class UserService {
     }
 
     async getUserdetails(email: string): Promise<User> {
+
         const user: User | null = await this.userRepository.getUserdetailsByEmail(email);
 
         if(!user)
