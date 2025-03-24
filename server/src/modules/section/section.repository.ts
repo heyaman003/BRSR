@@ -53,15 +53,24 @@ export class SectionRepository {
           where: { id: id },
           data: {
             questions: {
-              updateMany: data.questions.map((question) => ({
+              update: data.questions.map((question) => ({
                 where: {
                   id: question.id,
                 },
                 data: {
                   answer_text: question.answer_text || null,
-
+                  history: {
+                    create: {
+                      user: {
+                        connect: {
+                          id:  userId,
+                        }
+                      }
+                    }
+                  }
                 },
               })),
+              
             },
           },
         });
@@ -79,7 +88,7 @@ export class SectionRepository {
       });
     } catch (e) {
       console.log(e);
-      throw new BadRequestException(e.message);
+      throw new InternalServerErrorException();
     }
   }
 

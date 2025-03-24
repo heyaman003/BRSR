@@ -1,8 +1,6 @@
 import { cn } from "@/lib/utils";
-import { Button } from "../ui/button";
 import { SubSection } from "@/models/models";
 import { useEffect, useState } from "react";
-import {extractToPdf} from "@/utils/pdfgenerate";
 import {
   Leaf,
   Flower,
