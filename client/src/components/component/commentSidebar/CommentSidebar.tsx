@@ -16,12 +16,15 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { plainToInstance } from "class-transformer";
 import ViewHistory from "./ViewHistory";
+import {  SubSection } from "@/models/models";
 
 const CommentSidebar = ({
   questionId,
+  subsectionData,
   closeSidebar,
 }: {
   questionId: string;
+  subsectionData: SubSection | null;
   closeSidebar: () => void;
 }) => {
   const [commentText, setCommentText] = useState<string>("");
@@ -97,6 +100,7 @@ const CommentSidebar = ({
                 addComent(questionId, commentText)
                   .then((res) => {
                     setComments((prevComments) => [res, ...prevComments]);
+                    
                     setCommentText("");
                   })
                   .finally(() => setIsAddingComment(false));
