@@ -147,7 +147,7 @@ const ChatBox: React.FC = () => {
             <div className="mt-2 flex justify-center">
               <span className="text-xs flex items-center text-gray-400">
                 <Sparkles className="w-3 h-3 mr-1 text-eco-leaf" />
-                Powered by sustainable energy
+                Powered by Kalolwala & Associates
               </span>
             </div>
           </form>

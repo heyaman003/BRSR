@@ -51,6 +51,7 @@ export default function QuestionnairePage() {
         setActiveSubsection(activeSec.subsections[0].id);
       }
     }
+    // console.log("the section is is",activeSection)
   }, [activeSection]);
 
 
@@ -71,21 +72,18 @@ export default function QuestionnairePage() {
               setActiveSubsection={setActiveSubsection}
             />
 
-            <div className="h-screen overflow-auto pr-4 relative">
-              {/* Top bar containing the section buttons e.g. 'Section A' */}
-              <Horizontalscroll
-                sections={sections}
-                activeSection={activeSection}
-                setActiveSection={setActiveSection}
-              />
-
-              {/* Main container for questions */}
-              <SectionUI
-                subsectionId={activeSubsection}
-              />
-
-            </div>
+          <div className="h-screen overflow-auto pr-4 relative">
+            {/* Top bar containing the section buttons e.g. 'Section A' */}
+            <Horizontalscroll
+              sections={sections}
+              activeSection={activeSection}
+              setActiveSection={setActiveSection}
+            />
+            {activeSection==="C"}
+            {/* Main container for questions */}
+            <SectionUI activeSection={activeSection} subsectionId={activeSubsection} />
           </div>
+        </div>
       </div>
     </div>
   );

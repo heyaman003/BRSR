@@ -10,7 +10,6 @@ import {
   TableModel as TableDTO,
   RowModel as RowDTO,
   SubSectionModel as SubSectionDTO,
-  QuestionModel as QuestionDTO,
 } from './section.dtos';
 import { DbService } from 'src/utils/db.connections';
 
@@ -60,6 +59,7 @@ export class SectionRepository {
                 },
                 data: {
                   answer_text: question.answer_text || null,
+
                 },
               })),
             },
@@ -92,7 +92,7 @@ export class SectionRepository {
     id: string,
     data: TableDTO,
     userId: string,
-    obj
+    obj,
   ) {
     try {
       await obj.table.update({
@@ -106,10 +106,10 @@ export class SectionRepository {
                 create: {
                   user: {
                     connect: {
-                      id: userId
-                    }
-                  }
-                }
+                      id: userId,
+                    },
+                  },
+                },
               },
             },
           },
@@ -305,7 +305,11 @@ export class SectionRepository {
           id: questionId,
         },
         select: {
-          history: true,
+          history: {
+            include: {
+              user: true,
+            },
+          },
         },
       });
       if (!question) throw new NotFoundException('Question does not exist.');

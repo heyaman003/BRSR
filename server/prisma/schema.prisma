@@ -10,7 +10,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = "postgresql://postgres:NewSecurePassword@127.0.0.1:5434/BRSR?schema=public"
 }
 
 model User {

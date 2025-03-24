@@ -24,7 +24,18 @@ export class CompanyRepository {
             select: {
               id: true,
               title: true,
-              subsections: true
+              subsections: {
+                select: {
+                  title: true,
+                  id: true,
+                  questions: {
+                    select: {
+                      id: true,
+                      desc: true
+                    }
+                  }
+                }
+              }
             },
           },
         },

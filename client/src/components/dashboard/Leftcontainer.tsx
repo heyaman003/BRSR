@@ -2,12 +2,14 @@ import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
 import { SubSection } from "@/models/models";
 import { useEffect, useState } from "react";
+import {extractToPdf} from "@/utils/pdfgenerate";
 import {
   Leaf,
   Flower,
   Cloud,
 } from "@/components/component/SustainabilityElements";
-import { toast } from "sonner";
+import MainNavigationforC from "../component/SectioncNav";
+import BottomLeftContainer from "../component/BottomLeftContainer";
 type LeftcontainerProps = {
   subsections: SubSection[] | undefined; // Ensures sections is an object where each key holds an array of Section
   setActiveSubsection: (sectionId: string) => void;
@@ -71,10 +73,6 @@ const Leftcontainer: React.FC<LeftcontainerProps> = ({
         style={{ animationDelay: "1s" }}
       />
       <Flower className="absolute top-[1%] opacity-70 animate-spin" />
-      {/* <Flower
-          className="absolute bottom-[20%] right-[8%] opacity-60 animate-pulse-grow"
-          style={{ animationDelay: "2s" }}
-        /> */}
       <div className="relative w-[180px] h-[180px] m-auto">
         <svg className="w-full h-full" viewBox="0 0 100 100">
           <circle
@@ -111,6 +109,7 @@ const Leftcontainer: React.FC<LeftcontainerProps> = ({
       </div>
 
       {/* Subsection buttons */}
+      {subsections?.length!=9?
       <nav className="space-y-5 py-10 pt-5">
         {subsections?.sort((a: SubSection, b: SubSection)=>a.title.localeCompare(b.title)).map((subsection: SubSection) => (
           <button
@@ -134,68 +133,11 @@ const Leftcontainer: React.FC<LeftcontainerProps> = ({
             </div>
           </button>
         ))}
-      </nav>
-
-      {/* Bottom button contaner */}
-      <div className="flex gap-4 pb-6">
-        <Button
-          type="submit"
-          className="w-full bg-yellow-500 hover:bg-yellow-600 text-white"
-        >
-          Send for approval
-        </Button>
-        <Button
-        onClick={()=>toast.promise(extractToPdf(activeSection), {
-          loading: 'Generating pdf.',
-          success: (data)=> data,
-          error: (err)=>err.message
-        })}
-          type="submit"
-          className="w-full bg-yellow-500 hover:bg-yellow-600 text-white"
-        >
-          Extract to PDF
-        </Button>
-      </div>
+      </nav>: <div className="overflow-y-auto"> <MainNavigationforC subsections={subsections}/> </div>
+     }
+      <BottomLeftContainer activeSection={activeSection} />
     </div>
   );
 };
 
 export default Leftcontainer;
-
-
-const extractToPdf = async (sectionId: string) => {
-    const raw = await fetch(
-      `${import.meta.env.VITE_SERVER_URI}/section/${sectionId}/extract`,
-      {
-        headers: {
-          'X-Csrf-Token': sessionStorage.getItem('X-Csrf-Token') || ''
-        },
-        credentials: 'include'
-      }
-    );
-
-
-    if(raw.status<200 || raw.status>=400){
-      const res = await raw.json()
-      throw new Error(res.message);
-    }
-
-    const blob: Blob = await raw.blob();
-
-    const url: string = window.URL.createObjectURL(blob);
-
-    const a: HTMLAnchorElement = document.createElement('a');
-
-    a.href = url;
-
-    a.download = sectionId;
-
-    document.body.appendChild(a);
-
-    a.click();
-
-    a.remove()
-
-    return 'Extracted section to PDF successfully.'
-
-};

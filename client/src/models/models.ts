@@ -137,6 +137,7 @@ export class Section {
     this.id = id;
     this.title = title;
     this.subsections = subSections;
+    // this.data = data;
   }
 }
 
@@ -145,6 +146,17 @@ export class Comment {
   data?: string;
   @Expose()
   createdAt?: Date;
+  @Expose()
+  id?: string;
+
+  @Type(()=>CommentUser)
+  user?: CommentUser
+}
+
+export class History {
+  @Expose()
+  createdAt?: Date;
+  
   @Expose()
   id?: string;
 
