@@ -8,6 +8,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthGuard } from './utils/auth/AuthGuard';
 import { SectionModule } from './modules/section/section.module';
+import { CommentModule } from './modules/question-comments/comment.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { SectionModule } from './modules/section/section.module';
         expiresIn: '60m',
       },
     }),
+    CommentModule
   ],
   controllers: [AppController],
   providers: [

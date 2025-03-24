@@ -1,6 +1,8 @@
 import {
   BadRequestException,
+  HttpException,
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import { Row, Section, Table, Question, SubSection } from './initialData';
@@ -45,7 +47,7 @@ export class SectionRepository {
     return data;
   }
 
-  async updateSubsectionData(id: string, data: SubSectionDTO) {
+  async updateSubsectionData(id: string, data: SubSectionDTO, userId: string) {
     try {
       await this.db.$transaction(async (tx) => {
         await tx.subsection.update({
@@ -68,7 +70,8 @@ export class SectionRepository {
             async (question) =>
               await Promise.all(
                 question.answer_table.map(
-                  async (table) => await this.updateTableData(table.id, table, tx),
+                  async (table) =>
+                    await this.updateTableData(table.id, table, userId, tx),
                 ),
               ),
           ),
@@ -80,17 +83,36 @@ export class SectionRepository {
     }
   }
 
-  async saveTableData(id: string, data: TableDTO) {
-    this.updateTableData(id, data, this.db);
+  async saveTableData(id: string, data: TableDTO, userId: string) {
+    await this.updateTableData(id, data, userId, this.db);
   }
 
-  private async updateTableData(id: string, data: TableDTO, obj){
+  // Updates table data according to the context(obj) provided
+  private async updateTableData(
+    id: string,
+    data: TableDTO,
+    userId: string,
+    obj
+  ) {
     try {
       await obj.table.update({
         where: {
           id,
         },
         data: {
+          question: {
+            update: {
+              history: {
+                create: {
+                  user: {
+                    connect: {
+                      id: userId
+                    }
+                  }
+                }
+              },
+            },
+          },
           rows: {
             deleteMany: {
               id: {
@@ -132,16 +154,16 @@ export class SectionRepository {
           },
         },
       });
-      console.log('Yo');
     } catch (e) {
-      console.log(e);
-      throw new BadRequestException(e.message);
+      if (!(e instanceof HttpException)) {
+        console.log(e);
+        throw new InternalServerErrorException();
+      } else throw e;
     }
   }
 
   async getSubsectionData(id: string) {
     try {
-      console.log(id);
       return await this.db.subsection.findUnique({
         where: {
           id,
@@ -149,6 +171,11 @@ export class SectionRepository {
         include: {
           questions: {
             include: {
+              _count: {
+                select: {
+                  comments: true,
+                },
+              },
               answer_table: {
                 include: {
                   rows: {
@@ -269,5 +296,26 @@ export class SectionRepository {
         index: ind,
       },
     });
+  }
+
+  async getHistory(questionId: string) {
+    try {
+      const question = await this.db.question.findUnique({
+        where: {
+          id: questionId,
+        },
+        select: {
+          history: true,
+        },
+      });
+      if (!question) throw new NotFoundException('Question does not exist.');
+
+      return question.history;
+    } catch (e) {
+      if (!(e instanceof HttpException)) {
+        console.log(e);
+        throw new InternalServerErrorException();
+      } else throw e;
+    }
   }
 }

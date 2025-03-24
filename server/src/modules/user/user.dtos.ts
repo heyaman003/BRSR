@@ -1,5 +1,6 @@
 import { IsEmail, IsEnum, IsNotEmpty, IsOptional, IsUUID, Matches } from "class-validator";
 import { Company, Role } from "@prisma/client";
+import { Transform } from "class-transformer";
 
 
 export enum UserRole {
@@ -11,6 +12,7 @@ export enum UserRole {
 export class CreateUserDto {
     @IsNotEmpty()
     @IsEmail()
+    @Transform(({value}:{value: string})=>value.toLowerCase())
     email: string;
 
     @IsNotEmpty()
@@ -28,6 +30,7 @@ export class CreateUserDto {
 
 export class GetUserDto {
     @IsUUID()
+    @Transform(({value}:{value: string})=>value.toLowerCase())
     id: string;
 
     @IsNotEmpty()

@@ -15,17 +15,21 @@ export class SectionService {
         return await this.sectionRepository. createSection(section, companyId);
     }
 
-    async createTable(id: string, table: TableModel){
-        return await this.sectionRepository.saveTableData(id, table);
+    async createTable(id: string, table: TableModel, userId: string){
+        return await this.sectionRepository.saveTableData(id, table, userId);
     }
 
-    async updateSubsectionData(id: string, data: SubSectionModel) {
-        return await this.sectionRepository.updateSubsectionData(id, data);
+    async updateSubsectionData(id: string, data: SubSectionModel, userId: string) {
+        return await this.sectionRepository.updateSubsectionData(id, data, userId);
     }
 
     async extractSectionToPDF(sectionId: string): Promise<string> {
         const data = await this.sectionRepository.retrieveAllSectionData(sectionId);
         const pdfPath = await generatePdf(data);
         return pdfPath;
+    }
+
+    async getHistory(questionId: string) {
+        return await this.sectionRepository.getHistory(questionId);
     }
 }
