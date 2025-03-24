@@ -29,7 +29,6 @@ const CommentSidebar = ({
 }) => {
   const [commentText, setCommentText] = useState<string>("");
   const [comments, setComments] = useState<Comment[]>([]);
-  // const [history, setHistory] = useState<>([]);
   const [isAddingComment, setIsAddingComment] = useState<boolean>(false);
 
   useEffect(() => {
@@ -77,10 +76,11 @@ const CommentSidebar = ({
                 View History
               </TabsTrigger>
             </TabsList>
-            <TabsContent value="history">history</TabsContent>
+            <TabsContent value="history">
+              <ViewHistory questionId={questionId} />
+            </TabsContent>
             <TabsContent value="comments">
               <ViewComments comments={comments} />
-              <ViewHistory questionId={questionId}/>
             </TabsContent>
           </Tabs>
         </SidebarContent>
@@ -107,8 +107,14 @@ const CommentSidebar = ({
               }}
               className="bg-green-600 hover:bg-green-500 text-white font-semibold my-3"
             >
-              {isAddingComment?<Loader2 className="animate-spin"/>:<><FaRegPaperPlane />
-              Submit</>}
+              {isAddingComment ? (
+                <Loader2 className="animate-spin" />
+              ) : (
+                <>
+                  <FaRegPaperPlane />
+                  Submit
+                </>
+              )}
             </Button>
           </div>
         </SidebarFooter>
