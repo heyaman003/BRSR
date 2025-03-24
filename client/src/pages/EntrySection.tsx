@@ -39,6 +39,7 @@ export default function QuestionnairePage() {
         setActiveSubsection(activeSec.subsections[0].id);
       }
     }
+    // console.log("the section is is",activeSection)
   }, [activeSection]);
 
   return (
@@ -63,9 +64,9 @@ export default function QuestionnairePage() {
               activeSection={activeSection}
               setActiveSection={setActiveSection}
             />
-
+            {activeSection==="C"}
             {/* Main container for questions */}
-            <SectionUI subsectionId={activeSubsection} />
+            <SectionUI activeSection={activeSection} subsectionId={activeSubsection} />
           </div>
         </div>
       </div>

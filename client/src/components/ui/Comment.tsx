@@ -84,7 +84,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({ comments, updateComment
           className="flex items-center gap-1 text-yellow-600 hover:text-yellow-700 transition-colors text-sm font-medium"
         >
           <MessageCirclePlus size={16} />
-          <span>Add comment</span>
+          <span></span>
         </button>
       )}
     </div>

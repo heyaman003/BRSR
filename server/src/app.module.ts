@@ -8,6 +8,9 @@ import { AuthModule } from './modules/auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthGuard } from './utils/auth/AuthGuard';
 import { SectionModule } from './modules/section/section.module';
+import { ChatController } from './modules/chat/chat.controller';
+import { ChatService } from './modules/chat/chat.service';
+import { ChatModule } from './modules/chat/chat.module';
 
 @Module({
   imports: [
@@ -23,14 +26,16 @@ import { SectionModule } from './modules/section/section.module';
         expiresIn: '60m',
       },
     }),
+    ChatModule,
   ],
-  controllers: [AppController],
+  controllers: [AppController, ChatController],
   providers: [
     AppService,
     {
       provide: 'APP_GUARD',
       useClass: AuthGuard,
     },
+    ChatService,
   ],
 })
 export class AppModule {}

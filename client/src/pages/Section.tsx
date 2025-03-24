@@ -1,4 +1,3 @@
-// import SectionCTable2 from "@/components/sectionC/SectionCTable2";
 import ChatBox from "@/components/chat/ChatBox";
 import SustainabilityLoader from "@/components/component/SustainabiltyLoader";
 import BooleanInput from "@/components/Question/BooleanInput";
@@ -11,12 +10,13 @@ import { plainToInstance } from "class-transformer";
 import { Loader2 } from "lucide-react";
 import React, { memo, useEffect, useState } from "react";
 import { toast } from "sonner";
-
+import {fetchSubsectionData,updateSubsectionData} from '@/utils/dataFetching'
 interface SectionUiArgs {
   subsectionId: string;
+  activeSection:string;
 }
 
-const Section: React.FC<SectionUiArgs> = ({ subsectionId }) => {
+const Section: React.FC<SectionUiArgs> = ({ subsectionId,activeSection }) => {
   const [loaderProgress, setLoaderProgress] = useState<number>(10);
   const [isLoaderVisible, setIsLoaderVisible] = useState(true);
   const [comments, setComments] = useState<string[]>([]);
@@ -166,46 +166,4 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId }) => {
 
 export default memo(Section);
 
-const fetchSubsectionData = async (
-  subsectionId: string,
-  updateProgress: (value: number) => void
-) => {
-  updateProgress(10);
-  const raw = await fetch(
-    `${import.meta.env.VITE_SERVER_URI}/section/subsection/${subsectionId}`,
-    {
-      credentials: "include",
-      headers: { "X-Csrf-Token": sessionStorage.getItem("X-Csrf-Token") || "" },
-    }
-  );
-  updateProgress(50);
-  const res = await raw.json();
-  await new Promise((res: any) =>
-    setTimeout(() => {
-      updateProgress(90);
-      res();
-    }, 500)
-  );
 
-  return res.data;
-};
-
-const updateSubsectionData = async (subsectionData: SubSection) => {
-  const raw = await fetch(
-    `${import.meta.env.VITE_SERVER_URI}/section/subsection/${
-      subsectionData.id
-    }`,
-    {
-      credentials: "include",
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-Csrf-Token": sessionStorage.getItem("X-Csrf-Token") || "",
-      },
-      body: JSON.stringify(subsectionData),
-    }
-  );
-  const res = await raw.json();
-  if (raw.status < 200 || raw.status >= 400) throw new Error(res.message);
-  return res;
-};

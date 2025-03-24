@@ -13,7 +13,7 @@ export class AuthController {
     async signin(@Body(ValidationPipe) siginInRequest: SiginInDto, @Res({passthrough: true}) response: Response): Promise<ResponseModel> {
         const userdetails = await this.authService.signIn(siginInRequest.email, siginInRequest.password);
 
-        response.cookie('authorization', `Bearer ${userdetails.accessToken}`, {httpOnly: true, sameSite: "lax", secure: false, maxAge: 60*60000})
+        response.cookie('authorization', `Bearer ${userdetails.accessToken}`, {httpOnly: true, sameSite: "lax", secure: false, maxAge: 60*60000*24})
         return new ResponseModel(200, 'Successfully signed in.', userdetails.userdetails);
     }
     @Post("logout")
