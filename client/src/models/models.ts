@@ -153,6 +153,17 @@ export class Comment {
   user?: CommentUser
 }
 
+export class History {
+  @Expose()
+  createdAt?: Date;
+  
+  @Expose()
+  id?: string;
+
+  @Type(()=>CommentUser)
+  user?: CommentUser
+}
+
 
 class CommentUser {
   @Expose()
