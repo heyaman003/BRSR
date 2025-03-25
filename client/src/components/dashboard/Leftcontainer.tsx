@@ -6,7 +6,6 @@ import {
   Flower,
   Cloud,
 } from "@/components/component/SustainabilityElements";
-import { toast } from "sonner";
 import MainNavigationforC from "../component/SectioncNav";
 import BottomLeftContainer from "../component/BottomLeftContainer";
 type LeftcontainerProps = {

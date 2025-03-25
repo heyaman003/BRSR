@@ -1,4 +1,4 @@
-import { Loader2, Mail, MessageSquare, X } from "lucide-react";
+import { Loader2, MessageSquare, X } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -16,14 +16,6 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { plainToInstance } from "class-transformer";
 import ViewHistory from "./ViewHistory";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import MentionUser from "./MentionUser";
 import {  SubSection } from "@/models/models";
 
 const CommentSidebar = ({
@@ -32,7 +24,7 @@ const CommentSidebar = ({
   closeSidebar,
 }: {
   questionId: string;
-  setSubsectionData: (subSection: SubSection | null) => void;
+  setSubsectionData: React.Dispatch<React.SetStateAction<SubSection | null>>;
   closeSidebar: () => void;
 }) => {
   const [commentText, setCommentText] = useState<string>("");
@@ -94,7 +86,7 @@ const CommentSidebar = ({
         </SidebarContent>
 
         <SidebarFooter className="relative">
-          <MentionUser/>
+          {/* <MentionUser/> */}
 
           <div className="flex flex-col mt-4 ">
             <Textarea
@@ -110,24 +102,26 @@ const CommentSidebar = ({
                 addComent(questionId, commentText)
                   .then((res) => {
                     setComments((prevComments) => [res, ...prevComments]);
-                    setSubsectionData((prev: SubSection) => {
-                      if (prev) {
-                        return {
-                          ...prev,
-                          questions: prev.questions.map((question) =>
-                            question.id === questionId
-                              ? {
-                                  ...question,
-                                  _count: {
-                                    ...question._count,
-                                    comments: question._count.comments + 1,
-                                  },
-                                }
-                              : question
-                          ),
-                        };
-                      }
-                      return null;
+
+                    setSubsectionData((prev: SubSection | null) => {
+                      if (!prev) return prev;
+                      
+                      return new SubSection(
+                        prev.id,
+                        prev.title,
+                        prev.questions.map((question) =>
+                          question.id === questionId
+                            ? {
+                                ...question,
+                                _count: {
+                                  ...question._count,
+                                  comments: question._count.comments + 1,
+                                },
+                              }
+                            : question
+                        ),
+                        prev.index
+                      );
                     });
                     setCommentText("");
                   })

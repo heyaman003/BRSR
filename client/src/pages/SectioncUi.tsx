@@ -13,10 +13,9 @@ import { toast } from "sonner";
 import {fetchSubsectionData,updateSubsectionData} from '@/utils/dataFetching'
 interface SectionUiArgs {
   subsectionId: string;
-  activeSection:string;
 }
 
-const Section: React.FC<SectionUiArgs> = ({ subsectionId,activeSection }) => {
+const Section: React.FC<SectionUiArgs> = ({ subsectionId }) => {
   const [loaderProgress, setLoaderProgress] = useState<number>(10);
   const [isLoaderVisible, setIsLoaderVisible] = useState(true);
   const [subsectionData, setSubsectionData] = useState<SubSection | null>(null);

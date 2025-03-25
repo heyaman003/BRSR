@@ -8,7 +8,6 @@ import {
 } from "../ui/table";
 import { Cell, Row, Table as TableType } from "@/types";
 import CellInput from "./CellInput";
-import { AgGridReact } from 'ag-grid-react';
 import { memo, useCallback, useEffect, useState } from "react";
 import * as BSON from "bson";
 import { toast } from "sonner";

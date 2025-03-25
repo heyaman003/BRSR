@@ -6,10 +6,6 @@ interface LoginCredentials {
   password: string;
 }
 
-interface UserInformation extends LoginCredentials{
-  role:string;
-}
-
 interface AuthState {
   user: { [key: string]: any } | null;
   isLoading: boolean;

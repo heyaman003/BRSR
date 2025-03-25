@@ -1,5 +1,3 @@
-import React from 'react'
-
 const ReportPrep = () => {
     return (
         <div className='mx-auto py-16 container text-center'>

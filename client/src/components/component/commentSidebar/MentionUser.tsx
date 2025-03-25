@@ -1,23 +1,16 @@
-import { User } from "@/lib/types";
 import { RootState } from "@/store/store";
-import { plainToInstance } from "class-transformer";
 import { Mail } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useSelector } from "react-redux";
 
 const MentionUser = () => {
-    const [users, setUsers] = useState<User[]>([]);
     const companyId = useSelector((root: RootState)=>root.auth.user?.data?.companyId);
 
     useEffect(()=>{
-        loadCompanyUsers(companyId).then((users)=>console.log(users))
+        loadCompanyUsers(companyId);
     }, [companyId])
 
-    useEffect(()=>{
-
-        console.log("======>", users)
-    }, [users])
-    
+   
   return (
     <ul className="w-full absolute bottom-full">
       <li className="w-full my-1 px-5 py-2 bg-gray-100 hover:bg-gray-200 cursor-pointer">
