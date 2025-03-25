@@ -22,7 +22,7 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId,activeSection }) => {
   const [subsectionData, setSubsectionData] = useState<SubSection | null>(null);
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [selectedQuestionForComment, setSelectedQuestionForComment] = useState<string>("");
-
+  // const [commentLength, setCommentLength] = useState<number>(0);
   const updateTableData = (questionId: string, tableData: Table) => {
     setSubsectionData(
       (subSection: SubSection | null) =>
@@ -91,6 +91,7 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId,activeSection }) => {
             subsectionData.questions
               .sort((a, b) => a.index - b.index)
               .map((question: Question) => (
+               
                 <div className="mb-5 py-3" key={question.id}>
                   <div className="flex gap-3 justify-between w-[96%]">
                     <p
@@ -158,7 +159,7 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId,activeSection }) => {
         </div>
       )}
       <ChatBox />
-      <CommentSidebar closeSidebar={()=>setSelectedQuestionForComment("")} questionId={selectedQuestionForComment}/>
+      <CommentSidebar setSubsectionData={setSubsectionData} closeSidebar={()=>setSelectedQuestionForComment("")} questionId={selectedQuestionForComment}/>
     </section>
   );
 };

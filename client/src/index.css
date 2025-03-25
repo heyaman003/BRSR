@@ -409,7 +409,7 @@
 }
 
 .subsection-container.active {
-  max-height: 400px;
+ max-height: fit-content;
 }
 
 .subsection {

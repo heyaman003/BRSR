@@ -24,12 +24,15 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import MentionUser from "./MentionUser";
+import {  SubSection } from "@/models/models";
 
 const CommentSidebar = ({
   questionId,
+  setSubsectionData,
   closeSidebar,
 }: {
   questionId: string;
+  setSubsectionData: (subSection: SubSection | null) => void;
   closeSidebar: () => void;
 }) => {
   const [commentText, setCommentText] = useState<string>("");
@@ -107,6 +110,25 @@ const CommentSidebar = ({
                 addComent(questionId, commentText)
                   .then((res) => {
                     setComments((prevComments) => [res, ...prevComments]);
+                    setSubsectionData((prev: SubSection) => {
+                      if (prev) {
+                        return {
+                          ...prev,
+                          questions: prev.questions.map((question) =>
+                            question.id === questionId
+                              ? {
+                                  ...question,
+                                  _count: {
+                                    ...question._count,
+                                    comments: question._count.comments + 1,
+                                  },
+                                }
+                              : question
+                          ),
+                        };
+                      }
+                      return null;
+                    });
                     setCommentText("");
                   })
                   .finally(() => setIsAddingComment(false));
