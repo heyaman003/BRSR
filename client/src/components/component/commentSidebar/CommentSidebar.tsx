@@ -1,4 +1,4 @@
-import { Loader2, Mail, MessageSquare, X } from "lucide-react";
+import { MessageSquare, X } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -9,21 +9,12 @@ import {
 import { Tabs } from "../../ui/tabs";
 import { TabsContent, TabsList, TabsTrigger } from "@radix-ui/react-tabs";
 import ViewComments from "./ViewComments";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
-import { FaRegPaperPlane } from "react-icons/fa";
+import ViewHistory from "./ViewHistory";
+import CommentInput from "./CommentInput";
 import { useEffect, useState } from "react";
+import { Comment } from "@/models/models";
 import { toast } from "sonner";
 import { plainToInstance } from "class-transformer";
-import ViewHistory from "./ViewHistory";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import MentionUser from "./MentionUser";
 
 const CommentSidebar = ({
   questionId,
@@ -32,9 +23,8 @@ const CommentSidebar = ({
   questionId: string;
   closeSidebar: () => void;
 }) => {
-  const [commentText, setCommentText] = useState<string>("");
   const [comments, setComments] = useState<Comment[]>([]);
-  const [isAddingComment, setIsAddingComment] = useState<boolean>(false);
+
 
   useEffect(() => {
     if (questionId)
@@ -42,6 +32,7 @@ const CommentSidebar = ({
         setComments(plainToInstance(Comment, comment) as Comment[])
       );
   }, [questionId]);
+
 
   return (
     <SidebarProvider
@@ -91,38 +82,7 @@ const CommentSidebar = ({
         </SidebarContent>
 
         <SidebarFooter className="relative">
-          <MentionUser/>
-
-          <div className="flex flex-col mt-4 ">
-            <Textarea
-              placeholder="Write a comment..."
-              className="min-h-[80px] resize-none border-green-500 focus:ring-green-500 transition-all"
-              value={commentText}
-              onChange={(e) => setCommentText(e.target.value)}
-            />
-            <Button
-              disabled={isAddingComment}
-              onClick={() => {
-                setIsAddingComment(true);
-                addComent(questionId, commentText)
-                  .then((res) => {
-                    setComments((prevComments) => [res, ...prevComments]);
-                    setCommentText("");
-                  })
-                  .finally(() => setIsAddingComment(false));
-              }}
-              className="bg-green-600 hover:bg-green-500 text-white font-semibold my-3"
-            >
-              {isAddingComment ? (
-                <Loader2 className="animate-spin" />
-              ) : (
-                <>
-                  <FaRegPaperPlane />
-                  Submit
-                </>
-              )}
-            </Button>
-          </div>
+          <CommentInput questionId={questionId} setComments={setComments}/>
         </SidebarFooter>
       </Sidebar>
     </SidebarProvider>
@@ -131,28 +91,8 @@ const CommentSidebar = ({
 
 export default CommentSidebar;
 
-async function addComent(questionId: string, comment: string) {
-  try {
-    const raw = await fetch(`${import.meta.env.VITE_SERVER_URI}/comment`, {
-      method: "POST",
-      credentials: "include",
-      body: JSON.stringify({
-        questionId,
-        data: comment,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-        "X-Csrf-Token": sessionStorage.getItem("X-Csrf-Token") || "",
-      },
-    });
-    const res = await raw.json();
-    if (raw.status < 200 || raw.status >= 400) throw new Error(res.message);
-    return res.data;
-  } catch (e) {
-    if (e instanceof Error) toast.error(e.message);
-    throw e;
-  }
-}
+
+
 
 async function fetchComments(questionId: string) {
   try {

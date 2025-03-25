@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, IsUUID } from "class-validator";
+import { IsArray, IsNotEmpty, IsString, IsUUID, Validate, ValidateNested } from "class-validator";
 
 export class AddCommentDTO {
     @IsUUID()
@@ -7,4 +7,7 @@ export class AddCommentDTO {
     @IsString()
     @IsNotEmpty()
     data: string;
+
+    @IsArray()
+    mentions: string[]
 }

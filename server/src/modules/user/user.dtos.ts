@@ -1,4 +1,4 @@
-import { IsEmail, IsEnum, IsNotEmpty, IsOptional, IsUUID, Matches } from "class-validator";
+import { IsEmail, IsEnum, IsNotEmpty, IsOptional, IsUUID, Matches, MinLength } from "class-validator";
 import { Company, Role } from "@prisma/client";
 import { Transform } from "class-transformer";
 
@@ -18,7 +18,12 @@ export class CreateUserDto {
     @IsNotEmpty()
     name: string;
 
-    @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)
+    @MinLength(8)
+    @Matches(/(?=.*[a-z])/, {message: "Password must include atleast one lowercase letter."})
+    @Matches(/(?=.*[A-Z])/, {message: "Password must include atleast one uppercase letter."})
+    @Matches(/(?=.*\d)/, {message: "Password must include atleast one digit."})
+    @Matches(/(?=.*[@$!%*?&])/, {message: "Password must include atleast one special character."})
+    // @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, {message: "Password must include atleast 1 Uppercase, 1 lowercase, 1 digit and 1 special character and should be atleast 8 characters long."})
     password: string;
 
     @IsOptional()

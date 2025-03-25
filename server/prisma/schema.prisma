@@ -10,7 +10,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = "postgresql://postgres:NewSecurePassword@127.0.0.1:5434/BRSR?schema=public"
+  url      = env("DATABASE_URL")
 }
 
 model User {
@@ -25,6 +25,8 @@ model User {
   updatedAt DateTime @updatedAt
   comments Comment[] @relation(name: "commented-by")
   History History[] @relation(name: "saved-by")
+
+  Mention Mention[] @relation(name: "comment-mention")
 }
 
 model Company {
@@ -84,6 +86,15 @@ model Comment {
   question Question @relation(name: "belongs-to", references: [id], fields: [questionId])
   questionId String
   createdAt DateTime @default(now())
+  mentions Mention[] @relation(name: "mentioned-in")
+}
+
+model Mention {
+  id String @id @default(uuid())
+  user User @relation(name: "comment-mention", fields: [userId], references: [id])
+  userId String
+  comment Comment @relation(name: "mentioned-in", fields: [commentId], references: [id])
+  commentId String
 }
 
 model Table {

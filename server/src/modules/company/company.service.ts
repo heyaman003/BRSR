@@ -12,6 +12,7 @@ export class CompanyService {
 
     async listSections(companyId: string): Promise<any> {
         const company = await this.companyRepository.listSections(companyId);
+
         if(!company)
             throw new NotFoundException('Company does not exist.')
         

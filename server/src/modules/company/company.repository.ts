@@ -31,7 +31,8 @@ export class CompanyRepository {
                   questions: {
                     select: {
                       id: true,
-                      desc: true
+                      desc: true,
+                      index: true
                     }
                   }
                 }

@@ -45,6 +45,8 @@ export class AuthService {
       return await this.jwtService.signAsync({
         sub: user['id'],
         role: user.role,
+      }, {
+        expiresIn: '24h'
       });
     } catch (e) {
       throw new InternalServerErrorException(e.message);

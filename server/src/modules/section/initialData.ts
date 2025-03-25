@@ -558,7 +558,7 @@ export const companySectionsTemplate: Section[] = [
                   new Row(
                     [
                       new Cell(
-                        '7. Statement by director responsible for the business responsibility report, highlighting ESG related challenges, targets and achievements (listed entity has flexibility regarding the placement of this disclosure)',
+                        'Statement by director responsible for the business responsibility report, highlighting ESG related challenges, targets and achievements (listed entity has flexibility regarding the placement of this disclosure)',
                         false,
                         1,
                         2,
@@ -571,7 +571,7 @@ export const companySectionsTemplate: Section[] = [
                   new Row(
                     [
                       new Cell(
-                        '8. Details of the highest authority responsible for implementation and oversight of the Business Responsibility policy (ies).',
+                        'Details of the highest authority responsible for implementation and oversight of the Business Responsibility policy (ies).',
                         false,
                         1,
                         1,
@@ -585,7 +585,7 @@ export const companySectionsTemplate: Section[] = [
                   new Row(
                     [
                       new Cell(
-                        '9. Does the entity have a specified Committee of the Board/ Director responsible for decision making on sustainability related issues? (Yes / No). If yes, provide details.',
+                        'Does the entity have a specified Committee of the Board/ Director responsible for decision making on sustainability related issues? (Yes / No). If yes, provide details.',
                         false,
                         1,
                         1,
