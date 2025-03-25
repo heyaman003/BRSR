@@ -75,3 +75,25 @@ const MainNavigationforC: React.FC<MainNavigationProps> = ({subsections,setActiv
 
 export default MainNavigationforC;
 
+const fetchSubsectionData = async (
+  subsectionId: string,
+  updateProgress: (value: number) => void
+) => {
+  updateProgress(10);
+  const raw = await fetch(
+    `${import.meta.env.VITE_SERVER_URI}/section/subsection/${subsectionId}`,
+    {
+      credentials: "include",
+      headers: { "X-Csrf-Token": sessionStorage.getItem("X-Csrf-Token") || "" },
+    }
+  );
+  updateProgress(50);
+  const res = await raw.json();
+  await new Promise((res: any) =>{
+      updateProgress(90);
+      res();
+  }
+  );
+
+  return res.data;
+};

@@ -1,4 +1,4 @@
-import { Loader2, MessageSquare, X } from "lucide-react";
+import { Loader2, Mail, MessageSquare, X } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -16,6 +16,14 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { plainToInstance } from "class-transformer";
 import ViewHistory from "./ViewHistory";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import MentionUser from "./MentionUser";
 import {  SubSection } from "@/models/models";
 
 const CommentSidebar = ({
@@ -85,7 +93,9 @@ const CommentSidebar = ({
           </Tabs>
         </SidebarContent>
 
-        <SidebarFooter>
+        <SidebarFooter className="relative">
+          <MentionUser/>
+
           <div className="flex flex-col mt-4 ">
             <Textarea
               placeholder="Write a comment..."

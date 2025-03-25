@@ -19,6 +19,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { User } from "@/lib/types";
+import { plainToInstance } from "class-transformer";
 
 const formSchema = z.object({
   name: z.string().min(1),
@@ -26,7 +28,7 @@ const formSchema = z.object({
   password: z.string(),
 });
 
-export default function CreateUserForm({ companyId }: { companyId: string }) {
+export default function CreateUserForm({ companyId, addUserToState }: { companyId: string, addUserToState:(user: User)=>void }) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -37,11 +39,12 @@ export default function CreateUserForm({ companyId }: { companyId: string }) {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-      createClient(companyId, values).then((res)=>{
-        form.resetField("name")
-        form.resetField("email")
-        form.resetField("password")
-      });
+      createClient(companyId, values).then((res: User) => {
+              form.resetField("name");
+              form.resetField("email");
+              form.resetField("password");
+              addUserToState(plainToInstance(User, res) as User);
+            });
   }
 
   return (
@@ -132,5 +135,6 @@ const createClient = async (
     return res.data
   } catch (e) {
     if (e instanceof Error) toast.error(e.message);
+    throw e
   }
 };
