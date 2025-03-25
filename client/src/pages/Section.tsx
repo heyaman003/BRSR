@@ -1,4 +1,6 @@
 import ChatBox from "@/components/chat/ChatBox";
+import { useLocation } from "react-router-dom"; // Ensure react-router is used
+
 import CommentSidebar from "@/components/component/commentSidebar/CommentSidebar";
 import SustainabilityLoader from "@/components/component/SustainabiltyLoader";
 import BooleanInput from "@/components/Question/BooleanInput";
@@ -10,18 +12,54 @@ import { plainToInstance } from "class-transformer";
 import { Loader2, MessageSquareText } from "lucide-react";
 import React, { memo, useEffect, useState } from "react";
 import { toast } from "sonner";
-import {fetchSubsectionData,updateSubsectionData} from '@/utils/dataFetching'
+import {
+  fetchSubsectionData,
+  updateSubsectionData,
+} from "@/utils/dataFetching";
 interface SectionUiArgs {
   subsectionId: string;
-  activeSection:string;
+  activeSection: string;
 }
 
-const Section: React.FC<SectionUiArgs> = ({ subsectionId,activeSection }) => {
+const Section: React.FC<SectionUiArgs> = ({ subsectionId, activeSection }) => {
   const [loaderProgress, setLoaderProgress] = useState<number>(10);
   const [isLoaderVisible, setIsLoaderVisible] = useState(true);
   const [subsectionData, setSubsectionData] = useState<SubSection | null>(null);
   const [isSaving, setIsSaving] = useState<boolean>(false);
-  const [selectedQuestionForComment, setSelectedQuestionForComment] = useState<string>("");
+  const location = useLocation();
+ const smoothScrollTo = (targetY: number, duration = 1000) => {
+  const startY = window.scrollY;
+  const distance = targetY - startY;
+  let startTime: number | null = null;
+
+  const animationStep = (timestamp: number) => {
+    if (!startTime) startTime = timestamp;
+    const progress = Math.min((timestamp - startTime) / duration, 1);
+    window.scrollTo(0, startY + distance * progress);
+    if (progress < 1) {
+      requestAnimationFrame(animationStep);
+    }
+  };
+
+  requestAnimationFrame(animationStep);
+};
+
+  
+  useEffect(() => {
+    if (subsectionData) {
+      const hash = window.location.hash.substring(1); // Extract question ID from hash
+      if (hash) {
+        const questionElement = document.getElementById(hash);
+        if (questionElement) {
+          const targetY = questionElement.getBoundingClientRect().top + window.scrollY;
+          smoothScrollTo(targetY, 1000); // Scroll over 1 second
+        }
+      }
+    }
+  }, [subsectionData,window.location.hash]);
+
+  const [selectedQuestionForComment, setSelectedQuestionForComment] =
+    useState<string>("");
   // const [commentLength, setCommentLength] = useState<number>(0);
   const updateTableData = (questionId: string, tableData: Table) => {
     setSubsectionData(
@@ -90,55 +128,61 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId,activeSection }) => {
           {subsectionData.questions &&
             subsectionData.questions
               .sort((a, b) => a.index - b.index)
-              .map((question: Question) => (
-               
-                <div className="mb-5 py-3" key={question.id}>
-                  <div className="flex gap-3 justify-between w-[96%]">
-                    <p
-                      className={`text-sm mb-2 text-green-800 font-semibold
+              .map(
+                (question: Question) =>
+                   (
+                    <div className="mb-5 py-3" key={question.id} id={question.id}>
+                      <div className="flex gap-3 justify-between w-[96%]">
+                        <p
+                          className={`text-sm mb-2 text-green-800 font-semibold
                       `}
-                    >
-                      {question.desc}
-                    </p>
-                    <button
-                    onClick={()=>setSelectedQuestionForComment(question.id)}
-                      className="flex items-center gap-1 text-yellow-600 hover:text-yellow-700 transition-colors text-sm font-medium"
-                    >
-                      <MessageSquareText size={18} />
-                      <span className="text-base">{question._count.comments}</span>
-                    </button>
-                  </div>
+                        >
+                          {question.desc} 
+                        </p>
+                        <button
+                          onClick={() =>
+                            setSelectedQuestionForComment(question.id)
+                          }
+                          className="flex items-center gap-1 text-yellow-600 hover:text-yellow-700 transition-colors text-sm font-medium"
+                        >
+                          <MessageSquareText size={18} />
+                          <span className="text-base">
+                            {question._count.comments}
+                          </span>
+                        </button>
+                      </div>
 
-                  {question.type === "TABLE" &&
-                    question.answer_table &&
-                    question.answer_table.map((table: Table) => (
-                      <TableUI
-                        updateTableData={(updatedTableData: Table) => {
-                          updateTableData(question.id, updatedTableData);
-                        }}
-                        key={table.id}
-                        table={table}
-                      />
-                    ))}
-                  {question.type === "TEXT" && (
-                    <TextQuestionUI
-                      value={question.answer_text}
-                      key={question.id}
-                      updateTextAnswer={(answer: string) =>
-                        updateTextAnswer(question.id, answer)
-                      }
-                    />
-                  )}
-                  {question.type === "BOOLEAN" && (
-                    <BooleanInput
-                      updateAnswer={(answer: string) =>
-                        updateTextAnswer(question.id, answer)
-                      }
-                      answer={question.answer_text}
-                    />
-                  )}
-                </div>
-              ))}
+                      {question.type === "TABLE" &&
+                        question.answer_table &&
+                        question.answer_table.map((table: Table) => (
+                          <TableUI
+                            updateTableData={(updatedTableData: Table) => {
+                              updateTableData(question.id, updatedTableData);
+                            }}
+                            key={table.id}
+                            table={table}
+                          />
+                        ))}
+                      {question.type === "TEXT" && (
+                        <TextQuestionUI
+                          value={question.answer_text}
+                          key={question.id}
+                          updateTextAnswer={(answer: string) =>
+                            updateTextAnswer(question.id, answer)
+                          }
+                        />
+                      )}
+                      {question.type === "BOOLEAN" && (
+                        <BooleanInput
+                          updateAnswer={(answer: string) =>
+                            updateTextAnswer(question.id, answer)
+                          }
+                          answer={question.answer_text}
+                        />
+                      )}
+                    </div>
+                  )
+              )}
         </div>
       )}
       {subsectionData && (
@@ -159,11 +203,13 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId,activeSection }) => {
         </div>
       )}
       <ChatBox />
-      <CommentSidebar setSubsectionData={setSubsectionData} closeSidebar={()=>setSelectedQuestionForComment("")} questionId={selectedQuestionForComment}/>
+      <CommentSidebar
+        setSubsectionData={setSubsectionData}
+        closeSidebar={() => setSelectedQuestionForComment("")}
+        questionId={selectedQuestionForComment}
+      />
     </section>
   );
 };
 
 export default memo(Section);
-
-

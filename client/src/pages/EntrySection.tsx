@@ -79,8 +79,7 @@ export default function QuestionnairePage() {
               activeSection={activeSection}
               setActiveSection={setActiveSection}
             />
-            {activeSection==="C"}
-            {/* Main container for questions */}
+            {activeSection==="C" }
             <SectionUI activeSection={activeSection} subsectionId={activeSubsection} />
           </div>
         </div>
