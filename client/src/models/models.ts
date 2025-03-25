@@ -114,6 +114,7 @@ export class SubSection {
   @Expose()
   @Type(() => Question)
   questions: Question[];
+  @Expose()
   index: number;
 
   constructor(id: string, title: string, questions: Question[], index: number) {

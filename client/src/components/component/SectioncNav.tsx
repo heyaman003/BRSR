@@ -177,11 +177,10 @@ const fetchSubsectionData = async (
   );
   updateProgress(50);
   const res = await raw.json();
-  await new Promise((res: any) =>
-    setTimeout(() => {
+  await new Promise((res: any) =>{
       updateProgress(90);
       res();
-    }, 500)
+  }
   );
 
   return res.data;
