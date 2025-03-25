@@ -7,12 +7,14 @@ interface UserListProps {
   users: User[];
   deleteUserFromState: Function;
   companyId: string;
+  addUserToState: (user: User)=>void
 }
 
 const UserList: React.FC<UserListProps> = ({
   companyId,
   users,
   deleteUserFromState,
+  addUserToState
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -51,7 +53,7 @@ const UserList: React.FC<UserListProps> = ({
         <p className="mt-2 mb-10 text-sm text-muted-foreground relative">
           Showing {filteredUsers.length} of {users.length} users
 
-          {<span className="absolute right-0"><CreateUserForm companyId={companyId} /></span>}
+          {<span className="absolute right-0"><CreateUserForm addUserToState={addUserToState} companyId={companyId} /></span>}
         </p>
       </div>
 

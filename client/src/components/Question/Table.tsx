@@ -108,13 +108,13 @@ const TableUI = ({
             .filter((row: Row) => row.isHeading)
             .sort((a: Row, b: Row) => a.index - b.index)
             .map((row: Row) => (
-              <TableRow key={row.id} className="bg-green-50 border-green-300">
+              <TableRow key={row.id} className=" border-green-300">
                 {row.cells.map((cell: Cell) => (
                   <TableHead
                     key={cell.id}
                     colSpan={cell.colSpan}
                     rowSpan={cell.rowSpan}
-                    className="text-center text-green-700 hover:bg-green-100 p-2"
+                    className="text-center text-green-700 bg-green-50 hover:bg-green-100 p-2"
                   >
                     {cell.data}
                   </TableHead>

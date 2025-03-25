@@ -99,6 +99,14 @@ const CompanyUser = () => {
     });
   }
 
+
+  const addUserToState = (newuser: User) =>{
+    setCompanyData((companyData) => {
+      if (!companyData) return companyData;
+      companyData.users.unshift(newuser);
+      return { ...companyData };
+    });
+  }
   const activeCompanyDetails=()=>{
     const companyId =searchParams.get('id');
     if (companyId) {
@@ -128,7 +136,7 @@ const CompanyUser = () => {
       <div className="container max-w-5xl mx-auto relative z-10">
         <Button onClick={activeCompanyDetails}  className="absolute right-0 w-[200px] top-[10px] capitalize bg-green-500 hover:bg-green-600">view company data</Button>
         {companyData && <CompanyHeader company={companyData} />}
-        {companyData && <UserList companyId={companyData.id} deleteUserFromState={deleteUserFromState} users={companyData.users} />}
+        {companyData && <UserList companyId={companyData.id} deleteUserFromState={deleteUserFromState} users={companyData.users} addUserToState={addUserToState} />}
       </div>
     </div>
   );
