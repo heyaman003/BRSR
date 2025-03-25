@@ -12,7 +12,7 @@ import ViewComments from "./ViewComments";
 import ViewHistory from "./ViewHistory";
 import CommentInput from "./CommentInput";
 import { useEffect, useState } from "react";
-import { Comment } from "@/models/models";
+import { Comment, SubSection } from "@/models/models";
 import { toast } from "sonner";
 import { plainToInstance } from "class-transformer";
 
@@ -21,6 +21,7 @@ const CommentSidebar = ({
   closeSidebar,
 }: {
   questionId: string;
+  setSubsectionData: (subSection: SubSection | null) => void;
   closeSidebar: () => void;
 }) => {
   const [comments, setComments] = useState<Comment[]>([]);

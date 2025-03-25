@@ -2,117 +2,23 @@ import React, { useState } from "react";
 import { ChevronRight, ChevronDown, Leaf, BarChart2, Globe, Settings, MessageCircle, UserCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SubSection } from "@/models/models";
-interface SubSection1 {
-  id: number;
-  title: string;
-}
 
-interface Section1 {
-  id: number;
-  title: string;
-  icon: React.ReactNode;
-  subsections: SubSection1[];
-}
 
-const sections: Section1[] = [
-  {
-    id: 1,
-    title: "Principal",
-    icon: <Leaf className="w-5 h-5" />,
-    subsections: Array.from({ length: 7 }, (_, i) => ({
-      id: i + 1,
-      title: `Eco Metric ${i + 1}`
-    }))
-  },
-  {
-    id: 2,
-    title: "Principal",
-    icon: <BarChart2 className="w-5 h-5" />,
-    subsections: Array.from({ length: 7 }, (_, i) => ({
-      id: i + 1,
-      title: `Sustainability Report ${i + 1}`
-    }))
-  },
-  {
-    id: 3,
-    title: "Principal",
-    icon: <Globe className="w-5 h-5" />,
-    subsections: Array.from({ length: 7 }, (_, i) => ({
-      id: i + 1,
-      title: `Initiative ${i + 1}`
-    }))
-  },
-  {
-    id: 4,
-    title: "Principal",
-    icon: <Settings className="w-5 h-5" />,
-    subsections: Array.from({ length: 7 }, (_, i) => ({
-      id: i + 1,
-      title: `Eco Setting ${i + 1}`
-    }))
-  },
-  {
-    id: 5,
-    title: "Principal",
-    icon: <MessageCircle className="w-5 h-5" />,
-    subsections: Array.from({ length: 7 }, (_, i) => ({
-      id: i + 1,
-      title: `Community Forum ${i + 1}`
-    }))
-  },
-  {
-    id: 6,
-    title: "Principal",
-    icon: <UserCircle className="w-5 h-5" />,
-    subsections: Array.from({ length: 7 }, (_, i) => ({
-      id: i + 1,
-      title: `Sustainability Goal ${i + 1}`
-    }))
-  },
-  {
-    id: 7,
-    title: "Principal",
-    icon: <UserCircle className="w-5 h-5" />,
-    subsections: Array.from({ length: 7 }, (_, i) => ({
-      id: i + 1,
-      title: `Sustainability Goal ${i + 1}`
-    }))
-  },
-  {
-    id: 8,
-    title: "Principal",
-    icon: <UserCircle className="w-5 h-5" />,
-    subsections: Array.from({ length: 7 }, (_, i) => ({
-      id: i + 1,
-      title: `Sustainability Goal ${i + 1}`
-    }))
-  },
-  {
-    id: 9,
-    title: "Principal",
-    icon: <UserCircle className="w-5 h-5" />,
-    subsections: Array.from({ length: 7 }, (_, i) => ({
-      id: i + 1,
-      title: `Sustainability Goal ${i + 1}`
-    }))
-  }
-];
- 
 type MainNavigationProps = {
   subsections: SubSection[] | undefined;
 }
 const MainNavigationforC: React.FC<MainNavigationProps> = ({subsections}) => {
-  const [activeSection, setActiveSection] = useState<number | null>(null);
+  const [activeSection, setActiveSection] = useState<String | null>(null);
   // const [loaderProgress, setLoaderProgress] = useState<number>(10);
   console.log("the subsections are",subsections)
-  const toggleSection = (sectionId: number) => {
+  const toggleSection = (sectionId:any) => {
     setActiveSection(activeSection === sectionId ? null : sectionId);
   };
 
   return (
-    <div className="nav-container h-screen  bg-green-50/80  shadow-sm overflow-hidden">
+    <div className="nav-container h-screen  bg-green-50/80  shadow-sm overflow-auto scrollbar-hide [&::-webkit-scrollbar]:hidden">
       <div className="py-4 px-3">
-        {sections.map((section) => (
+        {subsections?.map((section) => (
           <div key={section.id} className="mb-2">
             <button
               onClick={() => toggleSection(section.id)}
@@ -124,8 +30,8 @@ const MainNavigationforC: React.FC<MainNavigationProps> = ({subsections}) => {
               )}
             >
               <div className="flex items-center space-x-3">
-                <div className="text-green-600">{section.icon}</div>
-                <span className="font-medium">{section.title} {section.id }</span>
+                <div className="text-green-600"><UserCircle className="w-5 h-5" /></div>
+                <span className="font-medium">{section.title.substring(0,11)}</span>
               </div>
               {activeSection === section.id ? (
                 <ChevronDown className="h-4 w-4 text-green-600" />
@@ -135,21 +41,21 @@ const MainNavigationforC: React.FC<MainNavigationProps> = ({subsections}) => {
             </button>
             <div
               className={cn(
-                "subsection-container pl-8 pr-3",
+                "subsection-container pl-2 pr-1",
                 activeSection === section.id ? "active" : ""
               )}
             >
-              {section.subsections.map((subsection, index) => (
+              {section.questions.map((qus, index) => (
                 <div
-                  key={subsection.id}
+                  key={qus.id}
                   className="subsection"
                   style={{ "--index": index } as React.CSSProperties}
                 >
                   <a
                     href="#"
-                    className="block py-2 px-3 my-1 rounded-md text-green-700 hover:bg-green-50 hover:text-green-900 text-sm transition-colors"
+                    className="block py-2 px-3 my-1 rounded-md text-green-700 hover:bg-green-50 hover:text-green-900 text-[12px] transition-colors"
                   >
-                    {subsection.title} 
+                    {qus?.desc} 
                   </a>
                 </div>
               ))}
