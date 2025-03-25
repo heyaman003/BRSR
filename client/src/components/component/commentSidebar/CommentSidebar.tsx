@@ -21,7 +21,7 @@ const CommentSidebar = ({
   closeSidebar,
 }: {
   questionId: string;
-  setSubsectionData: (subSection: SubSection | null) => void;
+  setSubsectionData: React.Dispatch<React.SetStateAction<SubSection | null>>;
   closeSidebar: () => void;
 }) => {
   const [comments, setComments] = useState<Comment[]>([]);

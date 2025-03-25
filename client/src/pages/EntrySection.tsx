@@ -8,12 +8,11 @@ import Horizontalscroll from "@/components/ui/Horizontalscroll";
 import { Section } from "@/models/models";
 import { plainToInstance } from "class-transformer";
 import SectionUI from "./Section";
-import {
-  selectIsLoading,
-  selectSectionError,
-} from "@/features/sections/sectionSelectors";
+// import {
+//   selectIsLoading,
+//   selectSectionError,
+// } from "@/features/sections/sectionSelectors";
 import { RootState } from "@/store/store";
-import CommentSidebar from "@/components/component/commentSidebar/CommentSidebar";
 export default function QuestionnairePage() {
   const [sections, setSections] = useState<Section[] | null>(null);
   const [activeSection, setActiveSection] = useState<string>("");
@@ -21,8 +20,8 @@ export default function QuestionnairePage() {
   const dispatch = useDispatch<AppDispatch>(); // Properly typed dispatch
 
 
-  const isLoading = useSelector(selectIsLoading);
-  const error = useSelector(selectSectionError);
+  // const isLoading = useSelector(selectIsLoading);
+  // const error = useSelector(selectSectionError);
   const companyId = useSelector(
     (state: RootState) => state?.auth?.user?.data?.companyId
   );
@@ -79,9 +78,8 @@ export default function QuestionnairePage() {
               activeSection={activeSection}
               setActiveSection={setActiveSection}
             />
-            {activeSection==="C"}
-            {/* Main container for questions */}
-            <SectionUI activeSection={activeSection} subsectionId={activeSubsection} />
+            {activeSection==="C" }
+            <SectionUI  subsectionId={activeSubsection} />
           </div>
         </div>
       </div>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MessageCirclePlus, MessageSquareText, X } from 'lucide-react';
+import { MessageSquareText, X } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 
 interface CommentSectionProps {

@@ -82,9 +82,10 @@ const CompanyUser = () => {
       if(res){
         const company: Company = plainToInstance(Company, res);
         setCompanyData(company);
+        setSearchParams(searchParams);
       }
     })
-
+    
     return () => {
       document.documentElement.style.opacity = "1";
     };

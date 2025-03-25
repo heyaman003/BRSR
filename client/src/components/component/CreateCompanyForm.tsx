@@ -46,6 +46,7 @@ const CreateCompanyForm: React.FC<CreateCompanyFormProps> = ({ addCompanyToLocal
       toast.error('Failed to create company. Please try again.');
     } finally {
       setLoading(false); 
+      console.log("just 1 time--")
     }
   };
 

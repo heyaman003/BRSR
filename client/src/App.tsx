@@ -18,6 +18,7 @@ function App() {
     const storedLoginStatus = sessionStorage.getItem("isLoggedInEmailer");
     if (storedLoginStatus === "true") {
       setIsLoggedIn(true);
+      console.log("User is logged in",isLoggedIn);
     }
 
     fetch(import.meta.env.VITE_SERVER_URI + "/csrf", {

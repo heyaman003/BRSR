@@ -6,7 +6,6 @@ import {
   Flower,
   Cloud,
 } from "@/components/component/SustainabilityElements";
-import { toast } from "sonner";
 import MainNavigationforC from "../component/SectioncNav";
 import BottomLeftContainer from "../component/BottomLeftContainer";
 type LeftcontainerProps = {
@@ -132,7 +131,7 @@ const Leftcontainer: React.FC<LeftcontainerProps> = ({
             </div>
           </button>
         ))}
-      </nav>: <div className="overflow-y-auto"> <MainNavigationforC subsections={subsections}/> </div>
+      </nav>: <div className="overflow-y-auto"> <MainNavigationforC setActiveSubsection={setActiveSubsection} subsections={subsections}/> </div>
      }
       <BottomLeftContainer activeSection={activeSection} />
     </div>

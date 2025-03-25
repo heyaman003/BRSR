@@ -34,6 +34,7 @@ const TextQuestionUI: React.FC<TextQuestionUIProps> = ({
       <CommentSection 
         comments={comments} 
         updateComments={updateComments} 
+        commentCount={comments.length}
       />
     </div>
   );

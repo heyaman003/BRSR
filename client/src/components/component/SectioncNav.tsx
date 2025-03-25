@@ -1,24 +1,26 @@
 import React, { useState } from "react";
-import { ChevronRight, ChevronDown, Leaf, BarChart2, Globe, Settings, MessageCircle, UserCircle } from "lucide-react";
+import { ChevronRight, ChevronDown, UserCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SubSection } from "@/models/models";
 
 
 type MainNavigationProps = {
   subsections: SubSection[] | undefined;
+  setActiveSubsection: (sectionId: string) => void;
 }
-const MainNavigationforC: React.FC<MainNavigationProps> = ({subsections}) => {
+const MainNavigationforC: React.FC<MainNavigationProps> = ({subsections,setActiveSubsection}) => {
   const [activeSection, setActiveSection] = useState<String | null>(null);
   // const [loaderProgress, setLoaderProgress] = useState<number>(10);
   console.log("the subsections are",subsections)
   const toggleSection = (sectionId:any) => {
+    setActiveSubsection(sectionId);
     setActiveSection(activeSection === sectionId ? null : sectionId);
   };
 
   return (
     <div className="nav-container h-screen  bg-green-50/80  shadow-sm overflow-auto scrollbar-hide [&::-webkit-scrollbar]:hidden">
       <div className="py-4 px-3">
-        {subsections?.map((section) => (
+        {subsections?.sort((a: SubSection, b: SubSection)=>a.title.localeCompare(b.title)).map((section) => (
           <div key={section.id} className="mb-2">
             <button
               onClick={() => toggleSection(section.id)}
@@ -45,18 +47,22 @@ const MainNavigationforC: React.FC<MainNavigationProps> = ({subsections}) => {
                 activeSection === section.id ? "active" : ""
               )}
             >
-              {section.questions.map((qus, index) => (
+              {section.questions.sort((a, b)=>Number(a.desc.split('.')[0])>Number(b.desc.split('.')[0])?Number(b.desc.split('.')[0]):Number(b.desc.split('.')[0])).map((qus, index) => (
                 <div
                   key={qus.id}
                   className="subsection"
                   style={{ "--index": index } as React.CSSProperties}
                 >
-                  <a
-                    href="#"
+                  <button
+                    onClick={() => {
+                      setActiveSubsection(section.id); // Set active subsection to parent section
+                      window.location.hash = `#${qus.id}`; // Set URL hash to question ID
+                      console.log("the question id is",qus.id,window.location.hash)
+                    }}
                     className="block py-2 px-3 my-1 rounded-md text-green-700 hover:bg-green-50 hover:text-green-900 text-[12px] transition-colors"
                   >
                     {qus?.desc} 
-                  </a>
+                  </button>
                 </div>
               ))}
             </div>
@@ -69,25 +75,3 @@ const MainNavigationforC: React.FC<MainNavigationProps> = ({subsections}) => {
 
 export default MainNavigationforC;
 
-const fetchSubsectionData = async (
-  subsectionId: string,
-  updateProgress: (value: number) => void
-) => {
-  updateProgress(10);
-  const raw = await fetch(
-    `${import.meta.env.VITE_SERVER_URI}/section/subsection/${subsectionId}`,
-    {
-      credentials: "include",
-      headers: { "X-Csrf-Token": sessionStorage.getItem("X-Csrf-Token") || "" },
-    }
-  );
-  updateProgress(50);
-  const res = await raw.json();
-  await new Promise((res: any) =>{
-      updateProgress(90);
-      res();
-  }
-  );
-
-  return res.data;
-};

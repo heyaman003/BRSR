@@ -44,6 +44,7 @@ const sectionSlice = createSlice({
     //   state.error = null;
     //   sessionStorage.removeItem("user");
     //   sessionStorage.removeItem("isLoggedIn");
+    console.log("updateSectiondata",state)
     },
 
   },
