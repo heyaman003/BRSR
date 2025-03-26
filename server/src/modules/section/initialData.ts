@@ -1296,7 +1296,7 @@ export const companySectionsTemplate: Section[] = [
           {
             index: 9,
             type: QuestionType.TABLE,
-            desc: '1. Awareness programmes conducted for value chain partners on any of the Principles during the financial year:',
+            desc: '9. Awareness programmes conducted for value chain partners on any of the Principles during the financial year:',
             answer_table: [
               new Table(
                 [
@@ -1331,7 +1331,7 @@ export const companySectionsTemplate: Section[] = [
           {
             index: 10,
             type: QuestionType.TEXT,
-            desc: '2. Does the entity have processes in place to avoid/ manage conflict of interests involving members of the Board? (Yes/No) If Yes, provide details of the same.',
+            desc: '10. Does the entity have processes in place to avoid/ manage conflict of interests involving members of the Board? (Yes/No) If Yes, provide details of the same.',
           },
         ],
       },
@@ -1398,7 +1398,7 @@ export const companySectionsTemplate: Section[] = [
           {
             index: 4,
             type: QuestionType.TABLE,
-            desc: '1. Has the entity conducted Life Cycle Perspective / Assessments (LCA) for any of its products (for manufacturing industry) or for its services (for service industry)? If yes, provide details in the following format?',
+            desc: '5. Has the entity conducted Life Cycle Perspective / Assessments (LCA) for any of its products (for manufacturing industry) or for its services (for service industry)? If yes, provide details in the following format?',
             answer_table: [
               new Table(
                 [
@@ -1438,7 +1438,7 @@ export const companySectionsTemplate: Section[] = [
           {
             index: 5,
             type: QuestionType.TABLE,
-            desc: '2. If there are any significant social or environmental concerns and/or risks arising from production or disposal of your products / services, as identified in the Life Cycle Perspective / Assessments (LCA) or through any other means, briefly describe the same along-with action taken to mitigate the same.',
+            desc: '6. If there are any significant social or environmental concerns and/or risks arising from production or disposal of your products / services, as identified in the Life Cycle Perspective / Assessments (LCA) or through any other means, briefly describe the same along-with action taken to mitigate the same.',
             answer_table: [
               new Table(
                 [
@@ -1474,9 +1474,9 @@ export const companySectionsTemplate: Section[] = [
             ],
           },
           {
-            index: 5,
+            index: 6,
             type: QuestionType.TABLE,
-            desc: '3. Percentage of recycled or reused input material to total material (by value) used in production (for manufacturing industry) or providing services (for service industry).',
+            desc: '7. Percentage of recycled or reused input material to total material (by value) used in production (for manufacturing industry) or providing services (for service industry).',
             answer_table: [
               new Table(
                 [
@@ -1520,9 +1520,9 @@ export const companySectionsTemplate: Section[] = [
             ],
           },
           {
-            index:6,
+            index:7,
             type: QuestionType.TABLE,
-            desc: '4. Of the products and packaging reclaimed at end of life of products, amount (in metric tonnes) reused, recycled, and safely disposed, as per the following format:',
+            desc: '8. Of the products and packaging reclaimed at end of life of products, amount (in metric tonnes) reused, recycled, and safely disposed, as per the following format:',
             answer_table: [
               new Table(
                 [
@@ -1572,9 +1572,9 @@ export const companySectionsTemplate: Section[] = [
             ],
           },
           {
-            index: 7,
+            index: 8,
             type: QuestionType.TABLE,
-            desc: '5. Reclaimed products and their packaging materials (as percentage of products sold) for each product category.',
+            desc: '9. Reclaimed products and their packaging materials (as percentage of products sold) for each product category.',
             answer_table: [
               new Table(
                 [
@@ -2184,7 +2184,7 @@ export const companySectionsTemplate: Section[] = [
                     (firstCol: string, rowNo: number) =>
                       new Row(
                         [
-                          new Cell(firstCol, false, 1, 1, 1),
+                          new Cell(firstCol, false, 1, 1, 0),
                           ...Array.from({ length: 10 }).map(
                             (_, ind: number) => new Cell('', true, 1, 1, ind),
                           ),
@@ -2596,7 +2596,7 @@ export const companySectionsTemplate: Section[] = [
                       new Cell('Health and safety practices', false, 1, 1, 0),
                       new Cell('', true, 1, 1, 1),
                     ],
-                    true,
+                    false,
                     1
                   ),
                   new Row(
@@ -2604,7 +2604,7 @@ export const companySectionsTemplate: Section[] = [
                       new Cell('Working Conditions', false, 1, 1, 0),
                       new Cell('', true, 1, 1, 1),
                     ],
-                    true,
+                    false,
                     2
                   ),
                 ],
@@ -3575,7 +3575,7 @@ export const companySectionsTemplate: Section[] = [
                       '',
                       '',
                       '',
-                    ].map((value, ind: number) => new Cell(value, false, 1, 1, ind)),
+                    ].map((value, ind: number) => new Cell(value, !value, 1, 1, ind)),
                     false,
                     7
                   ),
