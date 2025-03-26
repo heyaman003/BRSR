@@ -74,6 +74,7 @@ export class CompanyRepository {
       throw new BadRequestException(e.message);
     }
   }
+  
   async getCompanyDetails(companyId: string): Promise<Company | null> {
     try {
       return await this.db.company.findUnique({

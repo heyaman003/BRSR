@@ -68,7 +68,7 @@ const CommentInput: React.FC<CommentInputProps> = ({
         }}
         // className="h-[80px] resize-none border border-green-500 rounded-sm focus:ring-green-500 transition-all px-4"
         value={commentText}
-        onChange={(e, newValue, newTextValue, mentions) => {
+        onChange={(_e, newValue, _newTextValue, mentions) => {
           setCommentText(newValue);
           setMentions(mentions)
         }}
@@ -77,7 +77,7 @@ const CommentInput: React.FC<CommentInputProps> = ({
         )}
       >
         <Mention
-          displayTransform={(id, display) => `@${display}`}
+          displayTransform={(_id, display) => `@${display}`}
           appendSpaceOnAdd={true}
           trigger={"@"}
           style={{
@@ -86,10 +86,10 @@ const CommentInput: React.FC<CommentInputProps> = ({
           }}
           data={users.map((user) => ({ id: user.id, display: user.name }))}
           renderSuggestion={(
-            suggestion,
-            search,
+            _suggestion,
+            _search,
             highlightedDisplay,
-            index,
+            _index,
             focused
           ) => (
             <li

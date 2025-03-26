@@ -361,7 +361,7 @@ export class SectionRepository {
 
   private isTableCompletelyFilled(table: Table | TableModel): boolean {
     let flag: boolean = true;
-    table.rows.forEach((row: Row | RowModel) =>
+    table.rows.filter(row=>!row.isHeading).forEach((row: Row | RowModel) =>
       row.cells.forEach(
         (cell: Cell | CellModel) => (flag = flag && (cell.data ? true : false)),
       ),
