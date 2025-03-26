@@ -10,11 +10,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-<<<<<<< HEAD
   url      = env("DATABASE_URL")
-=======
-  url      = env("DB_URL")
->>>>>>> 970292a24ff8ba837b2e40565c507fec2126d750
 }
 
 model User {
@@ -71,6 +67,7 @@ model Question {
   index Int
   comments Comment[] @relation(name: "belongs-to")
   history History[] @relation(name: "belongs-to")
+  isAnswered Boolean @default(false)
 }
 
 model History{

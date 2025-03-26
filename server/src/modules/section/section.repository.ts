@@ -5,13 +5,19 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
-import { Row, Section, Table, Question, SubSection } from './initialData';
+import { Row, Section, Table, Question, SubSection, Cell } from './initialData';
 import {
   TableModel as TableDTO,
   RowModel as RowDTO,
   SubSectionModel as SubSectionDTO,
+  QuestionModel,
+  TableModel,
+  RowModel,
+  CellModel,
 } from './section.dtos';
 import { DbService } from 'src/utils/db.connections';
+import { Prisma, PrismaClient, QuestionType } from '@prisma/client';
+import { Omit, PrismaClientOptions } from '@prisma/client/runtime/library';
 
 @Injectable()
 export class SectionRepository {
@@ -58,19 +64,19 @@ export class SectionRepository {
                   id: question.id,
                 },
                 data: {
+                  isAnswered: this.isQuestionAnswered(question),
                   answer_text: question.answer_text || null,
                   history: {
                     create: {
                       user: {
                         connect: {
-                          id:  userId,
-                        }
-                      }
-                    }
-                  }
+                          id: userId,
+                        },
+                      },
+                    },
+                  },
                 },
               })),
-              
             },
           },
         });
@@ -101,7 +107,17 @@ export class SectionRepository {
     id: string,
     data: TableDTO,
     userId: string,
-    obj,
+    obj:
+      | DbService
+      | Omit<
+          PrismaClient<Prisma.PrismaClientOptions, never>,
+          | '$connect'
+          | '$disconnect'
+          | '$on'
+          | '$transaction'
+          | '$use'
+          | '$extends'
+        >,
   ) {
     try {
       await obj.table.update({
@@ -111,6 +127,7 @@ export class SectionRepository {
         data: {
           question: {
             update: {
+              isAnswered:this.isTableCompletelyFilled(data),
               history: {
                 create: {
                   user: {
@@ -330,5 +347,25 @@ export class SectionRepository {
         throw new InternalServerErrorException();
       } else throw e;
     }
+  }
+
+  private isQuestionAnswered(question: Question | QuestionModel): boolean {
+    if (question.type === QuestionType.TABLE) {
+      let flag = true;
+      question.answer_table?.forEach((table: Table | TableModel) => {
+        flag = flag && this.isTableCompletelyFilled(table);
+      });
+      return flag;
+    } else return question.answer_text ? true : false;
+  }
+
+  private isTableCompletelyFilled(table: Table | TableModel): boolean {
+    let flag: boolean = true;
+    table.rows.forEach((row: Row | RowModel) =>
+      row.cells.forEach(
+        (cell: Cell | CellModel) => (flag = flag && (cell.data ? true : false)),
+      ),
+    );
+    return flag;
   }
 }
