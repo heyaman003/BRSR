@@ -354,6 +354,30 @@ export const companySectionsTemplate: Section[] = [
             //   ],
             // },
           },
+          {
+            desc: '21. Participation/Inclusion/Representation of Women',
+            index: 1,
+            type: QuestionType.TABLE,
+            answer_table: [
+              new Table([
+                new Row([new Cell("", false, 1, 1, 0), new Cell("No. and precentage of women", false, 1, 4, 1)], true, 0),
+                new Row([new Cell("", false, 1, 1, 0), new Cell("Total (A)", false, 1, 1, 1), new Cell("No. (B)", false, 1, 1, 2), new Cell("% (B / A)", false, 1, 1, 3)], true, 1),
+                ...['Board of Directors', 'Key Management Personnel'].map((firstCell, ind)=>new Row([new Cell(firstCell, false, 1, 1, 0), ...Array.from({length:3}).map((_, cellNo: number)=>new Cell("", true, 1, 1, cellNo+1))], false, ind+2))
+              ], false)
+            ]
+          },
+          {
+            desc: '22. Turnover rate for permanent employees and workers (Disclose trends for past 3 years)',
+            index: 2,
+            type: QuestionType.TABLE,
+            answer_table: [
+              new Table([
+                new Row([new Cell("", false, 1, 1, 0), new Cell("Current financial year", false, 1, 3, 1), new Cell("Previous financial year", false, 1, 3, 2), new Cell("Previous to previous financial year", false, 1, 3, 3)], true, 0),
+                new Row([new Cell("", false, 1, 1, 0), new Cell("Male", false, 1, 1, 1), new Cell("Female", false, 1, 1, 2), new Cell("Total", false, 1, 1, 3), new Cell("Male", false, 1, 1, 4), new Cell("Female", false, 1, 1, 5), new Cell("Total", false, 1, 1, 6), new Cell("Male", false, 1, 1, 7), new Cell("Female", false, 1, 1, 8), new Cell("Total", false, 1, 1, 9)], true, 1),
+                ...['Board of Directors', 'Key Management Personnel'].map((firstCell, ind)=>new Row([new Cell(firstCell, false, 1, 1, 0), ...Array.from({length:9}).map((_, cellNo: number)=>new Cell("", true, 1, 1, cellNo+1))], false, ind+2))
+              ], false)
+            ]
+          }
         ],
       },
 
@@ -558,7 +582,7 @@ export const companySectionsTemplate: Section[] = [
                   new Row(
                     [
                       new Cell(
-                        '7. Statement by director responsible for the business responsibility report, highlighting ESG related challenges, targets and achievements (listed entity has flexibility regarding the placement of this disclosure)',
+                        'Statement by director responsible for the business responsibility report, highlighting ESG related challenges, targets and achievements (listed entity has flexibility regarding the placement of this disclosure)',
                         false,
                         1,
                         2,
@@ -571,7 +595,7 @@ export const companySectionsTemplate: Section[] = [
                   new Row(
                     [
                       new Cell(
-                        '8. Details of the highest authority responsible for implementation and oversight of the Business Responsibility policy (ies).',
+                        'Details of the highest authority responsible for implementation and oversight of the Business Responsibility policy (ies).',
                         false,
                         1,
                         1,
@@ -585,7 +609,7 @@ export const companySectionsTemplate: Section[] = [
                   new Row(
                     [
                       new Cell(
-                        '9. Does the entity have a specified Committee of the Board/ Director responsible for decision making on sustainability related issues? (Yes / No). If yes, provide details.',
+                        'Does the entity have a specified Committee of the Board/ Director responsible for decision making on sustainability related issues? (Yes / No). If yes, provide details.',
                         false,
                         1,
                         1,

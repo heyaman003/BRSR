@@ -15,7 +15,6 @@ export class CommentController {
         const response = await this.commentService.addComment(commentData, userId);
 
         return new ResponseModel(201, "Added comment succesfully.", response);
-
     }
 
 
@@ -23,8 +22,7 @@ export class CommentController {
     async getAllComment(@Query("question", ParseUUIDPipe) questionId:string) {
 
         const response: Comment[] = await this.commentService.listAllComments(questionId);
-
+        console.log(response)
         return new ResponseModel(200, "Success", response);
-
     }
 }

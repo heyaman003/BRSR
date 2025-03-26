@@ -116,6 +116,9 @@ export class SubSection {
   questions: Question[];
   @Expose()
   index: number;
+  _count?:{
+    questions: number
+  }
 
   constructor(id: string, title: string, questions: Question[], index: number) {
     this.id = id;

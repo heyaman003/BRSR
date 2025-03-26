@@ -22,6 +22,15 @@ export class CommentRepository {
           data: commentData.data,
           questionId: commentData.questionId,
           userId,
+          mentions:{
+            create: commentData.mentions.map((userId)=>({
+              user:{
+                connect:{
+                  id: userId
+                }
+              }
+            }))
+          }
         },
         include: {
             user: {

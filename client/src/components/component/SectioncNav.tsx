@@ -47,7 +47,7 @@ const MainNavigationforC: React.FC<MainNavigationProps> = ({subsections,setActiv
                 activeSection === section.id ? "active" : ""
               )}
             >
-              {section.questions.sort((a, b)=>Number(a.desc.split('.')[0])>Number(b.desc.split('.')[0])?Number(b.desc.split('.')[0]):Number(b.desc.split('.')[0])).map((qus, index) => (
+              {section.questions.sort((a, b)=>a.index-b.index).map((qus, index) => (
                 <div
                   key={qus.id}
                   className="subsection"
@@ -59,7 +59,7 @@ const MainNavigationforC: React.FC<MainNavigationProps> = ({subsections,setActiv
                       window.location.hash = `#${qus.id}`; // Set URL hash to question ID
                       console.log("the question id is",qus.id,window.location.hash)
                     }}
-                    className="block py-2 px-3 my-1 rounded-md text-green-700 hover:bg-green-50 hover:text-green-900 text-[12px] transition-colors"
+                    className="block py-2 px-3 my-1 text-left rounded-md text-green-700 hover:bg-green-50 hover:text-green-900 text-[12px] transition-colors"
                   >
                     {qus?.desc} 
                   </button>
