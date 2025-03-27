@@ -1,4 +1,4 @@
-import { QuestionType } from "@prisma/client";
+import { QuestionType, Operation } from '@prisma/client';
 
 export class Cell {
   data: string;
@@ -6,19 +6,25 @@ export class Cell {
   rowSpan: number;
   colSpan: number;
   index: number;
+  operation?: Operation | null;
+  operands: string[];
 
   constructor(
     data: string,
     isUpdateable: boolean,
     rowSpan: number,
     colSpan: number,
-    index: number
+    index: number,
+    operation?: Operation,
+    operands?: string[],
   ) {
     this.data = data;
     this.isUpdateable = isUpdateable;
     this.rowSpan = rowSpan;
     this.colSpan = colSpan;
     this.index = index;
+    if (operation) this.operation = operation;
+    if (operands) this.operands = operands;
   }
 }
 
@@ -73,11 +79,23 @@ export const companySectionsTemplate: Section[] = [
           {
             desc: '1. Corporate Identity Number (CIN) of the Listed Entity',
             type: QuestionType.TEXT,
-            index: 0
+            index: 0,
           },
-          { desc: '2. Name of the Listed Entity', type: QuestionType.TEXT, index: 1 },
-          { desc: '3. Year of incorporation', type: QuestionType.TEXT, index: 2 },
-          { desc: '4. Registered office address', type: QuestionType.TEXT, index: 3 },
+          {
+            desc: '2. Name of the Listed Entity',
+            type: QuestionType.TEXT,
+            index: 1,
+          },
+          {
+            desc: '3. Year of incorporation',
+            type: QuestionType.TEXT,
+            index: 2,
+          },
+          {
+            desc: '4. Registered office address',
+            type: QuestionType.TEXT,
+            index: 3,
+          },
           { desc: '5. Corporate address', type: QuestionType.TEXT, index: 4 },
           { desc: '6. E-mail', type: QuestionType.TEXT, index: 5 },
           { desc: '7. Telephone', type: QuestionType.TEXT, index: 6 },
@@ -85,20 +103,33 @@ export const companySectionsTemplate: Section[] = [
           {
             desc: '9. Financial year for which reporting is being done',
             type: QuestionType.TEXT,
-            index: 8
+            index: 8,
           },
           {
             desc: '10. Name of the Stock Exchange(s) where shares are listed',
             type: QuestionType.TEXT,
-            index: 9
+            index: 9,
           },
-          { desc: '11. Paid-up Capital (In Rs)', type: QuestionType.TEXT, index: 10 },
+          {
+            desc: '11. Paid-up Capital (In Rs)',
+            type: QuestionType.TEXT,
+            index: 10,
+          },
           {
             desc: '12. Name and contact details (telephone, email address) of the person who may be contacted in case of any queries on the BRSR report',
-            type: QuestionType.TEXT, index: 11
+            type: QuestionType.TEXT,
+            index: 11,
           },
-          { desc: '13. Name of assurance provider.', type: QuestionType.TEXT, index: 12 },
-          { desc: '14. Type of assurance obtained', type: QuestionType.TEXT, index: 13 },
+          {
+            desc: '13. Name of assurance provider.',
+            type: QuestionType.TEXT,
+            index: 12,
+          },
+          {
+            desc: '14. Type of assurance obtained',
+            type: QuestionType.TEXT,
+            index: 13,
+          },
         ],
       },
       {
@@ -129,9 +160,12 @@ export const companySectionsTemplate: Section[] = [
                       'Description of Main Activity',
                       'Description of Business Activity',
                       '% of Turnover of the entity',
-                    ].map((cell, ind: number) => new Cell(cell, false, 1, 1, ind+1)),
+                    ].map(
+                      (cell, ind: number) =>
+                        new Cell(cell, false, 1, 1, ind + 1),
+                    ),
                     true,
-                    0
+                    0,
                   ),
                   ...Array.from({ length: 2 }).map(
                     (_, rowNo: number) =>
@@ -142,9 +176,8 @@ export const companySectionsTemplate: Section[] = [
                           ),
                         ],
                         false,
-                        rowNo+1
+                        rowNo + 1,
                       ),
-                      
                   ),
                 ],
                 true,
@@ -164,10 +197,12 @@ export const companySectionsTemplate: Section[] = [
                         'Product/Service',
                         'NIC Code',
                         '% of total Turnover contribute',
-                      ].map((head, ind: number) => new Cell(head, false, 1, 1, ind)),
+                      ].map(
+                        (head, ind: number) => new Cell(head, false, 1, 1, ind),
+                      ),
                     ],
                     true,
-                    0
+                    0,
                   ),
                   ...Array.from({ length: 2 }).map(
                     (_, rowNo: number) =>
@@ -178,7 +213,7 @@ export const companySectionsTemplate: Section[] = [
                           ),
                         ],
                         false,
-                        rowNo+1
+                        rowNo + 1,
                       ),
                   ),
                 ],
@@ -210,19 +245,27 @@ export const companySectionsTemplate: Section[] = [
                       'Number of offices',
                       'Description of Business Activity',
                       'Total',
-                    ].map((head, ind: number) => new Cell(head, false, 1, 1, ind)),
+                    ].map(
+                      (head, ind: number) => new Cell(head, false, 1, 1, ind),
+                    ),
                     true,
-                    0
+                    0,
                   ),
                   ...['National', 'International'].map(
                     (firstColData, rowNo: number) =>
-                      new Row(
-                        Array.from({ length: 5 }).map(
-                          (_, ind: number) =>
-                            new Cell(ind ? '' : firstColData, ind > 0, 1, 1, ind),
-                        ),
+                      new Row([
+                        ...Array.from({ length: 4 }).map(
+                          (_, cellNo: number) =>
+                            new Cell(
+                              cellNo ? '' : firstColData,
+                              cellNo > 0,
+                              1,
+                              1,
+                              cellNo,
+                            ),
+                        ), new Cell('', true, 1, 1, 4, Operation.ADD, [`${rowNo+1}$1`, `${rowNo+1}$2`, `${rowNo+1}$3`])],
                         false,
-                        rowNo+1
+                        rowNo + 1,
                       ),
                   ),
                 ],
@@ -250,7 +293,7 @@ export const companySectionsTemplate: Section[] = [
                       (head, ind: number) => new Cell(head, false, 1, 1, ind),
                     ),
                     true,
-                    0
+                    0,
                   ),
                   ...['National', 'International'].map(
                     (firstColData, rowNo: number) =>
@@ -260,7 +303,7 @@ export const companySectionsTemplate: Section[] = [
                           new Cell('', true, 1, 1, 1),
                         ],
                         false,
-                        rowNo+1
+                        rowNo + 1,
                       ),
                   ),
                 ],
@@ -293,7 +336,7 @@ export const companySectionsTemplate: Section[] = [
                       new Cell('Female', false, 1, 2, 3),
                     ],
                     true,
-                    0
+                    0,
                   ),
                   new Row(
                     [
@@ -303,37 +346,79 @@ export const companySectionsTemplate: Section[] = [
                       new Cell('% (C / A)', false, 1, 2, 3),
                     ],
                     true,
-                    1
+                    1,
                   ),
                   new Row([new Cell('EMPLOYEES', false, 1, 6, 0)], false, 2),
-                  ...[
-                    'Permanent (D)',
-                    'Other than Permanent (E)',
-                    'Total employees (D + E)',
-                  ].map(
+                  ...['Permanent (D)', 'Other than Permanent (E)'].map(
                     (firstCol, rowNo: number) =>
                       new Row(
-                        Array.from({ length: 6 }).map(
-                          (_, ind: number) =>
-                            new Cell(ind === 0 ? firstCol : '', ind > 0, 1, 1, ind),
-                        ),
+                        [
+                          new Cell(firstCol, false, 1, 1, 0),
+                          new Cell('', true, 1, 1, 1),
+                          new Cell('', true, 1, 1, 2),
+                          new Cell('', true, 1, 1, 3, Operation.DIV, [
+                            `${rowNo+3}$2`,
+                            `${rowNo+3}$1`,
+                          ]),
+                          new Cell('', true, 1, 1, 4),
+                          new Cell('', true, 1, 1, 5, Operation.DIV, [
+                            `${rowNo+3}$4`,
+                            `${rowNo+3}$1`,
+                          ]),
+                        ],
                         false,
-                      rowNo+3),
+                        rowNo + 3,
+                      ),
+                  ),
+                  new Row(
+                    [
+                      new Cell('Total employees (D + E)', false, 1, 1, 0),
+                      ...Array.from({ length: 5 }).map(
+                        (_, cellNo: number) =>
+                          new Cell('', true, 1, 1, cellNo + 1, Operation.ADD, [
+                            `4$${cellNo + 1}`,
+                            `3$${cellNo + 1}`,
+                          ]),
+                      ),
+                    ],
+                    false,
+                    5,
                   ),
                   new Row([new Cell('WORKERS', false, 1, 6, 0)], false, 6),
-                  ...[
-                    'Permanent (F)',
-                    'Other than Permanent (G)',
-                    'Total employees (F + G)',
-                  ].map(
+                  ...['Permanent (F)', 'Other than Permanent (G)'].map(
                     (firstCol, rowNo: number) =>
                       new Row(
-                        Array.from({ length: 6 }).map(
-                          (_, ind: number) =>
-                            new Cell(ind === 0 ? firstCol : '', ind > 0, 1, 1, ind),
-                        ),
+                        [
+                          new Cell(firstCol, false, 1, 1, 0),
+                          new Cell('', true, 1, 1, 1),
+                          new Cell('', true, 1, 1, 2),
+                          new Cell('', true, 1, 1, 3, Operation.DIV, [
+                            `${rowNo+7}$2`,
+                            `${rowNo+7}$1`,
+                          ]),
+                          new Cell('', true, 1, 1, 4),
+                          new Cell('', true, 1, 1, 5, Operation.DIV, [
+                            `${rowNo+7}$4`,
+                            `${rowNo+7}$1`,
+                          ]),
+                        ],
                         false,
-                      rowNo+7),
+                        rowNo + 7,
+                      ),
+                  ),
+                  new Row(
+                    [
+                      new Cell('Total employees (F + G)', false, 1, 1, 0),
+                      ...Array.from({ length: 5 }).map(
+                        (_, cellNo: number) =>
+                          new Cell('', true, 1, 1, cellNo + 1, Operation.ADD, [
+                            `7$${cellNo + 1}`,
+                            `8$${cellNo + 1}`,
+                          ]),
+                      ),
+                    ],
+                    false,
+                    9,
                   ),
                 ],
                 false,
@@ -359,25 +444,115 @@ export const companySectionsTemplate: Section[] = [
             index: 1,
             type: QuestionType.TABLE,
             answer_table: [
-              new Table([
-                new Row([new Cell("", false, 1, 1, 0), new Cell("No. and precentage of women", false, 1, 4, 1)], true, 0),
-                new Row([new Cell("", false, 1, 1, 0), new Cell("Total (A)", false, 1, 1, 1), new Cell("No. (B)", false, 1, 1, 2), new Cell("% (B / A)", false, 1, 1, 3)], true, 1),
-                ...['Board of Directors', 'Key Management Personnel'].map((firstCell, ind)=>new Row([new Cell(firstCell, false, 1, 1, 0), ...Array.from({length:3}).map((_, cellNo: number)=>new Cell("", true, 1, 1, cellNo+1))], false, ind+2))
-              ], false)
-            ]
+              new Table(
+                [
+                  new Row(
+                    [
+                      new Cell('', false, 1, 1, 0),
+                      new Cell('No. and precentage of women', false, 1, 4, 1),
+                    ],
+                    true,
+                    0,
+                  ),
+                  new Row(
+                    [
+                      new Cell('', false, 1, 1, 0),
+                      new Cell('Total (A)', false, 1, 1, 1),
+                      new Cell('No. (B)', false, 1, 1, 2),
+                      new Cell('% (B / A)', false, 1, 1, 3),
+                    ],
+                    true,
+                    1,
+                  ),
+                  ...['Board of Directors', 'Key Management Personnel'].map(
+                    (firstCell, ind) =>
+                      new Row(
+                        [
+                          new Cell(firstCell, false, 1, 1, 0),
+                          ...Array.from({ length: 2 }).map(
+                            (_, cellNo: number) =>
+                              new Cell('', true, 1, 1, cellNo + 1),
+                          ),
+                          new Cell('', true, 1, 1, 3, Operation.DIV, [`${ind+2}$2`, `${ind+2}$1`])
+                        ],
+                        false,
+                        ind + 2,
+                      ),
+                  ),
+                ],
+                false,
+              ),
+            ],
           },
           {
             desc: '22. Turnover rate for permanent employees and workers (Disclose trends for past 3 years)',
             index: 2,
             type: QuestionType.TABLE,
             answer_table: [
-              new Table([
-                new Row([new Cell("", false, 1, 1, 0), new Cell("Current financial year", false, 1, 3, 1), new Cell("Previous financial year", false, 1, 3, 2), new Cell("Previous to previous financial year", false, 1, 3, 3)], true, 0),
-                new Row([new Cell("", false, 1, 1, 0), new Cell("Male", false, 1, 1, 1), new Cell("Female", false, 1, 1, 2), new Cell("Total", false, 1, 1, 3), new Cell("Male", false, 1, 1, 4), new Cell("Female", false, 1, 1, 5), new Cell("Total", false, 1, 1, 6), new Cell("Male", false, 1, 1, 7), new Cell("Female", false, 1, 1, 8), new Cell("Total", false, 1, 1, 9)], true, 1),
-                ...['Board of Directors', 'Key Management Personnel'].map((firstCell, ind)=>new Row([new Cell(firstCell, false, 1, 1, 0), ...Array.from({length:9}).map((_, cellNo: number)=>new Cell("", true, 1, 1, cellNo+1))], false, ind+2))
-              ], false)
-            ]
-          }
+              new Table(
+                [
+                  new Row(
+                    [
+                      new Cell('', false, 1, 1, 0),
+                      new Cell('Current financial year', false, 1, 3, 1),
+                      new Cell('Previous financial year', false, 1, 3, 2),
+                      new Cell(
+                        'Previous to previous financial year',
+                        false,
+                        1,
+                        3,
+                        3,
+                      ),
+                    ],
+                    true,
+                    0,
+                  ),
+                  new Row(
+                    [
+                      new Cell('', false, 1, 1, 0),
+                      new Cell('Male', false, 1, 1, 1),
+                      new Cell('Female', false, 1, 1, 2),
+                      new Cell('Total', false, 1, 1, 3),
+                      new Cell('Male', false, 1, 1, 4),
+                      new Cell('Female', false, 1, 1, 5),
+                      new Cell('Total', false, 1, 1, 6),
+                      new Cell('Male', false, 1, 1, 7),
+                      new Cell('Female', false, 1, 1, 8),
+                      new Cell('Total', false, 1, 1, 9),
+                    ],
+                    true,
+                    1,
+                  ),
+                  ...['Board of Directors', 'Key Management Personnel'].map(
+                    (firstCell, ind) =>
+                      new Row(
+                        [
+                          new Cell(firstCell, false, 1, 1, 0),
+                          ...Array.from({ length: 2 }).map(
+                            (_, cellNo: number) =>
+                              new Cell('', true, 1, 1, cellNo + 1),
+                          ),
+                          new Cell('', true, 1, 1, 3, Operation.ADD, [`${ind+2}$1`,`${ind+2}$2`]),
+                          ...Array.from({ length: 2 }).map(
+                            (_, cellNo: number) =>
+                              new Cell('', true, 1, 1, cellNo + 4),
+                          ),
+                          new Cell('', true, 1, 1, 6, Operation.ADD, [`${ind+2}$4`,`${ind+2}$5`]),
+                          ...Array.from({ length: 2 }).map(
+                            (_, cellNo: number) =>
+                              new Cell('', true, 1, 1, cellNo + 7),
+                          ),
+                          new Cell('', true, 1, 1, 9, Operation.ADD, [`${ind+2}$7`,`${ind+2}$8`]),
+                        ],
+                        false,
+                        ind + 2,
+                      ),
+                  ),
+                ],
+                false,
+              ),
+            ],
+          },
         ],
       },
 
@@ -401,10 +576,11 @@ export const companySectionsTemplate: Section[] = [
                 [
                   new Row(
                     ['a', 'b', 'c', 'd'].map(
-                      (heading, ind: number) => new Cell(heading, true, 1, 1, ind),
+                      (heading, ind: number) =>
+                        new Cell(heading, true, 1, 1, ind),
                     ),
                     true,
-                    0
+                    0,
                   ),
                   ...Array.from({ length: 3 }).map(
                     (_, rowNo: number) =>
@@ -413,7 +589,7 @@ export const companySectionsTemplate: Section[] = [
                           (_, ind: number) => new Cell('', true, 1, 1, ind),
                         ),
                         false,
-                        rowNo
+                        rowNo,
                       ),
                   ),
                 ],
@@ -478,19 +654,20 @@ export const companySectionsTemplate: Section[] = [
                 [
                   new Row(
                     ['a', 'b', 'c', 'd'].map(
-                      (heading, ind: number) => new Cell(heading, true, 1, 1, ind),
+                      (heading, ind: number) =>
+                        new Cell(heading, true, 1, 1, ind),
                     ),
                     true,
-                    0
+                    0,
                   ),
                   ...Array.from({ length: 3 }).map(
                     (_, rowNo: number) =>
                       new Row(
                         Array.from({ length: 4 }).map(
-                          (_, ind: number) => new Cell('', true, 1, 1 ,ind),
+                          (_, ind: number) => new Cell('', true, 1, 1, ind),
                         ),
                         false,
-                        rowNo
+                        rowNo,
                       ),
                   ),
                 ],
@@ -524,7 +701,7 @@ export const companySectionsTemplate: Section[] = [
         title: 'I. Policy and process',
         questions: [
           {
-            index:  0,
+            index: 0,
             desc: 'This section is aimed at helping businesses demonstrate the structures, policies and processes put in place towards adopting the NGRBC Principles and Core Elements.',
             type: QuestionType.TABLE,
             answer_table: [
@@ -535,11 +712,11 @@ export const companySectionsTemplate: Section[] = [
                       new Cell('Question', false, 1, 1, 0),
                       ...Array.from({ length: 9 }).map(
                         (_, ind: number) =>
-                          new Cell(`P${ind + 1}`, false, 1, 1, ind+1),
+                          new Cell(`P${ind + 1}`, false, 1, 1, ind + 1),
                       ),
                     ],
                     true,
-                    0
+                    0,
                   ),
                   ...[
                     `Whether your entity’s policy/policies cover each principle and its core elements of the NGRBCs. (Yes/No)`,
@@ -555,10 +732,16 @@ export const companySectionsTemplate: Section[] = [
                       new Row(
                         Array.from({ length: 10 }).map(
                           (_, ind: number) =>
-                            new Cell(ind === 0 ? question : '', ind > 0, 1, 1, ind),
+                            new Cell(
+                              ind === 0 ? question : '',
+                              ind > 0,
+                              1,
+                              1,
+                              ind,
+                            ),
                         ),
                         false,
-                        rowNo+1
+                        rowNo + 1,
                       ),
                   ),
                 ],
@@ -573,11 +756,11 @@ export const companySectionsTemplate: Section[] = [
                         false,
                         1,
                         2,
-                        0
+                        0,
                       ),
                     ],
                     true,
-                    0
+                    0,
                   ),
                   new Row(
                     [
@@ -586,11 +769,11 @@ export const companySectionsTemplate: Section[] = [
                         false,
                         1,
                         2,
-                        0
+                        0,
                       ),
                     ],
                     false,
-                    1
+                    1,
                   ),
                   new Row(
                     [
@@ -599,12 +782,12 @@ export const companySectionsTemplate: Section[] = [
                         false,
                         1,
                         1,
-                        0
+                        0,
                       ),
                       new Cell('', true, 1, 1, 1),
                     ],
                     false,
-                    2
+                    2,
                   ),
                   new Row(
                     [
@@ -613,12 +796,12 @@ export const companySectionsTemplate: Section[] = [
                         false,
                         1,
                         1,
-                        0
+                        0,
                       ),
                       new Cell('', true, 1, 1, 1),
                     ],
                     false,
-                    3
+                    3,
                   ),
                 ],
                 false,
@@ -645,18 +828,18 @@ export const companySectionsTemplate: Section[] = [
                         false,
                         1,
                         9,
-                        1
+                        1,
                       ),
                       new Cell(
                         'Frequency (Annually/ Half yearly/ Quarterly/ Any other – please specify)',
                         false,
                         1,
                         9,
-                        2
+                        2,
                       ),
                     ],
                     true,
-                    0
+                    0,
                   ),
                   new Row(
                     [
@@ -671,7 +854,7 @@ export const companySectionsTemplate: Section[] = [
                       ),
                     ],
                     true,
-                    1
+                    1,
                   ),
                   ...[
                     `Performance against above policies and follow up action`,
@@ -687,12 +870,12 @@ export const companySectionsTemplate: Section[] = [
                                 ind > 0,
                                 1,
                                 1,
-                                ind
+                                ind,
                               ),
                           ),
                         ],
                         false,
-                        2
+                        2,
                       ),
                   ),
                 ],
@@ -710,7 +893,7 @@ export const companySectionsTemplate: Section[] = [
                       ),
                     ],
                     true,
-                    0
+                    0,
                   ),
                   new Row(
                     [
@@ -719,14 +902,14 @@ export const companySectionsTemplate: Section[] = [
                         false,
                         1,
                         1,
-                        0
+                        0,
                       ),
                       ...Array.from({ length: 9 }).map(
                         (_, ind: number) => new Cell(``, true, 1, 1, ind),
                       ),
                     ],
                     false,
-                    1
+                    1,
                   ),
                 ],
                 false,
@@ -750,11 +933,11 @@ export const companySectionsTemplate: Section[] = [
                       new Cell('Question', false, 1, 1, 0),
                       ...Array.from({ length: 9 }).map(
                         (_, ind: number) =>
-                          new Cell(`P${ind + 1}`, false, 1, 1, ind+1),
+                          new Cell(`P${ind + 1}`, false, 1, 1, ind + 1),
                       ),
                     ],
                     true,
-                    0
+                    0,
                   ),
                   ...[
                     `The entity does not consider the Principles material to its business (Yes/No) `,
@@ -767,10 +950,16 @@ export const companySectionsTemplate: Section[] = [
                       new Row(
                         Array.from({ length: 10 }).map(
                           (_, ind: number) =>
-                            new Cell(ind === 0 ? question : '', ind > 0, 1, 1, ind),
+                            new Cell(
+                              ind === 0 ? question : '',
+                              ind > 0,
+                              1,
+                              1,
+                              ind,
+                            ),
                         ),
                         false,
-                        1
+                        1,
                       ),
                   ),
                 ],
@@ -811,18 +1000,18 @@ export const companySectionsTemplate: Section[] = [
                         false,
                         1,
                         1,
-                        2
+                        2,
                       ),
                       new Cell(
                         '%age of persons in respective category covered by the awareness programmes',
                         false,
                         1,
                         1,
-                        3
+                        3,
                       ),
                     ],
                     true,
-                    0
+                    0,
                   ),
                   ...[
                     'Board of Diretors',
@@ -835,11 +1024,12 @@ export const companySectionsTemplate: Section[] = [
                         [
                           new Cell(segment, false, 1, 1, 0),
                           ...Array.from({ length: 3 }).map(
-                            (_, colNo: number) => new Cell('', true, 1, 1, colNo+1),
+                            (_, colNo: number) =>
+                              new Cell('', true, 1, 1, colNo + 1),
                           ),
                         ],
                         false,
-                        rowNo+1
+                        rowNo + 1,
                       ),
                   ),
                 ],
@@ -870,7 +1060,7 @@ export const companySectionsTemplate: Section[] = [
                       ),
                     ],
                     true,
-                    1
+                    1,
                   ),
                   ...['Penalty/ Fine', 'Settlement', 'Compounding fee'].map(
                     (firstCol: string, rowNo: number) =>
@@ -878,11 +1068,12 @@ export const companySectionsTemplate: Section[] = [
                         [
                           new Cell(firstCol, false, 1, 1, 0),
                           ...Array.from({ length: 5 }).map(
-                            (_, colNo: number) => new Cell('', true, 1, 1, colNo+1),
+                            (_, colNo: number) =>
+                              new Cell('', true, 1, 1, colNo + 1),
                           ),
                         ],
                         false,
-                        rowNo+2
+                        rowNo + 2,
                       ),
                   ),
                 ],
@@ -902,11 +1093,11 @@ export const companySectionsTemplate: Section[] = [
                         'Has an appeal been preferred? (Yes/No)',
                       ].map(
                         (heading: string, ind: number) =>
-                          new Cell(heading, false, 1, 1, ind+1),
+                          new Cell(heading, false, 1, 1, ind + 1),
                       ),
                     ],
                     true,
-                    1
+                    1,
                   ),
                   ...['Imprisonment', 'Punishment'].map(
                     (firstCol: string, rowNo: number) =>
@@ -914,11 +1105,12 @@ export const companySectionsTemplate: Section[] = [
                         [
                           new Cell(firstCol, false, 1, 1, 0),
                           ...Array.from({ length: 4 }).map(
-                            (_, colNo: number) => new Cell('', true, 1, 1, colNo+1),
+                            (_, colNo: number) =>
+                              new Cell('', true, 1, 1, colNo + 1),
                           ),
                         ],
                         false,
-                        rowNo+2
+                        rowNo + 2,
                       ),
                   ),
                 ],
@@ -944,12 +1136,12 @@ export const companySectionsTemplate: Section[] = [
                       ),
                     ],
                     true,
-                    0
+                    0,
                   ),
                   new Row(
                     [new Cell('', true, 1, 1, 0), new Cell('', true, 1, 1, 1)],
                     false,
-                    1
+                    1,
                   ),
                 ],
                 true,
@@ -980,7 +1172,7 @@ export const companySectionsTemplate: Section[] = [
                       ),
                     ],
                     true,
-                    0
+                    0,
                   ),
                   ...['Directors', 'KMPs', 'Employees', 'Workers'].map(
                     (firstCol: string, rowNo: number) =>
@@ -988,11 +1180,12 @@ export const companySectionsTemplate: Section[] = [
                         [
                           new Cell(firstCol, false, 1, 1, 0),
                           ...Array.from({ length: 2 }).map(
-                            (_, colNo: number) => new Cell('', true, 1, 1, colNo+1),
+                            (_, colNo: number) =>
+                              new Cell('', true, 1, 1, colNo + 1),
                           ),
                         ],
                         false,
-                        0
+                        0,
                       ),
                   ),
                   // new Row(
@@ -1023,11 +1216,11 @@ export const companySectionsTemplate: Section[] = [
                         'FY _____ (Previous Financial Year)',
                       ].map(
                         (heading: string, ind: number) =>
-                          new Cell(heading, false, 1, 2, ind+1),
+                          new Cell(heading, false, 1, 2, ind + 1),
                       ),
                     ],
                     true,
-                    0
+                    0,
                   ),
                   new Row(
                     [
@@ -1037,7 +1230,7 @@ export const companySectionsTemplate: Section[] = [
                       ),
                     ],
                     true,
-                    1
+                    1,
                   ),
                   ...[
                     'Number of complaints received in relation to issues of Conflict of Interest of the Directors',
@@ -1048,11 +1241,12 @@ export const companySectionsTemplate: Section[] = [
                         [
                           new Cell(firstCol, false, 1, 1, 0),
                           ...Array.from({ length: 4 }).map(
-                            (_, colNo: number) => new Cell('', true, 1, 1, colNo+1),
+                            (_, colNo: number) =>
+                              new Cell('', true, 1, 1, colNo + 1),
                           ),
                         ],
                         false,
-                        rowNo+2
+                        rowNo + 2,
                       ),
                   ),
                 ],
@@ -1080,11 +1274,11 @@ export const companySectionsTemplate: Section[] = [
                         'FY _____ (Previous Financial Year)',
                       ].map(
                         (heading: string, ind: number) =>
-                          new Cell(heading, false, 1, 1, ind+1),
+                          new Cell(heading, false, 1, 1, ind + 1),
                       ),
                     ],
                     true,
-                    0
+                    0,
                   ),
                   ...['Number of days of accounts payables'].map(
                     (firstCol: string, rowNo: number) =>
@@ -1092,11 +1286,12 @@ export const companySectionsTemplate: Section[] = [
                         [
                           new Cell(firstCol, false, 1, 1, 0),
                           ...Array.from({ length: 2 }).map(
-                            (_, colNo: number) => new Cell('', true, 1, 1, colNo+1),
+                            (_, colNo: number) =>
+                              new Cell('', true, 1, 1, colNo + 1),
                           ),
                         ],
                         false,
-                        rowNo+1
+                        rowNo + 1,
                       ),
                   ),
                 ],
@@ -1124,7 +1319,7 @@ export const companySectionsTemplate: Section[] = [
                       ),
                     ],
                     true,
-                    0
+                    0,
                   ),
 
                   new Row(
@@ -1135,13 +1330,13 @@ export const companySectionsTemplate: Section[] = [
                         false,
                         1,
                         1,
-                        1
+                        1,
                       ),
                       new Cell('', true, 1, 1, 2),
                       new Cell('', true, 1, 1, 3),
                     ],
                     false,
-                    1
+                    1,
                   ),
                   new Row(
                     [
@@ -1151,13 +1346,13 @@ export const companySectionsTemplate: Section[] = [
                         false,
                         1,
                         1,
-                        0
+                        0,
                       ),
                       new Cell('', true, 1, 1, 1),
                       new Cell('', true, 1, 1, 2),
                     ],
                     false,
-                    2
+                    2,
                   ),
                   new Row(
                     [
@@ -1167,13 +1362,13 @@ export const companySectionsTemplate: Section[] = [
                         false,
                         1,
                         1,
-                        0
+                        0,
                       ),
                       new Cell('', true, 1, 1, 1),
                       new Cell('', true, 1, 1, 2),
                     ],
                     false,
-                    3
+                    3,
                   ),
                   new Row(
                     [
@@ -1183,13 +1378,13 @@ export const companySectionsTemplate: Section[] = [
                         false,
                         1,
                         1,
-                        1
+                        1,
                       ),
                       new Cell('', true, 1, 1, 2),
                       new Cell('', true, 1, 1, 3),
                     ],
                     false,
-                    4
+                    4,
                   ),
                   new Row(
                     [
@@ -1199,13 +1394,13 @@ export const companySectionsTemplate: Section[] = [
                         false,
                         1,
                         1,
-                        0
+                        0,
                       ),
                       new Cell('', true, 1, 1, 1),
                       new Cell('', true, 1, 1, 2),
                     ],
                     false,
-                    5
+                    5,
                   ),
                   new Row(
                     [
@@ -1215,13 +1410,13 @@ export const companySectionsTemplate: Section[] = [
                         false,
                         1,
                         1,
-                        0
+                        0,
                       ),
                       new Cell('', true, 1, 1, 1),
                       new Cell('', true, 1, 1, 2),
                     ],
                     false,
-                    6
+                    6,
                   ),
                   new Row(
                     [
@@ -1231,13 +1426,13 @@ export const companySectionsTemplate: Section[] = [
                         false,
                         1,
                         1,
-                        1
+                        1,
                       ),
                       new Cell('', true, 1, 1, 2),
                       new Cell('', true, 1, 1, 3),
                     ],
                     false,
-                    7
+                    7,
                   ),
                   new Row(
                     [
@@ -1247,13 +1442,13 @@ export const companySectionsTemplate: Section[] = [
                         false,
                         1,
                         1,
-                        0
+                        0,
                       ),
                       new Cell('', true, 1, 1, 1),
                       new Cell('', true, 1, 1, 2),
                     ],
                     false,
-                    8
+                    8,
                   ),
                   new Row(
                     [
@@ -1263,13 +1458,13 @@ export const companySectionsTemplate: Section[] = [
                         false,
                         1,
                         1,
-                        0
+                        0,
                       ),
                       new Cell('', true, 1, 1, 1),
                       new Cell('', true, 1, 1, 2),
                     ],
                     false,
-                    9
+                    9,
                   ),
 
                   new Row(
@@ -1280,13 +1475,13 @@ export const companySectionsTemplate: Section[] = [
                         false,
                         1,
                         1,
-                        0
+                        0,
                       ),
                       new Cell('', true, 1, 1, 1),
                       new Cell('', true, 1, 1, 2),
                     ],
                     false,
-                    10
+                    10,
                   ),
                 ],
                 false,
@@ -1312,7 +1507,7 @@ export const companySectionsTemplate: Section[] = [
                       ),
                     ],
                     true,
-                    0
+                    0,
                   ),
                   new Row(
                     [
@@ -1321,7 +1516,7 @@ export const companySectionsTemplate: Section[] = [
                       ),
                     ],
                     false,
-                    1
+                    1,
                   ),
                 ],
                 true,
@@ -1359,7 +1554,7 @@ export const companySectionsTemplate: Section[] = [
                       ),
                     ],
                     true,
-                    0
+                    0,
                   ),
                   ...['R&D', 'Capex'].map(
                     (firstCol: string, rowNo: number) =>
@@ -1367,13 +1562,13 @@ export const companySectionsTemplate: Section[] = [
                         [
                           new Cell(firstCol, false, 1, 1, 0),
                           ...Array.from({ length: 3 }).map(
-                            (_, cellNo: number) => new Cell('', true, 1, 1, cellNo+1),
+                            (_, cellNo: number) =>
+                              new Cell('', true, 1, 1, cellNo + 1),
                           ),
                         ],
                         false,
-                        rowNo+1
+                        rowNo + 1,
                       ),
-                      
                   ),
                 ],
                 false,
@@ -1416,18 +1611,20 @@ export const companySectionsTemplate: Section[] = [
                           new Cell(heading, false, 1, 1, cellNo),
                       ),
                     ],
-                    true,0
+                    true,
+                    0,
                   ),
                   ...[''].map(
                     (firstCol: string, rowNo: number) =>
                       new Row(
                         [
                           ...Array.from({ length: 6 }).map(
-                            (_, cellNo: number) => new Cell('', true, 1, 1, cellNo),
+                            (_, cellNo: number) =>
+                              new Cell('', true, 1, 1, cellNo),
                           ),
                         ],
                         false,
-                        rowNo+1
+                        rowNo + 1,
                       ),
                   ),
                 ],
@@ -1454,18 +1651,19 @@ export const companySectionsTemplate: Section[] = [
                       ),
                     ],
                     true,
-                    0
+                    0,
                   ),
                   ...Array.from({ length: 3 }).map(
                     (_, rowNo: number) =>
                       new Row(
                         [
                           ...Array.from({ length: 3 }).map(
-                            (_, cellNo: number) => new Cell('', true, 1, 1, cellNo),
+                            (_, cellNo: number) =>
+                              new Cell('', true, 1, 1, cellNo),
                           ),
                         ],
                         false,
-                        rowNo+1
+                        rowNo + 1,
                       ),
                   ),
                 ],
@@ -1488,30 +1686,43 @@ export const companySectionsTemplate: Section[] = [
                         false,
                         1,
                         2,
-                        1
+                        1,
                       ),
                     ],
                     true,
-                    0
+                    0,
                   ),
                   new Row(
                     [
-                      new Cell('FY _____ Current Financial Year', false, 1, 1, 0),
-                      new Cell('FY _____ Previous Financial Year', false, 1, 1, 1),
+                      new Cell(
+                        'FY _____ Current Financial Year',
+                        false,
+                        1,
+                        1,
+                        0,
+                      ),
+                      new Cell(
+                        'FY _____ Previous Financial Year',
+                        false,
+                        1,
+                        1,
+                        1,
+                      ),
                     ],
                     true,
-                    1
+                    1,
                   ),
                   ...Array.from({ length: 3 }).map(
                     (_, rowNo: number) =>
                       new Row(
                         [
                           ...Array.from({ length: 3 }).map(
-                            (_, colNo: number) => new Cell('', true, 1, 1, colNo),
+                            (_, colNo: number) =>
+                              new Cell('', true, 1, 1, colNo),
                           ),
                         ],
                         false,
-                        rowNo+2
+                        rowNo + 2,
                       ),
                   ),
                 ],
@@ -1520,7 +1731,7 @@ export const companySectionsTemplate: Section[] = [
             ],
           },
           {
-            index:7,
+            index: 7,
             type: QuestionType.TABLE,
             desc: '8. Of the products and packaging reclaimed at end of life of products, amount (in metric tonnes) reused, recycled, and safely disposed, as per the following format:',
             answer_table: [
@@ -1529,11 +1740,23 @@ export const companySectionsTemplate: Section[] = [
                   new Row(
                     [
                       new Cell('Indicate input material ', false, 2, 1, 0),
-                      new Cell('FY _____ Current Financial Year', false, 1, 3, 1),
-                      new Cell('FY _____ Previous Financial Year', false, 1, 3, 2),
+                      new Cell(
+                        'FY _____ Current Financial Year',
+                        false,
+                        1,
+                        3,
+                        1,
+                      ),
+                      new Cell(
+                        'FY _____ Previous Financial Year',
+                        false,
+                        1,
+                        3,
+                        2,
+                      ),
                     ],
                     true,
-                    0
+                    0,
                   ),
                   new Row(
                     [
@@ -1545,7 +1768,7 @@ export const companySectionsTemplate: Section[] = [
                       new Cell('Safely Disposed', true, 1, 1, 5),
                     ],
                     true,
-                    1
+                    1,
                   ),
                   ...[
                     'Plastics (including packaging)',
@@ -1562,9 +1785,8 @@ export const companySectionsTemplate: Section[] = [
                           ),
                         ],
                         false,
-                        rowNo+2
+                        rowNo + 2,
                       ),
-                      
                   ),
                 ],
                 false,
@@ -1586,22 +1808,23 @@ export const companySectionsTemplate: Section[] = [
                         false,
                         1,
                         1,
-                      1
+                        1,
                       ),
                     ],
                     true,
-                    0
+                    0,
                   ),
                   ...Array.from({ length: 3 }).map(
                     (_, rowNo: number) =>
                       new Row(
                         [
                           ...Array.from({ length: 2 }).map(
-                            (_, colNo: number) => new Cell('', true, 1, 1, colNo),
+                            (_, colNo: number) =>
+                              new Cell('', true, 1, 1, colNo),
                           ),
                         ],
                         false,
-                        rowNo+1
+                        rowNo + 1,
                       ),
                   ),
                 ],
@@ -1629,7 +1852,7 @@ export const companySectionsTemplate: Section[] = [
                       new Cell('% of employees covered by', false, 1, 11, 1),
                     ],
                     true,
-                    0
+                    0,
                   ),
                   new Row(
                     [
@@ -1646,7 +1869,7 @@ export const companySectionsTemplate: Section[] = [
                       ),
                     ],
                     true,
-                    1
+                    1,
                   ),
                   new Row(
                     [
@@ -1667,44 +1890,74 @@ export const companySectionsTemplate: Section[] = [
                       ),
                     ],
                     true,
-                    2
+                    2,
                   ),
                   new Row(
                     [new Cell('Permanent employees', false, 1, 11, 0)],
-                    true,
-                    3
+                    false,
+                    3,
                   ),
-                  ...['Male', 'Female', 'Total'].map(
+                  ...['Male', 'Female'].map(
                     (firstCol: string, rowNo: number) =>
                       new Row(
                         [
                           new Cell(firstCol, false, 1, 1, 0),
-                          ...Array.from({ length: 11 }).map(
-                            (_, colNo: number) => new Cell('', true, 1, 1, colNo+1),
-                          ),
+                          new Cell('', true, 1, 1, 1),
+                          new Cell('', true, 1, 1, 2),
+                          new Cell('', true, 1, 1, 3, Operation.DIV, [`${rowNo+4}$2`,`${rowNo+4}$1`]),
+                          new Cell('', true, 1, 1, 4),
+                          new Cell('', true, 1, 1, 5, Operation.DIV, [`${rowNo+4}$4`,`${rowNo+4}$1`]),
+                          new Cell('', true, 1, 1, 6),
+                          new Cell('', true, 1, 1, 7, Operation.DIV, [`${rowNo+4}$6`,`${rowNo+4}$1`]),
+                          new Cell('', true, 1, 1, 8),
+                          new Cell('', true, 1, 1, 9, Operation.DIV, [`${rowNo+4}$8`,`${rowNo+4}$1`]),
+                          new Cell('', true, 1, 1, 10),
+                          new Cell('', true, 1, 1, 11, Operation.DIV, [`${rowNo+4}$10`,`${rowNo+4}$1`])
                         ],
                         false,
-                        rowNo+4
+                        rowNo + 4,
                       ),
                   ),
+                  new Row([
+                    new Cell('Total', false, 1, 1, 0),
+                          ...Array.from({ length: 11 }).map(
+                            (_, colNo: number) =>
+                              new Cell('', true, 1, 1, colNo + 1, Operation.ADD, [`4$${colNo+1}`, `5$${colNo+1}`]),
+                          ),
+                  ], false, 6),
                   new Row(
                     [new Cell('Other than Permanent workers', false, 1, 11, 0)],
                     false,
-                    5
+                    7,
                   ),
-                  ...['Male', 'Female', 'Total'].map(
+                  ...['Male', 'Female'].map(
                     (firstCol: string, rowNo: number) =>
                       new Row(
                         [
                           new Cell(firstCol, false, 1, 1, 0),
-                          ...Array.from({ length: 11 }).map(
-                            (_, colNo: number) => new Cell('', true, 1, 1, colNo+1),
-                          ),
+                          new Cell('', true, 1, 1, 1),
+                          new Cell('', true, 1, 1, 2),
+                          new Cell('', true, 1, 1, 3, Operation.DIV, [`${rowNo+8}$2`,`${rowNo+8}$1`]),
+                          new Cell('', true, 1, 1, 4),
+                          new Cell('', true, 1, 1, 5, Operation.DIV, [`${rowNo+8}$4`,`${rowNo+8}$1`]),
+                          new Cell('', true, 1, 1, 6),
+                          new Cell('', true, 1, 1, 7, Operation.DIV, [`${rowNo+8}$6`,`${rowNo+8}$1`]),
+                          new Cell('', true, 1, 1, 8),
+                          new Cell('', true, 1, 1, 9, Operation.DIV, [`${rowNo+8}$8`,`${rowNo+8}$1`]),
+                          new Cell('', true, 1, 1, 10),
+                          new Cell('', true, 1, 1, 11, Operation.DIV, [`${rowNo+8}$10`,`${rowNo+8}$1`])
                         ],
                         false,
-                        rowNo+6
+                        rowNo + 8,
                       ),
                   ),
+                  new Row([
+                    new Cell('Total', false, 1, 1, 0),
+                          ...Array.from({ length: 11 }).map(
+                            (_, colNo: number) =>
+                              new Cell('', true, 1, 1, colNo + 1, Operation.ADD, [`8$${colNo+1}`, `9${colNo+1}`]),
+                          ),
+                  ], false, 10),
                 ],
                 false,
               ),
@@ -1723,7 +1976,7 @@ export const companySectionsTemplate: Section[] = [
                       new Cell('% of workers covered by', false, 1, 11, 1),
                     ],
                     true,
-                    0
+                    0,
                   ),
                   new Row(
                     [
@@ -1736,11 +1989,11 @@ export const companySectionsTemplate: Section[] = [
                         'Day Care facilities',
                       ].map(
                         (heading: string, colNo: number) =>
-                          new Cell(heading, false, 1, 2, colNo+1),
+                          new Cell(heading, false, 1, 2, colNo + 1),
                       ),
                     ],
                     true,
-                    1
+                    1,
                   ),
                   new Row(
                     [
@@ -1761,44 +2014,74 @@ export const companySectionsTemplate: Section[] = [
                       ),
                     ],
                     true,
-                    2
+                    2,
                   ),
                   new Row(
                     [new Cell('Permanent employees', false, 1, 11, 0)],
-                    true,
-                    3
-                  ),
-                  ...['Male', 'Female', 'Total'].map(
-                    (firstCol: string, rowNo: number) =>
-                      new Row(
-                        [
-                          new Cell(firstCol, false, 1, 1, 0),
-                          ...Array.from({ length: 11 }).map(
-                            (_, colNo: number) => new Cell('', true, 1, 1, colNo+1),
-                          ),
-                        ],
-                        false,
-                        rowNo+4
-                      ),
-                  ),
-                  new Row(
-                    [new Cell('Other than Permanent employees', false, 1, 11, 0)],
                     false,
-                    5
+                    3,
                   ),
-                  ...['Male', 'Female', 'Total'].map(
+                  ...['Male', 'Female'].map(
                     (firstCol: string, rowNo: number) =>
                       new Row(
                         [
                           new Cell(firstCol, false, 1, 1, 0),
-                          ...Array.from({ length: 11 }).map(
-                            (_, colNo: number) => new Cell('', true, 1, 1, colNo+1),
-                          ),
+                          new Cell('', true, 1, 1, 1),
+                          new Cell('', true, 1, 1, 2),
+                          new Cell('', true, 1, 1, 3, Operation.DIV, [`${rowNo+4}$2`,`${rowNo+4}$1`]),
+                          new Cell('', true, 1, 1, 4),
+                          new Cell('', true, 1, 1, 5, Operation.DIV, [`${rowNo+4}$4`,`${rowNo+4}$1`]),
+                          new Cell('', true, 1, 1, 6),
+                          new Cell('', true, 1, 1, 7, Operation.DIV, [`${rowNo+4}$6`,`${rowNo+4}$1`]),
+                          new Cell('', true, 1, 1, 8),
+                          new Cell('', true, 1, 1, 9, Operation.DIV, [`${rowNo+4}$8`,`${rowNo+4}$1`]),
+                          new Cell('', true, 1, 1, 10),
+                          new Cell('', true, 1, 1, 11, Operation.DIV, [`${rowNo+4}$10`,`${rowNo+4}$1`])
                         ],
                         false,
-                        rowNo+6
+                        rowNo + 4,
                       ),
                   ),
+                  new Row([
+                    new Cell('Total', false, 1, 1, 0),
+                          ...Array.from({ length: 11 }).map(
+                            (_, colNo: number) =>
+                              new Cell('', true, 1, 1, colNo + 1, Operation.ADD, [`4$${colNo+1}`, `5$${colNo+1}`]),
+                          ),
+                  ], false, 6),
+                  new Row(
+                    [new Cell('Other than Permanent workers', false, 1, 11, 0)],
+                    false,
+                    7,
+                  ),
+                  ...['Male', 'Female'].map(
+                    (firstCol: string, rowNo: number) =>
+                      new Row(
+                        [
+                          new Cell(firstCol, false, 1, 1, 0),
+                          new Cell('', true, 1, 1, 1),
+                          new Cell('', true, 1, 1, 2),
+                          new Cell('', true, 1, 1, 3, Operation.DIV, [`${rowNo+8}$2`,`${rowNo+8}$1`]),
+                          new Cell('', true, 1, 1, 4),
+                          new Cell('', true, 1, 1, 5, Operation.DIV, [`${rowNo+8}$4`,`${rowNo+8}$1`]),
+                          new Cell('', true, 1, 1, 6),
+                          new Cell('', true, 1, 1, 7, Operation.DIV, [`${rowNo+8}$6`,`${rowNo+8}$1`]),
+                          new Cell('', true, 1, 1, 8),
+                          new Cell('', true, 1, 1, 9, Operation.DIV, [`${rowNo+8}$8`,`${rowNo+8}$1`]),
+                          new Cell('', true, 1, 1, 10),
+                          new Cell('', true, 1, 1, 11, Operation.DIV, [`${rowNo+8}$10`,`${rowNo+8}$1`])
+                        ],
+                        false,
+                        rowNo + 8,
+                      ),
+                  ),
+                  new Row([
+                    new Cell('Total', false, 1, 1, 0),
+                          ...Array.from({ length: 11 }).map(
+                            (_, colNo: number) =>
+                              new Cell('', true, 1, 1, colNo + 1, Operation.ADD, [`8$${colNo+1}`, `9${colNo+1}`]),
+                          ),
+                  ], false, 10),
                 ],
                 false,
               ),
@@ -1814,11 +2097,23 @@ export const companySectionsTemplate: Section[] = [
                   new Row(
                     [
                       new Cell('', false, 1, 1, 0),
-                      new Cell('FY _____ Current Financial Year', false, 1, 1, 1),
-                      new Cell('FY _____ Previous Financial Year', false, 1, 1, 2),
+                      new Cell(
+                        'FY _____ Current Financial Year',
+                        false,
+                        1,
+                        1,
+                        1,
+                      ),
+                      new Cell(
+                        'FY _____ Previous Financial Year',
+                        false,
+                        1,
+                        1,
+                        2,
+                      ),
                     ],
                     true,
-                    0
+                    0,
                   ),
                   new Row(
                     [
@@ -1827,13 +2122,13 @@ export const companySectionsTemplate: Section[] = [
                         false,
                         1,
                         1,
-                        0
+                        0,
                       ),
                       new Cell('', true, 1, 1, 1),
                       new Cell('', true, 1, 1, 2),
                     ],
                     false,
-                    1
+                    1,
                   ),
                 ],
                 false,
@@ -1850,11 +2145,23 @@ export const companySectionsTemplate: Section[] = [
                   new Row(
                     [
                       new Cell('Benefits', false, 2, 1, 0),
-                      new Cell('FY _____ Current Financial Year', false, 1, 3, 1),
-                      new Cell('FY _____ Previous Financial Year', false, 1, 3, 2),
+                      new Cell(
+                        'FY _____ Current Financial Year',
+                        false,
+                        1,
+                        3,
+                        1,
+                      ),
+                      new Cell(
+                        'FY _____ Previous Financial Year',
+                        false,
+                        1,
+                        3,
+                        2,
+                      ),
                     ],
                     true,
-                    0
+                    0,
                   ),
                   new Row(
                     [
@@ -1863,46 +2170,46 @@ export const companySectionsTemplate: Section[] = [
                         false,
                         1,
                         1,
-                        0
+                        0,
                       ),
                       new Cell(
                         'No. of workers covered as a % of total workers',
                         false,
                         1,
                         1,
-                        1
+                        1,
                       ),
                       new Cell(
                         'Deducted and deposited with the authority (Y/N/N.A.)',
                         false,
                         1,
                         1,
-                        2
+                        2,
                       ),
                       new Cell(
                         'No. of employees covered as a % of total employees',
                         false,
                         1,
                         1,
-                        3
+                        3,
                       ),
                       new Cell(
                         'No. of workers covered as a % of total workers',
                         false,
                         1,
                         1,
-                        4
+                        4,
                       ),
                       new Cell(
                         'Deducted and deposited with the authority (Y/N/N.A.)',
                         false,
                         1,
                         1,
-                        5
+                        5,
                       ),
                     ],
                     true,
-                    1
+                    1,
                   ),
                   ...['PF', 'Gratuity', 'ESI', 'Others – pleasespecify'].map(
                     (firstCol: string, rowNo: number) =>
@@ -1910,11 +2217,12 @@ export const companySectionsTemplate: Section[] = [
                         [
                           new Cell(firstCol, false, 1, 1, 0),
                           ...Array.from({ length: 6 }).map(
-                            (_, colNo: number) => new Cell('', true, 1, 1, colNo+1),
+                            (_, colNo: number) =>
+                              new Cell('', true, 1, 1, colNo + 1),
                           ),
                         ],
                         false,
-                        rowNo+2
+                        rowNo + 2,
                       ),
                   ),
                 ],
@@ -1946,7 +2254,7 @@ export const companySectionsTemplate: Section[] = [
                       new Cell('Permanent workers', false, 1, 2, 2),
                     ],
                     true,
-                    0
+                    0,
                   ),
                   new Row(
                     [
@@ -1957,21 +2265,29 @@ export const companySectionsTemplate: Section[] = [
                       new Cell('Retention rate', false, 1, 1, 4),
                     ],
                     true,
-                    1
+                    1,
                   ),
-                  ...['Male', 'Female', 'Total'].map(
+                  ...['Male', 'Female'].map(
                     (firstCol: string, rowNo: number) =>
                       new Row(
                         [
                           new Cell(firstCol, false, 1, 1, 0),
                           ...Array.from({ length: 4 }).map(
-                            (_, colNo: number) => new Cell('', true, 1, 1, colNo),
+                            (_, colNo: number) =>
+                              new Cell('', true, 1, 1, colNo),
                           ),
                         ],
                         false,
-                        2
+                        rowNo+2,
                       ),
                   ),
+                  new Row([
+                    new Cell("Total", false, 1, 1, 0),
+                    new Cell("Total", false, 1, 1, 1, Operation.ADD, ['3$1', '2$1']),
+                    new Cell("Total", false, 1, 1, 2, Operation.ADD, ['3$2', '2$2']),
+                    new Cell("Total", false, 1, 1, 3, Operation.ADD, ['3$3', '2$3']),
+                    new Cell("Total", false, 1, 1, 4, Operation.ADD, ['3$4', '2$4']),
+                  ], false, 4)
                 ],
                 false,
               ),
@@ -1992,11 +2308,11 @@ export const companySectionsTemplate: Section[] = [
                         false,
                         1,
                         2,
-                        1
+                        1,
                       ),
                     ],
                     true,
-                    0
+                    0,
                   ),
                   ...[
                     'Permanent Workers',
@@ -2011,7 +2327,7 @@ export const companySectionsTemplate: Section[] = [
                           new Cell('', true, 1, 1, 1),
                         ],
                         false,
-                        rowNo+1
+                        rowNo + 1,
                       ),
                   ),
                 ],
@@ -2034,18 +2350,18 @@ export const companySectionsTemplate: Section[] = [
                         false,
                         1,
                         3,
-                        1
+                        1,
                       ),
                       new Cell(
                         'FY _____ (Previous Financial Year)',
                         false,
                         1,
                         3,
-                        2
+                        2,
                       ),
                     ],
                     true,
-                    0
+                    0,
                   ),
                   new Row(
                     [
@@ -2054,14 +2370,14 @@ export const companySectionsTemplate: Section[] = [
                         false,
                         1,
                         1,
-                        3
+                        3,
                       ),
                       new Cell(
                         'No. of employees / workers in respective category, who are part of association(s) or Union (B)',
                         false,
                         1,
                         1,
-                        4
+                        4,
                       ),
                       new Cell('% (B / A) T', false, 1, 1, 5),
                       new Cell(
@@ -2069,19 +2385,19 @@ export const companySectionsTemplate: Section[] = [
                         false,
                         1,
                         1,
-                        6
+                        6,
                       ),
                       new Cell(
                         'No. of employees / workers in respective category, who are part of association(s) or Union (D)',
                         false,
                         1,
                         1,
-                        7
+                        7,
                       ),
                       new Cell('% (D / C) T', false, 1, 1, 7),
                     ],
                     true,
-                    1
+                    1,
                   ),
                   ...[
                     'Total Permanent Employees',
@@ -2095,12 +2411,15 @@ export const companySectionsTemplate: Section[] = [
                       new Row(
                         [
                           new Cell(firstCol, false, 1, 1, 0),
-                          ...Array.from({ length: 6 }).map(
-                            (_, ind: number) => new Cell('', true, 1, 1,ind),
-                          ),
+                          new Cell('', true, 1, 1, 1),
+                          new Cell('', true, 1, 1, 2),
+                          new Cell('', true, 1, 1, 3, Operation.DIV, ['']),
+                          new Cell('', true, 1, 1, 4),
+                          new Cell('', true, 1, 1, 5),
+                          new Cell('', true, 1, 1, 6),
                         ],
                         false,
-                        rowNo+2
+                        rowNo + 2,
                       ),
                   ),
                 ],
@@ -2118,11 +2437,23 @@ export const companySectionsTemplate: Section[] = [
                   new Row(
                     [
                       new Cell('Category', false, 3, 1, 0),
-                      new Cell('FY _____ Current Financial Year', false, 1, 5, 1),
-                      new Cell('FY _____ Current Previous Year', false, 1, 5, 2),
+                      new Cell(
+                        'FY _____ Current Financial Year',
+                        false,
+                        1,
+                        5,
+                        1,
+                      ),
+                      new Cell(
+                        'FY _____ Current Previous Year',
+                        false,
+                        1,
+                        5,
+                        2,
+                      ),
                     ],
                     true,
-                    0
+                    0,
                   ),
                   new Row(
                     [
@@ -2132,7 +2463,7 @@ export const companySectionsTemplate: Section[] = [
                         'On Skill upgradation',
                       ].map(
                         (heading: string, colNo: number) =>
-                          new Cell(heading, false, 1, 2, colNo+1),
+                          new Cell(heading, false, 1, 2, colNo + 1),
                       ),
                       new Cell('Total (D)', false, 2, 1, 3),
                       ...[
@@ -2140,11 +2471,11 @@ export const companySectionsTemplate: Section[] = [
                         'On Skill upgradation',
                       ].map(
                         (heading: string, colNo: number) =>
-                          new Cell(heading, false, 1, 2, colNo+4),
+                          new Cell(heading, false, 1, 2, colNo + 4),
                       ),
                     ],
                     true,
-                    1
+                    1,
                   ),
                   new Row(
                     [
@@ -2163,7 +2494,7 @@ export const companySectionsTemplate: Section[] = [
                       ),
                     ],
                     true,
-                    2
+                    2,
                   ),
                   new Row([new Cell('Employees', false, 1, 11, 0)], false, 3),
                   ...['Male', 'Female', 'Total'].map(
@@ -2172,11 +2503,12 @@ export const companySectionsTemplate: Section[] = [
                         [
                           new Cell(firstCol, false, 1, 1, 0),
                           ...Array.from({ length: 10 }).map(
-                            (_, ind:number) => new Cell('', true, 1, 1, ind+1),
+                            (_, ind: number) =>
+                              new Cell('', true, 1, 1, ind + 1),
                           ),
                         ],
                         false,
-                        rowNo+4
+                        rowNo + 4,
                       ),
                   ),
                   new Row([new Cell('Workers', false, 1, 11, 0)], false, 7),
@@ -2190,7 +2522,7 @@ export const companySectionsTemplate: Section[] = [
                           ),
                         ],
                         false,
-                        rowNo+8
+                        rowNo + 8,
                       ),
                   ),
                 ],
@@ -2209,11 +2541,23 @@ export const companySectionsTemplate: Section[] = [
                   new Row(
                     [
                       new Cell('Category', false, 2, 1, 0),
-                      new Cell('FY _____ Current Financial Year', false, 1, 3, 1),
-                      new Cell('FY _____ Current Previous Year', false, 1, 3, 2),
+                      new Cell(
+                        'FY _____ Current Financial Year',
+                        false,
+                        1,
+                        3,
+                        1,
+                      ),
+                      new Cell(
+                        'FY _____ Current Previous Year',
+                        false,
+                        1,
+                        3,
+                        2,
+                      ),
                     ],
                     true,
-                    0
+                    0,
                   ),
                   new Row(
                     [
@@ -2230,7 +2574,7 @@ export const companySectionsTemplate: Section[] = [
                       ),
                     ],
                     true,
-                    1
+                    1,
                   ),
                   new Row([new Cell('Employees', false, 1, 7, 0)], false, 2),
                   ...['Male', 'Female', 'Total'].map(
@@ -2239,13 +2583,13 @@ export const companySectionsTemplate: Section[] = [
                         [
                           new Cell(firstCol, false, 1, 1, 0),
                           ...Array.from({ length: 6 }).map(
-                            (_, ind: number) => new Cell('', true, 1, 1, ind+1),
+                            (_, ind: number) =>
+                              new Cell('', true, 1, 1, ind + 1),
                           ),
                         ],
                         false,
-                        rowNo+3
+                        rowNo + 3,
                       ),
-                      
                   ),
                   new Row([new Cell('Workers', false, 1, 11, 0)], false, 6),
                   ...['Male', 'Female', 'Total'].map(
@@ -2254,11 +2598,12 @@ export const companySectionsTemplate: Section[] = [
                         [
                           new Cell(firstCol, false, 1, 1, 0),
                           ...Array.from({ length: 6 }).map(
-                            (_, ind: number) => new Cell('', true, 1, 1, ind+1),
+                            (_, ind: number) =>
+                              new Cell('', true, 1, 1, ind + 1),
                           ),
                         ],
                         false,
-                        rowNo+6
+                        rowNo + 6,
                       ),
                   ),
                 ],
@@ -2268,13 +2613,13 @@ export const companySectionsTemplate: Section[] = [
           },
 
           {
-            index: 12, 
+            index: 12,
             type: QuestionType.BOOLEAN,
             desc: '10. a. Whether an occupational health and safety management system has been implemented by the entity?',
             answer_text: '',
           },
           {
-            index: 13, 
+            index: 13,
             type: QuestionType.TEXT,
             desc: '10. b. What are the processes used to identify work-related hazards and assess risks on a routine and non-routine basis by the entity? ',
             answer_text: '',
@@ -2303,11 +2648,23 @@ export const companySectionsTemplate: Section[] = [
                     [
                       new Cell('Safety Incident/Number', false, 1, 1, 0),
                       new Cell('Category', false, 1, 1, 1),
-                      new Cell('FY _____ Current Financial Year', false, 1, 1, 2),
-                      new Cell('FY _____ Previous Financial Year', false, 1, 1, 3),
+                      new Cell(
+                        'FY _____ Current Financial Year',
+                        false,
+                        1,
+                        1,
+                        2,
+                      ),
+                      new Cell(
+                        'FY _____ Previous Financial Year',
+                        false,
+                        1,
+                        1,
+                        3,
+                      ),
                     ],
                     true,
-                    0
+                    0,
                   ),
                   ...[
                     'Lost Time Injury Frequency Rate (LTIFR) (per one million-person hours worked)',
@@ -2328,7 +2685,7 @@ export const companySectionsTemplate: Section[] = [
                             new Cell('', true, 1, 1, 3),
                           ],
                           false,
-                          rowNo+1
+                          rowNo + 1,
                         )
                       : new Row(
                           [
@@ -2337,7 +2694,7 @@ export const companySectionsTemplate: Section[] = [
                             new Cell('', true, 1, 1, 2),
                           ],
                           false,
-                          rowNo+1
+                          rowNo + 1,
                         ),
                   ),
                 ],
@@ -2367,18 +2724,18 @@ export const companySectionsTemplate: Section[] = [
                         false,
                         1,
                         3,
-                        1
+                        1,
                       ),
                       new Cell(
                         'FY _____ (Previous Financial Year)',
                         false,
                         1,
                         3,
-                        2
+                        2,
                       ),
                     ],
                     true,
-                    0
+                    0,
                   ),
                   new Row(
                     [
@@ -2388,7 +2745,7 @@ export const companySectionsTemplate: Section[] = [
                         false,
                         1,
                         1,
-                        1
+                        1,
                       ),
                       new Cell('Remarks', false, 1, 1, 2),
                       new Cell('Filed during the year', false, 1, 1, 3),
@@ -2397,12 +2754,12 @@ export const companySectionsTemplate: Section[] = [
                         false,
                         1,
                         1,
-                        4
+                        4,
                       ),
                       new Cell('Remarks', false, 1, 1, 5),
                     ],
                     true,
-                    1
+                    1,
                   ),
                   ...['Working Conditions', 'Health &Safety'].map(
                     (firstCell: string, rowNo: number) =>
@@ -2410,11 +2767,12 @@ export const companySectionsTemplate: Section[] = [
                         [
                           new Cell(firstCell, false, 1, 1, 0),
                           ...Array.from({ length: 6 }).map(
-                            (_, ind: number) => new Cell('', true, 1, 1, ind+1),
+                            (_, ind: number) =>
+                              new Cell('', true, 1, 1, ind + 1),
                           ),
                         ],
                         false,
-                        rowNo+2
+                        rowNo + 2,
                       ),
                   ),
                 ],
@@ -2438,11 +2796,11 @@ export const companySectionsTemplate: Section[] = [
                         false,
                         1,
                         1,
-                        1
+                        1,
                       ),
                     ],
                     true,
-                    0
+                    0,
                   ),
 
                   ...['Health and safety practices', 'Working Conditions'].map(
@@ -2453,7 +2811,7 @@ export const companySectionsTemplate: Section[] = [
                           new Cell('', true, 1, 1, 1),
                         ],
                         false,
-                        rowNo+1
+                        rowNo + 1,
                       ),
                   ),
                 ],
@@ -2479,7 +2837,6 @@ export const companySectionsTemplate: Section[] = [
             type: QuestionType.BOOLEAN,
             desc: '17. Does the entity extend any life insurance or any compensatory package in the event of death of (B) Workers?',
           },
-
           {
             index: 22,
             type: QuestionType.TEXT,
@@ -2500,18 +2857,18 @@ export const companySectionsTemplate: Section[] = [
                         false,
                         1,
                         2,
-                        1
+                        1,
                       ),
                       new Cell(
                         'No. of employees/workers that are rehabilitated and placed in suitable employment or whose family members have been placed in suitable employment',
                         false,
                         1,
                         2,
-                        2
+                        2,
                       ),
                     ],
                     true,
-                    0
+                    0,
                   ),
 
                   new Row(
@@ -2521,32 +2878,32 @@ export const companySectionsTemplate: Section[] = [
                         false,
                         1,
                         1,
-                        0
+                        0,
                       ),
                       new Cell(
                         'FY _____ (Previous Financial Year)',
                         false,
                         1,
                         1,
-                        1
+                        1,
                       ),
                       new Cell(
                         'FY _____ (Current Financial Year)',
                         false,
                         1,
                         1,
-                        2
+                        2,
                       ),
                       new Cell(
                         'FY _____ (Previous Financial Year)',
                         false,
                         1,
                         1,
-                        3
+                        3,
                       ),
                     ],
                     true,
-                    1
+                    1,
                   ),
                   new Row(
                     [
@@ -2557,14 +2914,13 @@ export const companySectionsTemplate: Section[] = [
                       new Cell('', true, 1, 1, 4),
                     ],
                     false,
-                    2
+                    2,
                   ),
                 ],
                 false,
               ),
             ],
           },
-
           {
             index: 24,
             type: QuestionType.BOOLEAN,
@@ -2585,11 +2941,11 @@ export const companySectionsTemplate: Section[] = [
                         false,
                         1,
                         1,
-                        1
+                        1,
                       ),
                     ],
                     true,
-                    0
+                    0,
                   ),
                   new Row(
                     [
@@ -2597,7 +2953,7 @@ export const companySectionsTemplate: Section[] = [
                       new Cell('', true, 1, 1, 1),
                     ],
                     false,
-                    1
+                    1,
                   ),
                   new Row(
                     [
@@ -2643,32 +2999,32 @@ export const companySectionsTemplate: Section[] = [
                         false,
                         1,
                         1,
-                        1
+                        1,
                       ),
                       new Cell(
                         'Channels of communication (Email, SMS, Newspaper, Pamphlets, Advertisement, Community Meetings, Notice Board, Website), Other',
                         false,
                         1,
                         1,
-                        2
+                        2,
                       ),
                       new Cell(
                         'Frequency of engagement (Annually/ Half yearly/ Quarterly / others – please specify) ',
                         false,
                         1,
                         1,
-                        3
+                        3,
                       ),
                       new Cell(
                         'Purpose and scope of engagement including key topics and concerns raised during such engagement',
                         false,
                         1,
                         1,
-                        4
+                        4,
                       ),
                     ],
                     true,
-                    0
+                    0,
                   ),
                   new Row(
                     Array.from({ length: 5 }).map(
@@ -2676,7 +3032,7 @@ export const companySectionsTemplate: Section[] = [
                       false,
                     ),
                     false,
-                    1
+                    1,
                   ),
                 ],
                 true,
@@ -2718,18 +3074,18 @@ export const companySectionsTemplate: Section[] = [
                         false,
                         1,
                         3,
-                        1
+                        1,
                       ),
                       new Cell(
                         'FY _____ (Previous Financial Year)',
                         false,
                         1,
                         3,
-                        2
+                        2,
                       ),
                     ],
                     true,
-                    0
+                    0,
                   ),
                   new Row(
                     [
@@ -2739,21 +3095,21 @@ export const companySectionsTemplate: Section[] = [
                         false,
                         1,
                         1,
-                        1
+                        1,
                       ),
                       new Cell('% (B / A)', false, 1, 1, 2),
-                      new Cell('Total (C)', false, 1, 1 ,3),
+                      new Cell('Total (C)', false, 1, 1, 3),
                       new Cell(
                         'No. of employees / workers covered (D)',
                         false,
                         1,
                         1,
-                        4
+                        4,
                       ),
                       new Cell('% (D / C)', false, 1, 1, 5),
                     ],
                     true,
-                    1
+                    1,
                   ),
                   new Row([new Cell('Employees', false, 1, 7, 6)], false, 2),
                   ...[
@@ -2766,11 +3122,12 @@ export const companySectionsTemplate: Section[] = [
                         [
                           new Cell(firstCol, false, 1, 1, 0),
                           ...Array.from({ length: 6 }).map(
-                            (_, ind: number) => new Cell('', true, 1, 1, ind+1),
+                            (_, ind: number) =>
+                              new Cell('', true, 1, 1, ind + 1),
                           ),
                         ],
                         false,
-                        rowNo+3
+                        rowNo + 3,
                       ),
                   ),
                   new Row([new Cell('Workers', false, 1, 7, 0)], false, 6),
@@ -2784,11 +3141,12 @@ export const companySectionsTemplate: Section[] = [
                         [
                           new Cell(firstCol, false, 1, 1, 0),
                           ...Array.from({ length: 6 }).map(
-                            (_ ,ind: number) => new Cell('', true, 1, 1, ind+1),
+                            (_, ind: number) =>
+                              new Cell('', true, 1, 1, ind + 1),
                           ),
                         ],
                         false,
-                        rowNo+7
+                        rowNo + 7,
                       ),
                   ),
                 ],
@@ -2806,11 +3164,23 @@ export const companySectionsTemplate: Section[] = [
                   new Row(
                     [
                       new Cell('Category', false, 3, 1, 0),
-                      new Cell('FY _____ Current Financial Year', false, 1, 5, 1),
-                      new Cell('FY _____ Current Previous Year', false, 1, 5, 2),
+                      new Cell(
+                        'FY _____ Current Financial Year',
+                        false,
+                        1,
+                        5,
+                        1,
+                      ),
+                      new Cell(
+                        'FY _____ Current Previous Year',
+                        false,
+                        1,
+                        5,
+                        2,
+                      ),
                     ],
                     true,
-                    0
+                    0,
                   ),
                   new Row(
                     [
@@ -2829,7 +3199,7 @@ export const companySectionsTemplate: Section[] = [
                       ),
                     ],
                     true,
-                    1
+                    1,
                   ),
                   new Row(
                     [
@@ -2848,7 +3218,7 @@ export const companySectionsTemplate: Section[] = [
                       ),
                     ],
                     true,
-                    2
+                    2,
                   ),
                   new Row([new Cell('Employees', false, 1, 11, 0)], false, 3),
                   ...[
@@ -2864,11 +3234,12 @@ export const companySectionsTemplate: Section[] = [
                         [
                           new Cell(firstCol, false, 1, 1, 0),
                           ...Array.from({ length: 10 }).map(
-                            (_, ind:number) => new Cell('', true, 1, 1, ind+1),
+                            (_, ind: number) =>
+                              new Cell('', true, 1, 1, ind + 1),
                           ),
                         ],
                         false,
-                        rowNo+4
+                        rowNo + 4,
                       ),
                   ),
                   new Row([new Cell('Workers', false, 1, 11, 0)], false, 10),
@@ -2885,11 +3256,11 @@ export const companySectionsTemplate: Section[] = [
                         [
                           new Cell(firstCol, false, 1, 1, 0),
                           ...Array.from({ length: 10 }).map(
-                            (_, ind) => new Cell('', true, 1, 1, ind+1),
+                            (_, ind) => new Cell('', true, 1, 1, ind + 1),
                           ),
                         ],
                         false,
-                        rowNo+11
+                        rowNo + 11,
                       ),
                   ),
                 ],
@@ -2911,7 +3282,7 @@ export const companySectionsTemplate: Section[] = [
                       new Cell('Female', false, 1, 2, 2),
                     ],
                     true,
-                    0
+                    0,
                   ),
                   new Row(
                     [
@@ -2921,7 +3292,7 @@ export const companySectionsTemplate: Section[] = [
                         false,
                         1,
                         1,
-                        1
+                        1,
                       ),
                       new Cell('Number', false, 1, 1, 2),
                       new Cell(
@@ -2929,11 +3300,11 @@ export const companySectionsTemplate: Section[] = [
                         false,
                         1,
                         1,
-                        3
+                        3,
                       ),
                     ],
                     true,
-                    1
+                    1,
                   ),
                   ...[
                     'Board of Directors (BoD)',
@@ -2946,11 +3317,12 @@ export const companySectionsTemplate: Section[] = [
                         [
                           new Cell(firstCell, false, 1, 1, 0),
                           ...Array.from({ length: 4 }).map(
-                            (_, ind:number) => new Cell('', true, 1, 1, ind+1),
+                            (_, ind: number) =>
+                              new Cell('', true, 1, 1, ind + 1),
                           ),
                         ],
                         false,
-                        rowNo+2
+                        rowNo + 2,
                       ),
                   ),
                 ],
@@ -2968,11 +3340,23 @@ export const companySectionsTemplate: Section[] = [
                   new Row(
                     [
                       new Cell('', false, 1, 1, 0),
-                      new Cell('FY _____ Current Financial Year', false, 1, 1, 1),
-                      new Cell('FY _____ Previous Financial Year', false, 1, 1, 2),
+                      new Cell(
+                        'FY _____ Current Financial Year',
+                        false,
+                        1,
+                        1,
+                        1,
+                      ),
+                      new Cell(
+                        'FY _____ Previous Financial Year',
+                        false,
+                        1,
+                        1,
+                        2,
+                      ),
                     ],
                     true,
-                    0
+                    0,
                   ),
                   new Row(
                     [
@@ -2981,13 +3365,13 @@ export const companySectionsTemplate: Section[] = [
                         false,
                         1,
                         1,
-                        0
+                        0,
                       ),
                       new Cell('', true, 1, 1, 1),
                       new Cell('', true, 1, 1, 2),
                     ],
                     false,
-                    1
+                    1,
                   ),
                 ],
                 false,
@@ -3014,11 +3398,23 @@ export const companySectionsTemplate: Section[] = [
                   new Row(
                     [
                       new Cell('', false, 2, 1, 0),
-                      new Cell('FY _____ Current Financial Year', false, 1, 3, 1),
-                      new Cell('FY _____ Current Financial Year', false, 1, 3, 2),
+                      new Cell(
+                        'FY _____ Current Financial Year',
+                        false,
+                        1,
+                        3,
+                        1,
+                      ),
+                      new Cell(
+                        'FY _____ Current Financial Year',
+                        false,
+                        1,
+                        3,
+                        2,
+                      ),
                     ],
                     true,
-                    0
+                    0,
                   ),
                   new Row(
                     [
@@ -3026,15 +3422,21 @@ export const companySectionsTemplate: Section[] = [
                         'Filed during the year',
                         'Pending resolution at the end of year',
                         'Remarks',
-                      ].map((value, ind: number) => new Cell(value, false, 1, 1, ind)),
+                      ].map(
+                        (value, ind: number) =>
+                          new Cell(value, false, 1, 1, ind),
+                      ),
                       ...[
                         'Filed during the year',
                         'Pending resolution at the end of year',
                         'Remarks',
-                      ].map((value, ind: number) => new Cell(value, false, 1, 1, ind)),
+                      ].map(
+                        (value, ind: number) =>
+                          new Cell(value, false, 1, 1, ind),
+                      ),
                     ],
                     true,
-                    1
+                    1,
                   ),
                   ...[
                     'Sexual Harassment',
@@ -3049,11 +3451,12 @@ export const companySectionsTemplate: Section[] = [
                         [
                           new Cell(firstCell, false, 1, 1, 0),
                           ...Array.from({ length: 6 }).map(
-                            (_, ind: number) => new Cell('', true, 1, 1, ind+1),
+                            (_, ind: number) =>
+                              new Cell('', true, 1, 1, ind + 1),
                           ),
                         ],
                         false,
-                        2
+                        2,
                       ),
                   ),
                 ],
@@ -3071,11 +3474,23 @@ export const companySectionsTemplate: Section[] = [
                   new Row(
                     [
                       new Cell('', false, 1, 1, 0),
-                      new Cell('FY _____ Current Financial Year', false, 1, 1, 1),
-                      new Cell('FY _____ Previous Financial Year', false, 1, 1, 2),
+                      new Cell(
+                        'FY _____ Current Financial Year',
+                        false,
+                        1,
+                        1,
+                        1,
+                      ),
+                      new Cell(
+                        'FY _____ Previous Financial Year',
+                        false,
+                        1,
+                        1,
+                        2,
+                      ),
                     ],
                     true,
-                    0
+                    0,
                   ),
 
                   ...[
@@ -3091,7 +3506,7 @@ export const companySectionsTemplate: Section[] = [
                           new Cell('', true, 1, 1, 2),
                         ],
                         false,
-                        1
+                        1,
                       ),
                   ),
                 ],
@@ -3124,11 +3539,11 @@ export const companySectionsTemplate: Section[] = [
                         false,
                         1,
                         1,
-                        1
+                        1,
                       ),
                     ],
                     true,
-                    0
+                    0,
                   ),
                   ...[
                     'Child labour',
@@ -3145,7 +3560,7 @@ export const companySectionsTemplate: Section[] = [
                           new Cell('', true, 1, 1, 1),
                         ],
                         false,
-                        rowNo+1
+                        rowNo + 1,
                       ),
                   ),
                 ],
@@ -3188,11 +3603,11 @@ export const companySectionsTemplate: Section[] = [
                         false,
                         1,
                         1,
-                        1
+                        1,
                       ),
                     ],
                     true,
-                    0
+                    0,
                   ),
                   ...[
                     'Sexual Harassment',
@@ -3209,7 +3624,7 @@ export const companySectionsTemplate: Section[] = [
                           new Cell('', true, 1, 1, 1),
                         ],
                         false,
-                        rowNo+1
+                        rowNo + 1,
                       ),
                   ),
                 ],
@@ -3243,18 +3658,18 @@ export const companySectionsTemplate: Section[] = [
                         false,
                         1,
                         1,
-                        1
+                        1,
                       ),
                       new Cell(
                         'FY ______(Previous Financial Year)',
                         false,
                         1,
                         1,
-                        2
+                        2,
                       ),
                     ],
                     true,
-                    0
+                    0,
                   ),
                   ...[
                     'From renewable sources',
@@ -3281,7 +3696,7 @@ export const companySectionsTemplate: Section[] = [
                           new Cell('', true, 1, 1, 2),
                         ],
                         false,
-                        rowNo+1
+                        rowNo + 1,
                       ),
                   ),
                 ],
@@ -3314,18 +3729,18 @@ export const companySectionsTemplate: Section[] = [
                         false,
                         1,
                         1,
-                        1
+                        1,
                       ),
                       new Cell(
                         'FY ______(Previous Financial Year)',
                         false,
                         1,
                         1,
-                        2
+                        2,
                       ),
                     ],
                     true,
-                    0
+                    0,
                   ),
                   new Row(
                     [
@@ -3334,11 +3749,11 @@ export const companySectionsTemplate: Section[] = [
                         false,
                         1,
                         3,
-                        0
+                        0,
                       ),
                     ],
                     true,
-                    1
+                    1,
                   ),
                   ...[
                     '(i) Surface water',
@@ -3361,7 +3776,7 @@ export const companySectionsTemplate: Section[] = [
                           new Cell('', true, 1, 1, 2),
                         ],
                         false,
-                        rowNo+2
+                        rowNo + 2,
                       ),
                   ),
                 ],
@@ -3384,18 +3799,18 @@ export const companySectionsTemplate: Section[] = [
                         false,
                         1,
                         1,
-                        1
+                        1,
                       ),
                       new Cell(
                         'FY ______(Previous Financial Year)',
                         false,
                         1,
                         1,
-                        2
+                        2,
                       ),
                     ],
                     true,
-                    0
+                    0,
                   ),
                   new Row(
                     [
@@ -3404,11 +3819,11 @@ export const companySectionsTemplate: Section[] = [
                         false,
                         1,
                         3,
-                        0
+                        0,
                       ),
                     ],
                     true,
-                    1
+                    1,
                   ),
                   ...[
                     '(i) Surface water',
@@ -3436,7 +3851,7 @@ export const companySectionsTemplate: Section[] = [
                           new Cell('', true, 1, 1, 2),
                         ],
                         false,
-                        2+rowNo
+                        2 + rowNo,
                       ),
                   ),
                 ],
@@ -3450,7 +3865,7 @@ export const companySectionsTemplate: Section[] = [
             type: QuestionType.TEXT,
           },
           {
-            index: 6, 
+            index: 6,
             desc: '6. Please provide details of air emissions (other than GHG emissions) by the entity, in the following format:',
             type: QuestionType.TABLE,
             answer_table: [
@@ -3462,9 +3877,11 @@ export const companySectionsTemplate: Section[] = [
                       'Please specify unit',
                       'FY _____ (Current Financial Year)',
                       'FY ______ (Previous Financial Year)',
-                    ].map((value, ind: number) => new Cell(value, false, 1, 1, ind)),
+                    ].map(
+                      (value, ind: number) => new Cell(value, false, 1, 1, ind),
+                    ),
                     true,
-                    0
+                    0,
                   ),
                   ...[
                     'NOx',
@@ -3484,7 +3901,7 @@ export const companySectionsTemplate: Section[] = [
                           new Cell('', true, 1, 1, 3),
                         ],
                         false,
-                        rowNo+1
+                        rowNo + 1,
                       ),
                   ),
                 ],
@@ -3505,9 +3922,11 @@ export const companySectionsTemplate: Section[] = [
                       'Unit',
                       'FY _____ (Current Financial Year)',
                       'FY ______ (Previous Financial Year)',
-                    ].map((value, ind: number) => new Cell(value, false, 1, 1, ind)),
-                    true, 
-                    0
+                    ].map(
+                      (value, ind: number) => new Cell(value, false, 1, 1, ind),
+                    ),
+                    true,
+                    0,
                   ),
                   new Row(
                     [
@@ -3515,9 +3934,12 @@ export const companySectionsTemplate: Section[] = [
                       'Metric tonnes of CO2 equivalent',
                       '',
                       '',
-                    ].map((value, ind: number) => new Cell(value, value === '', 1, 1, ind)),
+                    ].map(
+                      (value, ind: number) =>
+                        new Cell(value, value === '', 1, 1, ind),
+                    ),
                     false,
-                    1
+                    1,
                   ),
                   new Row(
                     [
@@ -3525,9 +3947,12 @@ export const companySectionsTemplate: Section[] = [
                       'Metric tonnes of CO2 equivalent',
                       '',
                       '',
-                    ].map((value, ind: number) => new Cell(value, value === '', 1, 1, ind)),
+                    ].map(
+                      (value, ind: number) =>
+                        new Cell(value, value === '', 1, 1, ind),
+                    ),
                     false,
-                    2
+                    2,
                   ),
                   new Row(
                     [
@@ -3535,9 +3960,12 @@ export const companySectionsTemplate: Section[] = [
                       '',
                       '',
                       '',
-                    ].map((value, ind: number) => new Cell(value, value === '', 1, 1, ind)),
+                    ].map(
+                      (value, ind: number) =>
+                        new Cell(value, value === '', 1, 1, ind),
+                    ),
                     false,
-                    3
+                    3,
                   ),
                   new Row(
                     [
@@ -3545,9 +3973,12 @@ export const companySectionsTemplate: Section[] = [
                       '',
                       '',
                       '',
-                    ].map((value, ind: number) => new Cell(value, value === '', 1, 1, ind)),
+                    ].map(
+                      (value, ind: number) =>
+                        new Cell(value, value === '', 1, 1, ind),
+                    ),
                     false,
-                    4
+                    4,
                   ),
                   new Row(
                     [
@@ -3555,9 +3986,12 @@ export const companySectionsTemplate: Section[] = [
                       '',
                       '',
                       '',
-                    ].map((value, ind: number) => new Cell(value, value === '', 1, 1, ind)),
+                    ].map(
+                      (value, ind: number) =>
+                        new Cell(value, value === '', 1, 1, ind),
+                    ),
                     false,
-                    5
+                    5,
                   ),
                   new Row(
                     [
@@ -3565,9 +3999,12 @@ export const companySectionsTemplate: Section[] = [
                       '',
                       '',
                       '',
-                    ].map((value, ind: number) => new Cell(value, value === '', 1, 1, ind)),
+                    ].map(
+                      (value, ind: number) =>
+                        new Cell(value, value === '', 1, 1, ind),
+                    ),
                     false,
-                    6
+                    6,
                   ),
                   new Row(
                     [
@@ -3575,9 +4012,12 @@ export const companySectionsTemplate: Section[] = [
                       '',
                       '',
                       '',
-                    ].map((value, ind: number) => new Cell(value, !value, 1, 1, ind)),
+                    ].map(
+                      (value, ind: number) =>
+                        new Cell(value, !value, 1, 1, ind),
+                    ),
                     false,
-                    7
+                    7,
                   ),
                 ],
                 false,
@@ -3603,7 +4043,7 @@ export const companySectionsTemplate: Section[] = [
                       'FY ______ (Previous Financial Year)',
                     ].map((value) => new Cell(value, false, 1, 1, 0)),
                     true,
-                    0
+                    0,
                   ),
                   new Row(
                     [
@@ -3612,11 +4052,11 @@ export const companySectionsTemplate: Section[] = [
                         false,
                         1,
                         3,
-                        0
+                        0,
                       ),
                     ],
                     false,
-                    1
+                    1,
                   ),
                   ...[
                     'Plastic waste (A)',
@@ -3641,7 +4081,7 @@ export const companySectionsTemplate: Section[] = [
                           new Cell('', true, 1, 1, 2),
                         ],
                         false,
-                        rowNo+2
+                        rowNo + 2,
                       ),
                   ),
                   new Row(
@@ -3651,13 +4091,17 @@ export const companySectionsTemplate: Section[] = [
                         false,
                         1,
                         3,
-                        0
+                        0,
                       ),
                     ],
                     false,
-                    15
+                    15,
                   ),
-                  new Row([new Cell('Category of waste', false, 1, 3, 0)], false, 16),
+                  new Row(
+                    [new Cell('Category of waste', false, 1, 3, 0)],
+                    false,
+                    16,
+                  ),
                   ...[
                     '(i) Recycled',
                     '(ii) Re-used',
@@ -3672,7 +4116,7 @@ export const companySectionsTemplate: Section[] = [
                           new Cell('', true, 1, 1, 2),
                         ],
                         false,
-                        rowNo+17
+                        rowNo + 17,
                       ),
                   ),
 
@@ -3683,11 +4127,11 @@ export const companySectionsTemplate: Section[] = [
                         false,
                         1,
                         3,
-                        0
+                        0,
                       ),
                     ],
                     false,
-                    21
+                    21,
                   ),
                   ...[
                     'Category of waste',
@@ -3696,7 +4140,7 @@ export const companySectionsTemplate: Section[] = [
                     '(iii) Other disposal operations',
                     'Total',
                   ].map(
-                    (firstCell: string, rowNo:number) =>
+                    (firstCell: string, rowNo: number) =>
                       new Row(
                         [
                           new Cell(firstCell, false, 1, 1, 0),
@@ -3704,7 +4148,7 @@ export const companySectionsTemplate: Section[] = [
                           new Cell('', true, 1, 1, 2),
                         ],
                         false,
-                        22+rowNo
+                        22 + rowNo,
                       ),
                   ),
                 ],
@@ -3729,16 +4173,18 @@ export const companySectionsTemplate: Section[] = [
                       'Location of operations/offices',
                       'Type of operations',
                       'Whether the conditions of environmental approval / clearance are being complied with? (Y/N) If no, the reasons thereof and corrective action taken, if any.',
-                    ].map((value, ind: number) => new Cell(value, false, 1, 1, ind)),
+                    ].map(
+                      (value, ind: number) => new Cell(value, false, 1, 1, ind),
+                    ),
                     true,
-                    0
+                    0,
                   ),
                   new Row(
                     Array.from({ length: 3 }).map(
                       (value, ind: number) => new Cell('', true, 1, 1, ind),
                     ),
                     false,
-                    1
+                    1,
                   ),
                 ],
                 true,
@@ -3760,16 +4206,18 @@ export const companySectionsTemplate: Section[] = [
                       'Whether conducted by independent external agency (Yes / No)',
                       'Results communicated in public domain (Yes / No)',
                       'Relevant Web link',
-                    ].map((value, ind: number) => new Cell(value, false, 1, 1, ind)),
+                    ].map(
+                      (value, ind: number) => new Cell(value, false, 1, 1, ind),
+                    ),
                     true,
-                    0
+                    0,
                   ),
                   new Row(
                     Array.from({ length: 6 }).map(
                       (_, ind: number) => new Cell('', true, 1, 1, ind),
                     ),
                     false,
-                    1
+                    1,
                   ),
                 ],
                 true,
@@ -3791,16 +4239,18 @@ export const companySectionsTemplate: Section[] = [
                       'Whether conducted by independent external agency (Yes / No)',
                       'Results communicated in public domain (Yes / No)',
                       'Corrective action taken, if any',
-                    ].map((value, ind: number) => new Cell(value, false, 1, 1, ind)),
+                    ].map(
+                      (value, ind: number) => new Cell(value, false, 1, 1, ind),
+                    ),
                     true,
-                    0
+                    0,
                   ),
                   new Row(
                     Array.from({ length: 6 }).map(
                       (_, ind: number) => new Cell('', true, 1, 1, ind),
                     ),
                     false,
-                    1
+                    1,
                   ),
                 ],
                 true,
@@ -3819,9 +4269,11 @@ export const companySectionsTemplate: Section[] = [
                       'Parameter',
                       'FY _____ (Current Financial Year)',
                       'FY ______ (Previous Financial Year)',
-                    ].map((value, ind: number) => new Cell(value, false, 1, 1, ind)),
+                    ].map(
+                      (value, ind: number) => new Cell(value, false, 1, 1, ind),
+                    ),
                     true,
-                    0
+                    0,
                   ),
                   new Row(
                     [
@@ -3830,11 +4282,11 @@ export const companySectionsTemplate: Section[] = [
                         false,
                         1,
                         3,
-                        0
+                        0,
                       ),
                     ],
                     false,
-                    1
+                    1,
                   ),
                   ...[
                     '(i) Surface water',
@@ -3847,7 +4299,7 @@ export const companySectionsTemplate: Section[] = [
                     'Water intensity per rupee of turnover (Water consumed / turnover)',
                     'Water intensity (optional) – the relevant metric may be selected by the entity',
                   ].map(
-                    (firstCell: string, rowNo:number) =>
+                    (firstCell: string, rowNo: number) =>
                       new Row(
                         [
                           new Cell(firstCell, false, 1, 1, 0),
@@ -3855,7 +4307,7 @@ export const companySectionsTemplate: Section[] = [
                           new Cell('', true, 1, 1, 2),
                         ],
                         false,
-                        rowNo+2
+                        rowNo + 2,
                       ),
                   ),
                   new Row(
@@ -3865,11 +4317,11 @@ export const companySectionsTemplate: Section[] = [
                         false,
                         1,
                         3,
-                        0
+                        0,
                       ),
                     ],
                     false,
-                    11
+                    11,
                   ),
                   ...[
                     '(i) Into Surface water',
@@ -3897,9 +4349,8 @@ export const companySectionsTemplate: Section[] = [
                           new Cell('', true, 1, 1, 2),
                         ],
                         false,
-                        rowNo+11
+                        rowNo + 11,
                       ),
-
                   ),
 
                   new Row(
@@ -3909,11 +4360,11 @@ export const companySectionsTemplate: Section[] = [
                         false,
                         1,
                         3,
-                        0
+                        0,
                       ),
                     ],
                     false,
-                    28
+                    28,
                   ),
                   ...[
                     'Category of waste',
@@ -3930,7 +4381,7 @@ export const companySectionsTemplate: Section[] = [
                           new Cell('', true, 1, 1, 2),
                         ],
                         false,
-                        rowNo+29
+                        rowNo + 29,
                       ),
                   ),
                 ],
@@ -3954,18 +4405,18 @@ export const companySectionsTemplate: Section[] = [
                         false,
                         1,
                         1,
-                        2
+                        2,
                       ),
                       new Cell(
                         'FY ______ (Previous Financial Year)',
                         false,
                         1,
                         1,
-                        3
+                        3,
                       ),
                     ],
                     true,
-                    0
+                    0,
                   ),
                   new Row(
                     [
@@ -3974,14 +4425,20 @@ export const companySectionsTemplate: Section[] = [
                         false,
                         1,
                         1,
-                        0
+                        0,
                       ),
-                      new Cell('Metric tonnes of CO2 equivalent', false, 1, 1, 2),
+                      new Cell(
+                        'Metric tonnes of CO2 equivalent',
+                        false,
+                        1,
+                        1,
+                        2,
+                      ),
                       new Cell('', true, 1, 1, 3),
                       new Cell('', true, 1, 1, 4),
                     ],
                     false,
-                    1
+                    1,
                   ),
                   new Row(
                     [
@@ -3990,14 +4447,14 @@ export const companySectionsTemplate: Section[] = [
                         false,
                         1,
                         1,
-                        0
+                        0,
                       ),
                       new Cell('', true, 1, 1, 1),
                       new Cell('', true, 1, 1, 2),
                       new Cell('', true, 1, 1, 3),
                     ],
                     false,
-                    2
+                    2,
                   ),
                   new Row(
                     [
@@ -4006,14 +4463,14 @@ export const companySectionsTemplate: Section[] = [
                         false,
                         1,
                         1,
-                        0
+                        0,
                       ),
                       new Cell('', true, 1, 1, 1),
                       new Cell('', true, 1, 1, 2),
                       new Cell('', true, 1, 1, 3),
                     ],
                     false,
-                    3
+                    3,
                   ),
                 ],
                 false,
@@ -4037,16 +4494,18 @@ export const companySectionsTemplate: Section[] = [
                       'Initiative undertaken',
                       'Details of the initiative (Web-link, if any, may be provided along-with summary)',
                       'Outcome of the initiative ',
-                    ].map((value, ind: number) => new Cell(value, false, 1, 1, ind)),
+                    ].map(
+                      (value, ind: number) => new Cell(value, false, 1, 1, ind),
+                    ),
                     true,
-                    0
+                    0,
                   ),
                   new Row(
                     Array.from({ length: 3 }).map(
                       (_, ind: number) => new Cell('', true, 1, 1, ind),
                     ),
                     false,
-                    1
+                    1,
                   ),
                 ],
                 true,
@@ -4093,7 +4552,7 @@ export const companySectionsTemplate: Section[] = [
                         false,
                         1,
                         1,
-                        0
+                        0,
                       ),
                       new Cell(
                         'Name of the trade and industry chambers/ associations',
@@ -4104,12 +4563,12 @@ export const companySectionsTemplate: Section[] = [
                       ),
                     ],
                     true,
-                    0
+                    0,
                   ),
                   new Row(
                     [new Cell('', true, 1, 1, 0), new Cell('', true, 1, 1, 1)],
                     false,
-                    1
+                    1,
                   ),
                 ],
                 true,
@@ -4130,7 +4589,7 @@ export const companySectionsTemplate: Section[] = [
                       new Cell('Corrective action taken', false, 1, 1, 2),
                     ],
                     true,
-                    0
+                    0,
                   ),
                   new Row(
                     [
@@ -4139,7 +4598,7 @@ export const companySectionsTemplate: Section[] = [
                       new Cell('', false, 1, 1, 2),
                     ],
                     false,
-                    1
+                    1,
                   ),
                 ],
                 true,
@@ -4168,19 +4627,19 @@ export const companySectionsTemplate: Section[] = [
                         false,
                         1,
                         1,
-                        2
+                        2,
                       ),
                       new Cell(
                         'Frequency of Review by Board (Annually/ Half yearly/ Quarterly / Others – please specify)',
                         false,
                         1,
                         1,
-                        3
+                        3,
                       ),
                       new Cell('Web Link, if available', false, 1, 1, 4),
                     ],
                     true,
-                    0
+                    0,
                   ),
                   new Row(
                     [
@@ -4191,7 +4650,7 @@ export const companySectionsTemplate: Section[] = [
                       new Cell('', true, 1, 1, 4),
                     ],
                     false,
-                    1
+                    1,
                   ),
                 ],
                 true,
@@ -4205,7 +4664,7 @@ export const companySectionsTemplate: Section[] = [
           'PRINCIPLE 8 Businesses should promote inclusive growth and equitable development',
         questions: [
           {
-            index: 0, 
+            index: 0,
             desc: '1. Details of Social Impact Assessments (SIA) of projects undertaken by the entity based on applicable laws, in the current financial year.',
             type: QuestionType.TABLE,
             answer_table: [
@@ -4219,16 +4678,18 @@ export const companySectionsTemplate: Section[] = [
                       'Whether conducted by independent external agency (Yes / No)',
                       'Results communicated in public domain (Yes / No)',
                       'Relevant Web link',
-                    ].map((value, ind: number) => new Cell(value, false, 1, 1, ind)),
+                    ].map(
+                      (value, ind: number) => new Cell(value, false, 1, 1, ind),
+                    ),
                     true,
-                    0
+                    0,
                   ),
                   new Row(
                     Array.from({ length: 6 }).map(
                       (_, ind: number) => new Cell('', true, 1, 1, ind),
                     ),
                     false,
-                    1
+                    1,
                   ),
                 ],
                 true,
@@ -4250,16 +4711,18 @@ export const companySectionsTemplate: Section[] = [
                       'No. of Project Affected Families (PAFs) ',
                       '% of PAFs covered by R&R',
                       'Amounts paid to PAFsin the FY (In INR)',
-                    ].map((value, ind: number) => new Cell(value, false, 1, 1, ind)),
+                    ].map(
+                      (value, ind: number) => new Cell(value, false, 1, 1, ind),
+                    ),
                     true,
-                    0
+                    0,
                   ),
                   new Row(
                     Array.from({ length: 6 }).map(
                       (_, ind: number) => new Cell('', true, 1, 1, ind),
                     ),
                     false,
-                    1
+                    1,
                   ),
                 ],
                 true,
@@ -4283,9 +4746,11 @@ export const companySectionsTemplate: Section[] = [
                       '',
                       'FY _____ Current Financial Year',
                       'FY _____ Previous Financial Year',
-                    ].map((value, ind: number) => new Cell(value, false, 1, 1, ind)),
+                    ].map(
+                      (value, ind: number) => new Cell(value, false, 1, 1, ind),
+                    ),
                     true,
-                    0
+                    0,
                   ),
                   ...[
                     'Directly sourced from MSMEs/ small producers ',
@@ -4299,7 +4764,7 @@ export const companySectionsTemplate: Section[] = [
                           new Cell('', true, 1, 1, 2),
                         ],
                         false,
-                        rowNo+1
+                        rowNo + 1,
                       ),
                   ),
                 ],
@@ -4319,9 +4784,11 @@ export const companySectionsTemplate: Section[] = [
                       'Location',
                       'FY _____ Current Financial Year',
                       'FY _____ Previous Financial Year',
-                    ].map((value, ind: number) => new Cell(value, false, 1, 1, ind)),
+                    ].map(
+                      (value, ind: number) => new Cell(value, false, 1, 1, ind),
+                    ),
                     true,
-                    0
+                    0,
                   ),
                   ...['Rural', 'Semi-urban', 'Urban', 'Metropolitan'].map(
                     (firstCell) =>
@@ -4332,7 +4799,7 @@ export const companySectionsTemplate: Section[] = [
                           new Cell('', true, 1, 1, 2),
                         ],
                         false,
-                        1
+                        1,
                       ),
                   ),
                 ],
@@ -4354,17 +4821,17 @@ export const companySectionsTemplate: Section[] = [
                         false,
                         1,
                         1,
-                        0
+                        0,
                       ),
                       new Cell('Corrective action taken', false, 1, 1, 1),
                     ],
                     true,
-                    0
+                    0,
                   ),
                   new Row(
                     [new Cell('', true, 1, 1, 0), new Cell('', true, 1, 1, 1)],
                     false,
-                    1
+                    1,
                   ),
                 ],
                 true,
@@ -4385,7 +4852,7 @@ export const companySectionsTemplate: Section[] = [
                       new Cell('Amount spent (In INR)', false, 1, 1, 2),
                     ],
                     true,
-                    0
+                    0,
                   ),
                   new Row(
                     [
@@ -4394,7 +4861,7 @@ export const companySectionsTemplate: Section[] = [
                       new Cell('', true, 1, 1, 2),
                     ],
                     false,
-                    1
+                    1,
                   ),
                 ],
                 true,
@@ -4429,16 +4896,18 @@ export const companySectionsTemplate: Section[] = [
                       'Owned/ Acquired (Yes/No)',
                       'Benefit shared (Yes / No)',
                       'Basis of calculating benefit share',
-                    ].map((value, ind: number) => new Cell(value, false, 1, 1, ind)),
+                    ].map(
+                      (value, ind: number) => new Cell(value, false, 1, 1, ind),
+                    ),
                     true,
-                    0
+                    0,
                   ),
                   new Row(
                     Array.from({ length: 4 }).map(
                       (_, ind: number) => new Cell('', true, 1, 1, ind),
                     ),
                     false,
-                    1
+                    1,
                   ),
                 ],
                 true,
@@ -4457,16 +4926,18 @@ export const companySectionsTemplate: Section[] = [
                       'Name of authority',
                       'Brief of the Case',
                       'Corrective action taken',
-                    ].map((value, ind: number) => new Cell(value, false, 1, 1, ind)),
+                    ].map(
+                      (value, ind: number) => new Cell(value, false, 1, 1, ind),
+                    ),
                     true,
-                    0
+                    0,
                   ),
                   new Row(
                     Array.from({ length: 3 }).map(
                       (_, ind: number) => new Cell('', true, 1, 1, ind),
                     ),
                     false,
-                    1
+                    1,
                   ),
                 ],
                 true,
@@ -4474,7 +4945,7 @@ export const companySectionsTemplate: Section[] = [
             ],
           },
           {
-            index: 12, 
+            index: 12,
             desc: '11. Details of beneficiaries of CSR Projects: ',
             type: QuestionType.TABLE,
             answer_table: [
@@ -4485,16 +4956,18 @@ export const companySectionsTemplate: Section[] = [
                       'CSR Project',
                       'No. of persons benefitted from CSR Projects ',
                       '% of beneficiaries from vulnerable and marginalized groups',
-                    ].map((value, ind: number) => new Cell(value, false, 1, 1, ind)),
+                    ].map(
+                      (value, ind: number) => new Cell(value, false, 1, 1, ind),
+                    ),
                     true,
-                    0
+                    0,
                   ),
                   new Row(
                     Array.from({ length: 3 }).map(
                       (_, ind: number) => new Cell('', true, 1, 1, ind),
                     ),
                     false,
-                    1
+                    1,
                   ),
                 ],
                 true,
@@ -4527,11 +5000,11 @@ export const companySectionsTemplate: Section[] = [
                         false,
                         1,
                         1,
-                        1
+                        1,
                       ),
                     ],
                     true,
-                    0
+                    0,
                   ),
                   new Row(
                     [
@@ -4540,12 +5013,12 @@ export const companySectionsTemplate: Section[] = [
                         false,
                         1,
                         1,
-                        0
+                        0,
                       ),
                       new Cell('', true, 1, 1, 1),
                     ],
                     false,
-                    1
+                    1,
                   ),
                   new Row(
                     [
@@ -4553,15 +5026,21 @@ export const companySectionsTemplate: Section[] = [
                       new Cell('', true, 1, 1, 1),
                     ],
                     false,
-                    2
+                    2,
                   ),
                   new Row(
                     [
-                      new Cell('Recycling and/or safe disposal', false, 1, 1, 0),
+                      new Cell(
+                        'Recycling and/or safe disposal',
+                        false,
+                        1,
+                        1,
+                        0,
+                      ),
                       new Cell('', true, 1, 1, 1),
                     ],
                     false,
-                    3
+                    3,
                   ),
                 ],
                 false,
@@ -4583,7 +5062,7 @@ export const companySectionsTemplate: Section[] = [
                         false,
                         1,
                         2,
-                        1
+                        1,
                       ),
                       new Cell('Remarks', false, 2, 1, 2),
                       new Cell(
@@ -4591,12 +5070,12 @@ export const companySectionsTemplate: Section[] = [
                         false,
                         1,
                         2,
-                        3
+                        3,
                       ),
                       new Cell('Remarks', false, 2, 1, 4),
                     ],
                     true,
-                    0
+                    0,
                   ),
                   new Row(
                     [
@@ -4606,7 +5085,7 @@ export const companySectionsTemplate: Section[] = [
                         false,
                         1,
                         1,
-                        1
+                        1,
                       ),
                       new Cell('Received during the year', false, 1, 1, 2),
                       new Cell(
@@ -4614,11 +5093,11 @@ export const companySectionsTemplate: Section[] = [
                         false,
                         1,
                         1,
-                        3
+                        3,
                       ),
                     ],
                     true,
-                    1
+                    1,
                   ),
 
                   ...[
@@ -4639,7 +5118,7 @@ export const companySectionsTemplate: Section[] = [
                           ),
                         ],
                         false,
-                        rowNo+2
+                        rowNo + 2,
                       ),
                   ),
                 ],
@@ -4661,7 +5140,7 @@ export const companySectionsTemplate: Section[] = [
                       new Cell('Reasons for recall', false, 1, 1, 2),
                     ],
                     true,
-                    0
+                    0,
                   ),
 
                   ...['Voluntary recalls', 'Forced recalls'].map(
@@ -4674,7 +5153,7 @@ export const companySectionsTemplate: Section[] = [
                           ),
                         ],
                         false,
-                        rowNo+1
+                        rowNo + 1,
                       ),
                   ),
                 ],

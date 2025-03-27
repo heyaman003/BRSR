@@ -27,7 +27,7 @@ const Leftcontainer: React.FC<LeftcontainerProps> = ({
   const [mounted, setMounted] = useState(false);
   const [leaves, setLeaves] = useState<React.ReactNode[]>([]);
   const [totalQuestions, setTotalQuestions] = useState<number>(0);
-  const [totalAnsweredQuestioins, setTotalAnsweredQuestions] = useState<number>(0);
+  const [totalAnsweredQuestions, setTotalAnsweredQuestions] = useState<number>(0);
   const companyId = useSelector(
     (root: RootState) => root.auth.user?.data?.companyId
   );
@@ -72,9 +72,6 @@ const Leftcontainer: React.FC<LeftcontainerProps> = ({
       document.documentElement.style.opacity = "1";
     };
   }, []);
-  const progress: number = 44;
-  const total: number = 178;
-  const percentage: number = Math.round((progress / total) * 100);
 
   return (
     <div className="space-y-10 bg-green-50 px-4 pt-5 h-[100vh] overflow-y-auto border-r-4 border-yellow-400 scrollbar-hide [&::-webkit-scrollbar]:hidden relative">
@@ -102,7 +99,7 @@ const Leftcontainer: React.FC<LeftcontainerProps> = ({
             cx="50"
             cy="50"
             r="46"
-            strokeDasharray={`${percentage * 2.89} 289`}
+            strokeDasharray={`${Math.round(totalAnsweredQuestions/totalQuestions*100) * 2.89} 289`}
             transform="rotate(-90 50 50)"
           />
           <text
@@ -113,11 +110,11 @@ const Leftcontainer: React.FC<LeftcontainerProps> = ({
             dy="0.3em"
             fill="currentColor"
           >
-            {Math.round(totalAnsweredQuestioins/totalQuestions*100)}%
+            {Math.round(totalAnsweredQuestions/totalQuestions*100)}%
           </text>
         </svg>
         <div className="text-center text-sm text-muted-foreground mt-2 absolute top-[62%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
-          {totalAnsweredQuestioins}/{totalQuestions}
+          {totalAnsweredQuestions}/{totalQuestions}
         </div>
       </div>
 
