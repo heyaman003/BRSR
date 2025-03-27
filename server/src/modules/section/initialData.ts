@@ -2411,9 +2411,12 @@ export const companySectionsTemplate: Section[] = [
                       new Row(
                         [
                           new Cell(firstCol, false, 1, 1, 0),
-                          ...Array.from({ length: 6 }).map(
-                            (_, ind: number) => new Cell('', true, 1, 1, ind),
-                          ),
+                          new Cell('', true, 1, 1, 1),
+                          new Cell('', true, 1, 1, 2),
+                          new Cell('', true, 1, 1, 3, Operation.DIV, ['']),
+                          new Cell('', true, 1, 1, 4),
+                          new Cell('', true, 1, 1, 5),
+                          new Cell('', true, 1, 1, 6),
                         ],
                         false,
                         rowNo + 2,

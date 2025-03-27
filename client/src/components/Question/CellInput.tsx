@@ -1,6 +1,5 @@
 import { Operation } from "@/models/models";
 import { Table } from "@/types";
-import { Value } from "@radix-ui/react-select";
 import { memo, useCallback, useEffect, useState } from "react";
 
 interface CellInputArgs {
