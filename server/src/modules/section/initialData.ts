@@ -2961,7 +2961,7 @@ export const companySectionsTemplate: Section[] = [
                       new Cell('', true, 1, 1, 1),
                     ],
                     false,
-                    2,
+                    2
                   ),
                 ],
                 false,
