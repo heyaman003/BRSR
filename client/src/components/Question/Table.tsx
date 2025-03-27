@@ -28,6 +28,7 @@ const TableUI = ({
     updateTableData(tableState);
   }, [tableState]);
 
+
   const updateTableCell = useCallback(
     (rowId: string, cellId: string, newValue: string) => {
       setTableState((table: TableType) => ({
@@ -108,7 +109,8 @@ const TableUI = ({
             .sort((a: Row, b: Row) => a.index - b.index)
             .map((row: Row) => (
               <TableRow key={row.id} className=" border-green-300">
-                {row.cells.map((cell: Cell) => (
+                {row.cells
+                  .sort((a, b) => a.index - b.index).map((cell: Cell) => (
                   <TableHead
                     key={cell.id}
                     colSpan={cell.colSpan}
@@ -144,6 +146,9 @@ const TableUI = ({
                           rowId={row.id}
                           cellId={cell.id}
                           updateTableCell={updateTableCell}
+                          tableState={tableState}
+                          operation={cell.operation}
+                          operands = {cell.operands}
                         />
                       )}
                     </TableCell>

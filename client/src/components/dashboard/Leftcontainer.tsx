@@ -102,7 +102,7 @@ const Leftcontainer: React.FC<LeftcontainerProps> = ({
             cx="50"
             cy="50"
             r="46"
-            strokeDasharray={`${percentage * 2.89} 289`}
+            strokeDasharray={`${Math.round(totalAnsweredQuestioins/totalQuestions*100) * 2.89} 289`}
             transform="rotate(-90 50 50)"
           />
           <text

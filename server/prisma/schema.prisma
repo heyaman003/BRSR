@@ -126,6 +126,8 @@ model Cell {
   row Row @relation(fields: [rowId], references: [id], name: "cell-belongs-to", onDelete: Cascade)
   rowId String
   index Int //Used to order the cells in response
+  operation Operation?
+  operands String[] //Will have cell indexes in '{rowIndex}${columnIndex}' format
 }
 
 
@@ -139,4 +141,9 @@ enum QuestionType {
   TABLE
   TEXT
   BOOLEAN
+}
+
+enum Operation {
+  ADD
+  DIV
 }

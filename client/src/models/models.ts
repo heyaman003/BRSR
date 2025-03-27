@@ -6,6 +6,11 @@ export enum QuestionType {
   BOOLEAN = "BOOLEAN",
 }
 
+export enum Operation {
+  ADD = "ADD",
+  DIV = "DIV"
+}
+
 export class Cell {
   @Expose()
   id: string;
@@ -19,6 +24,10 @@ export class Cell {
   colSpan: number;
   @Expose()
   index: number;
+  @Expose()
+  operation?: Operation;
+  @Expose()
+  operands?:string[]
 
   constructor(
     id: string,

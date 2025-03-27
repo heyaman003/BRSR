@@ -100,7 +100,8 @@ export class CompanyRepository {
     try {
       await this.db.company.delete({ where: { id: companyId } });
     } catch (e) {
-      throw new BadRequestException(e.message);
+      console.log(e)
+      throw new InternalServerErrorException();
     }
   }
 
