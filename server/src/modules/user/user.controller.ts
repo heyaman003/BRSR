@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, HttpStatus, Param, ParseUUIDPipe, Post, ValidationPipe } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpStatus, Param, ParseUUIDPipe, Post, Req, ValidationPipe } from "@nestjs/common";
 import { CreateUserDto, UserRole } from "src/modules/user/user.dtos";
 import { UserService } from "src/modules/user/user.service";
 import { Role } from "src/utils/auth/roles.decorator";
@@ -34,6 +34,13 @@ export class UserController {
     async deleteUser(@Param('userId', ParseUUIDPipe) userId: string): Promise<ResponseModel> {
         await this.userService.deleteUser(userId);
         return new ResponseModel(HttpStatus.NO_CONTENT, "User deleted successfully.");
+    }
+
+    @Get("/mentions")
+    async getMentions(@Req() request: Request): Promise<ResponseModel> {
+        const userId: string = request['user']['sub'];
+        const mentions = await this.userService.getMentions(userId);
+        return new ResponseModel(HttpStatus.OK, "Success", mentions);
     }
     
 }

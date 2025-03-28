@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Injectable,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { Role, User } from '@prisma/client';
 import { CreateUserDto } from 'src/modules/user/user.dtos';
@@ -20,7 +21,7 @@ export class UserRepository {
           role: role,
           companyId: userData.company,
         },
-      })
+      });
       return user;
     } catch (e) {
       throw new BadRequestException(e.message);
@@ -29,7 +30,9 @@ export class UserRepository {
 
   async getUserdetails(userId: string): Promise<User | null> {
     try {
-      const user: User | null = await this.db.user.findUnique({ where: { id: userId } })
+      const user: User | null = await this.db.user.findUnique({
+        where: { id: userId },
+      });
       return user;
     } catch (e) {
       throw new BadRequestException(e.message);
@@ -38,7 +41,9 @@ export class UserRepository {
 
   async getUserdetailsByEmail(email: string): Promise<User | null> {
     try {
-      const user: User | null = await this.db.user.findUnique({where: { email: email }});
+      const user: User | null = await this.db.user.findUnique({
+        where: { email: email },
+      });
       return user;
     } catch (e) {
       throw new BadRequestException(e.message);
@@ -47,16 +52,48 @@ export class UserRepository {
 
   async deleteUser(userId: string): Promise<void> {
     try {
-      await this.db.user.delete({where:{
-        id: userId,
-        role:{
-          not: {
-            equals: Role.SUPERADMIN
-          }
-        }
-      }});
+      await this.db.user.delete({
+        where: {
+          id: userId,
+          role: {
+            not: {
+              equals: Role.SUPERADMIN,
+            },
+          },
+        },
+      });
     } catch (e) {
       throw new BadRequestException(e.message);
+    }
+  }
+
+  async getMentions(userId: string) {
+    try {
+      return await this.db.user.findUnique({ where: { id: userId }, select: {
+        mentionedIn: {
+          select: {
+            comment:{
+              select: {
+                question: {
+                  select: {
+                    id: true
+                  }
+                },
+                user: {
+                  select: {
+                    id: true,
+                    email: true,
+                    name: true
+                  }
+                }
+              },
+            },
+          }
+        }
+      } });
+    } catch (e) {
+      console.log(e);
+      throw new InternalServerErrorException();
     }
   }
 }

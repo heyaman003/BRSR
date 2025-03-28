@@ -12,7 +12,6 @@ export class UserService {
        console.log(data); 
     }
 
-
     /**
      * 
      * @param userId 
@@ -52,6 +51,13 @@ export class UserService {
 
     async deleteUser(userId: string):Promise<void> {
         await this.userRepository.deleteUser(userId);
+    }
+
+    async getMentions(userId: string) {
+        const mentions = await this.userRepository.getMentions(userId)
+        if(!mentions)
+            throw new NotFoundException("User does not exist.");
+        return mentions.mentionedIn.map(mention=>({questionId: mention.comment.question.id, mentionedBy: mention.comment.user}))
     }
 
     convertToDto(user: User): GetUserDto{
