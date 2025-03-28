@@ -74,7 +74,7 @@ const Leftcontainer: React.FC<LeftcontainerProps> = ({
   }, []);
 
   return (
-    <div className="space-y-10 bg-green-50 px-4 pt-5 h-[100vh] overflow-y-auto border-r-4 border-yellow-400 scrollbar-hide [&::-webkit-scrollbar]:hidden relative">
+    <div className="space-y-10 bg-green-50 px-4 pt-5 h-full overflow-y-auto border-r-4 border-yellow-400 scrollbar-hide [&::-webkit-scrollbar]:hidden relative">
       {/* Progress Circle */}
       {mounted && leaves}
       <Cloud className="absolute top-[10%] right-[10%] opacity-50 animate-float" />

@@ -8,10 +8,7 @@ import Horizontalscroll from "@/components/ui/Horizontalscroll";
 import { Section } from "@/models/models";
 import { plainToInstance } from "class-transformer";
 import SectionUI from "./Section";
-// import {
-//   selectIsLoading,
-//   selectSectionError,
-// } from "@/features/sections/sectionSelectors";
+
 import { RootState } from "@/store/store";
 export default function QuestionnairePage() {
   const [sections, setSections] = useState<Section[] | null>(null);
@@ -59,7 +56,7 @@ export default function QuestionnairePage() {
       <div className=" mx-auto ">
         {/* For the comment sidebar */}
           {/* <SidebarInset> */}
-          <div className="grid grid-cols-1 md:grid-cols-[350px_1fr] gap-8 h-[100vh] overflow-y-auto bg-[#f2f9fa]">
+          <div className="grid grid-cols-1 md:grid-cols-[350px_1fr] h-[100vh] gap-8 overflow-y-auto bg-[#f2f9fa]">
             {/* Left Sidebar */}
             <Leftcontainer
               activeSection={activeSection}
@@ -71,7 +68,7 @@ export default function QuestionnairePage() {
               setActiveSubsection={setActiveSubsection}
             />
 
-          <div className="h-screen overflow-auto pr-4 relative">
+          <div className="h-full overflow-auto pr-4 relative">
             {/* Top bar containing the section buttons e.g. 'Section A' */}
             <Horizontalscroll
               sections={sections}
@@ -86,3 +83,4 @@ export default function QuestionnairePage() {
     </div>
   );
 }
+

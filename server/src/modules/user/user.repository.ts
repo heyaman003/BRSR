@@ -74,6 +74,7 @@ export class UserRepository {
           select: {
             comment:{
               select: {
+                id: true,
                 question: {
                   select: {
                     id: true

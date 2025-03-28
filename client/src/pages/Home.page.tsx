@@ -6,7 +6,7 @@ const Homepage = () => {
   const role = useSelector((state: RootState) => state?.auth?.user?.data.role);
 
   return (
-    <div className="h-[100vh]">
+    <div>
       {role === "SUPERADMIN" || role === "ADMIN" ? (
         <AdminLandingPage />
       ) : (
