@@ -3,7 +3,7 @@ import { Clock, Mail } from "lucide-react";
 import TimeAgo from "react-timeago";
 
 const ViewComments = ({ comments }: {comments: Comment[] }) => {
-
+  
   return (
     <div className=" h-full flex flex-col justify-between w-full">
       <ul className="mt-4 flex flex-col gap-4 overflow-y-auto flex-grow">
@@ -28,7 +28,7 @@ const ViewComments = ({ comments }: {comments: Comment[] }) => {
                   )}
                 </span>
               </div>
-              <p className="mt-2 text-sm">{comment.data}</p>
+              {comment.data && <p className="mt-2 text-sm" dangerouslySetInnerHTML={{__html: comment.data.replace(/@\[(.*?)\]\((.*?)\)/g, '<span style="color: green">@$1</span>')}}></p>}
             </div>
           </li>
         ))}
@@ -40,6 +40,7 @@ const ViewComments = ({ comments }: {comments: Comment[] }) => {
 };
 
 export default ViewComments;
+
 
 
 

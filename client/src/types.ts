@@ -1,3 +1,4 @@
+import { Operation } from "./models/models";
 
 export class Cell {
     id: string;
@@ -6,6 +7,8 @@ export class Cell {
     rowSpan: number;
     colSpan: number;
     index: number;
+    operation?: Operation;
+    operands?:string[]
   
     constructor(
       id: string,
@@ -13,7 +16,7 @@ export class Cell {
       isUpdateable: boolean,
       rowSpan: number,
       colSpan: number,
-      index: number
+      index: number,
     ) {
       (this.id = id), (this.data = data);
       this.isUpdateable = isUpdateable;

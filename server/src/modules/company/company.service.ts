@@ -12,6 +12,7 @@ export class CompanyService {
 
     async listSections(companyId: string): Promise<any> {
         const company = await this.companyRepository.listSections(companyId);
+
         if(!company)
             throw new NotFoundException('Company does not exist.')
         
@@ -53,5 +54,9 @@ export class CompanyService {
 
     async addUser(user, companyId: string) {
        return await this.companyRepository.addUser(user, companyId);
+    }
+
+    async getQuestionStats(companyId: string) {
+        return await this.companyRepository.getQuestionStats(companyId);
     }
 }

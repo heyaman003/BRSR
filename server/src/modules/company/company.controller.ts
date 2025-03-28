@@ -22,6 +22,12 @@ export class CompanyController{
         return new ResponseModel(200, "Success.", companies);
     }
 
+    /**
+     * 
+     * @param companyId 
+     *  Fetches the company details along with all the users of the company
+     */
+
     @Get('/:companyId')
     async getCompanyDetails(@Param("companyId", ParseUUIDPipe) companyId: string): Promise<ResponseModel> {
         const company: CompanyDto = await this.companyService.getCompanyDetails(companyId);
@@ -35,10 +41,20 @@ export class CompanyController{
         return new ResponseModel(200, "Deleted company successfully.");
     }
 
+
+    /**
+     * Lists all the sections, subsections and questions of a company.
+     * @param companyId 
+     */
     @Get("/:companyId/sections")
     async listSections(@Param("companyId", ParseUUIDPipe) companyId: string):Promise<ResponseModel> {
         const sections = await this.companyService.listSections(companyId);
-        return new ResponseModel(200, "Success.", sections);
+        return new ResponseModel(200, "Success", sections);
+    }
+
+    @Get("/:companyId/question/stats")
+    async getQuestionStats(@Param("companyId", ParseUUIDPipe) companyId: string) {
+        return new ResponseModel(200, "Success", await this.companyService.getQuestionStats(companyId));
     }
 
 }

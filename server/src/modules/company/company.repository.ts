@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import { User, Company } from '@prisma/client';
@@ -28,14 +29,25 @@ export class CompanyRepository {
                 select: {
                   title: true,
                   id: true,
+                  _count: {
+                    select: {
+                      questions: {
+                        where: {
+                          isAnswered: true,
+                        },
+                      },
+                    },
+                  },
                   questions: {
                     select: {
                       id: true,
-                      desc: true
-                    }
-                  }
-                }
-              }
+                      desc: true,
+                      index: true,
+                      isAnswered: true,
+                    },
+                  },
+                },
+              },
             },
           },
         },
@@ -62,12 +74,13 @@ export class CompanyRepository {
       throw new BadRequestException(e.message);
     }
   }
+  
   async getCompanyDetails(companyId: string): Promise<Company | null> {
     try {
       return await this.db.company.findUnique({
         where: { id: companyId },
         include: {
-          users: true
+          users: true,
         },
       });
     } catch (e) {
@@ -87,7 +100,8 @@ export class CompanyRepository {
     try {
       await this.db.company.delete({ where: { id: companyId } });
     } catch (e) {
-      throw new BadRequestException(e.message);
+      console.log(e)
+      throw new InternalServerErrorException();
     }
   }
 
@@ -102,5 +116,83 @@ export class CompanyRepository {
     } catch (e) {
       throw new BadRequestException(e.message);
     }
+  }
+
+  private async getTotalQuestionsCount(companyId: string) {
+    const totalQuestions = await this.db.company.findUnique({
+      where: { id: companyId },
+      select: {
+        sections: {
+          select: {
+            subsections: {
+              select: {
+                _count: {
+                  select: {
+                    questions: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+    let total: number = 0;
+
+    totalQuestions?.sections.forEach((section) =>
+      section.subsections.forEach(
+        (subsection) => (total += subsection._count.questions),
+      ),
+    );
+
+    return total;
+  }
+
+  async getQuestionStats(
+    companyId: string,
+  ): Promise<{ total: number; answered: number }> {
+    try {
+      return {
+        total: await this.getTotalQuestionsCount(companyId),
+        answered: await this.getTotalAnsweredQuestionsCount(companyId),
+      };
+    } catch (e) {
+      console.log(e)
+      throw new InternalServerErrorException();
+    }
+  }
+
+  private async getTotalAnsweredQuestionsCount(companyId: string) {
+    const totalQuestions = await this.db.company.findUnique({
+      where: { id: companyId },
+      select: {
+        sections: {
+          select: {
+            subsections: {
+              select: {
+                _count: {
+                  select: {
+                    questions: {
+                      where: {
+                        isAnswered: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+    let total: number = 0;
+
+    totalQuestions?.sections.forEach((section) =>
+      section.subsections.forEach(
+        (subsection) => (total += subsection._count.questions),
+      ),
+    );
+
+    return total;
   }
 }

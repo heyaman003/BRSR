@@ -8,6 +8,9 @@ import {
 } from "@/components/component/SustainabilityElements";
 import MainNavigationforC from "../component/SectioncNav";
 import BottomLeftContainer from "../component/BottomLeftContainer";
+import { toast } from "sonner";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 type LeftcontainerProps = {
   subsections: SubSection[] | undefined; // Ensures sections is an object where each key holds an array of Section
   setActiveSubsection: (sectionId: string) => void;
@@ -23,6 +26,12 @@ const Leftcontainer: React.FC<LeftcontainerProps> = ({
 }) => {
   const [mounted, setMounted] = useState(false);
   const [leaves, setLeaves] = useState<React.ReactNode[]>([]);
+  const [totalQuestions, setTotalQuestions] = useState<number>(0);
+  const [totalAnsweredQuestions, setTotalAnsweredQuestions] = useState<number>(0);
+  const companyId = useSelector(
+    (root: RootState) => root.auth.user?.data?.companyId
+  );
+
   useEffect(() => {
     // Animate fade in for the entire page
     document.documentElement.style.opacity = "0";
@@ -53,13 +62,16 @@ const Leftcontainer: React.FC<LeftcontainerProps> = ({
       );
     }
     setLeaves(leafElements);
+
+    fetchQuestionStats(companyId).then(res=>{
+      setTotalAnsweredQuestions(res.answered)
+      setTotalQuestions(res.total);
+    })
+
     return () => {
       document.documentElement.style.opacity = "1";
     };
   }, []);
-  const progress: number = 44;
-  const total: number = 178;
-  const percentage: number = Math.round((progress / total) * 100);
 
   return (
     <div className="space-y-10 bg-green-50 px-4 pt-5 h-[100vh] overflow-y-auto border-r-4 border-yellow-400 scrollbar-hide [&::-webkit-scrollbar]:hidden relative">
@@ -87,7 +99,7 @@ const Leftcontainer: React.FC<LeftcontainerProps> = ({
             cx="50"
             cy="50"
             r="46"
-            strokeDasharray={`${percentage * 2.89} 289`}
+            strokeDasharray={`${Math.round(totalAnsweredQuestions/totalQuestions*100) * 2.89} 289`}
             transform="rotate(-90 50 50)"
           />
           <text
@@ -98,11 +110,11 @@ const Leftcontainer: React.FC<LeftcontainerProps> = ({
             dy="0.3em"
             fill="currentColor"
           >
-            {percentage}%
+            {Math.round(totalAnsweredQuestions/totalQuestions*100)}%
           </text>
         </svg>
         <div className="text-center text-sm text-muted-foreground mt-2 absolute top-[62%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
-          {progress}/189
+          {totalAnsweredQuestions}/{totalQuestions}
         </div>
       </div>
 
@@ -126,7 +138,7 @@ const Leftcontainer: React.FC<LeftcontainerProps> = ({
                 In progress
               </div>
               <div className="text-xs font-bold text-green-500">
-                2/{subsection?.questions?.length || 14}
+                {subsection?._count?.questions}/{subsection?.questions?.length || 14}
               </div>
             </div>
           </button>
@@ -139,3 +151,23 @@ const Leftcontainer: React.FC<LeftcontainerProps> = ({
 };
 
 export default Leftcontainer;
+
+const fetchQuestionStats = async (companyId: string) =>{
+  try{
+    const raw = await fetch(`${import.meta.env.VITE_SERVER_URI}/company/${companyId}/question/stats`, {
+      credentials: 'include',
+      headers: {
+        'X-Csrf-Token':sessionStorage.getItem('X-Csrf-Token') || ''
+      }
+    });
+    const res = await raw.json();
+    if(raw.status<200 || raw.status>399)
+      throw new Error(res.message);
+    return res.data
+  }catch(e){
+    if(e instanceof Error)
+      toast.error(e.message)
+    console.log(e);
+    throw e;
+  }
+}
