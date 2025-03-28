@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { sectionfetchAPI } from './sectionAPI';
 import { Section } from "@/models/models";
+import { sectionfetchAPI } from "../sections/sectionAPI";
 
 interface sectionInfo {
  companyID:String
