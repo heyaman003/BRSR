@@ -3946,10 +3946,28 @@ export const companySectionsTemplate: Section[] = [
                   ),
                   new Row([
                     new Cell('Total volume of water withdrawal (in kilolitres) (i + ii + iii + iv + v)', false, 1, 1, 0),
-                    new Cell('', false, 1, 1, 1, Operation.ADD, ['2$1', '3$1', '4$1', '5$1', '6$1']),
-                    new Cell('', false, 1, 1, 2, Operation.ADD, ['2$2', '3$2', '4$2', '5$2', '6$2'])
+                    new Cell('', true, 1, 1, 1, Operation.ADD, ['2$1', '3$1', '4$1', '5$1', '6$1']),
+                    new Cell('', true, 1, 1, 2, Operation.ADD, ['2$2', '3$2', '4$2', '5$2', '6$2'])
                   ], false, 7)
-
+                  ,
+                  ...[
+                    'Total volume of water consumption (in kilolitres)',
+                    'Water intensity per rupee of turnover (Total water consumption / Revenue from operations)',
+                    'Water intensity per rupee of turnover adjusted for Purchasing Power Parity (PPP) (Total water consumption / Revenue from operations adjusted for PPP)',
+                    'Water intensity in terms of physical output',
+                    'Water intensity (optional) – the relevant metric may be selected by the entity',
+                  ].map(
+                    (firstCell: string, rowNo: number) =>
+                      new Row(
+                        [
+                          new Cell(firstCell, false, 1, 1, 0),
+                          new Cell('', true, 1, 1, 1),
+                          new Cell('', true, 1, 1, 2),
+                        ],
+                        false,
+                        rowNo + 2,
+                      ),
+                  ),
                 
                 ],
                 false,
@@ -4239,7 +4257,30 @@ export const companySectionsTemplate: Section[] = [
                     'Radioactive waste (F)',
                     'Other Hazardous waste. Please specify, if any. (G)',
                     'Other Non-hazardous waste generated (H). Please specify, if any. (Break-up by composition i.e. by materials relevant to the sector)',
-                    'Total (A+B + C + D + E + F + G + H)',
+                    // 'Waste intensity per rupee of turnover (Total waste generated / Revenue from operations)',
+                    // 'Waste intensity per rupee of turnover adjusted for Purchasing Power Parity (PPP) (Total waste generated / Revenue from operations adjusted for PPP)',
+                    // 'Waste intensity in terms of physical output',
+                    // 'Waste intensity (optional) – the relevant metric may be selected by the entity',
+                  ].map(
+                    (firstCell: string, rowNo: number) =>
+                      new Row(
+                        [
+                          new Cell(firstCell, false, 1, 1, 0),
+                          new Cell('', true, 1, 1, 1),
+                          new Cell('', true, 1, 1, 2),
+                        ],
+                        false,
+                        rowNo + 2,
+                      ),
+                  ),
+
+                  new Row([
+                    new Cell("Total (A+B + C + D + E + F + G + H)", false, 1, 1, 0),
+                    new Cell("", true, 1, 1, 1, Operation.ADD, ['2$1', '3$1', '4$1', '5$1', '6$1', '7$1', '8$1', '9$1']),
+                    new Cell("", true, 1, 1, 2, Operation.ADD, ['2$2', '3$2', '4$2', '5$2', '6$2', '7$2', '8$2', '9$2']),
+                  ], false, 10),
+
+                  ...[
                     'Waste intensity per rupee of turnover (Total waste generated / Revenue from operations)',
                     'Waste intensity per rupee of turnover adjusted for Purchasing Power Parity (PPP) (Total waste generated / Revenue from operations adjusted for PPP)',
                     'Waste intensity in terms of physical output',
@@ -4253,9 +4294,10 @@ export const companySectionsTemplate: Section[] = [
                           new Cell('', true, 1, 1, 2),
                         ],
                         false,
-                        rowNo + 2,
+                        rowNo + 11,
                       ),
                   ),
+
                   new Row(
                     [
                       new Cell(
@@ -4278,7 +4320,6 @@ export const companySectionsTemplate: Section[] = [
                     '(i) Recycled',
                     '(ii) Re-used',
                     '(iii) Other recovery operations',
-                    'Total',
                   ].map(
                     (firstCell: string, rowNo: number) =>
                       new Row(
@@ -4291,6 +4332,11 @@ export const companySectionsTemplate: Section[] = [
                         rowNo + 17,
                       ),
                   ),
+                  new Row([
+                    new Cell("Total", false, 1, 1, 0),
+                    new Cell("", true, 1, 1, 1, 'ADD', ['17$1', '18$1', '19$1']),
+                    new Cell("", true, 1, 1, 2, 'ADD', ['17$2', '18$2', '19$2']),
+                  ], false, 20),
 
                   new Row(
                     [
@@ -4310,7 +4356,6 @@ export const companySectionsTemplate: Section[] = [
                     '(i) Incineration',
                     '(ii) Landfilling',
                     '(iii) Other disposal operations',
-                    'Total',
                   ].map(
                     (firstCell: string, rowNo: number) =>
                       new Row(
@@ -4323,6 +4368,11 @@ export const companySectionsTemplate: Section[] = [
                         22 + rowNo,
                       ),
                   ),
+                  new Row([
+                    new Cell('Total', false, 1, 1, 0),
+                    new Cell("", true, 1, 1, 1, 'ADD', ['25$1', '24$1', '23$1']),
+                    new Cell("", true, 1, 1, 2, 'ADD', ['25$2', '24$2', '23$2']),
+                  ], false, 26)
                 ],
                 false,
               ),
