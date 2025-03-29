@@ -7,13 +7,10 @@ export const sectionfetchAPI = async (companyDesc:{companyID:String}): Promise<O
       }
     });
     if (!response.ok) {
-      console.log(companyDesc.companyID)
-      console.log(response)
       throw new Error("Invalid companyId");
     }
   
     let data= await response.json();
-    console.log(response,data)
      return data;
   };
   

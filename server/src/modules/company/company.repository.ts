@@ -22,10 +22,16 @@ export class CompanyRepository {
         where: { id: companyId },
         select: {
           sections: {
+            orderBy: {
+              title: 'asc',
+            },
             select: {
               id: true,
               title: true,
               subsections: {
+                orderBy: {
+                  title: 'asc',
+                },
                 select: {
                   title: true,
                   id: true,

@@ -191,6 +191,12 @@ export class Mention {
   @Expose()
   questionId?: string;
   @Expose()
+  sectionId?: string;
+  @Expose()
+  subsectionId?: string;
+  @Expose()
+  companyId?: string;
+  @Expose()
   id?: string;
   
   mentionedBy?: {

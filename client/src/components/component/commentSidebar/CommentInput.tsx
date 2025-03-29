@@ -38,8 +38,6 @@ const CommentInput: React.FC<CommentInputProps> = ({
       });
   }, [companyId]);
 
-  useEffect(()=>{console.log(mentions)}, [mentions])
-
   return (
     <div className="flex flex-col mt-4 ">
       <MentionsInput

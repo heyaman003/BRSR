@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+// import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { getSectiondata } from "../features/sections/sectionSlice";
 import type { AppDispatch } from "@/store/store.ts";
@@ -9,55 +9,52 @@ import { Section } from "@/models/models";
 import { plainToInstance } from "class-transformer";
 import SectionUI from "./Section";
 
-import { RootState } from "@/store/store";
+// import { RootState } from "@/store/store";
+import { useSearchParams } from "react-router-dom";
 export default function QuestionnairePage() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [companyId, setCompanyId] = useState<string | null>(null);
   const [sections, setSections] = useState<Section[] | null>(null);
   const [activeSection, setActiveSection] = useState<string>("");
   const [activeSubsection, setActiveSubsection] = useState<string>("");
   const dispatch = useDispatch<AppDispatch>(); // Properly typed dispatch
-
-
-  // const isLoading = useSelector(selectIsLoading);
-  // const error = useSelector(selectSectionError);
-  const companyId = useSelector(
-    (state: RootState) => state?.auth?.user?.data?.companyId
-  );
-
+  
+  
   useEffect(() => {
-    const sectionDataHandler = async () => {
+    const sectionDataHandler = async (companyId: string) => {
       const resultAction = await dispatch(
         getSectiondata({ companyID: companyId })
       );
+      if(!activeSection){
+        setSearchParams(params=>{params.set("section", resultAction?.payload?.data[0]?.id);return params});
+        setSearchParams(params=>{params.set("subsection", resultAction?.payload?.data[0]?.subsections[0]?.id); return params});
+      }
       const sections: Section[] = plainToInstance(
         Section,
         resultAction?.payload?.data
       );
       setSections(sections);
-      setActiveSection(sections[0]?.id);
     };
-    sectionDataHandler();
-  }, []);
+    if(companyId)
+      sectionDataHandler(companyId);
+  }, [companyId]);
 
   useEffect(() => {
-    if (sections && activeSection) {
-      const activeSec = sections.find(
-        (section: Section) => section.id === activeSection
-      );
-      if (activeSec && activeSec?.subsections?.length > 0) {
-        setActiveSubsection(activeSec.subsections[0].id);
-      }
-    }
-    // console.log("the section is is",activeSection)
-  }, [activeSection]);
-
+    // Extracting the search params and stting them in state variables
+    // This will be used to set the active section and subsection
+    setActiveSection(searchParams.get("section") || "");
+    setActiveSubsection(searchParams.get("subsection") || "");
+    setCompanyId(searchParams.get("company") || "");
+  }, [searchParams]);
 
   return (
     <div className="h-full">
       <div className=" mx-auto ">
         {/* For the comment sidebar */}
-          {/* <SidebarInset> */}
-          <div className="grid grid-cols-1 md:grid-cols-[350px_1fr] h-[100vh] gap-8 overflow-y-auto bg-[#f2f9fa]">
-            {/* Left Sidebar */}
+        {/* <SidebarInset> */}
+        <div className="flex bg-[#f2f9fa]">
+          {/* Left Sidebar */}
+          <div className="w-[350px]">
             <Leftcontainer
               activeSection={activeSection}
               subsections={
@@ -65,22 +62,27 @@ export default function QuestionnairePage() {
                   ?.subsections
               }
               activeSubsection={activeSubsection}
-              setActiveSubsection={setActiveSubsection}
+              setActiveSubsection={(subsectionId) =>
+                setSearchParams((params) => {
+                  params.set("subsection", subsectionId);
+                  return params;
+                })
+              }
             />
+          </div>
 
-          <div className="h-full overflow-auto pr-4 relative">
+          <div className="h-screen w-[calc(100%-350px)] flex flex-col relative pl-3">
             {/* Top bar containing the section buttons e.g. 'Section A' */}
             <Horizontalscroll
               sections={sections}
               activeSection={activeSection}
               setActiveSection={setActiveSection}
             />
-            {activeSection==="C" }
-            <SectionUI  subsectionId={activeSubsection} />
+            {/* {activeSection === "C"} */}
+            <SectionUI subsectionId={activeSubsection} />
           </div>
         </div>
       </div>
     </div>
   );
 }
-

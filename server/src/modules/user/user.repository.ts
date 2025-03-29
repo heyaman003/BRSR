@@ -72,12 +72,23 @@ export class UserRepository {
       return await this.db.user.findUnique({ where: { id: userId }, select: {
         mentionedIn: {
           select: {
+            id: true,
             comment:{
               select: {
-                id: true,
                 question: {
                   select: {
-                    id: true
+                    id: true,
+                    subsection: {
+                      select: {
+                        id: true,
+                        section: {
+                          select: {
+                            id: true,
+                            companyId: true
+                          }
+                        }
+                      }
+                    }
                   }
                 },
                 user: {
