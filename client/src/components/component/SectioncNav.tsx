@@ -11,7 +11,6 @@ type MainNavigationProps = {
 const MainNavigationforC: React.FC<MainNavigationProps> = ({subsections,setActiveSubsection}) => {
   const [activeSection, setActiveSection] = useState<String | null>(null);
   // const [loaderProgress, setLoaderProgress] = useState<number>(10);
-  console.log("the subsections are",subsections)
   const toggleSection = (sectionId:any) => {
     setActiveSubsection(sectionId);
     setActiveSection(activeSection === sectionId ? null : sectionId);

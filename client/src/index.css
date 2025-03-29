@@ -124,10 +124,6 @@
 }
 
 
-/* Smooth transitions */
-* {
-  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, opacity 0.2s ease, transform 0.2s ease;
-}
 
 /* Nature-inspired animations */
 @keyframes float {
@@ -418,7 +414,6 @@
   transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1.0);
   transition-delay: calc(var(--index) * 0.05s);
 }
-
 .subsection-container.active .subsection {
   opacity: 1;
   transform: translateY(0);

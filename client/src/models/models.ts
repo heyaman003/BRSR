@@ -186,3 +186,22 @@ class CommentUser {
   @Expose()
   name?: string;
 };
+
+export class Mention {
+  @Expose()
+  questionId?: string;
+  @Expose()
+  sectionId?: string;
+  @Expose()
+  subsectionId?: string;
+  @Expose()
+  companyId?: string;
+  @Expose()
+  id?: string;
+  
+  mentionedBy?: {
+    id: string;
+    email: string;
+    name: string;
+  }
+}

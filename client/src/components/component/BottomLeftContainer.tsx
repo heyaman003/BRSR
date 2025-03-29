@@ -6,7 +6,6 @@ interface BottomLeftContainerProps {
     activeSection: string,
 }
 const BottomLeftContainer: React.FC<BottomLeftContainerProps> = ({  activeSection}) => {
-    console.log("the active section is",activeSection)
   return (
     <div className="flex gap-4 pb-6">
         <Button

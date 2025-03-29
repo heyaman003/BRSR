@@ -112,7 +112,7 @@ const CompanyUser = () => {
     const companyId =searchParams.get('id');
     if (companyId) {
       dispatch(updateCompany(companyId)); // Dispatch the action with companyId
-      navigate(`/admin/brsr/company?id=${companyId}`); // Navigate to the report page
+      navigate(`/admin/brsr?company=${companyId}`); // Navigate to the report page
     }
   }
 

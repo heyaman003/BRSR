@@ -11,6 +11,7 @@ import AdminCompany from "./pages/Admin.Brsr";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoadingCsrf, setIsLoadingCsrf] = useState(true);
   const navigate = useNavigate();
 
   // Check login state on component mount
@@ -18,41 +19,50 @@ function App() {
     const storedLoginStatus = sessionStorage.getItem("isLoggedInEmailer");
     if (storedLoginStatus === "true") {
       setIsLoggedIn(true);
-      console.log("User is logged in",isLoggedIn);
+      console.log("User is logged in", isLoggedIn);
     }
 
     fetch(import.meta.env.VITE_SERVER_URI + "/csrf", {
       method: "HEAD",
       credentials: "include",
-    }).then((res) =>
+    }).then((res) => {
       sessionStorage.setItem(
         "X-Csrf-Token",
         res.headers.get("X-Csrf-Token") || ""
-      )
-    );
+      );
+      setIsLoadingCsrf(false);
+    });
   }, []);
 
   // Handle login
-  const handleLogin = () => {
+  const handleLogin = (companyId: string) => {
     setIsLoggedIn(true);
     sessionStorage.setItem("isLoggedInEmailer", "true"); // Persist login state
-    navigate("/brsr-making");
+    navigate("/brsr-making?company="+companyId);
   };
 
   return (
-    <div>
-      <Toaster richColors />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route
-          path="/brsr-making"
-          element={<ProtectedRoute element={<Homepage />} />}
-        />
-        <Route path="/login" element={<LoginForm onLogin={handleLogin} />} />
-        <Route path="/company" element={<CompanyUser />} />
-        <Route path="/admin/brsr/company" element={<AdminCompany />} />
-      </Routes>
-    </div>
+    <>
+      {!isLoadingCsrf && (
+        <div>
+          <Toaster richColors />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route
+              path="/brsr-making"
+              element={<Homepage/>}
+              // element={<ProtectedRoute element={<Homepage />} />}
+            />
+            <Route
+              path="/login"
+              element={<LoginForm onLogin={handleLogin} />}
+            />
+            <Route path="/company" element={<CompanyUser />} />
+            <Route path="/admin/brsr" element={<AdminCompany />} />
+          </Routes>
+        </div>
+      )}
+    </>
   );
 }
 

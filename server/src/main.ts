@@ -5,7 +5,9 @@ import helmet from 'helmet';
 import { doubleCsrf } from 'csrf-csrf';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    logger: ['log', 'error', 'warn', 'debug'],
+  });
 
   app.enableCors({
     origin: ['http://localhost:5173', 'http://172.16.16.68:5173'],
