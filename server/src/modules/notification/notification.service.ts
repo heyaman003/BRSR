@@ -10,12 +10,25 @@ export class NotificationService {
 
     addClient(userId: string) {
         try {
+            this.logger.debug(this.clients)
             if (!this.clients[userId]) {
                 this.clients[userId] = new Subject();
             }
             return this.clients[userId].asObservable();
         } catch (error) {
             this.logger.error('Error adding client:', error);
+            throw error;
+        }
+    }
+
+    removeClient(userId: string) {
+        try {
+            if (this.clients[userId]) {
+                this.clients[userId].complete();
+                delete this.clients[userId];
+            }
+        } catch (error) {
+            this.logger.error('Error removing client:', error);
             throw error;
         }
     }

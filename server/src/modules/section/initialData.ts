@@ -3930,7 +3930,7 @@ export const companySectionsTemplate: Section[] = [
                   new Row(
                     [
                       new Cell(
-                        'Gross wages paid to females as % of total wages',
+                        'Gross wages paid to females as % of total wages paid by the entity, in the following format:',
                         false,
                         1,
                         1,
@@ -4240,8 +4240,14 @@ export const companySectionsTemplate: Section[] = [
                     true,
                     0,
                   ),
+                  new Row(
+                    [
+                      new Cell('From renewable sources', false, 1, 3, 0),
+                    ],
+                    false,
+                    1,
+                  ),
                   ...[
-                    'From renewable sources',
                     'Total electricity consumption (A)',
                     'Total fuel consumption (B)',
                     'Energy consumption through other sources (C)',
@@ -4264,7 +4270,7 @@ export const companySectionsTemplate: Section[] = [
                           new Cell('', true, 1, 1, 2),
                         ],
                         false,
-                        rowNo + 1,
+                        rowNo + 2,
                       ),
                   ),
                   new Row(
@@ -4290,9 +4296,8 @@ export const companySectionsTemplate: Section[] = [
                     false,
                     5,
                   ),
-
+                  new Row([new Cell('From non-renewable sources', false, 1, 3, 0)], false, 6),
                   ...[
-                    'From non-renewable sources',
                     'Total electricity consumption (D)',
                     'Total fuel consumption (E)',
                     'Energy consumption through other sources (F)',
@@ -4309,7 +4314,7 @@ export const companySectionsTemplate: Section[] = [
                           new Cell('', true, 1, 1, 2),
                         ],
                         false,
-                        rowNo + 6,
+                        rowNo + 7,
                       ),
                   ),
                   new Row(
@@ -5682,7 +5687,7 @@ export const companySectionsTemplate: Section[] = [
           {
             index: 7,
             desc: '8. (a) Do you have a preferential procurement policy where you give preference to purchase from suppliers comprising marginalized /vulnerable groups?',
-            type: QuestionType.BOOLEAN,
+            type: QuestionType.TEXT,
           },
           {
             index: 8,
@@ -5974,7 +5979,7 @@ export const companySectionsTemplate: Section[] = [
           },
           {
             index: 4,
-            type: QuestionType.BOOLEAN,
+            type: QuestionType.TEXT,
             desc: '5. Does the entity have a framework/ policy on cyber security and risks related to data privacy?',
           },
           {
@@ -6020,7 +6025,7 @@ export const companySectionsTemplate: Section[] = [
           {
             index: 13,
             desc: '12. Does the entity display product information on the product over and above what is mandated as per local laws?',
-            type: QuestionType.BOOLEAN,
+            type: QuestionType.TEXT,
           },
           {
             index: 14,
