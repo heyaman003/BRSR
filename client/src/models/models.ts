@@ -198,6 +198,8 @@ export class Mention {
   companyId?: string;
   @Expose()
   id?: string;
+  @Expose()
+  createdAt?: Date
   
   mentionedBy?: {
     id: string;

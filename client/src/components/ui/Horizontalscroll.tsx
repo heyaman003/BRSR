@@ -12,6 +12,10 @@ import {
 import { DropdownMenuItem } from "@radix-ui/react-dropdown-menu";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import {EventSource} from 'eventsource'
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+import TimeAgo from "react-timeago";
 
 type HorizontalscrollProps = {
   activeSection: string; // Ensures activeSection is a valid key
@@ -23,7 +27,37 @@ const Horizontalscroll = ({
   activeSection,
   sections,
 }: HorizontalscrollProps) => {
-  const [mentions, setMentions] = useState<Mention[]>([]);
+  const [mentions, setMentions] = useState<Mention[]>([]);  const userId = useSelector((state: RootState) => state.auth.user?.data?.id);
+
+  useEffect(() => {
+    if (userId) {
+      const eventSource = new EventSource(
+        `${import.meta.env.VITE_SERVER_URI}/notification/mentions/${userId}`,
+        {
+          withCredentials: true,
+          fetch: (input, init) =>
+            fetch(input, {
+              ...init,
+              credentials: "include",
+              headers: {
+                "X-Csrf-Token": sessionStorage.getItem("X-Csrf-Token") || "",
+              },
+            }),
+        }
+      );
+      eventSource.onmessage = (event) => {
+        const {data} = JSON.parse(event.data);
+        setMentions((prevMentions) => [data, ...prevMentions]);
+      };
+      eventSource.onerror = (error) => {
+        console.error("EventSource failed:", error);
+        eventSource.close();
+      };
+      return () => {
+        eventSource.close();
+      };
+    }
+  }, [userId]);
 
   useEffect(() => {
     fetchMentions().then((res) => setMentions(res));
@@ -82,19 +116,19 @@ const MentionsContainer: React.FC<MentionsContainerProps> = ({ mentions }) => {
         <DropdownMenuLabel>Your Mentions</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          {mentions.map((mention) => (
+          {mentions.sort((a, b)=>(a.createdAt || new Date())>(b.createdAt || new Date())?-1:1).map((mention) => (
             <a
+            key={mention.id}
               target="_blank"
               href={`/brsr-making?section=${mention.sectionId}&subsection=${mention.subsectionId}&question=${mention.questionId}&company=${mention.companyId}`}
             >
               <DropdownMenuItem
-                key={mention.id}
                 className="text-sm hover:bg-lime-50 hover:border-0 hover:outline-0 p-2 cursor-pointer"
               >
                 <span className="text-green-500 font-semibold">
                   {mention.mentionedBy?.name}
                 </span>{" "}
-                has mentioned you in a question. Click to visit.
+                has mentioned you in a question. Click to visit. {<TimeAgo date={mention.createdAt?.toString() || new Date().toString()} />}
               </DropdownMenuItem>
             </a>
           ))}

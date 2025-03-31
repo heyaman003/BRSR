@@ -2,6 +2,7 @@ import { ConsoleLogger, Global, Module } from "@nestjs/common";
 
 @Global()
 @Module({
-    imports: [ConsoleLogger]
+    providers: [ConsoleLogger],
+    exports: [ConsoleLogger],
 })
 export class MyLogger {}

@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ConsoleLogger,
   Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
@@ -9,7 +10,10 @@ import { DbService } from 'src/utils/db.connections';
 
 @Injectable()
 export class UserRepository {
-  constructor(private db: DbService) {}
+  constructor(
+    private readonly db: DbService,
+    private readonly logger: ConsoleLogger,
+  ) {}
 
   async createUser(userData: CreateUserDto, role: Role): Promise<User> {
     try {
@@ -46,7 +50,8 @@ export class UserRepository {
       });
       return user;
     } catch (e) {
-      throw new BadRequestException(e.message);
+      this.logger.error(e);
+      throw new InternalServerErrorException(e.message);
     }
   }
 
@@ -63,48 +68,95 @@ export class UserRepository {
         },
       });
     } catch (e) {
-      throw new BadRequestException(e.message);
+      this.logger.error(e);
+      throw new InternalServerErrorException(e.message);
     }
   }
 
   async getMentions(userId: string) {
     try {
-      return await this.db.user.findUnique({ where: { id: userId }, select: {
-        mentionedIn: {
-          select: {
-            id: true,
-            comment:{
-              select: {
-                question: {
-                  select: {
-                    id: true,
-                    subsection: {
-                      select: {
-                        id: true,
-                        section: {
-                          select: {
-                            id: true,
-                            companyId: true
-                          }
-                        }
-                      }
-                    }
-                  }
+      return await this.db.user.findUnique({
+        where: { id: userId },
+        select: {
+          mentionedIn: {
+            select: {
+              id: true,
+              comment: {
+                select: {
+                  createdAt: true,
+                  question: {
+                    select: {
+                      id: true,
+                      subsection: {
+                        select: {
+                          id: true,
+                          section: {
+                            select: {
+                              id: true,
+                              companyId: true,
+                            },
+                          },
+                        },
+                      },
+                    },
+                  },
+                  user: {
+                    select: {
+                      id: true,
+                      email: true,
+                      name: true,
+                    },
+                  },
                 },
-                user: {
-                  select: {
-                    id: true,
-                    email: true,
-                    name: true
-                  }
-                }
               },
             },
-          }
-        }
-      } });
+          },
+        },
+      });
     } catch (e) {
-      console.log(e);
+      this.logger.log(e);
+      throw new InternalServerErrorException();
+    }
+  }
+
+  async getMention(mentionId: string) {
+    try {
+      return await this.db.mention.findUnique({
+        where: { id: mentionId },
+        select: {
+          id: true,
+          comment: {
+            select: {
+              createdAt: true,
+              question: {
+                select: {
+                  id: true,
+                  subsection: {
+                    select: {
+                      id: true,
+                      section: {
+                        select: {
+                          id: true,
+                          companyId: true,
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+              user: {
+                select: {
+                  id: true,
+                  email: true,
+                  name: true,
+                },
+              },
+            },
+          },
+        },
+      });
+    } catch (e) {
+      this.logger.error(e);
       throw new InternalServerErrorException();
     }
   }

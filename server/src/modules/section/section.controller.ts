@@ -1,5 +1,6 @@
 import {
   Body,
+  ConsoleLogger,
   Controller,
   Get,
   Param,
@@ -17,7 +18,7 @@ import { Request } from 'express';
 
 @Controller('section')
 export class SectionController {
-  constructor(private readonly sectionService: SectionService) {}
+  constructor(private readonly sectionService: SectionService, private readonly logger: ConsoleLogger) {}
 
   @Get('/subsection/:subsectionId')
   async getSubsectionData(@Param('subsectionId', ParseUUIDPipe) id: string) {
@@ -64,7 +65,7 @@ export class SectionController {
     } finally {
       rm(path, (err)=>{
         if(err)
-          console.log(err)
+          this.logger.log(err)
       })
     }
   }

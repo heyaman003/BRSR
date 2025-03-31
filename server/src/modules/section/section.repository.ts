@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ConsoleLogger,
   HttpException,
   Injectable,
   InternalServerErrorException,
@@ -17,11 +18,11 @@ import {
 } from './section.dtos';
 import { DbService } from 'src/utils/db.connections';
 import { Prisma, PrismaClient, QuestionType } from '@prisma/client';
-import { Omit, PrismaClientOptions } from '@prisma/client/runtime/library';
+import { Omit } from '@prisma/client/runtime/library';
 
 @Injectable()
 export class SectionRepository {
-  constructor(private readonly db: DbService) {}
+  constructor(private readonly db: DbService, private readonly logger: ConsoleLogger) {}
 
   async retrieveAllSectionData(sectionId: string): Promise<Section> {
     const data = await this.db.section.findUnique({
@@ -93,7 +94,7 @@ export class SectionRepository {
         );
       });
     } catch (e) {
-      console.log(e);
+      this.logger.log(e);
       throw new InternalServerErrorException();
     }
   }
@@ -182,7 +183,7 @@ export class SectionRepository {
       });
     } catch (e) {
       if (!(e instanceof HttpException)) {
-        console.log(e);
+        this.logger.log(e);
         throw new InternalServerErrorException();
       } else throw e;
     }
@@ -343,7 +344,7 @@ export class SectionRepository {
       return question.history;
     } catch (e) {
       if (!(e instanceof HttpException)) {
-        console.log(e);
+        this.logger.log(e);
         throw new InternalServerErrorException();
       } else throw e;
     }

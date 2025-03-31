@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { UserRepository } from 'src/modules/user/user.repository';
-import { User } from '@prisma/client';
+import { Mention, User } from '@prisma/client';
 import { CreateUserDto, GetUserDto, UserRole } from './user.dtos';
 import { hash } from 'bcryptjs';
 
@@ -61,14 +61,26 @@ export class UserService {
   async getMentions(userId: string) {
     const mentions = await this.userRepository.getMentions(userId);
     if (!mentions) throw new NotFoundException('User does not exist.');
-    return mentions.mentionedIn.map((mention) => ({
+    return mentions.mentionedIn.map((mention) => this.convertToMentionDto(mention));
+  }
+
+  async getMentionDetails(mentionId: string) {
+    const mention = await this.userRepository.getMention(mentionId);
+    if(!mention)
+      throw new NotFoundException('Mention does not exist.');
+    return this.convertToMentionDto(mention);
+  }
+
+  private convertToMentionDto(mention: any) {
+    return {
       questionId: mention.comment.question.id,
       mentionedBy: mention.comment.user,
       id: mention.id,
       subsectionId: mention.comment.question.subsection.id,
       sectionId: mention.comment.question.subsection.section.id,
       companyId: mention.comment.question.subsection.section.companyId,
-    }));
+      createdAt: mention.comment.createdAt,
+    }
   }
 
   convertToDto(user: User): GetUserDto {

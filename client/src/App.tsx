@@ -3,8 +3,7 @@ import { Routes, Route, useNavigate } from "react-router-dom";
 import "./App.css";
 import LoginForm from "@/pages/Loging.page";
 import Homepage from "@/pages/Home.page";
-import Home from "@/components/pages/Home";
-import ProtectedRoute from "@/components/ProtectedRoute"; // Import the new component
+import Home from "@/components/pages/Home"; // Import the new component
 import CompanyUser from "./pages/CompanyUser";
 import { Toaster } from "sonner";
 import AdminCompany from "./pages/Admin.Brsr";
@@ -38,7 +37,7 @@ function App() {
   const handleLogin = (companyId: string) => {
     setIsLoggedIn(true);
     sessionStorage.setItem("isLoggedInEmailer", "true"); // Persist login state
-    navigate("/brsr-making?company="+companyId);
+    navigate("/brsr-making?company=" + companyId);
   };
 
   return (
@@ -50,7 +49,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route
               path="/brsr-making"
-              element={<Homepage/>}
+              element={<Homepage />}
               // element={<ProtectedRoute element={<Homepage />} />}
             />
             <Route
