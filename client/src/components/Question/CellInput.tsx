@@ -53,6 +53,7 @@ const CellInput: React.FC<CellInputArgs> = ({
     <input
       disabled={operation ? true : false}
       onChange={(e) => setCellData(e.target.value)}
+      // type="number"
       value={cellData}
       className=" disabled:bg-gray-50 border disabled:border-gray-300 hover:bg-white focus:bg-white border-green-400 bg-green-50 text-green-900 px-2 py-1 w-full 
                               focus:outline-none focus:ring-1 focus:ring-green-400
