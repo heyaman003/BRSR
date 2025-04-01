@@ -1,6 +1,6 @@
 import { Operation } from "@/models/models";
 import { Table } from "@/types";
-import { memo, useCallback, useEffect, useState } from "react";
+import { memo, useCallback, useEffect, useRef, useState } from "react";
 
 interface CellInputArgs {
   updateTableCell: (rowId: string, cellId: string, newValue: string) => void;
@@ -34,15 +34,25 @@ const CellInput: React.FC<CellInputArgs> = ({
     [tableState]
   );
 
+  const debounceInputValueChangeRef = useRef<any>();
+
   useEffect(() => {
-    if (!operation) return;
-    const valueAtIndexes: number[] | undefined = operands?.map((operand) => {
-      const rowIndex = parseFloat(operand.split("$")[0]);
-      const colIndex = parseFloat(operand.split("$")[1]);
-      return getCellValue(rowIndex, colIndex);
-    });
-    if (valueAtIndexes)
-      setCellData("" + performOperation(operation, valueAtIndexes));
+    
+    clearTimeout(debounceInputValueChangeRef.current);
+
+    debounceInputValueChangeRef.current = setTimeout(() => {
+      console.log(1);
+      if (!operation) return;
+      const valueAtIndexes: number[] | undefined = operands?.map((operand) => {
+        const rowIndex = parseFloat(operand.split("$")[0]);
+        const colIndex = parseFloat(operand.split("$")[1]);
+        return getCellValue(rowIndex, colIndex);
+      });
+      if (valueAtIndexes)
+        setCellData("" + performOperation(operation, valueAtIndexes));
+    }, 300);
+
+    return () => clearTimeout(debounceInputValueChangeRef.current);
   }, [tableState]);
 
   useEffect(() => {
