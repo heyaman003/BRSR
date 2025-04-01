@@ -1,5 +1,5 @@
 import ChatBox from "@/components/chat/ChatBox";
-import CommentSidebar from "@/components/component/commentSidebar/CommentSidebar";
+import CommentSidebar from "@/components/component/commentSidebar/comment.sidebar";
 import SustainabilityLoader from "@/components/component/SustainabiltyLoader";
 import BooleanInput from "@/components/Question/BooleanInput";
 import TableUI from "@/components/Question/Table";

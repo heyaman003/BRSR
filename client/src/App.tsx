@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import "./App.css";
-import LoginForm from "@/pages/Loging.page";
-import Homepage from "@/pages/Home.page";
-import Home from "@/components/pages/Home"; // Import the new component
-import CompanyUser from "./pages/CompanyUser";
+import LoginForm from "@/pages/loging.page";
+import Homepage from "@/pages/home.page";
+import Home from "@/components/pages/Home"; 
+import CompanyUser from "./pages/company.user";
 import { Toaster } from "sonner";
-import AdminCompany from "./pages/Admin.Brsr";
+import AdminCompany from "./pages/admin.brsr";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -47,15 +47,8 @@ function App() {
           <Toaster richColors />
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route
-              path="/brsr-making"
-              element={<Homepage />}
-              // element={<ProtectedRoute element={<Homepage />} />}
-            />
-            <Route
-              path="/login"
-              element={<LoginForm onLogin={handleLogin} />}
-            />
+            <Route path="/brsr-making" element={<Homepage />} />
+            <Route path="/login" element={<LoginForm onLogin={handleLogin} />} />
             <Route path="/company" element={<CompanyUser />} />
             <Route path="/admin/brsr" element={<AdminCompany />} />
           </Routes>

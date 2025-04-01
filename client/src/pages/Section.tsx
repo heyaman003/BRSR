@@ -1,6 +1,5 @@
 import ChatBox from "@/components/chat/ChatBox";
-// import { useLocation } from "react-router-dom"; // Ensure react-router is used
-import CommentSidebar from "@/components/component/commentSidebar/CommentSidebar";
+import CommentSidebar from "@/components/component/commentSidebar/comment.sidebar";
 import SustainabilityLoader from "@/components/component/SustainabiltyLoader";
 import BooleanInput from "@/components/Question/BooleanInput";
 import TableUI from "@/components/Question/Table";
@@ -26,7 +25,7 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId }) => {
   const [isLoaderVisible, setIsLoaderVisible] = useState(true);
   const [subsectionData, setSubsectionData] = useState<SubSection | null>(null);
   const [isSaving, setIsSaving] = useState<boolean>(false);
-  // const location = useLocation();
+
  const smoothScrollTo = (targetY: number, duration = 1000) => {
   const startY = window.scrollY;
   const distance = targetY - startY;
@@ -60,7 +59,7 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId }) => {
 
   const [selectedQuestionForComment, setSelectedQuestionForComment] =
     useState<string>("");
-  // const [commentLength, setCommentLength] = useState<number>(0);
+    
   const updateTableData = (questionId: string, tableData: Table) => {
     setSubsectionData(
       (subSection: SubSection | null) =>

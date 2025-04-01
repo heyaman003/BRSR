@@ -3,11 +3,11 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { getSectiondata } from "../features/sections/sectionSlice";
 import type { AppDispatch } from "@/store/store.ts";
-import Leftcontainer from "@/components/dashboard/Leftcontainer";
+import Leftcontainer from "@/components/left.container";
 import Horizontalscroll from "@/components/ui/Horizontalscroll";
 import { Section } from "@/models/models";
 import { plainToInstance } from "class-transformer";
-import SectionUI from "./Section";
+import SectionUI from "./section";
 
 // import { RootState } from "@/store/store";
 import { useSearchParams } from "react-router-dom";
@@ -15,9 +15,9 @@ export default function QuestionnairePage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [companyId, setCompanyId] = useState<string | null>(null);
   const [sections, setSections] = useState<Section[] | null>(null);
-  const [activeSection, setActiveSection] = useState<string>("");
-  const [activeSubsection, setActiveSubsection] = useState<string>("");
-  const dispatch = useDispatch<AppDispatch>(); // Properly typed dispatch
+  const [activeSection, setActiveSection] = useState<string>(""); //Stores the id of the currect active section
+  const [activeSubsection, setActiveSubsection] = useState<string>(""); //Stores the id of the currect active subsection
+  const dispatch = useDispatch<AppDispatch>();
   
   
   useEffect(() => {
@@ -40,7 +40,7 @@ export default function QuestionnairePage() {
   }, [companyId]);
 
   useEffect(() => {
-    // Extracting the search params and stting them in state variables
+    // Extracting the search params and setting them in state variables
     // This will be used to set the active section and subsection
     setActiveSection(searchParams.get("section") || "");
     setActiveSubsection(searchParams.get("subsection") || "");
@@ -51,7 +51,6 @@ export default function QuestionnairePage() {
     <div className="h-full">
       <div className=" mx-auto ">
         {/* For the comment sidebar */}
-        {/* <SidebarInset> */}
         <div className="flex bg-[#f2f9fa]">
           {/* Left Sidebar */}
           <div className="w-[350px]">

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import CompanyHeader from "@/components/component/CompanyUser/CompanyHeader";
-import UserList from "@/components/component/CompanyUser/UserList";
+import CompanyHeader from "@/components/component/CompanyUser/company.header";
+import UserList from "@/components/component/CompanyUser/user.list";
 
 import { useDispatch } from "react-redux";
 // import { companyData } from "@/lib/mock-data";

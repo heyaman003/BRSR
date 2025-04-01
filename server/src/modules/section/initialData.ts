@@ -328,15 +328,15 @@ export const companySectionsTemplate: Section[] = [
             // defaultLength: 3,
           },
           {
-            desc: "19. b. What is the contribution of exports as a percentage of the total turnover of the entity? ",
+            desc: '19. b. What is the contribution of exports as a percentage of the total turnover of the entity? ',
             index: 2,
             type: QuestionType.TEXT,
           },
           {
-            desc: "19. c. A brief on types of customers ",
+            desc: '19. c. A brief on types of customers ',
             index: 3,
             type: QuestionType.TEXT,
-          }
+          },
         ],
       },
 
@@ -467,7 +467,11 @@ export const companySectionsTemplate: Section[] = [
                     true,
                     1,
                   ),
-                  new Row([new Cell('DIFFERENTLY ABLED EMPLOYEES', false, 1, 6, 0)], false, 2),
+                  new Row(
+                    [new Cell('DIFFERENTLY ABLED EMPLOYEES', false, 1, 6, 0)],
+                    false,
+                    2,
+                  ),
                   ...['Permanent (D)', 'Other than Permanent (E)'].map(
                     (firstCol, rowNo: number) =>
                       new Row(
@@ -503,7 +507,11 @@ export const companySectionsTemplate: Section[] = [
                     false,
                     5,
                   ),
-                  new Row([new Cell('DIFFERENTLY ABLED WORKERS', false, 1, 6, 0)], false, 6),
+                  new Row(
+                    [new Cell('DIFFERENTLY ABLED WORKERS', false, 1, 6, 0)],
+                    false,
+                    6,
+                  ),
                   ...['Permanent (F)', 'Other than Permanent (G)'].map(
                     (firstCol, rowNo: number) =>
                       new Row(
@@ -960,13 +968,7 @@ export const companySectionsTemplate: Section[] = [
                         1,
                         0,
                       ),
-                      new Cell(
-                        '',
-                        true,
-                        1,
-                        1,
-                        0,
-                      ),
+                      new Cell('', true, 1, 1, 0),
                     ],
                     false,
                     1,
@@ -3633,13 +3635,30 @@ export const companySectionsTemplate: Section[] = [
                   new Row(
                     [
                       new Cell('Total Employees	', false, 1, 1, 0),
-                      ...Array.from({ length: 6 }).map(
-                        (_, cellNo: number) =>
-                          new Cell('', true, 1, 1, cellNo + 1, Operation.ADD, [
-                            `4$${cellNo + 1}`,
-                            `3$${cellNo + 1}`,
-                          ]),
-                      ),
+                      new Cell('', true, 1, 1, 1, Operation.ADD, [
+                        `4$${1}`,
+                        `3$${1}`,
+                      ]),
+                      new Cell('', true, 1, 1, 2, Operation.ADD, [
+                        `4$${2}`,
+                        `3$${2}`,
+                      ]),
+                      new Cell('', true, 1, 1, 3, Operation.DIV, [
+                        `5$${2}`,
+                        `5$${1}`,
+                      ]),
+                      new Cell('', true, 1, 1, 4, Operation.ADD, [
+                        `4$${4}`,
+                        `3$${4}`,
+                      ]),
+                      new Cell('', true, 1, 1, 5, Operation.ADD, [
+                        `4$${5}`,
+                        `3$${5}`,
+                      ]),
+                      new Cell('', true, 1, 1, 6, Operation.DIV, [
+                        `5$${5}`,
+                        `5$${4}`,
+                      ]),
                     ],
                     false,
                     5,
@@ -3669,14 +3688,31 @@ export const companySectionsTemplate: Section[] = [
                   ),
                   new Row(
                     [
-                      new Cell('Total Workers	', false, 1, 1, 0),
-                      ...Array.from({ length: 6 }).map(
-                        (_, cellNo: number) =>
-                          new Cell('', true, 1, 1, cellNo + 1, Operation.ADD, [
-                            `7$${cellNo + 1}`,
-                            `8$${cellNo + 1}`,
-                          ]),
-                      ),
+                      new Cell('Total Employees	', false, 1, 1, 0),
+                      new Cell('', true, 1, 1, 1, Operation.ADD, [
+                        `8$${1}`,
+                        `7$${1}`,
+                      ]),
+                      new Cell('', true, 1, 1, 2, Operation.ADD, [
+                        `8$${2}`,
+                        `7$${2}`,
+                      ]),
+                      new Cell('', true, 1, 1, 3, Operation.DIV, [
+                        `9$${2}`,
+                        `9$${1}`,
+                      ]),
+                      new Cell('', true, 1, 1, 4, Operation.ADD, [
+                        `8$${4}`,
+                        `7$${4}`,
+                      ]),
+                      new Cell('', true, 1, 1, 5, Operation.ADD, [
+                        `8$${5}`,
+                        `7$${5}`,
+                      ]),
+                      new Cell('', true, 1, 1, 6, Operation.DIV, [
+                        `9$${5}`,
+                        `9$${4}`,
+                      ]),
                     ],
                     false,
                     9,
@@ -3929,8 +3965,17 @@ export const companySectionsTemplate: Section[] = [
                   ),
                   new Row(
                     [
+                      new Cell('Gross wages paid to females', false, 1, 1, 0),
+                      new Cell('', true, 1, 1, 1),
+                      new Cell('', true, 1, 1, 2),
+                    ],
+                    false,
+                    1,
+                  ),
+                  new Row(
+                    [
                       new Cell(
-                        'Gross wages paid to females as % of total wages paid by the entity, in the following format:',
+                        'Total wages paid to all the employees',
                         false,
                         1,
                         1,
@@ -3940,7 +3985,28 @@ export const companySectionsTemplate: Section[] = [
                       new Cell('', true, 1, 1, 2),
                     ],
                     false,
-                    1,
+                    2,
+                  ),
+                  new Row(
+                    [
+                      new Cell(
+                        'Gross wages paid to females as % of total wages',
+                        false,
+                        1,
+                        1,
+                        0,
+                      ),
+                      new Cell('', true, 1, 1, 1, Operation.DIV, [
+                        '1$1',
+                        '2$1',
+                      ]),
+                      new Cell('', true, 1, 1, 2, Operation.DIV, [
+                        '1$2',
+                        '2$2',
+                      ]),
+                    ],
+                    false,
+                    3,
                   ),
                 ],
                 false,
@@ -4001,7 +4067,7 @@ export const companySectionsTemplate: Section[] = [
                         'Remarks',
                       ].map(
                         (value, ind: number) =>
-                          new Cell(value, false, 1, 1, ind),
+                          new Cell(value, false, 1, 1, ind + 3),
                       ),
                     ],
                     true,
@@ -4064,10 +4130,9 @@ export const companySectionsTemplate: Section[] = [
 
                   ...[
                     'Total Complaints reported under Sexual Harassment on of Women at Workplace (Prevention, Prohibition and Redressal) Act, 2013 (POSH) ',
-                    'Complaints on POSH as a % of female employees / workers ',
-                    'Complaints on POSH upheld',
+                    'Female employees / workers',
                   ].map(
-                    (firstCell: string) =>
+                    (firstCell: string, ind: number) =>
                       new Row(
                         [
                           new Cell(firstCell, false, 1, 1, 0),
@@ -4075,8 +4140,32 @@ export const companySectionsTemplate: Section[] = [
                           new Cell('', true, 1, 1, 2),
                         ],
                         false,
-                        1,
+                        ind + 1,
                       ),
+                  ),
+                  new Row(
+                    [
+                      new Cell(
+                        'Complaints on POSH as a % of female employees / workers',
+                        false,
+                        1,
+                        1,
+                        0,
+                      ),
+                      new Cell('', true, 1, 1, 1, 'DIV', ['1$1', '2$1']),
+                      new Cell('', true, 1, 1, 2, 'DIV', ['1$2', '2$2']),
+                    ],
+                    false,
+                    3,
+                  ),
+                  new Row(
+                    [
+                      new Cell('Complaints on POSH upheld', false, 1, 1, 0),
+                      new Cell('', false, 1, 1, 1),
+                      new Cell('', false, 1, 1, 2),
+                    ],
+                    false,
+                    4,
                   ),
                 ],
                 false,
@@ -4241,9 +4330,7 @@ export const companySectionsTemplate: Section[] = [
                     0,
                   ),
                   new Row(
-                    [
-                      new Cell('From renewable sources', false, 1, 3, 0),
-                    ],
+                    [new Cell('From renewable sources', false, 1, 3, 0)],
                     false,
                     1,
                   ),
@@ -4296,15 +4383,15 @@ export const companySectionsTemplate: Section[] = [
                     false,
                     5,
                   ),
-                  new Row([new Cell('From non-renewable sources', false, 1, 3, 0)], false, 6),
+                  new Row(
+                    [new Cell('From non-renewable sources', false, 1, 3, 0)],
+                    false,
+                    6,
+                  ),
                   ...[
                     'Total electricity consumption (D)',
                     'Total fuel consumption (E)',
                     'Energy consumption through other sources (F)',
-                    // 'Energy intensity per rupee of turnover (Total energy consumed / Revenue from operations)',
-                    // 'Energy intensity per rupee of turnover adjusted for Purchasing Power Parity (PPP) (Total energy consumed / Revenue from operations adjusted for PPP)',
-                    // 'Energy intensity in terms of physical output',
-                    // 'Energy intensity (optional) – the relevant metric may be selected by the entity',
                   ].map(
                     (firstCell: string, rowNo: number) =>
                       new Row(
@@ -5393,7 +5480,7 @@ export const companySectionsTemplate: Section[] = [
           },
           {
             index: 2,
-            type: QuestionType.TEXT,
+            type: QuestionType.TABLE,
             desc: '2. Provide details of corrective action taken or underway on any issues related to anticompetitive conduct by the entity, based on adverse orders from regulatory authorities. ',
             answer_table: [
               new Table(
@@ -5606,17 +5693,144 @@ export const companySectionsTemplate: Section[] = [
                     true,
                     0,
                   ),
-                  ...['Rural', 'Semi-urban', 'Urban', 'Metropolitan'].map(
-                    (firstCell) =>
-                      new Row(
-                        [
-                          new Cell(firstCell, false, 1, 1, 0),
-                          new Cell('', true, 1, 1, 1),
-                          new Cell('', true, 1, 1, 2),
-                        ],
-                        false,
-                        1,
-                      ),
+                  new Row(
+                    [
+                      new Cell('Rural', false, 1, 3, 0),
+                    ],
+                    false,
+                    1,
+                  ),
+                  new Row(
+                    [
+                      new Cell('Disclose wages paid to persons employed (including employees or workers employed on a permanent or non-permanent / on contract basis)', false, 1, 1, 0),
+                      new Cell('', true, 1, 1, 1),
+                      new Cell('', true, 1, 1, 2),
+                    ],
+                    false,
+                    2,
+                  ),
+                  new Row(
+                    [
+                      new Cell('Total Wage Cost', false, 1, 1, 0),
+                      new Cell('', true, 1, 1, 1),
+                      new Cell('', true, 1, 1, 2),
+                    ],
+                    false,
+                    3,
+                  ),
+                  new Row(
+                    [
+                      new Cell('% of Job creation in Rural areas', false, 1, 1, 0),
+                      new Cell('', true, 1, 1, 1, 'DIV', ['2$1', '3$1']),
+                      new Cell('', true, 1, 1, 2, 'DIV', ['2$2', '3$2']),
+                    ],
+                    false,
+                    4,
+                  ),
+
+                  new Row(
+                    [
+                      new Cell('Semi-Urban', false, 1, 3, 0),
+                    ],
+                    false,
+                    5,
+                  ),
+                  new Row(
+                    [
+                      new Cell('Disclose wages paid to persons employed (including employees or workers employed on a permanent or non-permanent / on contract basis)', false, 1, 1, 0),
+                      new Cell('', true, 1, 1, 1),
+                      new Cell('', true, 1, 1, 2),
+                    ],
+                    false,
+                    6,
+                  ),
+                  new Row(
+                    [
+                      new Cell('Total Wage Cost', false, 1, 1, 0),
+                      new Cell('', true, 1, 1, 1),
+                      new Cell('', true, 1, 1, 2),
+                    ],
+                    false,
+                    7,
+                  ),
+                  new Row(
+                    [
+                      new Cell('% of Job creation in Rural areas', false, 1, 1, 0),
+                      new Cell('', true, 1, 1, 1, 'DIV', ['6$1', '7$1']),
+                      new Cell('', true, 1, 1, 2, 'DIV', ['6$2', '7$2']),
+                    ],
+                    false,
+                    8,
+                  ),
+
+                  new Row(
+                    [
+                      new Cell('Urban', false, 1, 3, 0),
+                    ],
+                    false,
+                    9,
+                  ),
+                  new Row(
+                    [
+                      new Cell('Disclose wages paid to persons employed (including employees or workers employed on a permanent or non-permanent / on contract basis)', false, 1, 1, 0),
+                      new Cell('', true, 1, 1, 1),
+                      new Cell('', true, 1, 1, 2),
+                    ],
+                    false,
+                    10,
+                  ),
+                  new Row(
+                    [
+                      new Cell('Total Wage Cost', false, 1, 1, 0),
+                      new Cell('', true, 1, 1, 1),
+                      new Cell('', true, 1, 1, 2),
+                    ],
+                    false,
+                    11,
+                  ),
+                  new Row(
+                    [
+                      new Cell('% of Job creation in Rural areas', false, 1, 1, 0),
+                      new Cell('', true, 1, 1, 1, 'DIV', ['10$1', '11$1']),
+                      new Cell('', true, 1, 1, 2, 'DIV', ['10$2', '11$2']),
+                    ],
+                    false,
+                    12,
+                  ),
+
+                  new Row(
+                    [
+                      new Cell('Metropolitan', false, 1, 3, 0),
+                    ],
+                    false,
+                    13,
+                  ),
+                  new Row(
+                    [
+                      new Cell('Disclose wages paid to persons employed (including employees or workers employed on a permanent or non-permanent / on contract basis)', false, 1, 1, 0),
+                      new Cell('', true, 1, 1, 1),
+                      new Cell('', true, 1, 1, 2),
+                    ],
+                    false,
+                    14,
+                  ),
+                  new Row(
+                    [
+                      new Cell('Total Wage Cost', false, 1, 1, 0),
+                      new Cell('', true, 1, 1, 1),
+                      new Cell('', true, 1, 1, 2),
+                    ],
+                    false,
+                    15,
+                  ),
+                  new Row(
+                    [
+                      new Cell('% of Job creation in Rural areas', false, 1, 1, 0),
+                      new Cell('', true, 1, 1, 1, 'DIV', ['14$1', '15$1']),
+                      new Cell('', true, 1, 1, 2, 'DIV', ['14$2', '15$2']),
+                    ],
+                    false,
+                    16,
                   ),
                 ],
                 false,
@@ -5985,52 +6199,47 @@ export const companySectionsTemplate: Section[] = [
           {
             index: 5,
             type: QuestionType.TEXT,
-            desc: '6.  If the above is true, provide a web-link of the policy.',
+            desc: '6. Provide details of any corrective actions taken or underway on issues relating to advertising, and delivery of essential services; cyber security and data privacy of customers; re-occurrence of instances of product recalls; penalty / action taken by regulatory authorities on safety of products / services.',
           },
           {
             index: 6,
             type: QuestionType.TEXT,
-            desc: '7. Provide details of any corrective actions taken or underway on issues relating to advertising, and delivery of essential services; cyber security and data privacy of customers; re-occurrence of instances of product recalls; penalty / action taken by regulatory authorities on safety of products / services.',
+            desc: '7. a. Provide the number of instances of data breaches.',
           },
           {
             index: 7,
             type: QuestionType.TEXT,
-            desc: '8. a. Provide the number of instances of data breaches.',
+            desc: '7. b. Provide the percentage of data breaches involving personally identifiable information of customers ',
           },
           {
             index: 8,
             type: QuestionType.TEXT,
-            desc: '8. b. Provide the percentage of data breaches involving personally identifiable information of customers ',
+            desc: '7. c. Provide the impact, if any, of the data breaches',
           },
           {
             index: 9,
             type: QuestionType.TEXT,
-            desc: '8. c. Provide the impact, if any, of the data breaches',
+            desc: '8. Channels / platforms where information on products and services of the entity can be accessed (provide web link, if available). ',
           },
           {
             index: 10,
             type: QuestionType.TEXT,
-            desc: '9. Channels / platforms where information on products and services of the entity can be accessed (provide web link, if available). ',
+            desc: '9. Steps taken to inform and educate consumers about safe and responsible usage of products and/or services. ',
           },
           {
             index: 11,
             type: QuestionType.TEXT,
-            desc: '10. Steps taken to inform and educate consumers about safe and responsible usage of products and/or services. ',
+            desc: '10. Mechanisms in place to inform consumers of any risk of disruption/discontinuation of essential services.',
           },
           {
             index: 12,
+            desc: '11. Does the entity display product information on the product over and above what is mandated as per local laws?',
             type: QuestionType.TEXT,
-            desc: '11. Mechanisms in place to inform consumers of any risk of disruption/discontinuation of essential services.',
           },
           {
             index: 13,
-            desc: '12. Does the entity display product information on the product over and above what is mandated as per local laws?',
-            type: QuestionType.TEXT,
-          },
-          {
-            index: 14,
             type: QuestionType.BOOLEAN,
-            desc: 'If the above is yes, provide details in brief. Did your entity carry out any survey with regard to consumer satisfaction relating to the major products / services of the entity, significant locations of operation of the entity or the entity as a whole?',
+            desc: '12. If the above is yes, provide details in brief. Did your entity carry out any survey with regard to consumer satisfaction relating to the major products / services of the entity, significant locations of operation of the entity or the entity as a whole?',
           },
         ],
       },

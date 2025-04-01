@@ -12,7 +12,7 @@ import {
 import { DropdownMenuItem } from "@radix-ui/react-dropdown-menu";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import {EventSource} from 'eventsource'
+import { EventSource } from "eventsource";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import TimeAgo from "react-timeago";
@@ -27,8 +27,10 @@ const Horizontalscroll = ({
   activeSection,
   sections,
 }: HorizontalscrollProps) => {
-  const [mentions, setMentions] = useState<Mention[]>([]);  const userId = useSelector((state: RootState) => state.auth.user?.data?.id);
+  const [mentions, setMentions] = useState<Mention[]>([]);
+  const userId = useSelector((state: RootState) => state.auth.user?.data?.id);
 
+  // Listening to mention notifications
   useEffect(() => {
     if (userId) {
       const eventSource = new EventSource(
@@ -46,18 +48,28 @@ const Horizontalscroll = ({
         }
       );
       eventSource.onmessage = (event) => {
-        const {data} = JSON.parse(event.data);
+        const { data } = JSON.parse(event.data);
         setMentions((prevMentions) => [data, ...prevMentions]);
       };
       eventSource.onerror = (error) => {
-        console.error("EventSource failed:", error);
+        console.log("EventSource failed:", error);
+        closeNotificationListenerAPI(userId);
         eventSource.close();
       };
-      return () => {
+      const clearenceFunction = () => {
         eventSource.close();
+        closeNotificationListenerAPI(userId);
+      }
+      window.addEventListener("beforeunload", clearenceFunction);
+
+      return () => {
+        window.removeEventListener("beforeunload", clearenceFunction)
+        eventSource.close();
+        closeNotificationListenerAPI(userId);
       };
     }
   }, [userId]);
+
 
   useEffect(() => {
     fetchMentions().then((res) => setMentions(res));
@@ -93,7 +105,7 @@ const Horizontalscroll = ({
             ))}
       </div>
 
-      <MentionsContainer mentions={mentions} />
+      <MentionsDropdown mentions={mentions} />
     </nav>
   );
 };
@@ -104,7 +116,7 @@ interface MentionsContainerProps {
   mentions: Mention[];
 }
 
-const MentionsContainer: React.FC<MentionsContainerProps> = ({ mentions }) => {
+const MentionsDropdown: React.FC<MentionsContainerProps> = ({ mentions }) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -116,22 +128,31 @@ const MentionsContainer: React.FC<MentionsContainerProps> = ({ mentions }) => {
         <DropdownMenuLabel>Your Mentions</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          {mentions.sort((a, b)=>(a.createdAt || new Date())>(b.createdAt || new Date())?-1:1).map((mention) => (
-            <a
-            key={mention.id}
-              target="_blank"
-              href={`/brsr-making?section=${mention.sectionId}&subsection=${mention.subsectionId}&question=${mention.questionId}&company=${mention.companyId}`}
-            >
-              <DropdownMenuItem
-                className="text-sm hover:bg-lime-50 hover:border-0 hover:outline-0 p-2 cursor-pointer"
+          {mentions
+            .sort((a, b) =>
+              (a.createdAt || new Date()) > (b.createdAt || new Date()) ? -1 : 1
+            )
+            .map((mention) => (
+              <a
+                key={mention.id}
+                target="_blank"
+                href={`/brsr-making?section=${mention.sectionId}&subsection=${mention.subsectionId}&question=${mention.questionId}&company=${mention.companyId}`}
               >
-                <span className="text-green-500 font-semibold">
-                  {mention.mentionedBy?.name}
-                </span>{" "}
-                has mentioned you in a question. Click to visit. {<TimeAgo date={mention.createdAt?.toString() || new Date().toString()} />}
-              </DropdownMenuItem>
-            </a>
-          ))}
+                <DropdownMenuItem className="text-sm hover:bg-lime-50 hover:border-0 hover:outline-0 p-2 cursor-pointer">
+                  <span className="inline-block w-full text-end text-xs text-gray-500 ">
+                    <TimeAgo
+                      date={
+                        mention.createdAt?.toString() || new Date().toString()
+                      }
+                    />
+                  </span>
+                  <span className="text-green-500 font-semibold">
+                    {mention.mentionedBy?.name}
+                  </span>
+                  has mentioned you in a question. Click to visit.
+                </DropdownMenuItem>
+              </a>
+            ))}
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem className="text-sm hover:bg-gray-50 hover:border-0 hover:outline-0 p-2 cursor-pointer">
@@ -152,3 +173,20 @@ const fetchMentions = async () => {
   const res = await raw.json();
   return res.data;
 };
+
+
+
+const closeNotificationListenerAPI = (userId: string) => {
+  fetch(
+    `${
+      import.meta.env.VITE_SERVER_URI
+    }/notification/mentions/${userId}/close`,
+    {
+      credentials: "include",
+      keepalive: true,
+      headers: {
+        "X-Csrf-Token": sessionStorage.getItem("X-Csrf-Token") || "",
+      },
+    }
+  )
+}

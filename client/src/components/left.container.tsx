@@ -6,14 +6,12 @@ import {
   Flower,
   Cloud,
 } from "@/components/component/SustainabilityElements";
-import MainNavigationforC from "../component/SectioncNav";
-import BottomLeftContainer from "../component/BottomLeftContainer";
+import MainNavigationforC from "./component/SectioncNav";
+import BottomLeftContainer from "./component/BottomLeftContainer";
 import { toast } from "sonner";
-// import { useSelector } from "react-redux";
-// import { RootState } from "@/store/store";
 import { useSearchParams } from "react-router-dom";
 type LeftcontainerProps = {
-  subsections: SubSection[] | undefined; // Ensures sections is an object where each key holds an array of Section
+  subsections: SubSection[] | undefined; 
   setActiveSubsection: (sectionId: string) => void;
   activeSubsection: string;
   activeSection: string

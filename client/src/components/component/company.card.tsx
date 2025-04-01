@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { useNavigate } from "react-router-dom";
 import { Trash2 } from "lucide-react";
 import { toast } from "sonner";
-import ConfirmDialog from "./ConfirmDialog";
+import ConfirmDialog from "./confirm.dialog";
 
 interface CompanyCardProps {
   id: string;
@@ -23,7 +23,6 @@ const CompanyCard: React.FC<CompanyCardProps> = ({
   const [showConfirm, setShowConfirm] = useState<boolean>(false);
 
   const navigate = useNavigate();
-
 
   return (
     <motion.div
@@ -47,19 +46,27 @@ const CompanyCard: React.FC<CompanyCardProps> = ({
         isOpen={showConfirm}
         onAgree={(e) => {
           e.stopPropagation();
-          deleteCompany(id)
-            .then((message) => {
-              removeCompanyFromLocalState(id);
-              toast.success(message);
-            })
-            .catch((err) => toast.error(err.message))
-            .finally(() => setShowConfirm(false));
+          toast.promise(
+            deleteCompany(id),
+            {
+              loading: "Deleting company...",
+              success: (message) => {
+                removeCompanyFromLocalState(id);
+                return message;
+              },
+              error: (error) => {
+                return error.message;
+              },
+            },
+          )
+          setShowConfirm(false);
         }}
         onDisagree={(e) => {
           e.stopPropagation();
           setShowConfirm(false);
         }}
       />
+
       {/* Delete company button */}
       <button
         onClick={(e) => {
@@ -72,21 +79,21 @@ const CompanyCard: React.FC<CompanyCardProps> = ({
       </button>
 
       <div className="relative w-full">
-        {/* <IconAnimation id={id} /> */}
-
         <div className="mt-6 text-center">
           <div className="text-xs font-medium text-green-500 mb-1 opacity-80">
             Company
           </div>
+          {/* Company name */}
           <h3 className="text-xl font-semibold tracking-tight mb-2">{name}</h3>
 
+          {/* Bottom horizontal rule */}
           <div
             className={cn(
               "w-12 h-0.5 mx-auto mt-3 mb-4 transition-all duration-300",
               isHovered ? "w-24 bg-green-800" : "bg-green-300"
             )}
           ></div>
-
+          {/* Bottom five dots */}
           <div className="flex justify-center space-x-1 mt-2">
             {[...Array(5)].map((_, i) => (
               <div
@@ -108,11 +115,14 @@ const CompanyCard: React.FC<CompanyCardProps> = ({
 export default CompanyCard;
 
 const deleteCompany = async (companyId: string) => {
-  const raw = await fetch(`${import.meta.env.VITE_SERVER_URI}/company/${companyId}`, {
-    method: "DELETE",
-    credentials: "include",
-    headers:{'X-Csrf-Token': sessionStorage.getItem('X-Csrf-Token') || ''}
-  });
+  const raw = await fetch(
+    `${import.meta.env.VITE_SERVER_URI}/company/${companyId}`,
+    {
+      method: "DELETE",
+      credentials: "include",
+      headers: { "X-Csrf-Token": sessionStorage.getItem("X-Csrf-Token") || "" },
+    }
+  );
   const res = await raw.json();
   if (raw.status < 200 || raw.status >= 400) throw new Error(res.message);
   return res.message;
