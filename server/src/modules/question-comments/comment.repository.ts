@@ -1,4 +1,5 @@
 import {
+  ConsoleLogger,
   HttpException,
   Injectable,
   InternalServerErrorException,
@@ -10,12 +11,12 @@ import { Comment } from '@prisma/client';
 
 @Injectable()
 export class CommentRepository {
-  constructor(private readonly db: DbService) {}
+  constructor(private readonly db: DbService, private readonly logger:ConsoleLogger) {}
 
   async addComment(
     commentData: AddCommentDTO,
     userId: string,
-  ): Promise<Comment> {
+  ) {
     try {
       return await this.db.comment.create({
         data: {
@@ -28,11 +29,12 @@ export class CommentRepository {
                 connect:{
                   id: userId
                 }
-              }
-            }))
+              },
+            })),
           }
         },
         include: {
+          mentions: true,
             user: {
                 select: {
                     id: true,
@@ -43,7 +45,7 @@ export class CommentRepository {
         }
       });
     } catch (e) {
-      if (!(e instanceof HttpException)) console.log(e.message);
+      if (!(e instanceof HttpException)) this.logger.log(e.message);
       throw new InternalServerErrorException(e);
     }
   }
@@ -76,7 +78,7 @@ export class CommentRepository {
 
       return question.comments;
     } catch (e) {
-      if (!(e instanceof HttpException)) console.log(e.message);
+      if (!(e instanceof HttpException)) this.logger.log(e.message);
       throw new InternalServerErrorException(e);
     }
   }

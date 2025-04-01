@@ -9,5 +9,5 @@ export class AddCommentDTO {
     data: string;
 
     @IsArray()
-    mentions: string[]
+    mentions: string[] //UserId
 }

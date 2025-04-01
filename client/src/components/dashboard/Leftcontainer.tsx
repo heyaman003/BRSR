@@ -9,8 +9,9 @@ import {
 import MainNavigationforC from "../component/SectioncNav";
 import BottomLeftContainer from "../component/BottomLeftContainer";
 import { toast } from "sonner";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
+// import { useSelector } from "react-redux";
+// import { RootState } from "@/store/store";
+import { useSearchParams } from "react-router-dom";
 type LeftcontainerProps = {
   subsections: SubSection[] | undefined; // Ensures sections is an object where each key holds an array of Section
   setActiveSubsection: (sectionId: string) => void;
@@ -24,13 +25,11 @@ const Leftcontainer: React.FC<LeftcontainerProps> = ({
   activeSubsection,
   activeSection
 }) => {
+  const [searchParams] = useSearchParams();
   const [mounted, setMounted] = useState(false);
   const [leaves, setLeaves] = useState<React.ReactNode[]>([]);
   const [totalQuestions, setTotalQuestions] = useState<number>(0);
   const [totalAnsweredQuestions, setTotalAnsweredQuestions] = useState<number>(0);
-  const companyId = useSelector(
-    (root: RootState) => root.auth.user?.data?.companyId
-  );
 
   useEffect(() => {
     // Animate fade in for the entire page
@@ -63,7 +62,7 @@ const Leftcontainer: React.FC<LeftcontainerProps> = ({
     }
     setLeaves(leafElements);
 
-    fetchQuestionStats(companyId).then(res=>{
+    fetchQuestionStats(searchParams.get('company') || '').then(res=>{
       setTotalAnsweredQuestions(res.answered)
       setTotalQuestions(res.total);
     })
@@ -74,7 +73,7 @@ const Leftcontainer: React.FC<LeftcontainerProps> = ({
   }, []);
 
   return (
-    <div className="space-y-10 bg-green-50 px-4 pt-5 h-[100vh] overflow-y-auto border-r-4 border-yellow-400 scrollbar-hide [&::-webkit-scrollbar]:hidden relative">
+    <div className="space-y-10 bg-green-50 px-4 pt-5 overflow-y-auto border-r-4 border-yellow-400 scrollbar-hide [&::-webkit-scrollbar]:hidden relative w-full h-screen">
       {/* Progress Circle */}
       {mounted && leaves}
       <Cloud className="absolute top-[10%] right-[10%] opacity-50 animate-float" />

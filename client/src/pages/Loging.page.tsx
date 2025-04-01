@@ -40,7 +40,7 @@ const floatingVariants = {
 };
 
 interface LoginFormProps {
-  onLogin: () => void;
+  onLogin: (companyId: string) => void;
 }
 
 export default function LoginForm({ onLogin }: LoginFormProps) {
@@ -59,7 +59,7 @@ export default function LoginForm({ onLogin }: LoginFormProps) {
       const resultAction = await dispatch(loginUser({ email, password }));
 
       if (loginUser.fulfilled.match(resultAction)) {
-        onLogin();
+        onLogin(resultAction.payload.data.companyId);
       } else {
         console.error("Login failed:", resultAction.payload);
       }

@@ -9,17 +9,19 @@ import { Button } from "@/components/ui/button";
 import { Question, SubSection, Table } from "@/models/models";
 import { plainToInstance } from "class-transformer";
 import { Loader2, MessageSquareText } from "lucide-react";
-import React, { memo, useEffect, useState } from "react";
+import React, { memo, useEffect, useLayoutEffect, useState } from "react";
 import { toast } from "sonner";
 import {
   fetchSubsectionData,
   updateSubsectionData,
 } from "@/utils/dataFetching";
+import { useSearchParams } from "react-router-dom";
 interface SectionUiArgs {
   subsectionId: string;
 }
 
 const Section: React.FC<SectionUiArgs> = ({ subsectionId }) => {
+  const [searchParams] = useSearchParams();
   const [loaderProgress, setLoaderProgress] = useState<number>(10);
   const [isLoaderVisible, setIsLoaderVisible] = useState(true);
   const [subsectionData, setSubsectionData] = useState<SubSection | null>(null);
@@ -114,10 +116,19 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId }) => {
     };
   }, [subsectionId]);
 
+  useLayoutEffect(() => {
+    const questionId = searchParams.get('question');
+    if (questionId) {
+      const questionElement = document.getElementById(questionId);
+      questionElement?.scrollIntoView({ behavior: 'smooth' });
+
+    }
+  }, [searchParams, subsectionData]);
+
   return isLoaderVisible ? (
     <SustainabilityLoader progress={loaderProgress} />
   ) : (
-    <section className="pt-6 relative h-full">
+    <section className="pt-6 relative w-full flex-grow overflow-auto">
       {subsectionData && (
         <div>
           <h1 className="font-bold text-md bg-yellow-200 w-fit px-4 rounded-lg   my-3 mb-5 ">

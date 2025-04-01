@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ConsoleLogger,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -14,6 +15,7 @@ export class CompanyRepository {
   constructor(
     private db: DbService,
     private readonly sectionService: SectionService,
+    private readonly logger: ConsoleLogger,
   ) {}
 
   async listSections(companyId: string) {
@@ -22,10 +24,16 @@ export class CompanyRepository {
         where: { id: companyId },
         select: {
           sections: {
+            orderBy: {
+              title: 'asc',
+            },
             select: {
               id: true,
               title: true,
               subsections: {
+                orderBy: {
+                  title: 'asc',
+                },
                 select: {
                   title: true,
                   id: true,
@@ -100,7 +108,7 @@ export class CompanyRepository {
     try {
       await this.db.company.delete({ where: { id: companyId } });
     } catch (e) {
-      console.log(e)
+      this.logger.log(e)
       throw new InternalServerErrorException();
     }
   }
@@ -157,7 +165,7 @@ export class CompanyRepository {
         answered: await this.getTotalAnsweredQuestionsCount(companyId),
       };
     } catch (e) {
-      console.log(e)
+      this.logger.log(e)
       throw new InternalServerErrorException();
     }
   }

@@ -12,9 +12,12 @@ import { ChatController } from './modules/chat/chat.controller';
 import { ChatService } from './modules/chat/chat.service';
 import { ChatModule } from './modules/chat/chat.module';
 import { CommentModule } from './modules/question-comments/comment.module';
+import { MyLogger } from './utils/logger';
+import { NotificationModule } from './modules/notification/notification.module';
 
 @Module({
   imports: [
+    MyLogger,
     ConfigModule.forRoot(),
     CompanyModule,
     UserModule,
@@ -28,7 +31,8 @@ import { CommentModule } from './modules/question-comments/comment.module';
       },
     }),
     ChatModule,
-    CommentModule
+    CommentModule,
+    NotificationModule
   ],
   controllers: [AppController, ChatController],
   providers: [
