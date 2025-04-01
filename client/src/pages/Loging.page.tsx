@@ -69,7 +69,7 @@ export default function LoginForm({ onLogin }: LoginFormProps) {
   };
 
   return (
-    <div className="grid lg:grid-cols-2 min-h-screen">
+    <div className="grid lg:grid-cols-2 min-h-screen overflow-x-hidden">
       {/* Left Panel with Sustainability Animation */}
       <motion.div
         className="hidden lg:flex bg-[#166534] items-center justify-center p-8 relative overflow-hidden"

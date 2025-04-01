@@ -8,9 +8,9 @@ import {
 } from "../../ui/sidebar";
 import { Tabs } from "../../ui/tabs";
 import { TabsContent, TabsList, TabsTrigger } from "@radix-ui/react-tabs";
-import ViewComments from "./ViewComments";
-import ViewHistory from "./ViewHistory";
-import CommentInput from "./CommentInput";
+import ViewComments from "./view.comments";
+import ViewHistory from "./view.history";
+import CommentInput from "./comment.Input";
 import { useEffect, useState } from "react";
 import { Comment, SubSection } from "@/models/models";
 import { toast } from "sonner";

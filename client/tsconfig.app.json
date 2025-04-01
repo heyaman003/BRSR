@@ -29,5 +29,5 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
   },
-  "include": ["src", "src/pages/CompanyUser.tsx"]
+  "include": ["src", "src/pages/company.user.tsx"]
 }

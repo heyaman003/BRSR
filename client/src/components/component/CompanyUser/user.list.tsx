@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { User } from "@/lib/types";
-import UserCard from "./UserCard";
-import CreateUserForm from "./CreateUserForm";
+import UserCard from "./user.card";
+import CreateUserForm from "./create.user.form";
 
 interface UserListProps {
   users: User[];

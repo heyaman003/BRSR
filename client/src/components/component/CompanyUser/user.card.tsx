@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { User } from "@/lib/types";
 import { Trash2 } from "lucide-react";
-import ConfirmDialog from "../ConfirmDialog";
+import ConfirmDialog from "../confirm.dialog";
 import { toast } from "sonner";
 
 interface UserCardProps {
@@ -27,8 +27,23 @@ const UserCard: React.FC<UserCardProps> = ({ user, index, deleteUserFromState })
         message="This operation can't be undone."
         isOpen={isOpen}
         onAgree={() => {
-          deleteUser(user.id).then(()=>deleteUserFromState(user.id))
-          setIsOpen(false);
+          toast.promise(
+            deleteUser(user.id),
+            {
+              loading: 'Deleting user...',
+              success: (res) => {
+                deleteUserFromState(user.id);
+                setIsOpen(false);
+                return res;
+              },
+              error: (err) => {
+                if (err instanceof Error) {
+                  return err.message;
+                }
+                return "User deletion failed";
+              },
+            }
+          )
         }}
         onDisagree={() => {
           setIsOpen(false);
@@ -69,15 +84,8 @@ const UserCard: React.FC<UserCardProps> = ({ user, index, deleteUserFromState })
 export default UserCard;
 
 const deleteUser = async (userId: string) => {
-  try {
     const raw = await fetch(`${import.meta.env.VITE_SERVER_URI}/user/${userId}`, {method: 'DELETE', credentials: 'include', headers:{'X-Csrf-Token': sessionStorage.getItem('X-Csrf-Token') || ''}});
     const res = await raw.json();
     if (raw.status < 200 || raw.status >= 400) throw new Error(res.message);
-    toast.success(res.message)
-  } catch (e) {
-    if(e instanceof Error)
-      toast.error('User deletion failed: '+e.message);
-    console.log(e);
-    throw(e);
-  }
+    return res.message
 };

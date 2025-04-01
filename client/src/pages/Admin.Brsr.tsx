@@ -1,9 +1,8 @@
 import { useSearchParams } from "react-router-dom";
-import EntrySectionMain from "./EntrySection";
+import EntrySectionMain from "./entry.section";
 const AdminCompany = () => {
   const [searchParams] = useSearchParams();
   const companyId = searchParams.get("company"); // Extract companyId from query params
-   console.log("i am trying to render")
   return (
     <div>
       {

@@ -71,7 +71,7 @@ model Question {
 
 model History{
   id String @id @default(uuid())
-  user User @relation(name: "saved-by", fields: [userId], references: [id])
+  user User @relation(name: "saved-by", fields: [userId], references: [id], onDelete: Cascade)
   userId String
   question Question @relation(name: "belongs-to", references: [id], fields: [questionId])
   questionId String
@@ -81,9 +81,9 @@ model History{
 model Comment {
   id String @id @default(uuid())
   data String
-  user User @relation(name: "commented-by", fields: [userId], references: [id])
+  user User @relation(name: "commented-by", fields: [userId], references: [id], onDelete: Cascade)
   userId String
-  question Question @relation(name: "belongs-to", references: [id], fields: [questionId])
+  question Question @relation(name: "belongs-to", references: [id], fields: [questionId], onDelete: Cascade)
   questionId String
   createdAt DateTime @default(now())
   mentions Mention[] @relation(name: "mentioned-in")
@@ -91,9 +91,9 @@ model Comment {
 
 model Mention {
   id String @id @default(uuid())
-  user User @relation(name: "mentioned-in", fields: [userId], references: [id])
+  user User @relation(name: "mentioned-in", fields: [userId], references: [id], onDelete: Cascade)
   userId String
-  comment Comment @relation(name: "mentioned-in", fields: [commentId], references: [id])
+  comment Comment @relation(name: "mentioned-in", fields: [commentId], references: [id], onDelete: Cascade)
   commentId String
 }
 
