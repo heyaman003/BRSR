@@ -1,9 +1,9 @@
 import ChatBox from "@/components/chat/ChatBox";
 import CommentSidebar from "@/components/component/commentSidebar/comment.sidebar";
 import SustainabilityLoader from "@/components/component/SustainabiltyLoader";
-import BooleanInput from "@/components/Question/BooleanInput";
-import TableUI from "@/components/Question/Table";
-import TextQuestionUI from "@/components/Question/Text";
+import BooleanInput from "@/components/Question/boolean.input";
+import TableUI from "@/components/Question/table";
+import TextQuestionUI from "@/components/Question/text";
 import { Button } from "@/components/ui/button";
 import { Question, SubSection, Table } from "@/models/models";
 import { plainToInstance } from "class-transformer";
@@ -140,6 +140,7 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId }) => {
                 (question: Question) =>
                    (
                     <div className="mb-5 py-3" key={question.id} id={question.id}>
+                      <h3 className="text-center font-semibold text-green-500 text-lg mb-4">{question.heading}</h3>
                       <div className="flex gap-3 justify-between w-[96%]">
                         <p
                           className={`text-sm mb-2 text-green-800 font-semibold

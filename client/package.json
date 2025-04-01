@@ -50,6 +50,7 @@
     "react-redux": "^9.2.0",
     "react-router-dom": "^6.29.0",
     "react-slick": "^0.30.3",
+    "react-textarea-autosize": "^8.5.9",
     "react-timeago": "^8.0.0",
     "reflect-metadata": "^0.2.2",
     "slick-carousel": "^1.8.1",

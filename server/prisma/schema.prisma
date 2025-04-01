@@ -57,6 +57,7 @@ model Subsection {
 
 model Question {
   id String @id @default(uuid())
+  heading String? @default("")
   desc String
   type QuestionType
   answer_text String?
