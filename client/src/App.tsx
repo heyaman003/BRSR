@@ -4,9 +4,9 @@ import "./App.css";
 import LoginForm from "@/pages/loging.page";
 import Homepage from "@/pages/Home.page";
 import Home from "@/components/pages/Home";
-import CompanyUser from "./pages/company.user";
+import CompanyUser from "@/pages/company.user";
 import { Toaster } from "sonner";
-import AdminCompany from "./pages/admin.Brsr";
+import AdminCompany from "@/pages/admin.Brsr";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
