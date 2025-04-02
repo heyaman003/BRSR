@@ -5,8 +5,8 @@ import {
   SidebarFooter,
   SidebarHeader,
   SidebarProvider,
-} from "../../ui/sidebar";
-import { Tabs } from "../../ui/tabs";
+} from "../ui/sidebar";
+import { Tabs } from "../ui/tabs";
 import { TabsContent, TabsList, TabsTrigger } from "@radix-ui/react-tabs";
 import ViewComments from "./view.comments";
 import ViewHistory from "./view.history";

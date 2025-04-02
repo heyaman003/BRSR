@@ -74,7 +74,7 @@ model History{
   id String @id @default(uuid())
   user User @relation(name: "saved-by", fields: [userId], references: [id], onDelete: Cascade)
   userId String
-  question Question @relation(name: "belongs-to", references: [id], fields: [questionId])
+  question Question @relation(name: "belongs-to", references: [id], fields: [questionId], onDelete: Cascade)
   questionId String
   createdAt DateTime @default(now())
 }
