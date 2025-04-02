@@ -1,8 +1,8 @@
 import React, { useState } from "react";
+import { User } from "@/lib/types";
 import { Trash2 } from "lucide-react";
 import ConfirmDialog from "../component/confirm.dialog";
 import { toast } from "sonner";
-import { User } from "@/lib/types";
 
 interface UserCardProps {
   user: User;

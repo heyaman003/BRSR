@@ -7,7 +7,7 @@ import Leftcontainer from "@/components/left.container";
 import Horizontalscroll from "@/components/sectionNavigationBar/horizontal.scroll";
 import { Section } from "@/models/models";
 import { plainToInstance } from "class-transformer";
-import SectionUI from "../components/section/section";
+import SectionUI from "@/components/section/section";
 
 import { useSearchParams } from "react-router-dom";
 export default function QuestionnairePage() {
