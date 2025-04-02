@@ -50,7 +50,7 @@ const CellInput: React.FC<CellInputArgs> = ({
       });
       if (valueAtIndexes)
         setCellData("" + performOperation(operation, valueAtIndexes));
-    }, 300);
+    }, 200);
 
     return () => clearTimeout(debounceInputValueChangeRef.current);
   }, [tableState]);

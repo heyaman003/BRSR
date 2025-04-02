@@ -10,7 +10,6 @@ export class NotificationService {
 
     addClient(userId: string) {
         try {
-            this.logger.debug(this.clients)
             if (!this.clients[userId]) {
                 this.clients[userId] = new Subject();
             }

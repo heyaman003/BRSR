@@ -54,7 +54,7 @@ export class Question {
   answer_table?: Table[] | null;
   answer_text?: string | null;
   index: number;
-  heading?: string | null // Used for rendering 'Leadership Indicators', 'Essential Indicators'
+  heading?: string | null; // Used for rendering 'Leadership Indicators', 'Essential Indicators'
 }
 
 export class SubSection {
@@ -286,7 +286,7 @@ export const companySectionsTemplate: Section[] = [
               ),
             ],
             // colFirstData: ['Location', 'National', 'International'],
-            desc: '18.Details of business activities (accounting for 90% of the turnover):',
+            desc: '18. Number of locations where plants and/or operations/offices of the entity are situated',
             // tabulardata: [
             //   ['Number of plants', 'number'],
             //   ['Number of offices', 'text'],
@@ -396,13 +396,11 @@ export const companySectionsTemplate: Section[] = [
                   new Row(
                     [
                       new Cell('Total employees (D + E)', false, 1, 1, 0),
-                      ...Array.from({ length: 5 }).map(
-                        (_, cellNo: number) =>
-                          new Cell('', true, 1, 1, cellNo + 1, Operation.ADD, [
-                            `4$${cellNo + 1}`,
-                            `3$${cellNo + 1}`,
-                          ]),
-                      ),
+                      new Cell('', true, 1, 1, 1, 'ADD', ['3$1', '4$1']),
+                      new Cell('', true, 1, 1, 2, 'ADD', ['3$2', '4$2']),
+                      new Cell('', true, 1, 1, 3, 'DIV', ['5$2', '5$1']),
+                      new Cell('', true, 1, 1, 4, 'ADD', ['3$4', '4$4']),
+                      new Cell('', true, 1, 1, 5, 'DIV', ['5$4', '5$1'])
                     ],
                     false,
                     5,
@@ -432,22 +430,18 @@ export const companySectionsTemplate: Section[] = [
                   new Row(
                     [
                       new Cell('Total employees (F + G)', false, 1, 1, 0),
-                      ...Array.from({ length: 5 }).map(
-                        (_, cellNo: number) =>
-                          new Cell('', true, 1, 1, cellNo + 1, Operation.ADD, [
-                            `7$${cellNo + 1}`,
-                            `8$${cellNo + 1}`,
-                          ]),
-                      ),
+                      new Cell('', true, 1, 1, 1, 'ADD', ['7$1', '8$1']),
+                      new Cell('', true, 1, 1, 2, 'ADD', ['7$2', '8$2']),
+                      new Cell('', true, 1, 1, 3, 'DIV', ['9$2', '9$1']),
+                      new Cell('', true, 1, 1, 4, 'ADD', ['7$4', '8$4']),
+                      new Cell('', true, 1, 1, 5, 'DIV', ['9$4', '9$1'])
                     ],
                     false,
                     9,
                   ),
-                ],
-                false,
-              ),
-              new Table(
-                [
+
+
+
                   new Row(
                     [
                       new Cell('Particulars', false, 2, 1, 0),
@@ -456,7 +450,7 @@ export const companySectionsTemplate: Section[] = [
                       new Cell('Female', false, 1, 2, 3),
                     ],
                     true,
-                    0,
+                    10,
                   ),
                   new Row(
                     [
@@ -466,12 +460,12 @@ export const companySectionsTemplate: Section[] = [
                       new Cell('% (C / A)', false, 1, 2, 3),
                     ],
                     true,
-                    1,
+                    11,
                   ),
                   new Row(
                     [new Cell('DIFFERENTLY ABLED EMPLOYEES', false, 1, 6, 0)],
                     false,
-                    2,
+                    12,
                   ),
                   ...['Permanent (D)', 'Other than Permanent (E)'].map(
                     (firstCol, rowNo: number) =>
@@ -491,27 +485,25 @@ export const companySectionsTemplate: Section[] = [
                           ]),
                         ],
                         false,
-                        rowNo + 3,
+                        rowNo + 13,
                       ),
                   ),
                   new Row(
                     [
                       new Cell('Total employees (D + E)', false, 1, 1, 0),
-                      ...Array.from({ length: 5 }).map(
-                        (_, cellNo: number) =>
-                          new Cell('', true, 1, 1, cellNo + 1, Operation.ADD, [
-                            `4$${cellNo + 1}`,
-                            `3$${cellNo + 1}`,
-                          ]),
-                      ),
+                      new Cell('', true, 1, 1, 1, 'ADD', ['3$1', '4$1']),
+                      new Cell('', true, 1, 1, 2, 'ADD', ['3$2', '4$2']),
+                      new Cell('', true, 1, 1, 3, 'DIV', ['5$2', '5$1']),
+                      new Cell('', true, 1, 1, 4, 'ADD', ['3$4', '4$4']),
+                      new Cell('', true, 1, 1, 5, 'DIV', ['5$4', '5$1'])
                     ],
                     false,
-                    5,
+                    15,
                   ),
                   new Row(
                     [new Cell('DIFFERENTLY ABLED WORKERS', false, 1, 6, 0)],
                     false,
-                    6,
+                    16,
                   ),
                   ...['Permanent (F)', 'Other than Permanent (G)'].map(
                     (firstCol, rowNo: number) =>
@@ -531,26 +523,24 @@ export const companySectionsTemplate: Section[] = [
                           ]),
                         ],
                         false,
-                        rowNo + 7,
+                        rowNo + 17,
                       ),
                   ),
                   new Row(
                     [
                       new Cell('Total employees (F + G)', false, 1, 1, 0),
-                      ...Array.from({ length: 5 }).map(
-                        (_, cellNo: number) =>
-                          new Cell('', true, 1, 1, cellNo + 1, Operation.ADD, [
-                            `7$${cellNo + 1}`,
-                            `8$${cellNo + 1}`,
-                          ]),
-                      ),
+                      new Cell('', true, 1, 1, 1, 'ADD', ['7$1', '8$1']),
+                      new Cell('', true, 1, 1, 2, 'ADD', ['7$2', '8$2']),
+                      new Cell('', true, 1, 1, 3, 'DIV', ['9$2', '9$1']),
+                      new Cell('', true, 1, 1, 4, 'ADD', ['7$4', '8$4']),
+                      new Cell('', true, 1, 1, 5, 'DIV', ['9$4', '9$1'])
                     ],
                     false,
-                    9,
+                    19,
                   ),
                 ],
                 false,
-              ),
+              )
             ],
             // employee: {
             //   colFirstData: [
@@ -654,7 +644,7 @@ export const companySectionsTemplate: Section[] = [
                     true,
                     1,
                   ),
-                  ...['Board of Directors', 'Key Management Personnel'].map(
+                  ...['Permanent Employees', 'Permanent Workers'].map(
                     (firstCell, ind) =>
                       new Row(
                         [
@@ -1178,7 +1168,7 @@ export const companySectionsTemplate: Section[] = [
           'PRINCIPLE 1 Businesses should conduct and govern themselves with integrity, and in a manner that is Ethical, Transparent and Accountable.',
         questions: [
           {
-            heading: "Essential Indicators",
+            heading: 'Essential Indicators',
             index: 0,
             type: QuestionType.TABLE,
             desc: '1. Percentage coverage by training and awareness programmes on any of the Principles during the financial year:',
@@ -1480,19 +1470,50 @@ export const companySectionsTemplate: Section[] = [
                     true,
                     0,
                   ),
-                  ...['Number of days of accounts payables'].map(
-                    (firstCol: string, rowNo: number) =>
-                      new Row(
-                        [
-                          new Cell(firstCol, false, 1, 1, 0),
-                          ...Array.from({ length: 2 }).map(
-                            (_, colNo: number) =>
-                              new Cell('', true, 1, 1, colNo + 1),
-                          ),
-                        ],
+                  new Row(
+                    [
+                      new Cell(
+                        'i) Accounts payable * 365 days',
                         false,
-                        rowNo + 1,
+                        1,
+                        1,
+                        0,
                       ),
+                      new Cell('', true, 1, 1, 1),
+                      new Cell('', true, 1, 1, 2),
+                    ],
+                    false,
+                    1,
+                  ),
+                  new Row(
+                    [
+                      new Cell(
+                        'ii) Cost of goods or services procured',
+                        false,
+                        1,
+                        1,
+                        0,
+                      ),
+                      new Cell('', true, 1, 1, 1),
+                      new Cell('', true, 1, 1, 2),
+                    ],
+                    false,
+                    2,
+                  ),
+                  new Row(
+                    [
+                      new Cell(
+                        'Number of days of accounts payables',
+                        false,
+                        1,
+                        1,
+                        0,
+                      ),
+                      new Cell('', true, 1, 1, 1, 'DIV', ['1$1', '2$1']),
+                      new Cell('', true, 1, 1, 2, 'DIV', ['1$2', '2$2']),
+                    ],
+                    false,
+                    3,
                   ),
                 ],
                 false,
@@ -1524,9 +1545,9 @@ export const companySectionsTemplate: Section[] = [
 
                   new Row(
                     [
-                      new Cell('Concentration of Purchases', false, 3, 1, 0),
+                      new Cell('Concentration of Purchases', false, 7, 1, 0),
                       new Cell(
-                        'a. Purchases from trading houses as % of total purchases ',
+                        'a. i) Purchases from trading houses',
                         false,
                         1,
                         1,
@@ -1538,9 +1559,35 @@ export const companySectionsTemplate: Section[] = [
                     false,
                     1,
                   ),
+
                   new Row(
                     [
-                      // new Cell("sC-p1-s1-q9-r3-c1", 'Concentration of Purchases', false, 3, 1),
+                      new Cell('a. ii) Total purchases', false, 1, 1, 1),
+                      new Cell('', true, 1, 1, 2),
+                      new Cell('', true, 1, 1, 3),
+                    ],
+                    false,
+                    2,
+                  ),
+
+                  new Row(
+                    [
+                      new Cell(
+                        'a. iii) Purchases from trading houses as % of total purchases',
+                        false,
+                        1,
+                        1,
+                        1,
+                      ),
+                      new Cell('', true, 1, 1, 2, 'DIV', ['1$2', '2$2']),
+                      new Cell('', true, 1, 1, 3, 'DIV', ['1$3', '2$3']),
+                    ],
+                    false,
+                    3,
+                  ),
+
+                  new Row(
+                    [
                       new Cell(
                         'b. Number of trading houses where purchases are made from ',
                         false,
@@ -1552,29 +1599,13 @@ export const companySectionsTemplate: Section[] = [
                       new Cell('', true, 1, 1, 2),
                     ],
                     false,
-                    2,
+                    4,
                   ),
+
                   new Row(
                     [
-                      // new Cell("sC-p1-s1-q9-r4-c1", 'Concentration of Purchases', false, 3, 1),
                       new Cell(
-                        'c. Purchases from top 10 trading houses as % of total purchases from trading houses ',
-                        false,
-                        1,
-                        1,
-                        0,
-                      ),
-                      new Cell('', true, 1, 1, 1),
-                      new Cell('', true, 1, 1, 2),
-                    ],
-                    false,
-                    3,
-                  ),
-                  new Row(
-                    [
-                      new Cell('Concentration of Sales', false, 3, 1, 0),
-                      new Cell(
-                        'a. Sales to dealers / distributors as % of total sales',
+                        'c. i) Sales to top 10 dealers / distributors',
                         false,
                         1,
                         1,
@@ -1584,11 +1615,86 @@ export const companySectionsTemplate: Section[] = [
                       new Cell('', true, 1, 1, 3),
                     ],
                     false,
-                    4,
+                    5,
                   ),
+
                   new Row(
                     [
-                      // new Cell("sC-p1-s1-q9-r3-c1", 'Concentration of Purchases', false, 3, 1),
+                      new Cell(
+                        'c. ii) Total Sales to dealer / distributors',
+                        false,
+                        1,
+                        1,
+                        1,
+                      ),
+                      new Cell('', true, 1, 1, 2),
+                      new Cell('', true, 1, 1, 3),
+                    ],
+                    false,
+                    6,
+                  ),
+
+                  new Row(
+                    [
+                      new Cell(
+                        'c. iii) Sales to top 10 dealers / distributors as % of total sales to dealer / distributors',
+                        false,
+                        1,
+                        1,
+                        1,
+                      ),
+                      new Cell('', true, 1, 1, 2, 'DIV', ['5$2', '6$2']),
+                      new Cell('', true, 1, 1, 3, 'DIV', ['5$3', '6$3']),
+                    ],
+                    false,
+                    7,
+                  ),
+
+                  new Row(
+                    [
+                      new Cell('Concentration of Sales', false, 7, 1, 0),
+                      new Cell(
+                        'a. i) Sales to dealer / distributors',
+                        false,
+                        1,
+                        1,
+                        1,
+                      ),
+                      new Cell('', true, 1, 1, 2),
+                      new Cell('', true, 1, 1, 3),
+                    ],
+                    false,
+                    8,
+                  ),
+
+                  new Row(
+                    [
+                      new Cell('a. ii) Total Sales', false, 1, 1, 1),
+                      new Cell('', true, 1, 1, 2),
+                      new Cell('', true, 1, 1, 3),
+                    ],
+                    false,
+                    9,
+                  ),
+
+                  new Row(
+                    [
+                      new Cell(
+                        'a. iii) Sales to dealer / distributors as % of total sales',
+                        false,
+                        1,
+                        1,
+                        1,
+                      ),
+                      new Cell('', true, 1, 1, 2, 'DIV', ['8$2', '9$2']),
+                      new Cell('', true, 1, 1, 3, 'DIV', ['8$3', '9$3']),
+                    ],
+                    false,
+                    10,
+                  ),
+
+                  new Row(
+                    [
                       new Cell(
                         'b. Number of dealers / distributors to whom sales are made',
                         false,
@@ -1600,29 +1706,13 @@ export const companySectionsTemplate: Section[] = [
                       new Cell('', true, 1, 1, 2),
                     ],
                     false,
-                    5,
+                    11,
                   ),
+
                   new Row(
                     [
-                      // new Cell("sC-p1-s1-q9-r4-c1", 'Concentration of Purchases', false, 3, 1),
                       new Cell(
-                        'c. Sales to top 10 dealers / distributors as % of total sales to dealers / distributors',
-                        false,
-                        1,
-                        1,
-                        0,
-                      ),
-                      new Cell('', true, 1, 1, 1),
-                      new Cell('', true, 1, 1, 2),
-                    ],
-                    false,
-                    6,
-                  ),
-                  new Row(
-                    [
-                      new Cell('Share of RPTs in', false, 4, 1, 0),
-                      new Cell(
-                        'a. Purchases (Purchaseswith related parties / Total Purchases)',
+                        'c. i) Sales to top 10 dealers / distributors',
                         false,
                         1,
                         1,
@@ -1632,56 +1722,198 @@ export const companySectionsTemplate: Section[] = [
                       new Cell('', true, 1, 1, 3),
                     ],
                     false,
-                    7,
-                  ),
-                  new Row(
-                    [
-                      // new Cell("sC-p1-s1-q9-r3-c1", 'Concentration of Purchases', false, 3, 1),
-                      new Cell(
-                        'b. Sales (Sales to related parties / Total Sales)',
-                        false,
-                        1,
-                        1,
-                        0,
-                      ),
-                      new Cell('', true, 1, 1, 1),
-                      new Cell('', true, 1, 1, 2),
-                    ],
-                    false,
-                    8,
-                  ),
-                  new Row(
-                    [
-                      // new Cell("sC-p1-s1-q9-r4-c1", 'Concentration of Purchases', false, 3, 1),
-                      new Cell(
-                        'c. Loans & advances (Loans & advances given to related parties / Total loans & advances)',
-                        false,
-                        1,
-                        1,
-                        0,
-                      ),
-                      new Cell('', true, 1, 1, 1),
-                      new Cell('', true, 1, 1, 2),
-                    ],
-                    false,
-                    9,
+                    12,
                   ),
 
                   new Row(
                     [
-                      // new Cell("sC-p1-s1-q9-r4-c1", 'Concentration of Purchases', false, 3, 1),
                       new Cell(
-                        'd. Investments ( Investments in related parties / Total Investments made)',
+                        'c. ii) Total Sales to dealer / distributors',
                         false,
                         1,
                         1,
-                        0,
+                        1,
                       ),
-                      new Cell('', true, 1, 1, 1),
                       new Cell('', true, 1, 1, 2),
+                      new Cell('', true, 1, 1, 3),
                     ],
                     false,
-                    10,
+                    13,
+                  ),
+
+                  new Row(
+                    [
+                      new Cell(
+                        'c. iii) Sales to top 10 dealers / distributors as % of total sales to dealer / distributors',
+                        false,
+                        1,
+                        1,
+                        1,
+                      ),
+                      new Cell('', true, 1, 1, 2, 'DIV', ['12$2', '13$2']),
+                      new Cell('', true, 1, 1, 3, 'DIV', ['12$3', '13$3']),
+                    ],
+                    false,
+                    14,
+                  ),
+                  new Row(
+                    [
+                      new Cell('Share of RPTs in', false, 12, 1, 0),
+                      new Cell(
+                        'a. i) Purchases (Purchases with related parties)',
+                        false,
+                        1,
+                        1,
+                        1,
+                      ),
+                      new Cell('', true, 1, 1, 2),
+                      new Cell('', true, 1, 1, 3),
+                    ],
+                    false,
+                    15,
+                  ),
+                  new Row(
+                    [
+                      new Cell('a. ii) Total Purchases)', false, 1, 1, 1),
+                      new Cell('', true, 1, 1, 2),
+                      new Cell('', true, 1, 1, 3),
+                    ],
+                    false,
+                    16,
+                  ),
+                  new Row(
+                    [
+                      new Cell(
+                        'a. iii) Purchases (Purchases with related parties as % of Total Purchases)',
+                        false,
+                        1,
+                        1,
+                        1,
+                      ),
+                      new Cell('', true, 1, 1, 2, 'DIV', ['15$2', '16$2']),
+                      new Cell('', true, 1, 1, 3, 'DIV', ['15$3', '16$3']),
+                    ],
+                    false,
+                    17,
+                  ),
+                  new Row(
+                    [
+                      new Cell(
+                        'b. i) Sales (Sales to related parties)',
+                        false,
+                        1,
+                        1,
+                        1,
+                      ),
+                      new Cell('', true, 1, 1, 2),
+                      new Cell('', true, 1, 1, 3),
+                    ],
+                    false,
+                    18,
+                  ),
+                  new Row(
+                    [
+                      new Cell('b. ii) Total Sales', false, 1, 1, 1),
+                      new Cell('', true, 1, 1, 2),
+                      new Cell('', true, 1, 1, 3),
+                    ],
+                    false,
+                    19,
+                  ),
+                  new Row(
+                    [
+                      new Cell(
+                        'b. iii) Sales (Sales to related parties as % of Total Sales)',
+                        false,
+                        1,
+                        1,
+                        1,
+                      ),
+                      new Cell('', true, 1, 1, 2, 'DIV', ['18$2', '19$2']),
+                      new Cell('', true, 1, 1, 3, 'DIV', ['18$3', '19$3']),
+                    ],
+                    false,
+                    20,
+                  ),
+                  
+                  new Row(
+                    [
+                      new Cell(
+                        'c. i) Loans & advances given to related parties',
+                        false,
+                        1,
+                        1,
+                        1,
+                      ),
+                      new Cell('', true, 1, 1, 2),
+                      new Cell('', true, 1, 1, 3),
+                    ],
+                    false,
+                    21,
+                  ),
+                  new Row(
+                    [
+                      new Cell('c. ii) Total loans & advances', false, 1, 1, 1),
+                      new Cell('', true, 1, 1, 2),
+                      new Cell('', true, 1, 1, 3),
+                    ],
+                    false,
+                    22,
+                  ),
+                  new Row(
+                    [
+                      new Cell(
+                        'c. iii) Loans & advances given to related parties as % of Total loans & advances',
+                        false,
+                        1,
+                        1,
+                        1,
+                      ),
+                      new Cell('', true, 1, 1, 2, 'DIV', ['21$2', '22$2']),
+                      new Cell('', true, 1, 1, 3, 'DIV', ['21$3', '22$3']),
+                    ],
+                    false,
+                    23,
+                  ),
+
+                  new Row(
+                    [
+                      new Cell(
+                        'd. i) Investments in related parties',
+                        false,
+                        1,
+                        1,
+                        1,
+                      ),
+                      new Cell('', true, 1, 1, 2),
+                      new Cell('', true, 1, 1, 3),
+                    ],
+                    false,
+                    24,
+                  ),
+                  new Row(
+                    [
+                      new Cell('d. ii) Total Investments made', false, 1, 1, 1),
+                      new Cell('', true, 1, 1, 2),
+                      new Cell('', true, 1, 1, 3),
+                    ],
+                    false,
+                    25,
+                  ),
+                  new Row(
+                    [
+                      new Cell(
+                        'd. iii) Investments in related parties as % of Total Investments made',
+                        false,
+                        1,
+                        1,
+                        1,
+                      ),
+                      new Cell('', true, 1, 1, 2, 'DIV', ['24$2', '25$2']),
+                      new Cell('', true, 1, 1, 3, 'DIV', ['24$3', '25$3']),
+                    ],
+                    false,
+                    26,
                   ),
                 ],
                 false,
@@ -1736,7 +1968,7 @@ export const companySectionsTemplate: Section[] = [
           'PRINCIPLE 2 Businesses should provide goods and services in a manner that is sustainable and safe',
         questions: [
           {
-            heading: "Essential Indicators",
+            heading: 'Essential Indicators',
             index: 0,
             type: QuestionType.TABLE,
             desc: '1. Percentage of R&D and capital expenditure (capex) investments in specific technologies to improve the environmental and social impacts of product and processes to total R&D and capex investments made by the entity, respectively',
@@ -1785,16 +2017,31 @@ export const companySectionsTemplate: Section[] = [
           {
             index: 2,
             type: QuestionType.TEXT,
-            desc: '3. Describe the processes in place to safely reclaim your products for reusing, recycling and disposing at the end of life, for (a) Plastics (including packaging) (b) E-waste (c) Hazardous waste and (d) other waste.',
+            desc: '3. a. Describe the processes in place to safely reclaim your products for reusing, recycling and disposing at the end of life, for Plastics (including packaging)',
           },
           {
             index: 3,
             type: QuestionType.TEXT,
+            desc: '3. b. Describe the processes in place to safely reclaim your products for reusing, recycling and disposing at the end of life, for E-waste',
+          },
+          {
+            index: 4,
+            type: QuestionType.TEXT,
+            desc: '3. c. Describe the processes in place to safely reclaim your products for reusing, recycling and disposing at the end of life, for Hazardous waste.',
+          },
+          {
+            index: 5,
+            type: QuestionType.TEXT,
+            desc: '3. d. Describe the processes in place to safely reclaim your products for reusing, recycling and disposing at the end of life, for other waste.',
+          },
+          {
+            index: 6,
+            type: QuestionType.TEXT,
             desc: '4. Whether Extended Producer Responsibility (EPR) is applicable to the entity’s activities (Yes / No). If yes, whether the waste collection plan is in line with the Extended Producer Responsibility (EPR) plan submitted to Pollution Control Boards? If not, provide steps taken to address the same.',
           },
           {
-            heading: "Leadership Indicators",
-            index: 4,
+            heading: 'Leadership Indicators',
+            index: 7,
             type: QuestionType.TABLE,
             desc: '1. Has the entity conducted Life Cycle Perspective / Assessments (LCA) for any of its products (for manufacturing industry) or for its services (for service industry)? If yes, provide details in the following format?',
             answer_table: [
@@ -1836,7 +2083,7 @@ export const companySectionsTemplate: Section[] = [
             ],
           },
           {
-            index: 5,
+            index: 7,
             type: QuestionType.TABLE,
             desc: '2. If there are any significant social or environmental concerns and/or risks arising from production or disposal of your products / services, as identified in the Life Cycle Perspective / Assessments (LCA) or through any other means, briefly describe the same along-with action taken to mitigate the same.',
             answer_table: [
@@ -1875,7 +2122,7 @@ export const companySectionsTemplate: Section[] = [
             ],
           },
           {
-            index: 6,
+            index: 8,
             type: QuestionType.TABLE,
             desc: '3. Percentage of recycled or reused input material to total material (by value) used in production (for manufacturing industry) or providing services (for service industry).',
             answer_table: [
@@ -1934,7 +2181,7 @@ export const companySectionsTemplate: Section[] = [
             ],
           },
           {
-            index: 7,
+            index: 9,
             type: QuestionType.TABLE,
             desc: '4. Of the products and packaging reclaimed at end of life of products, amount (in metric tonnes) reused, recycled, and safely disposed, as per the following format:',
             answer_table: [
@@ -1997,7 +2244,7 @@ export const companySectionsTemplate: Section[] = [
             ],
           },
           {
-            index: 8,
+            index: 10,
             type: QuestionType.TABLE,
             desc: '5. Reclaimed products and their packaging materials (as percentage of products sold) for each product category.',
             answer_table: [
@@ -2043,7 +2290,7 @@ export const companySectionsTemplate: Section[] = [
 
         questions: [
           {
-            heading: "Essential Indicators",
+            heading: 'Essential Indicators',
             index: 0,
             type: QuestionType.TABLE,
             desc: '1. a. Details of measures for the well-being of employees:',
@@ -2463,11 +2710,11 @@ export const companySectionsTemplate: Section[] = [
                         1,
                         0,
                       ),
-                      new Cell('', true, 1, 1, 1, Operation.ADD, [
+                      new Cell('', true, 1, 1, 1, Operation.DIV, [
                         `1$1`,
                         `2$1`,
                       ]),
-                      new Cell('', true, 1, 1, 2, Operation.ADD, [
+                      new Cell('', true, 1, 1, 2, Operation.DIV, [
                         `1$2`,
                         `2$2`,
                       ]),
@@ -2768,7 +3015,7 @@ export const companySectionsTemplate: Section[] = [
                       new Cell('', true, 1, 1, 3, 'DIV', ['2$2', '2$1']),
                       new Cell('', true, 1, 1, 4, 'ADD', ['3$4', '4$4']),
                       new Cell('', true, 1, 1, 5, 'ADD', ['3$5', '4$5']),
-                      new Cell('', true, 1, 1, 6, 'DIV', ['2$5', '4$4']),
+                      new Cell('', true, 1, 1, 6, 'DIV', ['2$5', '2$4']),
                     ],
                     false,
                     2,
@@ -2801,10 +3048,10 @@ export const companySectionsTemplate: Section[] = [
                       new Cell('Total Permanent Employee', false, 1, 1, 0),
                       new Cell('', true, 1, 1, 1, 'ADD', ['6$1', '7$1']),
                       new Cell('', true, 1, 1, 2, 'ADD', ['6$2', '7$2']),
-                      new Cell('', true, 1, 1, 3, 'ADD', ['5$2', '5$1']),
+                      new Cell('', true, 1, 1, 3, 'DIV', ['5$2', '5$1']),
                       new Cell('', true, 1, 1, 4, 'ADD', ['6$4', '7$4']),
                       new Cell('', true, 1, 1, 5, 'ADD', ['6$5', '7$5']),
-                      new Cell('', true, 1, 1, 6, 'ADD', ['5$5', '5$4']),
+                      new Cell('', true, 1, 1, 6, 'DIV', ['5$5', '5$4']),
                     ],
                     false,
                     5,
@@ -2948,9 +3195,9 @@ export const companySectionsTemplate: Section[] = [
                       new Cell('', true, 1, 1, 5, 'DIV', ['6$4', '6$1']),
                       new Cell('', true, 1, 1, 6, 'ADD', ['4$6', '5$6']),
                       new Cell('', true, 1, 1, 7, 'ADD', ['4$7', '5$7']),
-                      new Cell('', true, 1, 1, 8, 'DIV', ['6$8', '6$7']),
+                      new Cell('', true, 1, 1, 8, 'DIV', ['6$7', '6$6']),
                       new Cell('', true, 1, 1, 9, 'ADD', ['4$9', '5$9']),
-                      new Cell('', true, 1, 1, 10, 'DIV', ['6$9', '6$7']),
+                      new Cell('', true, 1, 1, 10, 'DIV', ['6$9', '6$6']),
                     ],
                     false,
                     6,
@@ -3439,6 +3686,17 @@ export const companySectionsTemplate: Section[] = [
                     false,
                     2,
                   ),
+                  new Row(
+                    [
+                      new Cell('Workers', false, 1, 1, 0),
+                      new Cell('', true, 1, 1, 1),
+                      new Cell('', true, 1, 1, 2),
+                      new Cell('', true, 1, 1, 3),
+                      new Cell('', true, 1, 1, 4),
+                    ],
+                    false,
+                    3,
+                  ),
                 ],
                 false,
               ),
@@ -3503,7 +3761,7 @@ export const companySectionsTemplate: Section[] = [
           'PRINCIPLE 4: Businesses should respect the interests of and be responsive to all its stakeholders',
         questions: [
           {
-            heading: "Essential Indicators",
+            heading: 'Essential Indicators',
             index: 0,
             desc: '1. Describe the processes for identifying key stakeholder groups of the entity',
             type: QuestionType.TEXT,
@@ -3564,7 +3822,7 @@ export const companySectionsTemplate: Section[] = [
             ],
           },
           {
-            heading: "Leadership Indicators",
+            heading: 'Leadership Indicators',
             index: 2,
             type: QuestionType.TEXT,
             desc: '1. Provide the processes for consultation between stakeholders and the Board on economic, environmental, and social topics or if consultation is delegated, how is feedback from such consultations provided to the Board.',
@@ -3585,7 +3843,7 @@ export const companySectionsTemplate: Section[] = [
         title: 'PRINCIPLE 5 Businesses should respect and promote human rights',
         questions: [
           {
-            heading: "Essential Indicators",
+            heading: 'Essential Indicators',
             index: 0,
             desc: '1. Employees and workers who have been provided training on human rights issues and policy(ies) of the entity, in the following format: ',
             type: QuestionType.TABLE,
@@ -3811,17 +4069,42 @@ export const companySectionsTemplate: Section[] = [
                       ].map(
                         (heading: string, colNo: number) =>
                           new Cell(heading, false, 1, 1, colNo),
+                        
                       ),
                     ],
                     true,
                     2,
                   ),
-                  new Row([new Cell('Employees', false, 1, 11, 0)], false, 3),
+                  new Row(
+                    [new Cell("Employees", false, 1, 1, 11)], false, 3
+                  ),
+                  new Row([
+                    new Cell('Permanent', false, 1, 1, 0 ),
+                    new Cell('', true, 1, 1, 1, 'ADD', ['5$1', '6$1']),
+                          new Cell('', true, 1, 1, 2, 'ADD', ['5$2', '6$2']),
+                          new Cell('', true, 1, 1, 3, Operation.DIV, [
+                            `4$2`,
+                            `4$1`,
+                          ]),
+                          new Cell('', true, 1, 1, 4, 'ADD', ['5$4', '6$4']),
+                          new Cell('', true, 1, 1, 5, Operation.DIV, [
+                            `4$4`,
+                            `4$1`,
+                          ]),
+                          new Cell('', true, 1, 1, 6, 'ADD', ['5$6', '6$6']),
+                          new Cell('', true, 1, 1, 7, 'ADD', ['5$7', '6$7']),
+                          new Cell('', true, 1, 1, 8, Operation.DIV, [
+                            `4$7`,
+                            `4$6`,
+                          ]),
+                          new Cell('', true, 1, 1, 9, 'ADD', ['5$9', '6$9']),
+                          new Cell('', true, 1, 1, 10, Operation.DIV, [
+                            `4$9`,
+                            `4$6`,
+                          ]),
+
+                  ], false, 4),
                   ...[
-                    'Permanent',
-                    'Male',
-                    'Female',
-                    'Other than Permanent',
                     'Male',
                     'Female',
                   ].map(
@@ -3832,36 +4115,121 @@ export const companySectionsTemplate: Section[] = [
                           new Cell('', true, 1, 1, 1),
                           new Cell('', true, 1, 1, 2),
                           new Cell('', true, 1, 1, 3, Operation.DIV, [
-                            `${rowNo + 4}$2`,
-                            `${rowNo + 4}$1`,
+                            `${rowNo + 5}$2`,
+                            `${rowNo + 5}$1`,
                           ]),
                           new Cell('', true, 1, 1, 4),
                           new Cell('', true, 1, 1, 5, Operation.DIV, [
-                            `${rowNo + 4}$4`,
-                            `${rowNo + 4}$1`,
+                            `${rowNo + 5}$4`,
+                            `${rowNo + 5}$1`,
                           ]),
                           new Cell('', true, 1, 1, 6),
                           new Cell('', true, 1, 1, 7),
                           new Cell('', true, 1, 1, 8, Operation.DIV, [
-                            `${rowNo + 4}$7`,
-                            `${rowNo + 4}$6`,
+                            `${rowNo + 5}$7`,
+                            `${rowNo + 5}$6`,
                           ]),
                           new Cell('', true, 1, 1, 9),
                           new Cell('', true, 1, 1, 10, Operation.DIV, [
-                            `${rowNo + 4}$9`,
-                            `${rowNo + 4}$6`,
+                            `${rowNo + 5}$9`,
+                            `${rowNo + 5}$6`,
                           ]),
                         ],
                         false,
-                        rowNo + 4,
+                        rowNo + 5,
+                      ),
+                  ),
+
+                  new Row([
+                    new Cell('Permanent', false, 1, 1, 0 ),
+                    new Cell('', true, 1, 1, 1, 'ADD', ['8$1', '9$1']),
+                          new Cell('', true, 1, 1, 2, 'ADD', ['8$2', '9$2']),
+                          new Cell('', true, 1, 1, 3, Operation.DIV, [
+                            `7$2`,
+                            `7$1`,
+                          ]),
+                          new Cell('', true, 1, 1, 4, 'ADD', ['8$4', '9$4']),
+                          new Cell('', true, 1, 1, 5, Operation.DIV, [
+                            `7$4`,
+                            `7$1`,
+                          ]),
+                          new Cell('', true, 1, 1, 6, 'ADD', ['8$6', '9$6']),
+                          new Cell('', true, 1, 1, 7, 'ADD', ['8$7', '9$7']),
+                          new Cell('', true, 1, 1, 8, Operation.DIV, [
+                            `7$7`,
+                            `7$6`,
+                          ]),
+                          new Cell('', true, 1, 1, 9, 'ADD', ['8$9', '9$9']),
+                          new Cell('', true, 1, 1, 10, Operation.DIV, [
+                            `7$9`,
+                            `7$6`,
+                          ]),
+
+                  ], false, 7),
+                  ...[
+                    'Male',
+                    'Female',
+                  ].map(
+                    (firstCol: string, rowNo: number) =>
+                      new Row(
+                        [
+                          new Cell(firstCol, false, 1, 1, 0),
+                          new Cell('', true, 1, 1, 1),
+                          new Cell('', true, 1, 1, 2),
+                          new Cell('', true, 1, 1, 3, Operation.DIV, [
+                            `${rowNo + 8}$2`,
+                            `${rowNo + 8}$1`,
+                          ]),
+                          new Cell('', true, 1, 1, 4),
+                          new Cell('', true, 1, 1, 5, Operation.DIV, [
+                            `${rowNo + 8}$4`,
+                            `${rowNo + 8}$1`,
+                          ]),
+                          new Cell('', true, 1, 1, 6),
+                          new Cell('', true, 1, 1, 7),
+                          new Cell('', true, 1, 1, 8, Operation.DIV, [
+                            `${rowNo + 8}$7`,
+                            `${rowNo + 8}$6`,
+                          ]),
+                          new Cell('', true, 1, 1, 9),
+                          new Cell('', true, 1, 1, 10, Operation.DIV, [
+                            `${rowNo + 8}$9`,
+                            `${rowNo + 8}$6`,
+                          ]),
+                        ],
+                        false,
+                        rowNo + 8
                       ),
                   ),
                   new Row([new Cell('Workers', false, 1, 11, 0)], false, 10),
+                  
+                  new Row([
+                    new Cell('Permanent', false, 1, 1, 0 ),
+                    new Cell('', true, 1, 1, 1, 'ADD', ['12$1', '13$1']),
+                          new Cell('', true, 1, 1, 2, 'ADD', ['12$2', '13$2']),
+                          new Cell('', true, 1, 1, 3, Operation.DIV, [
+                            `11$2`,
+                            `11$1`,
+                          ]),
+                          new Cell('', true, 1, 1, 4, 'ADD', ['12$4', '13$4']),
+                          new Cell('', true, 1, 1, 5, Operation.DIV, [
+                            `11$4`,
+                            `11$1`,
+                          ]),
+                          new Cell('', true, 1, 1, 6, 'ADD', ['12$6', '13$6']),
+                          new Cell('', true, 1, 1, 7, 'ADD', ['12$7', '13$7']),
+                          new Cell('', true, 1, 1, 8, Operation.DIV, [
+                            `11$7`,
+                            `11$6`,
+                          ]),
+                          new Cell('', true, 1, 1, 9, 'ADD', ['12$9', '13$9']),
+                          new Cell('', true, 1, 1, 10, Operation.DIV, [
+                            `11$9`,
+                            `11$6`,
+                          ]),
+
+                  ], false, 11),
                   ...[
-                    'Permanent',
-                    'Male',
-                    'Female',
-                    'Other than Permanent',
                     'Male',
                     'Female',
                   ].map(
@@ -3872,28 +4240,90 @@ export const companySectionsTemplate: Section[] = [
                           new Cell('', true, 1, 1, 1),
                           new Cell('', true, 1, 1, 2),
                           new Cell('', true, 1, 1, 3, Operation.DIV, [
-                            `${rowNo + 11}$2`,
-                            `${rowNo + 11}$1`,
+                            `${rowNo + 12}$2`,
+                            `${rowNo + 12}$1`,
                           ]),
                           new Cell('', true, 1, 1, 4),
                           new Cell('', true, 1, 1, 5, Operation.DIV, [
-                            `${rowNo + 11}$4`,
-                            `${rowNo + 11}$1`,
+                            `${rowNo + 12}$4`,
+                            `${rowNo + 12}$1`,
                           ]),
                           new Cell('', true, 1, 1, 6),
                           new Cell('', true, 1, 1, 7),
                           new Cell('', true, 1, 1, 8, Operation.DIV, [
-                            `${rowNo + 11}$7`,
-                            `${rowNo + 11}$6`,
+                            `${rowNo + 12}$7`,
+                            `${rowNo + 12}$6`,
                           ]),
                           new Cell('', true, 1, 1, 9),
                           new Cell('', true, 1, 1, 10, Operation.DIV, [
-                            `${rowNo + 11}$9`,
-                            `${rowNo + 11}$6`,
+                            `${rowNo + 12}$9`,
+                            `${rowNo + 12}$6`,
                           ]),
                         ],
                         false,
-                        rowNo + 11,
+                        rowNo + 12,
+                      ),
+                  ),
+
+                  new Row([
+                    new Cell('Other than Permanent', false, 1, 1, 0 ),
+                    new Cell('', true, 1, 1, 1, 'ADD', ['15$1', '16$1']),
+                          new Cell('', true, 1, 1, 2, 'ADD', ['15$2', '16$2']),
+                          new Cell('', true, 1, 1, 3, Operation.DIV, [
+                            `14$2`,
+                            `14$1`,
+                          ]),
+                          new Cell('', true, 1, 1, 4, 'ADD', ['15$4', '16$4']),
+                          new Cell('', true, 1, 1, 5, Operation.DIV, [
+                            `14$4`,
+                            `14$1`,
+                          ]),
+                          new Cell('', true, 1, 1, 6, 'ADD', ['15$6', '16$6']),
+                          new Cell('', true, 1, 1, 7, 'ADD', ['15$7', '16$7']),
+                          new Cell('', true, 1, 1, 8, Operation.DIV, [
+                            `14$7`,
+                            `14$6`,
+                          ]),
+                          new Cell('', true, 1, 1, 9, 'ADD', ['15$9', '16$9']),
+                          new Cell('', true, 1, 1, 10, Operation.DIV, [
+                            `14$9`,
+                            `14$6`,
+                          ]),
+
+                  ], false, 14),
+                  ...[
+                    'Male',
+                    'Female',
+                  ].map(
+                    (firstCol: string, rowNo: number) =>
+                      new Row(
+                        [
+                          new Cell(firstCol, false, 1, 1, 0),
+                          new Cell('', true, 1, 1, 1),
+                          new Cell('', true, 1, 1, 2),
+                          new Cell('', true, 1, 1, 3, Operation.DIV, [
+                            `${rowNo + 15}$2`,
+                            `${rowNo + 15}$1`,
+                          ]),
+                          new Cell('', true, 1, 1, 4),
+                          new Cell('', true, 1, 1, 5, Operation.DIV, [
+                            `${rowNo + 15}$4`,
+                            `${rowNo + 15}$1`,
+                          ]),
+                          new Cell('', true, 1, 1, 6),
+                          new Cell('', true, 1, 1, 7),
+                          new Cell('', true, 1, 1, 8, Operation.DIV, [
+                            `${rowNo + 15}$7`,
+                            `${rowNo + 15}$6`,
+                          ]),
+                          new Cell('', true, 1, 1, 9),
+                          new Cell('', true, 1, 1, 10, Operation.DIV, [
+                            `${rowNo + 15}$9`,
+                            `${rowNo + 15}$6`,
+                          ]),
+                        ],
+                        false,
+                        rowNo + 15
                       ),
                   ),
                 ],
@@ -4260,7 +4690,7 @@ export const companySectionsTemplate: Section[] = [
             desc: '11. Provide details of any corrective actions taken or underway to address significant risks / concerns arising from the assessments at Question 10 above. ',
           },
           {
-            heading: "Leadership Indicators",
+            heading: 'Leadership Indicators',
             index: 12,
             desc: '1. Details of a business process being modified / introduced as a result of addressing human rights grievances/complaints.',
             type: QuestionType.TEXT,
@@ -4331,7 +4761,7 @@ export const companySectionsTemplate: Section[] = [
           'PRINCIPLE 6: Businesses should respect and make efforts to protect and restore the environment',
         questions: [
           {
-            heading:'Essential Indicators',
+            heading: 'Essential Indicators',
             index: 0,
             desc: '1. Details of total energy consumption (in Joules or multiples) and energy intensity, in the following format:',
             type: QuestionType.TABLE,
@@ -5191,7 +5621,7 @@ export const companySectionsTemplate: Section[] = [
             ],
           },
           {
-            heading: "Leadership Indicators",
+            heading: 'Leadership Indicators',
             index: 14,
             desc: '1. Water withdrawal, consumption and discharge in areas of water stress (in kilolitres): \n For each facility / plant located in areas of water stress, provide the following information: \n(i) Name of the area \n(ii) Nature of operations \n(iii) Water withdrawal, consumption and discharge in the following format:',
             type: QuestionType.TABLE,
@@ -5468,7 +5898,7 @@ export const companySectionsTemplate: Section[] = [
           'PRINCIPLE 7 Businesses, when engaging in influencing public and regulatory policy, should do so in a manner that is responsible and transparent',
         questions: [
           {
-            heading:"Essential Indicators",
+            heading: 'Essential Indicators',
             desc: '1. a. Number of affiliations with trade and industry chambers/ associations',
             type: QuestionType.TEXT,
             index: 0,
@@ -5541,7 +5971,7 @@ export const companySectionsTemplate: Section[] = [
             ],
           },
           {
-            heading: "Leadership Indicators",
+            heading: 'Leadership Indicators',
             index: 3,
             type: QuestionType.TABLE,
             desc: '1. Details of public policy positions advocated by the entity:',
@@ -5600,7 +6030,7 @@ export const companySectionsTemplate: Section[] = [
           'PRINCIPLE 8 Businesses should promote inclusive growth and equitable development',
         questions: [
           {
-            heading: "Essential Indicators",
+            heading: 'Essential Indicators',
             index: 0,
             desc: '1. Details of Social Impact Assessments (SIA) of projects undertaken by the entity based on applicable laws, in the current financial year.',
             type: QuestionType.TABLE,
@@ -5727,16 +6157,16 @@ export const companySectionsTemplate: Section[] = [
                     true,
                     0,
                   ),
+                  new Row([new Cell('Rural', false, 1, 3, 0)], false, 1),
                   new Row(
                     [
-                      new Cell('Rural', false, 1, 3, 0),
-                    ],
-                    false,
-                    1,
-                  ),
-                  new Row(
-                    [
-                      new Cell('Disclose wages paid to persons employed (including employees or workers employed on a permanent or non-permanent / on contract basis)', false, 1, 1, 0),
+                      new Cell(
+                        'Disclose wages paid to persons employed (including employees or workers employed on a permanent or non-permanent / on contract basis)',
+                        false,
+                        1,
+                        1,
+                        0,
+                      ),
                       new Cell('', true, 1, 1, 1),
                       new Cell('', true, 1, 1, 2),
                     ],
@@ -5754,7 +6184,13 @@ export const companySectionsTemplate: Section[] = [
                   ),
                   new Row(
                     [
-                      new Cell('% of Job creation in Rural areas', false, 1, 1, 0),
+                      new Cell(
+                        '% of Job creation in Rural areas',
+                        false,
+                        1,
+                        1,
+                        0,
+                      ),
                       new Cell('', true, 1, 1, 1, 'DIV', ['2$1', '3$1']),
                       new Cell('', true, 1, 1, 2, 'DIV', ['2$2', '3$2']),
                     ],
@@ -5762,16 +6198,16 @@ export const companySectionsTemplate: Section[] = [
                     4,
                   ),
 
+                  new Row([new Cell('Semi-Urban', false, 1, 3, 0)], false, 5),
                   new Row(
                     [
-                      new Cell('Semi-Urban', false, 1, 3, 0),
-                    ],
-                    false,
-                    5,
-                  ),
-                  new Row(
-                    [
-                      new Cell('Disclose wages paid to persons employed (including employees or workers employed on a permanent or non-permanent / on contract basis)', false, 1, 1, 0),
+                      new Cell(
+                        'Disclose wages paid to persons employed (including employees or workers employed on a permanent or non-permanent / on contract basis)',
+                        false,
+                        1,
+                        1,
+                        0,
+                      ),
                       new Cell('', true, 1, 1, 1),
                       new Cell('', true, 1, 1, 2),
                     ],
@@ -5789,7 +6225,13 @@ export const companySectionsTemplate: Section[] = [
                   ),
                   new Row(
                     [
-                      new Cell('% of Job creation in Rural areas', false, 1, 1, 0),
+                      new Cell(
+                        '% of Job creation in Rural areas',
+                        false,
+                        1,
+                        1,
+                        0,
+                      ),
                       new Cell('', true, 1, 1, 1, 'DIV', ['6$1', '7$1']),
                       new Cell('', true, 1, 1, 2, 'DIV', ['6$2', '7$2']),
                     ],
@@ -5797,16 +6239,16 @@ export const companySectionsTemplate: Section[] = [
                     8,
                   ),
 
+                  new Row([new Cell('Urban', false, 1, 3, 0)], false, 9),
                   new Row(
                     [
-                      new Cell('Urban', false, 1, 3, 0),
-                    ],
-                    false,
-                    9,
-                  ),
-                  new Row(
-                    [
-                      new Cell('Disclose wages paid to persons employed (including employees or workers employed on a permanent or non-permanent / on contract basis)', false, 1, 1, 0),
+                      new Cell(
+                        'Disclose wages paid to persons employed (including employees or workers employed on a permanent or non-permanent / on contract basis)',
+                        false,
+                        1,
+                        1,
+                        0,
+                      ),
                       new Cell('', true, 1, 1, 1),
                       new Cell('', true, 1, 1, 2),
                     ],
@@ -5824,7 +6266,13 @@ export const companySectionsTemplate: Section[] = [
                   ),
                   new Row(
                     [
-                      new Cell('% of Job creation in Rural areas', false, 1, 1, 0),
+                      new Cell(
+                        '% of Job creation in Rural areas',
+                        false,
+                        1,
+                        1,
+                        0,
+                      ),
                       new Cell('', true, 1, 1, 1, 'DIV', ['10$1', '11$1']),
                       new Cell('', true, 1, 1, 2, 'DIV', ['10$2', '11$2']),
                     ],
@@ -5833,15 +6281,19 @@ export const companySectionsTemplate: Section[] = [
                   ),
 
                   new Row(
-                    [
-                      new Cell('Metropolitan', false, 1, 3, 0),
-                    ],
+                    [new Cell('Metropolitan', false, 1, 3, 0)],
                     false,
                     13,
                   ),
                   new Row(
                     [
-                      new Cell('Disclose wages paid to persons employed (including employees or workers employed on a permanent or non-permanent / on contract basis)', false, 1, 1, 0),
+                      new Cell(
+                        'Disclose wages paid to persons employed (including employees or workers employed on a permanent or non-permanent / on contract basis)',
+                        false,
+                        1,
+                        1,
+                        0,
+                      ),
                       new Cell('', true, 1, 1, 1),
                       new Cell('', true, 1, 1, 2),
                     ],
@@ -5859,7 +6311,13 @@ export const companySectionsTemplate: Section[] = [
                   ),
                   new Row(
                     [
-                      new Cell('% of Job creation in Rural areas', false, 1, 1, 0),
+                      new Cell(
+                        '% of Job creation in Rural areas',
+                        false,
+                        1,
+                        1,
+                        0,
+                      ),
                       new Cell('', true, 1, 1, 1, 'DIV', ['14$1', '15$1']),
                       new Cell('', true, 1, 1, 2, 'DIV', ['14$2', '15$2']),
                     ],
@@ -5872,7 +6330,7 @@ export const companySectionsTemplate: Section[] = [
             ],
           },
           {
-            heading: "Leadership Indicators",
+            heading: 'Leadership Indicators',
             index: 5,
             desc: '1. Provide details of actions taken to mitigate any negative social impacts identified in the Social Impact Assessments (Reference: Question 1 of Essential Indicators above):',
             type: QuestionType.TABLE,
@@ -6046,7 +6504,7 @@ export const companySectionsTemplate: Section[] = [
           'PRINCIPLE 9 Businesses should engage with and provide value to their consumers in a responsible manner',
         questions: [
           {
-            heading: "Essential Indicators",
+            heading: 'Essential Indicators',
             index: 0,
             desc: '1. Describe the mechanisms in place to receive and respond to consumer complaints and feedback. ',
             type: QuestionType.TEXT,
@@ -6253,7 +6711,7 @@ export const companySectionsTemplate: Section[] = [
             desc: '7. c. Provide the impact, if any, of the data breaches',
           },
           {
-            heading: "Leadership Indicators",
+            heading: 'Leadership Indicators',
             index: 9,
             type: QuestionType.TEXT,
             desc: '1. Channels / platforms where information on products and services of the entity can be accessed (provide web link, if available). ',
@@ -6272,7 +6730,7 @@ export const companySectionsTemplate: Section[] = [
             index: 12,
             desc: '4. Does the entity display product information on the product over and above what is mandated as per local laws?',
             type: QuestionType.TEXT,
-          }
+          },
         ],
       },
     ],

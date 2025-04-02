@@ -1,36 +1,32 @@
-import { cn } from "@/lib/utils";
-import { Mention, Section } from "@/models/models";
-import { CircleUser } from "lucide-react";
+import { Mention } from "@/models/models";
+import { useEffect, useState } from "react";
 import {
-  DropdownMenuGroup,
-  DropdownMenuLabel,
+  DropdownMenuContent,
   DropdownMenuTrigger,
   DropdownMenu,
-  DropdownMenuContent,
   DropdownMenuSeparator,
-} from "./dropdown-menu";
-import { DropdownMenuItem } from "@radix-ui/react-dropdown-menu";
-import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+} from "../ui/dropdown-menu";
 import { EventSource } from "eventsource";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
+import { CircleUser } from "lucide-react";
 import TimeAgo from "react-timeago";
 
-type HorizontalscrollProps = {
-  activeSection: string; // Ensures activeSection is a valid key
-  setActiveSection: (section: string) => void;
-  sections: Section[] | null;
-};
+interface MentionsContainerProps {
+  userId: string;
+}
 
-const Horizontalscroll = ({
-  activeSection,
-  sections,
-}: HorizontalscrollProps) => {
-  const [mentions, setMentions] = useState<Mention[]>([]);
-  const userId = useSelector((state: RootState) => state.auth.user?.data?.id);
-
+const MentionsDropdown: React.FC<MentionsContainerProps> = ({ userId }) => {
   // Listening to mention notifications
+  const [mentions, setMentions] = useState<Mention[]>([]);
+  const [newNewNotificationCount, setNewNotificationCount] =
+    useState<number>(0);
+
+  useEffect(() => {
+    fetchMentions().then((res) => setMentions(res));
+  }, []);
+
   useEffect(() => {
     if (userId) {
       const eventSource = new EventSource(
@@ -47,10 +43,12 @@ const Horizontalscroll = ({
             }),
         }
       );
+
       eventSource.onmessage = (event) => {
         const { data } = JSON.parse(event.data);
         setMentions((prevMentions) => [data, ...prevMentions]);
       };
+
       eventSource.onerror = (error) => {
         console.log("EventSource failed:", error);
         closeNotificationListenerAPI(userId);
@@ -59,69 +57,49 @@ const Horizontalscroll = ({
       const clearenceFunction = () => {
         eventSource.close();
         closeNotificationListenerAPI(userId);
-      }
+      };
       window.addEventListener("beforeunload", clearenceFunction);
 
       return () => {
-        window.removeEventListener("beforeunload", clearenceFunction)
+        window.removeEventListener("beforeunload", clearenceFunction);
         eventSource.close();
         closeNotificationListenerAPI(userId);
       };
     }
   }, [userId]);
 
-
   useEffect(() => {
-    fetchMentions().then((res) => setMentions(res));
-  }, []);
-  const [_searchParams, setSearchParams] = useSearchParams();
+    let newNewNotificationCount = 0;
+    mentions.forEach((mention) => {
+      if (!localStorage.getItem(`notification-${mention.id}`))
+        newNewNotificationCount++;
+    });
+    setNewNotificationCount(newNewNotificationCount);
+  }, [mentions]);
+
+  const viewNotifications = () => {
+    mentions.forEach((mention) =>
+      localStorage.setItem(`notification-${mention.id}`, "1")
+    );
+    setNewNotificationCount(0);
+  };
 
   return (
-    <nav className="top-0 w-full flex justify-between items-center py-4 mt-2 bg-[#f2f9fa] z-10 pr-4">
-      <div className="overflow-y-auto flex justify-betwwen gap-10 w-full">
-        {sections &&
-          sections
-            .sort((a, b) => a.title.localeCompare(b.title))
-            .map((section: Section) => (
-              <button
-                onClick={() =>
-                  setSearchParams((params) => {
-                    params.set("section", section.id);
-                    return params;
-                  })
-                }
-                key={section.id}
-                className={cn(
-                  " px-8 py-2 rounded-md text-md font-bold whitespace-nowrap",
-                  `${
-                    activeSection !== section.id
-                      ? "bg-[#8dcba3]"
-                      : "bg-[#04b52d]"
-                  } text-primary-foreground hover:bg-[#04b52d] tracking-[2px]`
-                )}
-              >
-                {section.title}
-              </button>
-            ))}
-      </div>
-
-      <MentionsDropdown mentions={mentions} />
-    </nav>
-  );
-};
-
-export default Horizontalscroll;
-
-interface MentionsContainerProps {
-  mentions: Mention[];
-}
-
-const MentionsDropdown: React.FC<MentionsContainerProps> = ({ mentions }) => {
-  return (
-    <DropdownMenu>
+    <DropdownMenu
+      onOpenChange={(open) => {
+        if (open) viewNotifications();
+      }}
+    >
       <DropdownMenuTrigger asChild>
         {/* <Button> */}
-        <CircleUser className="text-green-600 cursor-pointer" size={35} />
+        <span className="relative">
+          <CircleUser className="text-green-600 cursor-pointer" size={35} />
+          {newNewNotificationCount ? (
+            <span className="flex rounded-full bg-red-500 -top-1 -right-1 absolute text-xs text-white size-4 justify-center items-center font-semibold ">{newNewNotificationCount}</span>
+          ) : (
+            <></>
+          )}
+        </span>
         {/* </Button> */}
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-80" side="left" align="start">
@@ -138,18 +116,20 @@ const MentionsDropdown: React.FC<MentionsContainerProps> = ({ mentions }) => {
                 target="_blank"
                 href={`/brsr-making?section=${mention.sectionId}&subsection=${mention.subsectionId}&question=${mention.questionId}&company=${mention.companyId}`}
               >
-                <DropdownMenuItem className="text-sm hover:bg-lime-50 hover:border-0 hover:outline-0 p-2 cursor-pointer">
-                  <span className="inline-block w-full text-end text-xs text-gray-500 ">
+                <DropdownMenuItem className="text-sm hover:bg-lime-50 hover:border-0 hover:outline-0 p-2 cursor-pointer flex flex-col">
+                  <div className="inline-block w-full text-end text-xs text-gray-500 ">
                     <TimeAgo
                       date={
                         mention.createdAt?.toString() || new Date().toString()
                       }
                     />
-                  </span>
-                  <span className="text-green-500 font-semibold">
-                    {mention.mentionedBy?.name}
-                  </span>
-                  has mentioned you in a question. Click to visit.
+                  </div>
+                  <div>
+                    <span className="text-green-500 font-semibold mx-1">
+                      {mention.mentionedBy?.name}
+                    </span>
+                    has mentioned you in a question. Click to visit.
+                  </div>
                 </DropdownMenuItem>
               </a>
             ))}
@@ -163,6 +143,8 @@ const MentionsDropdown: React.FC<MentionsContainerProps> = ({ mentions }) => {
   );
 };
 
+export default MentionsDropdown;
+
 const fetchMentions = async () => {
   const raw = await fetch(`${import.meta.env.VITE_SERVER_URI}/user/mentions`, {
     credentials: "include",
@@ -174,13 +156,9 @@ const fetchMentions = async () => {
   return res.data;
 };
 
-
-
 const closeNotificationListenerAPI = (userId: string) => {
   fetch(
-    `${
-      import.meta.env.VITE_SERVER_URI
-    }/notification/mentions/${userId}/close`,
+    `${import.meta.env.VITE_SERVER_URI}/notification/mentions/${userId}/close`,
     {
       credentials: "include",
       keepalive: true,
@@ -188,5 +166,5 @@ const closeNotificationListenerAPI = (userId: string) => {
         "X-Csrf-Token": sessionStorage.getItem("X-Csrf-Token") || "",
       },
     }
-  )
-}
+  );
+};

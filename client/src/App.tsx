@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import "./App.css";
-import LoginForm from "@/pages/Loging.page";
+import LoginForm from "./pages/loging.page";
 import Homepage from "@/pages/Home.page";
 import Home from "@/components/pages/Home"; 
 import CompanyUser from "./pages/company.user";
 import { Toaster } from "sonner";
-import AdminCompany from "@/pages/Admin.Brsr";
+import AdminCompany from "./pages/admin.brsr";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -20,7 +20,7 @@ function App() {
       setIsLoggedIn(true);
       console.log("User is logged in", isLoggedIn);
     }
-
+    setIsLoadingCsrf(true);
     fetch(import.meta.env.VITE_SERVER_URI + "/csrf", {
       method: "HEAD",
       credentials: "include",
