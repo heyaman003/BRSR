@@ -7,7 +7,7 @@ import Leftcontainer from "@/components/left.container";
 import Horizontalscroll from "@/components/ui/Horizontalscroll";
 import { Section } from "@/models/models";
 import { plainToInstance } from "class-transformer";
-import SectionUI from "../components/section/section";
+import SectionUI from "./Section";
 
 // import { RootState } from "@/store/store";
 import { useSearchParams } from "react-router-dom";
