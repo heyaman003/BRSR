@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { getSectiondata } from "../features/sections/sectionSlice";
 import type { AppDispatch } from "@/store/store.ts";
 import Leftcontainer from "@/components/left.container";
-import Horizontalscroll from "@/components/ui/Horizontalscroll";
+import Horizontalscroll from "@/components/sectionNavigationBar/horizontal.scroll";
 import { Section } from "@/models/models";
 import { plainToInstance } from "class-transformer";
 import SectionUI from "../components/section/section";

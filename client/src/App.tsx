@@ -20,7 +20,7 @@ function App() {
       setIsLoggedIn(true);
       console.log("User is logged in", isLoggedIn);
     }
-
+    setIsLoadingCsrf(true);
     fetch(import.meta.env.VITE_SERVER_URI + "/csrf", {
       method: "HEAD",
       credentials: "include",

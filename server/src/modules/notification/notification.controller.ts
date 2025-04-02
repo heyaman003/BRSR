@@ -11,13 +11,11 @@ export class NotificationController {
 
   @Sse('/mentions/:userId')
   sendNotification(@Param('userId') userId: string): Observable<any> {
-    this.logger.debug(userId);
     return this.notificationService.addClient(userId);
   }
 
   @Get('/mentions/:userId/close')
   closeNotification(@Param('userId') userId: string) {
-    this.logger.debug(userId);
     this.notificationService.removeClient(userId);
   }
 }
