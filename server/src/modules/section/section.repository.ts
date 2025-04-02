@@ -269,6 +269,7 @@ export class SectionRepository {
     const questionId: string = (
       await this.db.question.create({
         data: {
+          heading: question.heading,
           desc: question.desc,
           subsectionId: subsectionId,
           type: question.type,

@@ -54,6 +54,7 @@ export class Question {
   answer_table?: Table[] | null;
   answer_text?: string | null;
   index: number;
+  heading?: string | null // Used for rendering 'Leadership Indicators', 'Essential Indicators'
 }
 
 export class SubSection {
@@ -1177,6 +1178,7 @@ export const companySectionsTemplate: Section[] = [
           'PRINCIPLE 1 Businesses should conduct and govern themselves with integrity, and in a manner that is Ethical, Transparent and Accountable.',
         questions: [
           {
+            heading: "Essential Indicators",
             index: 0,
             type: QuestionType.TABLE,
             desc: '1. Percentage coverage by training and awareness programmes on any of the Principles during the financial year:',
@@ -1687,9 +1689,10 @@ export const companySectionsTemplate: Section[] = [
             ],
           },
           {
+            heading: 'Leadership Indicators',
             index: 9,
             type: QuestionType.TABLE,
-            desc: '9. Awareness programmes conducted for value chain partners on any of the Principles during the financial year:',
+            desc: '1. Awareness programmes conducted for value chain partners on any of the Principles during the financial year:',
             answer_table: [
               new Table(
                 [
@@ -1724,7 +1727,7 @@ export const companySectionsTemplate: Section[] = [
           {
             index: 10,
             type: QuestionType.TEXT,
-            desc: '10. Does the entity have processes in place to avoid/ manage conflict of interests involving members of the Board? (Yes/No) If Yes, provide details of the same.',
+            desc: '2. Does the entity have processes in place to avoid/ manage conflict of interests involving members of the Board? (Yes/No) If Yes, provide details of the same.',
           },
         ],
       },
@@ -1733,6 +1736,7 @@ export const companySectionsTemplate: Section[] = [
           'PRINCIPLE 2 Businesses should provide goods and services in a manner that is sustainable and safe',
         questions: [
           {
+            heading: "Essential Indicators",
             index: 0,
             type: QuestionType.TABLE,
             desc: '1. Percentage of R&D and capital expenditure (capex) investments in specific technologies to improve the environmental and social impacts of product and processes to total R&D and capex investments made by the entity, respectively',
@@ -1789,9 +1793,10 @@ export const companySectionsTemplate: Section[] = [
             desc: '4. Whether Extended Producer Responsibility (EPR) is applicable to the entity’s activities (Yes / No). If yes, whether the waste collection plan is in line with the Extended Producer Responsibility (EPR) plan submitted to Pollution Control Boards? If not, provide steps taken to address the same.',
           },
           {
+            heading: "Leadership Indicators",
             index: 4,
             type: QuestionType.TABLE,
-            desc: '5. Has the entity conducted Life Cycle Perspective / Assessments (LCA) for any of its products (for manufacturing industry) or for its services (for service industry)? If yes, provide details in the following format?',
+            desc: '1. Has the entity conducted Life Cycle Perspective / Assessments (LCA) for any of its products (for manufacturing industry) or for its services (for service industry)? If yes, provide details in the following format?',
             answer_table: [
               new Table(
                 [
@@ -1833,7 +1838,7 @@ export const companySectionsTemplate: Section[] = [
           {
             index: 5,
             type: QuestionType.TABLE,
-            desc: '6. If there are any significant social or environmental concerns and/or risks arising from production or disposal of your products / services, as identified in the Life Cycle Perspective / Assessments (LCA) or through any other means, briefly describe the same along-with action taken to mitigate the same.',
+            desc: '2. If there are any significant social or environmental concerns and/or risks arising from production or disposal of your products / services, as identified in the Life Cycle Perspective / Assessments (LCA) or through any other means, briefly describe the same along-with action taken to mitigate the same.',
             answer_table: [
               new Table(
                 [
@@ -1872,7 +1877,7 @@ export const companySectionsTemplate: Section[] = [
           {
             index: 6,
             type: QuestionType.TABLE,
-            desc: '7. Percentage of recycled or reused input material to total material (by value) used in production (for manufacturing industry) or providing services (for service industry).',
+            desc: '3. Percentage of recycled or reused input material to total material (by value) used in production (for manufacturing industry) or providing services (for service industry).',
             answer_table: [
               new Table(
                 [
@@ -1931,7 +1936,7 @@ export const companySectionsTemplate: Section[] = [
           {
             index: 7,
             type: QuestionType.TABLE,
-            desc: '8. Of the products and packaging reclaimed at end of life of products, amount (in metric tonnes) reused, recycled, and safely disposed, as per the following format:',
+            desc: '4. Of the products and packaging reclaimed at end of life of products, amount (in metric tonnes) reused, recycled, and safely disposed, as per the following format:',
             answer_table: [
               new Table(
                 [
@@ -1994,7 +1999,7 @@ export const companySectionsTemplate: Section[] = [
           {
             index: 8,
             type: QuestionType.TABLE,
-            desc: '9. Reclaimed products and their packaging materials (as percentage of products sold) for each product category.',
+            desc: '5. Reclaimed products and their packaging materials (as percentage of products sold) for each product category.',
             answer_table: [
               new Table(
                 [
@@ -2038,6 +2043,7 @@ export const companySectionsTemplate: Section[] = [
 
         questions: [
           {
+            heading: "Essential Indicators",
             index: 0,
             type: QuestionType.TABLE,
             desc: '1. a. Details of measures for the well-being of employees:',
@@ -2134,13 +2140,17 @@ export const companySectionsTemplate: Section[] = [
                   new Row(
                     [
                       new Cell('Total', false, 1, 1, 0),
-                      ...Array.from({ length: 11 }).map(
-                        (_, colNo: number) =>
-                          new Cell('', true, 1, 1, colNo + 1, Operation.ADD, [
-                            `4$${colNo + 1}`,
-                            `5$${colNo + 1}`,
-                          ]),
-                      ),
+                      new Cell('', true, 1, 1, 1, 'ADD', ['4$1', '5$1']),
+                      new Cell('', true, 1, 1, 2, 'ADD', ['4$2', '5$2']),
+                      new Cell('', true, 1, 1, 3, 'DIV', ['6$2', '6$1']),
+                      new Cell('', true, 1, 1, 4, 'ADD', ['4$4', '5$4']),
+                      new Cell('', true, 1, 1, 5, 'DIV', ['6$4', '6$1']),
+                      new Cell('', true, 1, 1, 6, 'ADD', ['4$6', '5$6']),
+                      new Cell('', true, 1, 1, 7, 'DIV', ['6$6', '6$1']),
+                      new Cell('', true, 1, 1, 8, 'ADD', ['4$8', '5$8']),
+                      new Cell('', true, 1, 1, 9, 'DIV', ['6$8', '6$1']),
+                      new Cell('', true, 1, 1, 10, 'ADD', ['4$10', '5$10']),
+                      new Cell('', true, 1, 1, 11, 'DIV', ['6$10', '6$1']),
                     ],
                     false,
                     6,
@@ -2189,13 +2199,17 @@ export const companySectionsTemplate: Section[] = [
                   new Row(
                     [
                       new Cell('Total', false, 1, 1, 0),
-                      ...Array.from({ length: 11 }).map(
-                        (_, colNo: number) =>
-                          new Cell('', true, 1, 1, colNo + 1, Operation.ADD, [
-                            `8$${colNo + 1}`,
-                            `9${colNo + 1}`,
-                          ]),
-                      ),
+                      new Cell('', true, 1, 1, 1, 'ADD', ['8$1', '9$1']),
+                      new Cell('', true, 1, 1, 2, 'ADD', ['8$2', '9$2']),
+                      new Cell('', true, 1, 1, 3, 'DIV', ['10$2', '10$1']),
+                      new Cell('', true, 1, 1, 4, 'ADD', ['8$4', '9$4']),
+                      new Cell('', true, 1, 1, 5, 'DIV', ['10$4', '10$1']),
+                      new Cell('', true, 1, 1, 6, 'ADD', ['8$6', '9$6']),
+                      new Cell('', true, 1, 1, 7, 'DIV', ['10$6', '10$1']),
+                      new Cell('', true, 1, 1, 8, 'ADD', ['8$8', '9$8']),
+                      new Cell('', true, 1, 1, 9, 'DIV', ['10$8', '10$1']),
+                      new Cell('', true, 1, 1, 10, 'ADD', ['8$10', '9$10']),
+                      new Cell('', true, 1, 1, 11, 'DIV', ['10$10', '10$1']),
                     ],
                     false,
                     10,
@@ -2302,13 +2316,17 @@ export const companySectionsTemplate: Section[] = [
                   new Row(
                     [
                       new Cell('Total', false, 1, 1, 0),
-                      ...Array.from({ length: 11 }).map(
-                        (_, colNo: number) =>
-                          new Cell('', true, 1, 1, colNo + 1, Operation.ADD, [
-                            `4$${colNo + 1}`,
-                            `5$${colNo + 1}`,
-                          ]),
-                      ),
+                      new Cell('', true, 1, 1, 1, 'ADD', ['4$1', '5$1']),
+                      new Cell('', true, 1, 1, 2, 'ADD', ['4$2', '5$2']),
+                      new Cell('', true, 1, 1, 3, 'DIV', ['6$2', '6$1']),
+                      new Cell('', true, 1, 1, 4, 'ADD', ['4$4', '5$4']),
+                      new Cell('', true, 1, 1, 5, 'DIV', ['6$4', '6$1']),
+                      new Cell('', true, 1, 1, 6, 'ADD', ['4$6', '5$6']),
+                      new Cell('', true, 1, 1, 7, 'DIV', ['6$6', '6$1']),
+                      new Cell('', true, 1, 1, 8, 'ADD', ['4$8', '5$8']),
+                      new Cell('', true, 1, 1, 9, 'DIV', ['6$8', '6$1']),
+                      new Cell('', true, 1, 1, 10, 'ADD', ['4$10', '5$10']),
+                      new Cell('', true, 1, 1, 11, 'DIV', ['6$10', '6$1']),
                     ],
                     false,
                     6,
@@ -2357,13 +2375,17 @@ export const companySectionsTemplate: Section[] = [
                   new Row(
                     [
                       new Cell('Total', false, 1, 1, 0),
-                      ...Array.from({ length: 11 }).map(
-                        (_, colNo: number) =>
-                          new Cell('', true, 1, 1, colNo + 1, Operation.ADD, [
-                            `8$${colNo + 1}`,
-                            `9${colNo + 1}`,
-                          ]),
-                      ),
+                      new Cell('', true, 1, 1, 1, 'ADD', ['8$1', '9$1']),
+                      new Cell('', true, 1, 1, 2, 'ADD', ['8$2', '9$2']),
+                      new Cell('', true, 1, 1, 3, 'DIV', ['10$2', '10$1']),
+                      new Cell('', true, 1, 1, 4, 'ADD', ['8$4', '9$4']),
+                      new Cell('', true, 1, 1, 5, 'DIV', ['10$4', '10$1']),
+                      new Cell('', true, 1, 1, 6, 'ADD', ['8$6', '9$6']),
+                      new Cell('', true, 1, 1, 7, 'DIV', ['10$6', '10$1']),
+                      new Cell('', true, 1, 1, 8, 'ADD', ['8$8', '9$8']),
+                      new Cell('', true, 1, 1, 9, 'DIV', ['10$8', '10$1']),
+                      new Cell('', true, 1, 1, 10, 'ADD', ['8$10', '9$10']),
+                      new Cell('', true, 1, 1, 11, 'DIV', ['10$10', '10$1']),
                     ],
                     false,
                     10,
@@ -2741,13 +2763,12 @@ export const companySectionsTemplate: Section[] = [
                   new Row(
                     [
                       new Cell('Total Permanent Employee', false, 1, 1, 0),
-                      ...Array.from({ length: 6 }).map(
-                        (_, cellNo: number) =>
-                          new Cell('', true, 1, 1, 2, Operation.ADD, [
-                            `3$${cellNo + 1}`,
-                            `4$${cellNo + 1}`,
-                          ]),
-                      ),
+                      new Cell('', true, 1, 1, 1, 'ADD', ['3$1', '4$1']),
+                      new Cell('', true, 1, 1, 2, 'ADD', ['3$2', '4$2']),
+                      new Cell('', true, 1, 1, 3, 'DIV', ['2$2', '2$1']),
+                      new Cell('', true, 1, 1, 4, 'ADD', ['3$4', '4$4']),
+                      new Cell('', true, 1, 1, 5, 'ADD', ['3$5', '4$5']),
+                      new Cell('', true, 1, 1, 6, 'DIV', ['2$5', '4$4']),
                     ],
                     false,
                     2,
@@ -2778,13 +2799,12 @@ export const companySectionsTemplate: Section[] = [
                   new Row(
                     [
                       new Cell('Total Permanent Employee', false, 1, 1, 0),
-                      ...Array.from({ length: 6 }).map(
-                        (_, cellNo: number) =>
-                          new Cell('', true, 1, 1, 2, Operation.ADD, [
-                            `6$${cellNo + 1}`,
-                            `7$${cellNo + 1}`,
-                          ]),
-                      ),
+                      new Cell('', true, 1, 1, 1, 'ADD', ['6$1', '7$1']),
+                      new Cell('', true, 1, 1, 2, 'ADD', ['6$2', '7$2']),
+                      new Cell('', true, 1, 1, 3, 'ADD', ['5$2', '5$1']),
+                      new Cell('', true, 1, 1, 4, 'ADD', ['6$4', '7$4']),
+                      new Cell('', true, 1, 1, 5, 'ADD', ['6$5', '7$5']),
+                      new Cell('', true, 1, 1, 6, 'ADD', ['5$5', '5$4']),
                     ],
                     false,
                     5,
@@ -2921,13 +2941,16 @@ export const companySectionsTemplate: Section[] = [
                   new Row(
                     [
                       new Cell('Total', false, 1, 1, 0),
-                      ...Array.from({ length: 10 }).map(
-                        (_, cellNo: number) =>
-                          new Cell('', true, 1, 1, cellNo, Operation.ADD, [
-                            `5$${cellNo + 1}`,
-                            `4$${cellNo + 1}`,
-                          ]),
-                      ),
+                      new Cell('', true, 1, 1, 1, 'ADD', ['4$1', '5$1']),
+                      new Cell('', true, 1, 1, 2, 'ADD', ['4$2', '5$2']),
+                      new Cell('', true, 1, 1, 3, 'DIV', ['6$2', '6$1']),
+                      new Cell('', true, 1, 1, 4, 'ADD', ['4$4', '5$4']),
+                      new Cell('', true, 1, 1, 5, 'DIV', ['6$4', '6$1']),
+                      new Cell('', true, 1, 1, 6, 'ADD', ['4$6', '5$6']),
+                      new Cell('', true, 1, 1, 7, 'ADD', ['4$7', '5$7']),
+                      new Cell('', true, 1, 1, 8, 'DIV', ['6$8', '6$7']),
+                      new Cell('', true, 1, 1, 9, 'ADD', ['4$9', '5$9']),
+                      new Cell('', true, 1, 1, 10, 'DIV', ['6$9', '6$7']),
                     ],
                     false,
                     6,
@@ -2968,13 +2991,16 @@ export const companySectionsTemplate: Section[] = [
                   new Row(
                     [
                       new Cell('Total', false, 1, 1, 0),
-                      ...Array.from({ length: 10 }).map(
-                        (_, cellNo: number) =>
-                          new Cell('', true, 1, 1, cellNo, Operation.ADD, [
-                            `7$${cellNo + 1}`,
-                            `8$${cellNo + 1}`,
-                          ]),
-                      ),
+                      new Cell('', true, 1, 1, 1, 'ADD', ['8$1', '7$1']),
+                      new Cell('', true, 1, 1, 2, 'ADD', ['8$2', '7$2']),
+                      new Cell('', true, 1, 1, 3, 'DIV', ['9$2', '9$1']),
+                      new Cell('', true, 1, 1, 4, 'ADD', ['8$4', '7$4']),
+                      new Cell('', true, 1, 1, 5, 'DIV', ['9$4', '9$1']),
+                      new Cell('', true, 1, 1, 6, 'ADD', ['8$6', '7$6']),
+                      new Cell('', true, 1, 1, 7, 'ADD', ['8$7', '7$7']),
+                      new Cell('', true, 1, 1, 8, 'DIV', ['9$7', '9$6']),
+                      new Cell('', true, 1, 1, 9, 'ADD', ['8$9', '7$9']),
+                      new Cell('', true, 1, 1, 10, 'DIV', ['9$9', '9$6']),
                     ],
                     false,
                     9,
@@ -3056,13 +3082,12 @@ export const companySectionsTemplate: Section[] = [
                   new Row(
                     [
                       new Cell('Total', false, 1, 1, 0),
-                      ...Array.from({ length: 6 }).map(
-                        (_, cellNo: number) =>
-                          new Cell('', true, 1, 1, cellNo + 1, Operation.ADD, [
-                            `3$${cellNo + 1}`,
-                            `4$${cellNo + 1}`,
-                          ]),
-                      ),
+                      new Cell('', true, 1, 1, 1, 'ADD', ['4$1', '3$1']),
+                      new Cell('', true, 1, 1, 2, 'ADD', ['4$2', '3$2']),
+                      new Cell('', true, 1, 1, 3, 'DIV', ['5$2', '5$1']),
+                      new Cell('', true, 1, 1, 4, 'ADD', ['4$4', '3$4']),
+                      new Cell('', true, 1, 1, 5, 'ADD', ['4$5', '3$5']),
+                      new Cell('', true, 1, 1, 6, 'DIV', ['5$5', '5$4']),
                     ],
                     false,
                     5,
@@ -3093,13 +3118,12 @@ export const companySectionsTemplate: Section[] = [
                   new Row(
                     [
                       new Cell('Total', false, 1, 1, 0),
-                      ...Array.from({ length: 6 }).map(
-                        (_, cellNo: number) =>
-                          new Cell('', true, 1, 1, cellNo + 1, Operation.ADD, [
-                            `7$${cellNo + 1}`,
-                            `8$${cellNo + 1}`,
-                          ]),
-                      ),
+                      new Cell('', true, 1, 1, 1, 'ADD', ['8$1', '7$1']),
+                      new Cell('', true, 1, 1, 2, 'ADD', ['8$2', '7$2']),
+                      new Cell('', true, 1, 1, 3, 'DIV', ['9$2', '9$1']),
+                      new Cell('', true, 1, 1, 4, 'ADD', ['8$4', '7$4']),
+                      new Cell('', true, 1, 1, 5, 'ADD', ['8$5', '7$5']),
+                      new Cell('', true, 1, 1, 6, 'DIV', ['9$5', '9$4']),
                     ],
                     false,
                     9,
@@ -3326,24 +3350,25 @@ export const companySectionsTemplate: Section[] = [
           },
 
           {
+            heading: 'Leadership Indicators',
             index: 20,
             type: QuestionType.BOOLEAN,
-            desc: '16. Does the entity extend any life insurance or any compensatory package in the event of death of (A) Employees?',
+            desc: '1. Does the entity extend any life insurance or any compensatory package in the event of death of (A) Employees?',
           },
           {
             index: 21,
             type: QuestionType.BOOLEAN,
-            desc: '17. Does the entity extend any life insurance or any compensatory package in the event of death of (B) Workers?',
+            desc: '2. Does the entity extend any life insurance or any compensatory package in the event of death of (B) Workers?',
           },
           {
             index: 22,
             type: QuestionType.TEXT,
-            desc: '18. Provide the measures undertaken by the entity to ensure that statutory dues have been deducted and deposited by the value chain partners.',
+            desc: '3. Provide the measures undertaken by the entity to ensure that statutory dues have been deducted and deposited by the value chain partners.',
           },
           {
             index: 23,
             type: QuestionType.TABLE,
-            desc: '19. Provide the number of employees / workers having suffered high consequence workrelated injury / ill-health / fatalities (as reported in Q11 of Essential Indicators above), who have been are rehabilitated and placed in suitable employment or whose family members have been placed in suitable employment:',
+            desc: '4. Provide the number of employees / workers having suffered high consequence workrelated injury / ill-health / fatalities (as reported in Q11 of Essential Indicators above), who have been are rehabilitated and placed in suitable employment or whose family members have been placed in suitable employment:',
             answer_table: [
               new Table(
                 [
@@ -3422,12 +3447,12 @@ export const companySectionsTemplate: Section[] = [
           {
             index: 24,
             type: QuestionType.BOOLEAN,
-            desc: '20. Does the entity provide transition assistance programs to facilitate continued employability and the management of career endings resulting from retirement or termination of employment?',
+            desc: '5. Does the entity provide transition assistance programs to facilitate continued employability and the management of career endings resulting from retirement or termination of employment?',
           },
           {
             index: 25,
             type: QuestionType.TABLE,
-            desc: '21. Details on assessment of value chain partners:',
+            desc: '6. Details on assessment of value chain partners:',
             answer_table: [
               new Table(
                 [
@@ -3469,7 +3494,7 @@ export const companySectionsTemplate: Section[] = [
           {
             index: 26,
             type: QuestionType.TEXT,
-            desc: '22. Provide details of any corrective actions taken or underway to address significant risks / concerns arising from assessments of health and safety practices and working conditions of value chain partners.',
+            desc: '7. Provide details of any corrective actions taken or underway to address significant risks / concerns arising from assessments of health and safety practices and working conditions of value chain partners.',
           },
         ],
       },
@@ -3478,6 +3503,7 @@ export const companySectionsTemplate: Section[] = [
           'PRINCIPLE 4: Businesses should respect the interests of and be responsive to all its stakeholders',
         questions: [
           {
+            heading: "Essential Indicators",
             index: 0,
             desc: '1. Describe the processes for identifying key stakeholder groups of the entity',
             type: QuestionType.TEXT,
@@ -3538,19 +3564,20 @@ export const companySectionsTemplate: Section[] = [
             ],
           },
           {
+            heading: "Leadership Indicators",
             index: 2,
             type: QuestionType.TEXT,
-            desc: '3. Provide the processes for consultation between stakeholders and the Board on economic, environmental, and social topics or if consultation is delegated, how is feedback from such consultations provided to the Board.',
+            desc: '1. Provide the processes for consultation between stakeholders and the Board on economic, environmental, and social topics or if consultation is delegated, how is feedback from such consultations provided to the Board.',
           },
           {
             index: 3,
             type: QuestionType.TEXT,
-            desc: '4. Whether stakeholder consultation is used to support the identification and management of environmental, and social topics (Yes / No). If so, provide details of instances as to how the inputs received from stakeholders on these topics were incorporated into policies and activities of the entity.',
+            desc: '2. Whether stakeholder consultation is used to support the identification and management of environmental, and social topics (Yes / No). If so, provide details of instances as to how the inputs received from stakeholders on these topics were incorporated into policies and activities of the entity.',
           },
           {
             index: 4,
             type: QuestionType.TEXT,
-            desc: '5. Provide details of instances of engagement with, and actions taken to, address the concerns of vulnerable/ marginalized stakeholder groups. ',
+            desc: '3. Provide details of instances of engagement with, and actions taken to, address the concerns of vulnerable/ marginalized stakeholder groups. ',
           },
         ],
       },
@@ -3558,6 +3585,7 @@ export const companySectionsTemplate: Section[] = [
         title: 'PRINCIPLE 5 Businesses should respect and promote human rights',
         questions: [
           {
+            heading: "Essential Indicators",
             index: 0,
             desc: '1. Employees and workers who have been provided training on human rights issues and policy(ies) of the entity, in the following format: ',
             type: QuestionType.TABLE,
@@ -4232,24 +4260,25 @@ export const companySectionsTemplate: Section[] = [
             desc: '11. Provide details of any corrective actions taken or underway to address significant risks / concerns arising from the assessments at Question 10 above. ',
           },
           {
+            heading: "Leadership Indicators",
             index: 12,
-            desc: '12. Details of a business process being modified / introduced as a result of addressing human rights grievances/complaints.',
+            desc: '1. Details of a business process being modified / introduced as a result of addressing human rights grievances/complaints.',
             type: QuestionType.TEXT,
           },
           {
             index: 13,
-            desc: '13. Details of the scope and coverage of any Human rights due-diligence conducted.',
+            desc: '2. Details of the scope and coverage of any Human rights due-diligence conducted.',
             type: QuestionType.TEXT,
           },
           {
             index: 14,
             type: QuestionType.TEXT,
-            desc: '14. Is the premise/office of the entity accessible to differently abled visitors, as per the requirements of the Rights of Persons with Disabilities Act, 2016?',
+            desc: '3. Is the premise/office of the entity accessible to differently abled visitors, as per the requirements of the Rights of Persons with Disabilities Act, 2016?',
           },
           {
             index: 15,
             type: QuestionType.TABLE,
-            desc: '15. Details on assessment of value chain partners:',
+            desc: '4. Details on assessment of value chain partners:',
             answer_table: [
               new Table(
                 [
@@ -4292,7 +4321,7 @@ export const companySectionsTemplate: Section[] = [
           },
           {
             index: 16,
-            desc: '16. Provide details of any corrective actions taken or underway to address significant risks / concerns arising from the assessments at Question 4 above. ',
+            desc: '5. Provide details of any corrective actions taken or underway to address significant risks / concerns arising from the assessments at Question 4 above. ',
             type: QuestionType.TEXT,
           },
         ],
@@ -4302,6 +4331,7 @@ export const companySectionsTemplate: Section[] = [
           'PRINCIPLE 6: Businesses should respect and make efforts to protect and restore the environment',
         questions: [
           {
+            heading:'Essential Indicators',
             index: 0,
             desc: '1. Details of total energy consumption (in Joules or multiples) and energy intensity, in the following format:',
             type: QuestionType.TABLE,
@@ -5161,8 +5191,9 @@ export const companySectionsTemplate: Section[] = [
             ],
           },
           {
+            heading: "Leadership Indicators",
             index: 14,
-            desc: '14. Water withdrawal, consumption and discharge in areas of water stress (in kilolitres): \n For each facility / plant located in areas of water stress, provide the following information: \n(i) Name of the area \n(ii) Nature of operations \n(iii) Water withdrawal, consumption and discharge in the following format:',
+            desc: '1. Water withdrawal, consumption and discharge in areas of water stress (in kilolitres): \n For each facility / plant located in areas of water stress, provide the following information: \n(i) Name of the area \n(ii) Nature of operations \n(iii) Water withdrawal, consumption and discharge in the following format:',
             type: QuestionType.TABLE,
             answer_table: [
               new Table(
@@ -5294,7 +5325,7 @@ export const companySectionsTemplate: Section[] = [
           },
           {
             index: 15,
-            desc: '15. Please provide details of total Scope 3 emissions & its intensity, in the following format:',
+            desc: '2. Please provide details of total Scope 3 emissions & its intensity, in the following format:',
             type: QuestionType.TABLE,
             answer_table: [
               new Table(
@@ -5382,12 +5413,12 @@ export const companySectionsTemplate: Section[] = [
           },
           {
             index: 16,
-            desc: '16. With respect to the ecologically sensitive areas reported at Question 11 of Essential Indicators above, provide details of significant direct & indirect impact of the entity on biodiversity in such areas along-with prevention and remediation activities. ',
+            desc: '3. With respect to the ecologically sensitive areas reported at Question 11 of Essential Indicators above, provide details of significant direct & indirect impact of the entity on biodiversity in such areas along-with prevention and remediation activities. ',
             type: QuestionType.TEXT,
           },
           {
             index: 17,
-            desc: '17. If the entity has undertaken any specific initiatives or used innovative technology or solutions to improve resource efficiency, or reduce impact due to emissions / effluent discharge / waste generated, please provide details of the same as well as outcome of such initiatives, as per the following format:',
+            desc: '4. If the entity has undertaken any specific initiatives or used innovative technology or solutions to improve resource efficiency, or reduce impact due to emissions / effluent discharge / waste generated, please provide details of the same as well as outcome of such initiatives, as per the following format:',
             type: QuestionType.TABLE,
             answer_table: [
               new Table(
@@ -5417,17 +5448,17 @@ export const companySectionsTemplate: Section[] = [
           },
           {
             index: 18,
-            desc: '18. Does the entity have a business continuity and disaster management plan? Give details in 100 words/ web link.',
+            desc: '5. Does the entity have a business continuity and disaster management plan? Give details in 100 words/ web link.',
             type: QuestionType.TEXT,
           },
           {
             index: 19,
-            desc: '19. Disclose any significant adverse impact to the environment, arising from the value chain of the entity. What mitigation or adaptation measures have been taken by the entity in this regard.',
+            desc: '6. Disclose any significant adverse impact to the environment, arising from the value chain of the entity. What mitigation or adaptation measures have been taken by the entity in this regard.',
             type: QuestionType.TEXT,
           },
           {
             index: 20,
-            desc: '20. Percentage of value chain partners (by value of business done with such partners) that were assessed for environmental impacts.',
+            desc: '7. Percentage of value chain partners (by value of business done with such partners) that were assessed for environmental impacts.',
             type: QuestionType.TEXT,
           },
         ],
@@ -5437,6 +5468,7 @@ export const companySectionsTemplate: Section[] = [
           'PRINCIPLE 7 Businesses, when engaging in influencing public and regulatory policy, should do so in a manner that is responsible and transparent',
         questions: [
           {
+            heading:"Essential Indicators",
             desc: '1. a. Number of affiliations with trade and industry chambers/ associations',
             type: QuestionType.TEXT,
             index: 0,
@@ -5509,9 +5541,10 @@ export const companySectionsTemplate: Section[] = [
             ],
           },
           {
+            heading: "Leadership Indicators",
             index: 3,
             type: QuestionType.TABLE,
-            desc: '3. Details of public policy positions advocated by the entity:',
+            desc: '1. Details of public policy positions advocated by the entity:',
             answer_table: [
               new Table(
                 [
@@ -5567,6 +5600,7 @@ export const companySectionsTemplate: Section[] = [
           'PRINCIPLE 8 Businesses should promote inclusive growth and equitable development',
         questions: [
           {
+            heading: "Essential Indicators",
             index: 0,
             desc: '1. Details of Social Impact Assessments (SIA) of projects undertaken by the entity based on applicable laws, in the current financial year.',
             type: QuestionType.TABLE,
@@ -5838,8 +5872,9 @@ export const companySectionsTemplate: Section[] = [
             ],
           },
           {
+            heading: "Leadership Indicators",
             index: 5,
-            desc: '6. Provide details of actions taken to mitigate any negative social impacts identified in the Social Impact Assessments (Reference: Question 1 of Essential Indicators above):',
+            desc: '1. Provide details of actions taken to mitigate any negative social impacts identified in the Social Impact Assessments (Reference: Question 1 of Essential Indicators above):',
             type: QuestionType.TABLE,
             answer_table: [
               new Table(
@@ -5870,7 +5905,7 @@ export const companySectionsTemplate: Section[] = [
           },
           {
             index: 6,
-            desc: '7. Provide the following information on CSR projects undertaken by your entity in designated aspirational districts as identified by government bodies:',
+            desc: '2. Provide the following information on CSR projects undertaken by your entity in designated aspirational districts as identified by government bodies:',
             type: QuestionType.TABLE,
             answer_table: [
               new Table(
@@ -5900,22 +5935,22 @@ export const companySectionsTemplate: Section[] = [
           },
           {
             index: 7,
-            desc: '8. (a) Do you have a preferential procurement policy where you give preference to purchase from suppliers comprising marginalized /vulnerable groups?',
+            desc: '3. (a) Do you have a preferential procurement policy where you give preference to purchase from suppliers comprising marginalized /vulnerable groups?',
             type: QuestionType.TEXT,
           },
           {
             index: 8,
-            desc: '8. (b) From which marginalized /vulnerable groups do you procure?',
+            desc: '3. (b) From which marginalized /vulnerable groups do you procure?',
             type: QuestionType.TEXT,
           },
           {
             index: 9,
-            desc: '8. (c) What percentage of total procurement (by value) does it constitute? ',
+            desc: '3. (c) What percentage of total procurement (by value) does it constitute? ',
             type: QuestionType.TEXT,
           },
           {
             index: 10,
-            desc: '9. Details of the benefits derived and shared from the intellectual properties owned or acquired by your entity (in the current financial year), based on traditional knowledge:',
+            desc: '4. Details of the benefits derived and shared from the intellectual properties owned or acquired by your entity (in the current financial year), based on traditional knowledge:',
             type: QuestionType.TABLE,
             answer_table: [
               new Table(
@@ -5946,7 +5981,7 @@ export const companySectionsTemplate: Section[] = [
           },
           {
             index: 11,
-            desc: '10. Details of corrective actions taken or underway, based on any adverse order in intellectual property related disputes wherein usage of traditional knowledge is involved.',
+            desc: '5. Details of corrective actions taken or underway, based on any adverse order in intellectual property related disputes wherein usage of traditional knowledge is involved.',
             type: QuestionType.TABLE,
             answer_table: [
               new Table(
@@ -5976,7 +6011,7 @@ export const companySectionsTemplate: Section[] = [
           },
           {
             index: 12,
-            desc: '11. Details of beneficiaries of CSR Projects: ',
+            desc: '6. Details of beneficiaries of CSR Projects: ',
             type: QuestionType.TABLE,
             answer_table: [
               new Table(
@@ -6011,6 +6046,7 @@ export const companySectionsTemplate: Section[] = [
           'PRINCIPLE 9 Businesses should engage with and provide value to their consumers in a responsible manner',
         questions: [
           {
+            heading: "Essential Indicators",
             index: 0,
             desc: '1. Describe the mechanisms in place to receive and respond to consumer complaints and feedback. ',
             type: QuestionType.TEXT,
@@ -6217,30 +6253,26 @@ export const companySectionsTemplate: Section[] = [
             desc: '7. c. Provide the impact, if any, of the data breaches',
           },
           {
+            heading: "Leadership Indicators",
             index: 9,
             type: QuestionType.TEXT,
-            desc: '8. Channels / platforms where information on products and services of the entity can be accessed (provide web link, if available). ',
+            desc: '1. Channels / platforms where information on products and services of the entity can be accessed (provide web link, if available). ',
           },
           {
             index: 10,
             type: QuestionType.TEXT,
-            desc: '9. Steps taken to inform and educate consumers about safe and responsible usage of products and/or services. ',
+            desc: '2. Steps taken to inform and educate consumers about safe and responsible usage of products and/or services. ',
           },
           {
             index: 11,
             type: QuestionType.TEXT,
-            desc: '10. Mechanisms in place to inform consumers of any risk of disruption/discontinuation of essential services.',
+            desc: '3. Mechanisms in place to inform consumers of any risk of disruption/discontinuation of essential services.',
           },
           {
             index: 12,
-            desc: '11. Does the entity display product information on the product over and above what is mandated as per local laws?',
+            desc: '4. Does the entity display product information on the product over and above what is mandated as per local laws?',
             type: QuestionType.TEXT,
-          },
-          {
-            index: 13,
-            type: QuestionType.BOOLEAN,
-            desc: '12. If the above is yes, provide details in brief. Did your entity carry out any survey with regard to consumer satisfaction relating to the major products / services of the entity, significant locations of operation of the entity or the entity as a whole?',
-          },
+          }
         ],
       },
     ],

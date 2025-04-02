@@ -90,8 +90,9 @@ export class Question {
   answer_text?: string;
   @Expose()
   index: number;
+  @Expose()
+  heading?: string;
 
-  // @Type(()=>({comments: number}))
   _count: {
     comments: number;
   };
