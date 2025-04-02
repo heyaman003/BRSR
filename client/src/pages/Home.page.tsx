@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import AdminLandingPage from "./admin.landing.page.tsx";
+import AdminLandingPage from "@/pages/Admin.landing.page.tsx";
 import EntrySectionMain from "./entry.section.tsx";
 import { RootState } from "@/store/store";
 const Homepage = () => {
