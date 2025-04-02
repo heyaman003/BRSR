@@ -1,9 +1,9 @@
 import ChatBox from "@/components/chat/ChatBox";
 import CommentSidebar from "../commentSidebar/comment.sidebar";
 import SustainabilityLoader from "@/components/component/SustainabiltyLoader";
-import BooleanInput from "@/components/question/boolean.input";
-import TableUI from "@/components/question/Table";
-import TextQuestionUI from "@/components/question/Text";
+import BooleanInput from "@/components/Question/boolean.input";
+import TableUI from "@/components/Question/Table";
+import TextQuestionUI from "@/components/Question/Text";
 import { Button } from "@/components/ui/button";
 import { Question, SubSection, Table } from "@/models/models";
 import { plainToInstance } from "class-transformer";
