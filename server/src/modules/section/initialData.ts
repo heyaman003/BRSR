@@ -286,7 +286,7 @@ export const companySectionsTemplate: Section[] = [
               ),
             ],
             // colFirstData: ['Location', 'National', 'International'],
-            desc: '18.Details of business activities (accounting for 90% of the turnover):',
+            desc: '18. Number of locations where plants and/or operations/offices of the entity are situated',
             // tabulardata: [
             //   ['Number of plants', 'number'],
             //   ['Number of offices', 'text'],
@@ -439,11 +439,9 @@ export const companySectionsTemplate: Section[] = [
                     false,
                     9,
                   ),
-                ],
-                false,
-              ),
-              new Table(
-                [
+
+
+
                   new Row(
                     [
                       new Cell('Particulars', false, 2, 1, 0),
@@ -452,7 +450,7 @@ export const companySectionsTemplate: Section[] = [
                       new Cell('Female', false, 1, 2, 3),
                     ],
                     true,
-                    0,
+                    10,
                   ),
                   new Row(
                     [
@@ -462,12 +460,12 @@ export const companySectionsTemplate: Section[] = [
                       new Cell('% (C / A)', false, 1, 2, 3),
                     ],
                     true,
-                    1,
+                    11,
                   ),
                   new Row(
                     [new Cell('DIFFERENTLY ABLED EMPLOYEES', false, 1, 6, 0)],
                     false,
-                    2,
+                    12,
                   ),
                   ...['Permanent (D)', 'Other than Permanent (E)'].map(
                     (firstCol, rowNo: number) =>
@@ -487,7 +485,7 @@ export const companySectionsTemplate: Section[] = [
                           ]),
                         ],
                         false,
-                        rowNo + 3,
+                        rowNo + 13,
                       ),
                   ),
                   new Row(
@@ -500,12 +498,12 @@ export const companySectionsTemplate: Section[] = [
                       new Cell('', true, 1, 1, 5, 'DIV', ['5$4', '5$1'])
                     ],
                     false,
-                    5,
+                    15,
                   ),
                   new Row(
                     [new Cell('DIFFERENTLY ABLED WORKERS', false, 1, 6, 0)],
                     false,
-                    6,
+                    16,
                   ),
                   ...['Permanent (F)', 'Other than Permanent (G)'].map(
                     (firstCol, rowNo: number) =>
@@ -525,7 +523,7 @@ export const companySectionsTemplate: Section[] = [
                           ]),
                         ],
                         false,
-                        rowNo + 7,
+                        rowNo + 17,
                       ),
                   ),
                   new Row(
@@ -538,11 +536,11 @@ export const companySectionsTemplate: Section[] = [
                       new Cell('', true, 1, 1, 5, 'DIV', ['9$4', '9$1'])
                     ],
                     false,
-                    9,
+                    19,
                   ),
                 ],
                 false,
-              ),
+              )
             ],
             // employee: {
             //   colFirstData: [
@@ -646,7 +644,7 @@ export const companySectionsTemplate: Section[] = [
                     true,
                     1,
                   ),
-                  ...['Board of Directors', 'Key Management Personnel'].map(
+                  ...['Permanent Employees', 'Permanent Workers'].map(
                     (firstCell, ind) =>
                       new Row(
                         [
@@ -2019,7 +2017,7 @@ export const companySectionsTemplate: Section[] = [
           {
             index: 2,
             type: QuestionType.TEXT,
-            desc: '3. a. Describe the processes in place to safely reclaim your products for reusing, recycling and disposing at the end of life, for Plastics (including packaging',
+            desc: '3. a. Describe the processes in place to safely reclaim your products for reusing, recycling and disposing at the end of life, for Plastics (including packaging)',
           },
           {
             index: 3,
@@ -4071,17 +4069,42 @@ export const companySectionsTemplate: Section[] = [
                       ].map(
                         (heading: string, colNo: number) =>
                           new Cell(heading, false, 1, 1, colNo),
+                        
                       ),
                     ],
                     true,
                     2,
                   ),
-                  new Row([new Cell('Employees', false, 1, 11, 0)], false, 3),
+                  new Row(
+                    [new Cell("Employees", false, 1, 1, 11)], false, 3
+                  ),
+                  new Row([
+                    new Cell('Permanent', false, 1, 1, 0 ),
+                    new Cell('', true, 1, 1, 1, 'ADD', ['5$1', '6$1']),
+                          new Cell('', true, 1, 1, 2, 'ADD', ['5$2', '6$2']),
+                          new Cell('', true, 1, 1, 3, Operation.DIV, [
+                            `4$2`,
+                            `4$1`,
+                          ]),
+                          new Cell('', true, 1, 1, 4, 'ADD', ['5$4', '6$4']),
+                          new Cell('', true, 1, 1, 5, Operation.DIV, [
+                            `4$4`,
+                            `4$1`,
+                          ]),
+                          new Cell('', true, 1, 1, 6, 'ADD', ['5$6', '6$6']),
+                          new Cell('', true, 1, 1, 7, 'ADD', ['5$7', '6$7']),
+                          new Cell('', true, 1, 1, 8, Operation.DIV, [
+                            `4$7`,
+                            `4$6`,
+                          ]),
+                          new Cell('', true, 1, 1, 9, 'ADD', ['5$9', '6$9']),
+                          new Cell('', true, 1, 1, 10, Operation.DIV, [
+                            `4$9`,
+                            `4$6`,
+                          ]),
+
+                  ], false, 4),
                   ...[
-                    'Permanent',
-                    'Male',
-                    'Female',
-                    'Other than Permanent',
                     'Male',
                     'Female',
                   ].map(
@@ -4092,36 +4115,121 @@ export const companySectionsTemplate: Section[] = [
                           new Cell('', true, 1, 1, 1),
                           new Cell('', true, 1, 1, 2),
                           new Cell('', true, 1, 1, 3, Operation.DIV, [
-                            `${rowNo + 4}$2`,
-                            `${rowNo + 4}$1`,
+                            `${rowNo + 5}$2`,
+                            `${rowNo + 5}$1`,
                           ]),
                           new Cell('', true, 1, 1, 4),
                           new Cell('', true, 1, 1, 5, Operation.DIV, [
-                            `${rowNo + 4}$4`,
-                            `${rowNo + 4}$1`,
+                            `${rowNo + 5}$4`,
+                            `${rowNo + 5}$1`,
                           ]),
                           new Cell('', true, 1, 1, 6),
                           new Cell('', true, 1, 1, 7),
                           new Cell('', true, 1, 1, 8, Operation.DIV, [
-                            `${rowNo + 4}$7`,
-                            `${rowNo + 4}$6`,
+                            `${rowNo + 5}$7`,
+                            `${rowNo + 5}$6`,
                           ]),
                           new Cell('', true, 1, 1, 9),
                           new Cell('', true, 1, 1, 10, Operation.DIV, [
-                            `${rowNo + 4}$9`,
-                            `${rowNo + 4}$6`,
+                            `${rowNo + 5}$9`,
+                            `${rowNo + 5}$6`,
                           ]),
                         ],
                         false,
-                        rowNo + 4,
+                        rowNo + 5,
+                      ),
+                  ),
+
+                  new Row([
+                    new Cell('Permanent', false, 1, 1, 0 ),
+                    new Cell('', true, 1, 1, 1, 'ADD', ['8$1', '9$1']),
+                          new Cell('', true, 1, 1, 2, 'ADD', ['8$2', '9$2']),
+                          new Cell('', true, 1, 1, 3, Operation.DIV, [
+                            `7$2`,
+                            `7$1`,
+                          ]),
+                          new Cell('', true, 1, 1, 4, 'ADD', ['8$4', '9$4']),
+                          new Cell('', true, 1, 1, 5, Operation.DIV, [
+                            `7$4`,
+                            `7$1`,
+                          ]),
+                          new Cell('', true, 1, 1, 6, 'ADD', ['8$6', '9$6']),
+                          new Cell('', true, 1, 1, 7, 'ADD', ['8$7', '9$7']),
+                          new Cell('', true, 1, 1, 8, Operation.DIV, [
+                            `7$7`,
+                            `7$6`,
+                          ]),
+                          new Cell('', true, 1, 1, 9, 'ADD', ['8$9', '9$9']),
+                          new Cell('', true, 1, 1, 10, Operation.DIV, [
+                            `7$9`,
+                            `7$6`,
+                          ]),
+
+                  ], false, 7),
+                  ...[
+                    'Male',
+                    'Female',
+                  ].map(
+                    (firstCol: string, rowNo: number) =>
+                      new Row(
+                        [
+                          new Cell(firstCol, false, 1, 1, 0),
+                          new Cell('', true, 1, 1, 1),
+                          new Cell('', true, 1, 1, 2),
+                          new Cell('', true, 1, 1, 3, Operation.DIV, [
+                            `${rowNo + 8}$2`,
+                            `${rowNo + 8}$1`,
+                          ]),
+                          new Cell('', true, 1, 1, 4),
+                          new Cell('', true, 1, 1, 5, Operation.DIV, [
+                            `${rowNo + 8}$4`,
+                            `${rowNo + 8}$1`,
+                          ]),
+                          new Cell('', true, 1, 1, 6),
+                          new Cell('', true, 1, 1, 7),
+                          new Cell('', true, 1, 1, 8, Operation.DIV, [
+                            `${rowNo + 8}$7`,
+                            `${rowNo + 8}$6`,
+                          ]),
+                          new Cell('', true, 1, 1, 9),
+                          new Cell('', true, 1, 1, 10, Operation.DIV, [
+                            `${rowNo + 8}$9`,
+                            `${rowNo + 8}$6`,
+                          ]),
+                        ],
+                        false,
+                        rowNo + 8
                       ),
                   ),
                   new Row([new Cell('Workers', false, 1, 11, 0)], false, 10),
+                  
+                  new Row([
+                    new Cell('Permanent', false, 1, 1, 0 ),
+                    new Cell('', true, 1, 1, 1, 'ADD', ['12$1', '13$1']),
+                          new Cell('', true, 1, 1, 2, 'ADD', ['12$2', '13$2']),
+                          new Cell('', true, 1, 1, 3, Operation.DIV, [
+                            `11$2`,
+                            `11$1`,
+                          ]),
+                          new Cell('', true, 1, 1, 4, 'ADD', ['12$4', '13$4']),
+                          new Cell('', true, 1, 1, 5, Operation.DIV, [
+                            `11$4`,
+                            `11$1`,
+                          ]),
+                          new Cell('', true, 1, 1, 6, 'ADD', ['12$6', '13$6']),
+                          new Cell('', true, 1, 1, 7, 'ADD', ['12$7', '13$7']),
+                          new Cell('', true, 1, 1, 8, Operation.DIV, [
+                            `11$7`,
+                            `11$6`,
+                          ]),
+                          new Cell('', true, 1, 1, 9, 'ADD', ['12$9', '13$9']),
+                          new Cell('', true, 1, 1, 10, Operation.DIV, [
+                            `11$9`,
+                            `11$6`,
+                          ]),
+
+                  ], false, 11),
                   ...[
-                    'Permanent',
-                    'Male',
-                    'Female',
-                    'Other than Permanent',
                     'Male',
                     'Female',
                   ].map(
@@ -4132,28 +4240,90 @@ export const companySectionsTemplate: Section[] = [
                           new Cell('', true, 1, 1, 1),
                           new Cell('', true, 1, 1, 2),
                           new Cell('', true, 1, 1, 3, Operation.DIV, [
-                            `${rowNo + 11}$2`,
-                            `${rowNo + 11}$1`,
+                            `${rowNo + 12}$2`,
+                            `${rowNo + 12}$1`,
                           ]),
                           new Cell('', true, 1, 1, 4),
                           new Cell('', true, 1, 1, 5, Operation.DIV, [
-                            `${rowNo + 11}$4`,
-                            `${rowNo + 11}$1`,
+                            `${rowNo + 12}$4`,
+                            `${rowNo + 12}$1`,
                           ]),
                           new Cell('', true, 1, 1, 6),
                           new Cell('', true, 1, 1, 7),
                           new Cell('', true, 1, 1, 8, Operation.DIV, [
-                            `${rowNo + 11}$7`,
-                            `${rowNo + 11}$6`,
+                            `${rowNo + 12}$7`,
+                            `${rowNo + 12}$6`,
                           ]),
                           new Cell('', true, 1, 1, 9),
                           new Cell('', true, 1, 1, 10, Operation.DIV, [
-                            `${rowNo + 11}$9`,
-                            `${rowNo + 11}$6`,
+                            `${rowNo + 12}$9`,
+                            `${rowNo + 12}$6`,
                           ]),
                         ],
                         false,
-                        rowNo + 11,
+                        rowNo + 12,
+                      ),
+                  ),
+
+                  new Row([
+                    new Cell('Other than Permanent', false, 1, 1, 0 ),
+                    new Cell('', true, 1, 1, 1, 'ADD', ['15$1', '16$1']),
+                          new Cell('', true, 1, 1, 2, 'ADD', ['15$2', '16$2']),
+                          new Cell('', true, 1, 1, 3, Operation.DIV, [
+                            `14$2`,
+                            `14$1`,
+                          ]),
+                          new Cell('', true, 1, 1, 4, 'ADD', ['15$4', '16$4']),
+                          new Cell('', true, 1, 1, 5, Operation.DIV, [
+                            `14$4`,
+                            `14$1`,
+                          ]),
+                          new Cell('', true, 1, 1, 6, 'ADD', ['15$6', '16$6']),
+                          new Cell('', true, 1, 1, 7, 'ADD', ['15$7', '16$7']),
+                          new Cell('', true, 1, 1, 8, Operation.DIV, [
+                            `14$7`,
+                            `14$6`,
+                          ]),
+                          new Cell('', true, 1, 1, 9, 'ADD', ['15$9', '16$9']),
+                          new Cell('', true, 1, 1, 10, Operation.DIV, [
+                            `14$9`,
+                            `14$6`,
+                          ]),
+
+                  ], false, 14),
+                  ...[
+                    'Male',
+                    'Female',
+                  ].map(
+                    (firstCol: string, rowNo: number) =>
+                      new Row(
+                        [
+                          new Cell(firstCol, false, 1, 1, 0),
+                          new Cell('', true, 1, 1, 1),
+                          new Cell('', true, 1, 1, 2),
+                          new Cell('', true, 1, 1, 3, Operation.DIV, [
+                            `${rowNo + 15}$2`,
+                            `${rowNo + 15}$1`,
+                          ]),
+                          new Cell('', true, 1, 1, 4),
+                          new Cell('', true, 1, 1, 5, Operation.DIV, [
+                            `${rowNo + 15}$4`,
+                            `${rowNo + 15}$1`,
+                          ]),
+                          new Cell('', true, 1, 1, 6),
+                          new Cell('', true, 1, 1, 7),
+                          new Cell('', true, 1, 1, 8, Operation.DIV, [
+                            `${rowNo + 15}$7`,
+                            `${rowNo + 15}$6`,
+                          ]),
+                          new Cell('', true, 1, 1, 9),
+                          new Cell('', true, 1, 1, 10, Operation.DIV, [
+                            `${rowNo + 15}$9`,
+                            `${rowNo + 15}$6`,
+                          ]),
+                        ],
+                        false,
+                        rowNo + 15
                       ),
                   ),
                 ],
