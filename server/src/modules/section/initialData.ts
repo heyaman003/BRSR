@@ -4619,8 +4619,8 @@ export const companySectionsTemplate: Section[] = [
                   new Row(
                     [
                       new Cell('Complaints on POSH upheld', false, 1, 1, 0),
-                      new Cell('', false, 1, 1, 1),
-                      new Cell('', false, 1, 1, 2),
+                      new Cell('', true, 1, 1, 1),
+                      new Cell('', true, 1, 1, 2),
                     ],
                     false,
                     4,
@@ -6728,9 +6728,14 @@ export const companySectionsTemplate: Section[] = [
           },
           {
             index: 12,
-            desc: '4. Does the entity display product information on the product over and above what is mandated as per local laws?',
-            type: QuestionType.TEXT,
+            desc: '4. a. Does the entity display product information on the product over and above what is mandated as per local laws? If yes, provide details in brief.',
+            type: QuestionType.BOOLEAN,
           },
+          {
+            index: 13,
+            desc: '4. b. Did your entity carry out any survey with regard to consumer satisfaction relating to the major products / services of the entity, significant locations of operation of the entity or the entity as a whole? (Yes/No)',
+            type: 'BOOLEAN'
+          }
         ],
       },
     ],

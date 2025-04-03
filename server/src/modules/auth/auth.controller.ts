@@ -6,14 +6,17 @@ import { Public } from 'src/utils/auth/public.decorator';
 import { Response } from 'express';
 @Controller('auth')
 export class AuthController {
-    constructor(private authService: AuthService){}
+    private readonly PROFILE: string;
+    constructor(private authService: AuthService){
+        this.PROFILE = process.env.PROFILE || '';
+    }
 
     @Post("signin")
     @Public()
     async signin(@Body(ValidationPipe) siginInRequest: SiginInDto, @Res({passthrough: true}) response: Response): Promise<ResponseModel> {
         const userdetails = await this.authService.signIn(siginInRequest.email, siginInRequest.password);
         console.log(userdetails,"the credintials are")
-        response.cookie('authorization', `Bearer ${userdetails.accessToken}`, {httpOnly: true, sameSite: "lax", secure: false, maxAge: 60*60000*24})
+        response.cookie('authorization', `Bearer ${userdetails.accessToken}`, {httpOnly: true, sameSite: this.PROFILE==='dev'?"lax":"strict", secure: false, maxAge: 60*60000*24})
         return new ResponseModel(200, 'Successfully signed in.', userdetails.userdetails);
     }
     @Post("logout")

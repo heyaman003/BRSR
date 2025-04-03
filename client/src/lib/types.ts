@@ -3,7 +3,8 @@ export class User {
     id: string;
     name: string;
     email: string;
-    createdAt: Date
+    createdAt: Date;
+    role?: string
     constructor(id: string, name: string, email: string, createdAt: Date) {
       this.id = id;
       this.name = name;

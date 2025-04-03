@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import CompanyHeader from "@/components/company-user/company.header";
 import UserList from "@/components/company-user/user.list";
-
 import { useDispatch } from "react-redux";
-// import { companyData } from "@/lib/mock-data";
 import {
   Leaf,
   Flower,

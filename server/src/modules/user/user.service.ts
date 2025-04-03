@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ConflictException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -44,18 +45,16 @@ export class UserService {
   ): Promise<GetUserDto> {
     newUser.password = await hash(newUser.password, 12);
 
-    if (role === UserRole.CLIENT && !newUser.company)
-      throw new BadRequestException("Please fill client's company details.");
+    if(await this.userRepository.doesEmailExist(newUser.email))
+      throw new ConflictException('Email already exists.')
 
     const user: User = await this.userRepository.createUser(newUser, role);
-
-    // await this.companyService.addUser(user['id'], newUser.company);
 
     return this.convertToDto(user);
   }
 
-  async deleteUser(userId: string): Promise<void> {
-    await this.userRepository.deleteUser(userId);
+  async deleteUser(userId: string, userRole: UserRole): Promise<void> {
+    await this.userRepository.deleteUser(userId, userRole);
   }
 
   async getMentions(userId: string) {
