@@ -21,14 +21,33 @@ import {
 } from "@/components/ui/dialog";
 import { User } from "@/lib/types";
 import { plainToInstance } from "class-transformer";
+import {
+  Select,
+  SelectItem,
+  SelectGroup,
+  SelectContent,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 const formSchema = z.object({
   name: z.string().min(1),
   email: z.string(),
   password: z.string(),
+  role: z.string(),
 });
 
-export default function CreateUserForm({ companyId, addUserToState }: { companyId: string, addUserToState:(user: User)=>void }) {
+export default function CreateUserForm({
+  companyId,
+  addUserToState,
+}: {
+  companyId: string;
+  addUserToState: (user: User) => void;
+}) {
+  const role = useSelector((state: RootState) => state?.auth?.user?.data.role);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -39,20 +58,26 @@ export default function CreateUserForm({ companyId, addUserToState }: { companyI
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-      createClient(companyId, values).then((res: User) => {
-              form.resetField("name");
-              form.resetField("email");
-              form.resetField("password");
-              addUserToState(plainToInstance(User, res) as User);
-            });
+    createUser(companyId, values).then((res: User) => {
+      form.resetField("name");
+      form.resetField("email");
+      form.resetField("password");
+      form.resetField('role')
+      addUserToState(plainToInstance(User, res) as User);
+    });
   }
 
   return (
     <Dialog>
-      <DialogTrigger className="bg-green-500 text-white  rounded-sm py-2 px-8 font-bold my-2">Create User</DialogTrigger>
+      <DialogTrigger className="bg-green-500 text-white  rounded-sm py-2 px-8 font-bold my-2">
+        Create User
+      </DialogTrigger>
       <DialogContent className={"px-10 bg-green-50"}>
         <DialogHeader>
-          <DialogTitle className="text-green-600 text-2xl font-sans"> Add User</DialogTitle>
+          <DialogTitle className="text-green-600 text-2xl font-sans">
+            {" "}
+            Add User
+          </DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form
@@ -95,7 +120,7 @@ export default function CreateUserForm({ companyId, addUserToState }: { companyI
                   <FormLabel>Password</FormLabel>
                   <FormControl>
                     <Input
-                    className={"outline-green-100 outline-1"}
+                      className={"outline-green-100 outline-1"}
                       placeholder={"Password"}
                       type="password"
                       {...field}
@@ -105,7 +130,40 @@ export default function CreateUserForm({ companyId, addUserToState }: { companyI
                 </FormItem>
               )}
             />
-            <Button className="bg-green-600 hover:bg-green-700 px-5" type="submit">Submit</Button>
+
+            <FormField
+              control={form.control}
+              name="role"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Role</FormLabel>
+                  <FormControl>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      {...field}
+                    >
+                      <SelectTrigger className="">
+                        <SelectValue placeholder="Select a role" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          {role==='SUPERADMIN' && <SelectItem value="ADMIN">Admin</SelectItem>}
+                          <SelectItem value="CLIENT">Client</SelectItem>
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button
+              className="bg-green-600 hover:bg-green-700 px-5"
+              type="submit"
+            >
+              Submit
+            </Button>
           </form>
         </Form>
       </DialogContent>
@@ -113,28 +171,31 @@ export default function CreateUserForm({ companyId, addUserToState }: { companyI
   );
 }
 
-const createClient = async (
+const createUser = async (
   companyId: string,
   data: { name: string; email: string; password: string }
 ) => {
   try {
-    const raw = await fetch(`${import.meta.env.VITE_SERVER_URI}/user/create/client`, {
+    const raw = await fetch(`${import.meta.env.VITE_SERVER_URI}/user/create`, {
       method: "POST",
       headers: {
-        "Content-Type": 'application/json',
-        'X-Csrf-Token': sessionStorage.getItem('X-Csrf-Token') || ''
+        "Content-Type": "application/json",
+        "X-Csrf-Token": sessionStorage.getItem("X-Csrf-Token") || "",
       },
       body: JSON.stringify({ ...data, company: companyId }),
-      credentials: 'include'
+      credentials: "include",
     });
 
     const res = await raw.json();
 
-    if (raw.status < 200 || raw.status >= 400) throw new Error(Array.isArray(res.message)?res.message[0]: res.message);
-    toast.success(res.message)
-    return res.data
+    if (raw.status < 200 || raw.status >= 400)
+      throw new Error(
+        Array.isArray(res.message) ? res.message[0] : res.message
+      );
+    toast.success(res.message);
+    return res.data;
   } catch (e) {
     if (e instanceof Error) toast.error(e.message);
-    throw e
+    throw e;
   }
 };

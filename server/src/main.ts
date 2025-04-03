@@ -5,16 +5,19 @@ import helmet from 'helmet';
 import { doubleCsrf } from 'csrf-csrf';
 
 async function bootstrap() {
+  const PROFILE= process.env.PROFILE;
+
   const app = await NestFactory.create(AppModule, {
     logger: ['log', 'error', 'warn', 'debug'],
   });
 
-  app.enableCors({
-    origin: ['http://localhost:5173', 'http://172.16.16.68:5173'],
-    credentials: true,
-    exposedHeaders: ['X-Csrf-Token', 'Content-Type'],
-    allowedHeaders: ['X-Csrf-Token', 'Content-Type'],
-  });
+  if(PROFILE==='dev')
+    app.enableCors({
+      origin: ['http://localhost:5173', 'http://172.16.16.68:5173'],
+      credentials: true,
+      exposedHeaders: ['X-Csrf-Token', 'Content-Type'],
+      allowedHeaders: ['X-Csrf-Token', 'Content-Type'],
+    });
 
   app.use(cookieparser());
   app.use(helmet());
@@ -22,10 +25,14 @@ async function bootstrap() {
   const { doubleCsrfProtection } = doubleCsrf({
     getSecret: () => 'hello world',
     ignoredMethods: ['HEAD'],
-    cookieOptions: {
+    cookieOptions: PROFILE==='dev' ? {
       httpOnly: true,
       secure: false,
       sameSite: 'lax',
+    } : {
+      httpOnly: true,
+      secure: false,
+      sameSite: 'strict'
     },
     cookieName: 'csrf',
   });

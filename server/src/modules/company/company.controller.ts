@@ -10,13 +10,14 @@ export class CompanyController{
     constructor(private companyService: CompanyService){}
 
     @Post()
-    @Role(UserRole.ADMIN)
+    @Role(UserRole.SUPERADMIN)
     async createCompany(@Body() company: {name: string}):Promise<ResponseModel>{
         const companyDetails: CompanyDto = await this.companyService.createCompany(company.name);
         return new ResponseModel(201, "Company added successfully.", companyDetails);
     }
 
     @Get('/all')
+    @Role(UserRole.SUPERADMIN)
     async listAllCompanies() {
         const companies = await this.companyService.listAllCompanies();
         return new ResponseModel(200, "Success.", companies);
@@ -35,7 +36,7 @@ export class CompanyController{
     }
 
     @Delete('/:companyId')
-    @Role(UserRole.ADMIN)
+    @Role(UserRole.SUPERADMIN)
     async deleteCompany(@Param("companyId", ParseUUIDPipe) companyId: string): Promise<ResponseModel> {
         await this.companyService.deleteCompany(companyId);
         return new ResponseModel(200, "Deleted company successfully.");

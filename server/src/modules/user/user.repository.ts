@@ -1,11 +1,12 @@
 import {
   BadRequestException,
   ConsoleLogger,
+  HttpException,
   Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
 import { Role, User } from '@prisma/client';
-import { CreateUserDto } from 'src/modules/user/user.dtos';
+import { CreateUserDto, UserRole } from 'src/modules/user/user.dtos';
 import { DbService } from 'src/utils/db.connections';
 
 @Injectable()
@@ -14,6 +15,27 @@ export class UserRepository {
     private readonly db: DbService,
     private readonly logger: ConsoleLogger,
   ) {}
+
+  async doesEmailExist(email: string): Promise<Boolean> {
+    try {
+      const userId = (await this.db.user.findUnique({
+        where: {
+          email: email
+        },
+        select: {
+          id: true
+        }
+      }))?.id;
+
+      return userId?true:false;
+    } catch (e) {
+      if (!(e instanceof HttpException)) {
+        this.logger.error(e.message, e.stack);
+        throw new InternalServerErrorException();
+      }
+      throw e;
+    }
+  }
 
   async createUser(userData: CreateUserDto, role: Role): Promise<User> {
     try {
@@ -28,7 +50,11 @@ export class UserRepository {
       });
       return user;
     } catch (e) {
-      throw new BadRequestException(e.message);
+      if (!(e instanceof HttpException)) {
+        this.logger.error(e.message, e.stack);
+        throw new InternalServerErrorException();
+      }
+      throw e;
     }
   }
 
@@ -39,7 +65,11 @@ export class UserRepository {
       });
       return user;
     } catch (e) {
-      throw new BadRequestException(e.message);
+      if (!(e instanceof HttpException)) {
+        this.logger.error(e.message, e.stack);
+        throw new InternalServerErrorException();
+      }
+      throw e;
     }
   }
 
@@ -50,26 +80,40 @@ export class UserRepository {
       });
       return user;
     } catch (e) {
-      this.logger.error(e);
-      throw new InternalServerErrorException(e.message);
+      if (!(e instanceof HttpException)) {
+        this.logger.error(e.message, e.stack);
+        throw new InternalServerErrorException();
+      }
+      throw e;
     }
   }
 
-  async deleteUser(userId: string): Promise<void> {
+  async deleteUser(userId: string, userRole: UserRole): Promise<void> {
     try {
-      await this.db.user.delete({
-        where: {
-          id: userId,
-          role: {
-            not: {
-              equals: Role.SUPERADMIN,
+      if (userRole === 'SUPERADMIN')
+        await this.db.user.delete({
+          where: {
+            id: userId,
+            role: {
+              in: ['ADMIN', 'CLIENT'],
             },
           },
-        },
-      });
+        });
+      else if (userRole === 'ADMIN')
+        await this.db.user.delete({
+          where: {
+            id: userId,
+            role: {
+              in: ['ADMIN'],
+            },
+          },
+        });
     } catch (e) {
-      this.logger.error(e);
-      throw new InternalServerErrorException(e.message);
+      if (!(e instanceof HttpException)) {
+        this.logger.error(e.message, e.stack);
+        throw new InternalServerErrorException();
+      }
+      throw e;
     }
   }
 
@@ -114,8 +158,11 @@ export class UserRepository {
         },
       });
     } catch (e) {
-      this.logger.log(e);
-      throw new InternalServerErrorException();
+      if (!(e instanceof HttpException)) {
+        this.logger.error(e.message, e.stack);
+        throw new InternalServerErrorException();
+      }
+      throw e;
     }
   }
 
@@ -156,8 +203,11 @@ export class UserRepository {
         },
       });
     } catch (e) {
-      this.logger.error(e);
-      throw new InternalServerErrorException();
+      if (!(e instanceof HttpException)) {
+        this.logger.error(e.message, e.stack);
+        throw new InternalServerErrorException();
+      }
+      throw e;
     }
   }
 }

@@ -74,6 +74,7 @@ const UserCard: React.FC<UserCardProps> = ({ user, index, deleteUserFromState })
           <h3 className="text-lg font-semibold truncate group-hover:text-emerald-700 dark:group-hover:text-emerald-300 transition-colors duration-300">
             {user.name}
           </h3>
+          <h5 className="text-xs font-semibold text-gray-400 capitalize">{user.role?.toLowerCase()}</h5>
           <p className="text-sm text-muted-foreground truncate">{user.email}</p>
         </div>
       </div>
