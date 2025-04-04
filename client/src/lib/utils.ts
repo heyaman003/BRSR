@@ -9,7 +9,6 @@ export const listSections = async (companyId: string): Promise<Object[]> => {
     `${import.meta.env.VITE_SERVER_URI}/company/${companyId}/sections`,{credentials:"include", headers: {'X-Csrf-Token': sessionStorage.getItem('X-Csrf-Token') || ''}}
   );
   const res = await raw.json();
-  console.log(res.data,"the data is")
   return res.data;
 };
 

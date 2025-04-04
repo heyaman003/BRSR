@@ -146,4 +146,5 @@ enum QuestionType {
 enum Operation {
   ADD
   DIV
+  MUL
 }

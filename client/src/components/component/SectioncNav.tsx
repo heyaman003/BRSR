@@ -56,7 +56,6 @@ const MainNavigationforC: React.FC<MainNavigationProps> = ({subsections,setActiv
                     onClick={() => {
                       setActiveSubsection(section.id); // Set active subsection to parent section
                       window.location.hash = `#${qus.id}`; // Set URL hash to question ID
-                      console.log("the question id is",qus.id,window.location.hash)
                     }}
                     className="block py-2 px-3 my-1 text-left rounded-md text-green-700 hover:bg-green-50 hover:text-green-900 text-[12px] transition-colors"
                   >

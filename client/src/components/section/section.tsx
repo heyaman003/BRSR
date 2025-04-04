@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Question, SubSection, Table } from "@/models/models";
 import { plainToInstance } from "class-transformer";
 import { Loader2, MessageSquareText } from "lucide-react";
-import React, { memo, useEffect, useLayoutEffect, useState } from "react";
+import React, { memo, useCallback, useEffect, useLayoutEffect, useState } from "react";
 import { toast } from "sonner";
 import {
   fetchSubsectionData,
@@ -78,6 +78,10 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId }) => {
         }
     );
   };
+
+  const getTableData = useCallback((questionIndex: number, tableIndex: number): Table | null => {
+    return subsectionData?.questions.find(question => question.index === questionIndex)?.answer_table?.[tableIndex] ?? null
+  }, [subsectionData])
 
   const updateTextAnswer = (questionId: string, answer: string) => {
     setSubsectionData(
@@ -162,6 +166,7 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId }) => {
                     question.answer_table &&
                     question.answer_table.map((table: Table) => (
                       <TableUI
+                        getTableData={getTableData}
                         updateTableData={(updatedTableData: Table) => {
                           updateTableData(question.id, updatedTableData);
                         }}

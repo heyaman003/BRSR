@@ -52,7 +52,7 @@ export default function QuestionnairePage() {
         {/* For the comment sidebar */}
         <div className="flex bg-[#f2f9fa]">
           {/* Left Sidebar */}
-          <div className="w-[350px]">
+          <div className="w-[300px]">
             <Leftcontainer
               activeSection={activeSection}
               subsections={
@@ -69,7 +69,7 @@ export default function QuestionnairePage() {
             />
           </div>
 
-          <div className="h-screen w-[calc(100%-350px)] flex flex-col relative pl-3">
+          <div className="h-screen w-[calc(100%-300px)] flex flex-col relative pl-3">
             {/* Top bar containing the section buttons e.g. 'Section A' */}
             <Horizontalscroll
               sections={sections}

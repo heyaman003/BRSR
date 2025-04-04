@@ -10,7 +10,7 @@ const BottomLeftContainer: React.FC<BottomLeftContainerProps> = ({  activeSectio
     <div className="flex gap-4 pb-6">
         <Button
           type="submit"
-          className="w-full bg-yellow-500 hover:bg-yellow-600 text-white"
+          className="w-full bg-yellow-500 hover:bg-yellow-600 text-white text-xs font-semibold"
         >
           Send for approval
         </Button>
@@ -21,7 +21,7 @@ const BottomLeftContainer: React.FC<BottomLeftContainerProps> = ({  activeSectio
           error: (err)=>err.message
         })}
           type="submit"
-          className="w-full bg-yellow-500 hover:bg-yellow-600 text-white"
+          className="w-full bg-yellow-500 hover:bg-yellow-600 text-white text-xs font-semibold"
         >
           Extract to PDF
         </Button>

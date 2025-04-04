@@ -9,7 +9,7 @@ import { Toaster } from "sonner";
 import AdminCompany from "./pages/admin.brsr";
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [_isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoadingCsrf, setIsLoadingCsrf] = useState(true);
   const navigate = useNavigate();
 
@@ -18,7 +18,6 @@ function App() {
     const storedLoginStatus = sessionStorage.getItem("isLoggedInEmailer");
     if (storedLoginStatus === "true") {
       setIsLoggedIn(true);
-      console.log("User is logged in", isLoggedIn);
     }
     setIsLoadingCsrf(true);
     fetch(import.meta.env.VITE_SERVER_URI + "/csrf", {

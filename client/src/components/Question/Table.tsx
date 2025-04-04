@@ -17,9 +17,11 @@ const generateId = () => new BSON.ObjectId().toString();
 const TableUI = ({
   table,
   updateTableData,
+  getTableData
 }: {
   table: TableType;
   updateTableData: (updatedTableData: TableType) => void;
+  getTableData: (questionIndex: number, tableIndex: number) => TableType | null
 }) => {
   const [tableState, setTableState] = useState<TableType>(table);
   const [isSavingTableData, setIsSavingTableData] = useState<boolean>(false);
@@ -27,7 +29,6 @@ const TableUI = ({
   useEffect(() => {
     updateTableData(tableState);
   }, [tableState]);
-
 
   const updateTableCell = useCallback(
     (rowId: string, cellId: string, newValue: string) => {
@@ -142,6 +143,7 @@ const TableUI = ({
                         cell.data
                       ) : (
                         <CellInput
+                          getTableData={getTableData}
                           value={cell.data}
                           rowId={row.id}
                           cellId={cell.id}
