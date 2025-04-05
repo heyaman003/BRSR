@@ -7,7 +7,7 @@ import TextQuestionUI from "@/components/Question/Text";
 import { Button } from "@/components/ui/button";
 import { Question, SubSection, Table } from "@/models/models";
 import { plainToInstance } from "class-transformer";
-import { Leaf, Loader2, MessageSquareText } from "lucide-react";
+import {  Loader2, MessageSquareText } from "lucide-react";
 import React, { memo, useEffect, useLayoutEffect, useState } from "react";
 import { toast } from "sonner";
 import {
@@ -15,7 +15,7 @@ import {
   updateSubsectionData,
 } from "@/utils/dataFetching";
 import { useSearchParams } from "react-router-dom";
-import UnitConverter from "../calc/Main.calc";
+// import UnitConverter from "../calc/Main.calc";
 interface SectionUiArgs {
   subsectionId: string;
 }
