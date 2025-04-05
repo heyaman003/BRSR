@@ -8,7 +8,8 @@ export class Cell {
     colSpan: number;
     index: number;
     operation?: Operation;
-    operands?:string[]
+    operands?:string[];
+    isHeading?: boolean
   
     constructor(
       id: string,
