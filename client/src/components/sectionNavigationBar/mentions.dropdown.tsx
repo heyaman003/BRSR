@@ -10,9 +10,11 @@ import {
   DropdownMenuLabel,
 } from "../ui/dropdown-menu";
 import { EventSource } from "eventsource";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from "@/components/ui/dialog";
 import { CircleUser } from "lucide-react";
 import TimeAgo from "react-timeago";
-
+import UnitConverter from "../calc/Main.calc";
+import { Button } from "@/components/ui/button";
 interface MentionsContainerProps {
   userId: string;
 }
@@ -20,6 +22,8 @@ interface MentionsContainerProps {
 const MentionsDropdown: React.FC<MentionsContainerProps> = ({ userId }) => {
   // Listening to mention notifications
   const [mentions, setMentions] = useState<Mention[]>([]);
+  const [open, setOpen] = useState(false);
+
   const [newNewNotificationCount, setNewNotificationCount] =
     useState<number>(0);
 
@@ -85,7 +89,8 @@ const MentionsDropdown: React.FC<MentionsContainerProps> = ({ userId }) => {
   };
 
   return (
-    <DropdownMenu
+   <> 
+   <DropdownMenu
       onOpenChange={(open) => {
         if (open) viewNotifications();
       }}
@@ -135,11 +140,27 @@ const MentionsDropdown: React.FC<MentionsContainerProps> = ({ userId }) => {
             ))}
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
+        <DropdownMenuItem   onClick={() => setOpen(true)} className="text-sm hover:bg-gray-50 hover:border-0 hover:outline-0 p-2 cursor-pointer">
+          Calculator
+          
+        </DropdownMenuItem>
         <DropdownMenuItem className="text-sm hover:bg-gray-50 hover:border-0 hover:outline-0 p-2 cursor-pointer">
           Logout
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
+    <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="max-w-3xl overflow-y-auto max-h-screen">
+          <DialogHeader>
+            <DialogTitle>Unit Converter</DialogTitle>
+          </DialogHeader>
+          <UnitConverter />
+          <DialogClose asChild>
+            <Button variant="outline">Close</Button>
+          </DialogClose>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 };
 
@@ -160,6 +181,7 @@ const closeNotificationListenerAPI = (userId: string) => {
   fetch(
     `${import.meta.env.VITE_SERVER_URI}/notification/mentions/${userId}/close`,
     {
+
       credentials: "include",
       keepalive: true,
       headers: {

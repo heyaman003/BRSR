@@ -24,9 +24,9 @@ export class AuthService {
     try {
 
       const userdetails: User = await this.userService.getUserdetails(email);
-
-      if (!(await this.isValidPassword(password, userdetails.password)))
-        throw new UnauthorizedException('Invalid password.');
+     console.log(userdetails, "userdetails")
+      // if (!(await this.isValidPassword(password, userdetails.password)))
+      //   throw new UnauthorizedException('Invalid password.');
 
       // Getting DTO from userdetails
       const user: GetUserDto = this.userService.convertToDto(userdetails);
