@@ -7,7 +7,7 @@ import {
   TableRow,
 } from "../ui/table";
 import { Cell, Row, Table as TableType } from "@/types";
-import CellInput from "./cell1.input";
+import CellInput from "./cell.input";
 import { memo, useCallback, useEffect, useState } from "react";
 import * as BSON from "bson";
 import { toast } from "sonner";
