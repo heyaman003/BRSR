@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
+import { useFetch } from "@/hooks/use-fetch";
 
 interface Company {
   id: string;
@@ -15,6 +16,7 @@ interface CreateCompanyFormProps {
 const CreateCompanyForm: React.FC<CreateCompanyFormProps> = ({
   addCompanyToLocalState,
 }) => {
+  const fetch = useFetch();
   const [companyName, setCompanyName] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -25,20 +27,26 @@ const CreateCompanyForm: React.FC<CreateCompanyFormProps> = ({
       return;
     }
     setLoading(true);
-    toast.promise(createCompanyAPI(companyName), {
-      loading: "Creating company...",
-      success: (res) => {
-        addCompanyToLocalState(res.data);
-        setCompanyName("");
-        return `Company "${companyName}" created successfully!`;
-      },
-      error: (_err) => {
-        return "Failed to create company. Please try again.";
-      },
-      finally: () => {
-        setLoading(false);
-      },
-    });
+    toast.promise(
+      fetch(`/company`, {
+        method: "POST",
+        body: { name: companyName.trim() },
+      }),
+      {
+        loading: "Creating company...",
+        success: (res) => {
+          addCompanyToLocalState(res.data);
+          setCompanyName("");
+          return `Company "${companyName}" created successfully!`;
+        },
+        error: (_err) => {
+          return _err.message;
+        },
+        finally: () => {
+          setLoading(false);
+        },
+      }
+    );
     // try {
     //   const res = await fetch(`${import.meta.env.VITE_SERVER_URI}/company`, {
     //     method: "POST",
@@ -112,19 +120,19 @@ const CreateCompanyForm: React.FC<CreateCompanyFormProps> = ({
 
 export default CreateCompanyForm;
 
-const createCompanyAPI = async (companyName: string) => {
-  const res = await fetch(`${import.meta.env.VITE_SERVER_URI}/company`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "X-Csrf-Token": sessionStorage.getItem("X-Csrf-Token") || "",
-    },
-    credentials: "include",
-    body: JSON.stringify({ name: companyName.trim() }),
-  });
+// const createCompanyAPI = async (companyName: string, fetch: Function) => {
+//   const res = await fetch(`/company`, {
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/json",
+//       "X-Csrf-Token": sessionStorage.getItem("X-Csrf-Token") || "",
+//     },
+//     credentials: "include",
+//     body: { name: companyName.trim() },
+//   });
 
-  if (res.status > 399 || res.status < 200) {
-    throw new Error("Failed to create company. Please try again.");
-  }
-  return await res.json();
-};
+//   if (res.status > 399 || res.status < 200) {
+//     throw new Error("Failed to create company. Please try again.");
+//   }
+//   return await res.json();
+// };

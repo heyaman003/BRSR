@@ -24,7 +24,6 @@ export class AuthService {
     try {
 
       const userdetails: User = await this.userService.getUserdetails(email);
-     console.log(userdetails, "userdetails")
       // if (!(await this.isValidPassword(password, userdetails.password)))
       //   throw new UnauthorizedException('Invalid password.');
 

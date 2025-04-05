@@ -5350,8 +5350,8 @@ export const companySectionsTemplate: Section[] = [
                         1,
                         0,
                       ),
-                      new Cell('', true, 1, 1, 1, 'MUL', ['8$1', '22.4']),
-                      new Cell('', true, 1, 1, 2, 'MUL', ['8$2', '22.4']),
+                      new Cell('', true, 1, 1, 1, 'MUL', ['9$1', '22.4']),
+                      new Cell('', true, 1, 1, 2, 'MUL', ['9$2', '22.4']),
                     ],
                     false,
                     10,
@@ -5709,7 +5709,7 @@ export const companySectionsTemplate: Section[] = [
                         1,
                         0,
                       ),
-                      new Cell('', false, 1, 1, 1),
+                      new Cell('', true, 1, 1, 1),
                       new Cell('', true, 1, 1, 2, 'SUMDIVIDE', [
                         '1$2',
                         '2$2',
@@ -5733,25 +5733,12 @@ export const companySectionsTemplate: Section[] = [
                         1,
                         0,
                       ),
-                      new Cell('', false, 1, 1, 1),
+                      new Cell('', true, 1, 1, 1),
                       new Cell('', true, 1, 1, 2, 'MUL', ['3$2', '22.4']),
                       new Cell('', true, 1, 1, 3, 'MUL', ['3$3', '22.4']),
                     ],
                     false,
                     4,
-                  ),
-                  new Row(
-                    [
-                      'for Purchasing Power Parity (PPP) (Total Scope 1 and Scope 2 GHG emissions / Revenue from operations adjusted for PPP)',
-                      '',
-                      '',
-                      '',
-                    ].map(
-                      (value, ind: number) =>
-                        new Cell(value, value === '', 1, 1, ind),
-                    ),
-                    false,
-                    5,
                   ),
                   new Row(
                     [
@@ -5764,7 +5751,7 @@ export const companySectionsTemplate: Section[] = [
                         new Cell(value, value === '', 1, 1, ind),
                     ),
                     false,
-                    6,
+                    5,
                   ),
                   new Row(
                     [
@@ -5777,7 +5764,7 @@ export const companySectionsTemplate: Section[] = [
                         new Cell(value, !value, 1, 1, ind),
                     ),
                     false,
-                    7,
+                    6,
                   ),
                 ],
                 false,
@@ -6363,8 +6350,8 @@ export const companySectionsTemplate: Section[] = [
                         0,
                       ),
                       new Cell('', true, 1, 1, 1),
-                      new Cell('', true, 1, 1, 2, 'DIV', ['1$2', '1$0$1$0']),
-                      new Cell('', true, 1, 1, 3, 'DIV', ['1$3', '1$0$1$1']),
+                      new Cell('', true, 1, 1, 2),
+                      new Cell('', true, 1, 1, 3),
                     ],
                     false,
                     3,
