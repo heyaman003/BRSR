@@ -1,20 +1,22 @@
 import ChatBox from "@/components/chat/ChatBox";
 import CommentSidebar from "../commentSidebar/comment.sidebar";
 import SustainabilityLoader from "@/components/component/SustainabiltyLoader";
-import BooleanInput from "@/components/question/boolean.input";
-import TableUI from "@/components/question/table";
-import TextQuestionUI from "@/components/question/text";
+import BooleanInput from "@/components/Question/boolean.input";
+import TableUI from "@/components/Question/Table";
+import TextQuestionUI from "@/components/Question/Text";
 import { Button } from "@/components/ui/button";
 import { Question, SubSection, Table } from "@/models/models";
 import { plainToInstance } from "class-transformer";
-import { Loader2, MessageSquareText } from "lucide-react";
-import React, { memo, useCallback, useEffect, useLayoutEffect, useState } from "react";
+
+import {  Loader2, MessageSquareText } from "lucide-react";
+import React, { memo, useEffect, useLayoutEffect, useState } from "react";
 import { toast } from "sonner";
 import {
   fetchSubsectionData,
   updateSubsectionData,
 } from "@/utils/dataFetching";
 import { useSearchParams } from "react-router-dom";
+// import UnitConverter from "../calc/Main.calc";
 interface SectionUiArgs {
   subsectionId: string;
 }
@@ -25,6 +27,7 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId }) => {
   const [isLoaderVisible, setIsLoaderVisible] = useState(true);
   const [subsectionData, setSubsectionData] = useState<SubSection | null>(null);
   const [isSaving, setIsSaving] = useState<boolean>(false);
+
 
   const smoothScrollTo = (targetY: number, duration = 1000) => {
     const startY = window.scrollY;

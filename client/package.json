@@ -35,6 +35,7 @@
     "class-transformer": "^0.5.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "dialog": "^0.3.1",
     "event-source-polyfill": "^1.0.31",
     "eventsource": "^3.0.6",
     "eventsource-polyfill": "^0.9.6",
