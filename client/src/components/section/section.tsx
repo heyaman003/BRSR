@@ -9,7 +9,7 @@ import { Question, SubSection, Table } from "@/models/models";
 import { plainToInstance } from "class-transformer";
 
 import {  Loader2, MessageSquareText } from "lucide-react";
-import React, { memo, useEffect, useLayoutEffect, useState } from "react";
+import React, { memo, useEffect, useLayoutEffect, useState,useCallback } from "react";
 import { toast } from "sonner";
 import {
   fetchSubsectionData,
