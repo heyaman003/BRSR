@@ -137,10 +137,10 @@ const TableUI = ({
                       key={cell.id}
                       colSpan={cell.colSpan}
                       rowSpan={cell.rowSpan}
-                      className="py-3"
+                      className={`py-3 ${cell.isHeading &&'bg-green-50'}`}
                     >
                       {!cell.isUpdateable ? (
-                        cell.data
+                        <span className={`inline-block w-full h-full ${cell.isHeading?'text-center font-semibold text-sm text-green-700':'text-left'}`}>{cell.data}</span>
                       ) : (
                         <CellInput
                           getTableData={getTableData}

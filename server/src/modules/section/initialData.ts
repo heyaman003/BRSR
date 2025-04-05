@@ -7,7 +7,8 @@ export class Cell {
   colSpan: number;
   index: number;
   operation?: Operation | null;
-  operands: string[];
+  operands?: string[];
+  isHeading: boolean | null | undefined;
 
   constructor(
     data: string,
@@ -17,7 +18,9 @@ export class Cell {
     index: number,
     operation?: Operation,
     operands?: string[],
+    isHeading?: boolean | null | undefined,
   ) {
+    this.isHeading = isHeading ? true : false;
     this.data = data;
     this.isUpdateable = isUpdateable;
     this.rowSpan = rowSpan;
@@ -358,7 +361,20 @@ export const companySectionsTemplate: Section[] = [
                     true,
                     1,
                   ),
-                  new Row([new Cell('EMPLOYEES', false, 1, 6, 0)], false, 2),
+                  new Row(
+                    [
+                      {
+                        data: 'EMPLOYEES',
+                        isHeading: true,
+                        isUpdateable: false,
+                        rowSpan: 1,
+                        colSpan: 6,
+                        index: 0,
+                      },
+                    ],
+                    false,
+                    2,
+                  ),
                   ...['Permanent (D)', 'Other than Permanent (E)'].map(
                     (firstCol, rowNo: number) =>
                       new Row(
@@ -392,7 +408,20 @@ export const companySectionsTemplate: Section[] = [
                     false,
                     5,
                   ),
-                  new Row([new Cell('WORKERS', false, 1, 6, 0)], false, 6),
+                  new Row(
+                    [
+                      {
+                        data: 'WORKERS',
+                        isUpdateable: false,
+                        rowSpan: 1,
+                        colSpan: 6,
+                        index: 0,
+                        isHeading: true,
+                      },
+                    ],
+                    false,
+                    6,
+                  ),
                   ...['Permanent (F)', 'Other than Permanent (G)'].map(
                     (firstCol, rowNo: number) =>
                       new Row(
@@ -453,7 +482,16 @@ export const companySectionsTemplate: Section[] = [
                     11,
                   ),
                   new Row(
-                    [new Cell('DIFFERENTLY ABLED EMPLOYEES', false, 1, 6, 0)],
+                    [
+                      {
+                        data: 'DIFFERENTLY ABLED EMPLOYEES',
+                        isUpdateable: false,
+                        rowSpan: 1,
+                        colSpan: 6,
+                        index: 0,
+                        isHeading: true,
+                      },
+                    ],
                     false,
                     12,
                   ),
@@ -491,7 +529,16 @@ export const companySectionsTemplate: Section[] = [
                     15,
                   ),
                   new Row(
-                    [new Cell('DIFFERENTLY ABLED WORKERS', false, 1, 6, 0)],
+                    [
+                      {
+                        data: 'DIFFERENTLY ABLED WORKERS',
+                        isUpdateable: false,
+                        rowSpan: 1,
+                        colSpan: 6,
+                        index: 0,
+                        isHeading: true,
+                      },
+                    ],
                     false,
                     16,
                   ),
@@ -532,20 +579,6 @@ export const companySectionsTemplate: Section[] = [
                 false,
               ),
             ],
-            // employee: {
-            //   colFirstData: [
-            //     'Permanent (D)',
-            //     'Other than Permanent (E)',
-            //     'Total employees (D + E)',
-            //   ],
-            // },
-            // worker: {
-            //   colFirstData: [
-            //     'Permanent (F)',
-            //     'Other than Permanent (G)',
-            //     'Total employees (F + G)',
-            //   ],
-            // },
           },
           {
             desc: '21. Participation/Inclusion/Representation of Women',
@@ -2334,7 +2367,16 @@ export const companySectionsTemplate: Section[] = [
                     2,
                   ),
                   new Row(
-                    [new Cell('Permanent employees', false, 1, 11, 0)],
+                    [
+                      {
+                        data: 'Permanent employees',
+                        isUpdateable: false,
+                        rowSpan: 1,
+                        colSpan: 11,
+                        index: 0,
+                        isHeading: true,
+                      },
+                    ],
                     false,
                     3,
                   ),
@@ -2387,13 +2429,25 @@ export const companySectionsTemplate: Section[] = [
                       new Cell('', true, 1, 1, 8, 'ADD', ['4$8', '5$8']),
                       new Cell('', true, 1, 1, 9, 'PERCENTAGE', ['6$8', '6$1']),
                       new Cell('', true, 1, 1, 10, 'ADD', ['4$10', '5$10']),
-                      new Cell('', true, 1, 1, 11, 'PERCENTAGE', ['6$10', '6$1']),
+                      new Cell('', true, 1, 1, 11, 'PERCENTAGE', [
+                        '6$10',
+                        '6$1',
+                      ]),
                     ],
                     false,
                     6,
                   ),
                   new Row(
-                    [new Cell('Other than Permanent workers', false, 1, 11, 0)],
+                    [
+                      {
+                        data: 'Other than Permanent employees',
+                        isUpdateable: false,
+                        rowSpan: 1,
+                        colSpan: 11,
+                        index: 0,
+                        isHeading: true,
+                      },
+                    ],
                     false,
                     7,
                   ),
@@ -2438,15 +2492,30 @@ export const companySectionsTemplate: Section[] = [
                       new Cell('Total', false, 1, 1, 0),
                       new Cell('', true, 1, 1, 1, 'ADD', ['8$1', '9$1']),
                       new Cell('', true, 1, 1, 2, 'ADD', ['8$2', '9$2']),
-                      new Cell('', true, 1, 1, 3, 'PERCENTAGE', ['10$2', '10$1']),
+                      new Cell('', true, 1, 1, 3, 'PERCENTAGE', [
+                        '10$2',
+                        '10$1',
+                      ]),
                       new Cell('', true, 1, 1, 4, 'ADD', ['8$4', '9$4']),
-                      new Cell('', true, 1, 1, 5, 'PERCENTAGE', ['10$4', '10$1']),
+                      new Cell('', true, 1, 1, 5, 'PERCENTAGE', [
+                        '10$4',
+                        '10$1',
+                      ]),
                       new Cell('', true, 1, 1, 6, 'ADD', ['8$6', '9$6']),
-                      new Cell('', true, 1, 1, 7, 'PERCENTAGE', ['10$6', '10$1']),
+                      new Cell('', true, 1, 1, 7, 'PERCENTAGE', [
+                        '10$6',
+                        '10$1',
+                      ]),
                       new Cell('', true, 1, 1, 8, 'ADD', ['8$8', '9$8']),
-                      new Cell('', true, 1, 1, 9, 'PERCENTAGE', ['10$8', '10$1']),
+                      new Cell('', true, 1, 1, 9, 'PERCENTAGE', [
+                        '10$8',
+                        '10$1',
+                      ]),
                       new Cell('', true, 1, 1, 10, 'ADD', ['8$10', '9$10']),
-                      new Cell('', true, 1, 1, 11, 'PERCENTAGE', ['10$10', '10$1']),
+                      new Cell('', true, 1, 1, 11, 'PERCENTAGE', [
+                        '10$10',
+                        '10$1',
+                      ]),
                     ],
                     false,
                     10,
@@ -2510,7 +2579,16 @@ export const companySectionsTemplate: Section[] = [
                     2,
                   ),
                   new Row(
-                    [new Cell('Permanent employees', false, 1, 11, 0)],
+                    [
+                      {
+                        data: 'Permanent workers',
+                        isUpdateable: false,
+                        isHeading: true,
+                        rowSpan: 1,
+                        colSpan: 11,
+                        index: 0,
+                      },
+                    ],
                     false,
                     3,
                   ),
@@ -2563,7 +2641,10 @@ export const companySectionsTemplate: Section[] = [
                       new Cell('', true, 1, 1, 8, 'ADD', ['4$8', '5$8']),
                       new Cell('', true, 1, 1, 9, 'PERCENTAGE', ['6$8', '6$1']),
                       new Cell('', true, 1, 1, 10, 'ADD', ['4$10', '5$10']),
-                      new Cell('', true, 1, 1, 11, 'PERCENTAGE', ['6$10', '6$1']),
+                      new Cell('', true, 1, 1, 11, 'PERCENTAGE', [
+                        '6$10',
+                        '6$1',
+                      ]),
                     ],
                     false,
                     6,
@@ -2614,15 +2695,30 @@ export const companySectionsTemplate: Section[] = [
                       new Cell('Total', false, 1, 1, 0),
                       new Cell('', true, 1, 1, 1, 'ADD', ['8$1', '9$1']),
                       new Cell('', true, 1, 1, 2, 'ADD', ['8$2', '9$2']),
-                      new Cell('', true, 1, 1, 3, 'PERCENTAGE', ['10$2', '10$1']),
+                      new Cell('', true, 1, 1, 3, 'PERCENTAGE', [
+                        '10$2',
+                        '10$1',
+                      ]),
                       new Cell('', true, 1, 1, 4, 'ADD', ['8$4', '9$4']),
-                      new Cell('', true, 1, 1, 5, 'PERCENTAGE', ['10$4', '10$1']),
+                      new Cell('', true, 1, 1, 5, 'PERCENTAGE', [
+                        '10$4',
+                        '10$1',
+                      ]),
                       new Cell('', true, 1, 1, 6, 'ADD', ['8$6', '9$6']),
-                      new Cell('', true, 1, 1, 7, 'PERCENTAGE', ['10$6', '10$1']),
+                      new Cell('', true, 1, 1, 7, 'PERCENTAGE', [
+                        '10$6',
+                        '10$1',
+                      ]),
                       new Cell('', true, 1, 1, 8, 'ADD', ['8$8', '9$8']),
-                      new Cell('', true, 1, 1, 9, 'PERCENTAGE', ['10$8', '10$1']),
+                      new Cell('', true, 1, 1, 9, 'PERCENTAGE', [
+                        '10$8',
+                        '10$1',
+                      ]),
                       new Cell('', true, 1, 1, 10, 'ADD', ['8$10', '9$10']),
-                      new Cell('', true, 1, 1, 11, 'PERCENTAGE', ['10$10', '10$1']),
+                      new Cell('', true, 1, 1, 11, 'PERCENTAGE', [
+                        '10$10',
+                        '10$1',
+                      ]),
                     ],
                     false,
                     10,
@@ -3142,7 +3238,20 @@ export const companySectionsTemplate: Section[] = [
                     true,
                     2,
                   ),
-                  new Row([new Cell('Employees', false, 1, 11, 0)], false, 3),
+                  new Row(
+                    [
+                      {
+                        data: 'Employees',
+                        isUpdateable: false,
+                        isHeading: true,
+                        rowSpan: 1,
+                        colSpan: 11,
+                        index: 0,
+                      },
+                    ],
+                    false,
+                    3,
+                  ),
                   ...['Male', 'Female'].map(
                     (firstCol: string, rowNo: number) =>
                       new Row(
@@ -3187,7 +3296,10 @@ export const companySectionsTemplate: Section[] = [
                       new Cell('', true, 1, 1, 7, 'ADD', ['4$7', '5$7']),
                       new Cell('', true, 1, 1, 8, 'PERCENTAGE', ['6$7', '6$6']),
                       new Cell('', true, 1, 1, 9, 'ADD', ['4$9', '5$9']),
-                      new Cell('', true, 1, 1, 10, 'PERCENTAGE', ['6$9', '6$6']),
+                      new Cell('', true, 1, 1, 10, 'PERCENTAGE', [
+                        '6$9',
+                        '6$6',
+                      ]),
                     ],
                     false,
                     6,
@@ -3237,7 +3349,10 @@ export const companySectionsTemplate: Section[] = [
                       new Cell('', true, 1, 1, 7, 'ADD', ['8$7', '7$7']),
                       new Cell('', true, 1, 1, 8, 'PERCENTAGE', ['9$7', '9$6']),
                       new Cell('', true, 1, 1, 9, 'ADD', ['8$9', '7$9']),
-                      new Cell('', true, 1, 1, 10, 'PERCENTAGE', ['9$9', '9$6']),
+                      new Cell('', true, 1, 1, 10, 'PERCENTAGE', [
+                        '9$9',
+                        '9$6',
+                      ]),
                     ],
                     false,
                     9,
@@ -3293,7 +3408,20 @@ export const companySectionsTemplate: Section[] = [
                     true,
                     1,
                   ),
-                  new Row([new Cell('Employees', false, 1, 7, 0)], false, 2),
+                  new Row(
+                    [
+                      {
+                        data: 'Employees',
+                        isUpdateable: false,
+                        rowSpan: 1,
+                        colSpan: 7,
+                        index: 0,
+                        isHeading: true,
+                      },
+                    ],
+                    false,
+                    2,
+                  ),
                   ...['Male', 'Female'].map(
                     (firstCol: string, rowNo: number) =>
                       new Row(
@@ -3329,7 +3457,20 @@ export const companySectionsTemplate: Section[] = [
                     false,
                     5,
                   ),
-                  new Row([new Cell('Workers', false, 1, 11, 0)], false, 6),
+                  new Row(
+                    [
+                      {
+                        data: 'Workers',
+                        isUpdateable: false,
+                        rowSpan: 1,
+                        colSpan: 11,
+                        index: 0,
+                        isHeading: true,
+                      },
+                    ],
+                    false,
+                    6,
+                  ),
                   ...['Male', 'Female'].map(
                     (firstCol: string, rowNo: number) =>
                       new Row(
@@ -3885,7 +4026,20 @@ export const companySectionsTemplate: Section[] = [
                     true,
                     1,
                   ),
-                  new Row([new Cell('Employees', false, 1, 7, 6)], false, 2),
+                  new Row(
+                    [
+                      {
+                        data: 'Employees',
+                        isUpdateable: false,
+                        rowSpan: 1,
+                        colSpan: 7,
+                        index: 6,
+                        isHeading: true,
+                      },
+                    ],
+                    false,
+                    2,
+                  ),
                   ...['Permanent', 'Other than permanent'].map(
                     (firstCol: string, rowNo: number) =>
                       new Row(
@@ -3939,7 +4093,20 @@ export const companySectionsTemplate: Section[] = [
                     false,
                     5,
                   ),
-                  new Row([new Cell('Workers', false, 1, 7, 0)], false, 6),
+                  new Row(
+                    [
+                      {
+                        data: 'Workers',
+                        isUpdateable: false,
+                        rowSpan: 1,
+                        colSpan: 7,
+                        index: 0,
+                        isHeading: true,
+                      },
+                    ],
+                    false,
+                    6,
+                  ),
                   ...['Permanent', 'Other than permanent'].map(
                     (firstCol: string, rowNo: number) =>
                       new Row(
@@ -4064,7 +4231,20 @@ export const companySectionsTemplate: Section[] = [
                     true,
                     2,
                   ),
-                  new Row([new Cell('Employees', false, 1, 1, 11)], false, 3),
+                  new Row(
+                    [
+                      {
+                        data: 'Employees',
+                        isUpdateable: false,
+                        isHeading: true,
+                        rowSpan: 1,
+                        colSpan: 1,
+                        index: 11,
+                      },
+                    ],
+                    false,
+                    3,
+                  ),
                   new Row(
                     [
                       new Cell('Permanent', false, 1, 1, 0),
@@ -4188,8 +4368,20 @@ export const companySectionsTemplate: Section[] = [
                         rowNo + 8,
                       ),
                   ),
-                  new Row([new Cell('Workers', false, 1, 11, 0)], false, 10),
-
+                  new Row(
+                    [
+                      {
+                        data: 'Workers',
+                        isUpdateable: false,
+                        rowSpan: 1,
+                        colSpan: 11,
+                        index: 0,
+                        isHeading: true,
+                      },
+                    ],
+                    false,
+                    10,
+                  ),
                   new Row(
                     [
                       new Cell('Permanent', false, 1, 1, 0),
@@ -4775,6 +4967,31 @@ export const companySectionsTemplate: Section[] = [
           },
           {
             index: 1,
+            desc: 'Physical Output (KL/MT/Number)',
+            type: QuestionType.TABLE,
+            answer_table: [
+              new Table(
+                [
+                  new Row(
+                    [
+                      new Cell('FY __', false, 1, 1, 0),
+                      new Cell('PY __', false, 1, 1, 0),
+                    ],
+                    true,
+                    0,
+                  ),
+                  new Row(
+                    [new Cell('', true, 1, 1, 0), new Cell('', true, 1, 1, 1)],
+                    false,
+                    1,
+                  ),
+                ],
+                false,
+              ),
+            ],
+          },
+          {
+            index: 2,
             desc: '1. Details of total energy consumption (in Joules or multiples) and energy intensity, in the following format:',
             type: QuestionType.TABLE,
             answer_table: [
@@ -4802,7 +5019,16 @@ export const companySectionsTemplate: Section[] = [
                     0,
                   ),
                   new Row(
-                    [new Cell('From renewable sources', false, 1, 3, 0)],
+                    [
+                      {
+                        data: 'From renewable sources',
+                        isUpdateable: false,
+                        rowSpan: 1,
+                        colSpan: 3,
+                        index: 0,
+                        isHeading: true,
+                      },
+                    ],
                     false,
                     1,
                   ),
@@ -4846,7 +5072,16 @@ export const companySectionsTemplate: Section[] = [
                     5,
                   ),
                   new Row(
-                    [new Cell('From non-renewable sources', false, 1, 3, 0)],
+                    [
+                      {
+                        data: 'From non-renewable sources',
+                        isUpdateable: false,
+                        rowSpan: 1,
+                        colSpan: 3,
+                        index: 0,
+                        isHeading: true,
+                      },
+                    ],
                     false,
                     6,
                   ),
@@ -4981,17 +5216,17 @@ export const companySectionsTemplate: Section[] = [
             ],
           },
           {
-            index: 2,
+            index: 3,
             desc: '2. a. Does the entity have any sites / facilities identified as designated consumers (DCs) under the Performance, Achieve and Trade (PAT) Scheme of the Government of India?',
             type: QuestionType.BOOLEAN,
           },
           {
-            index: 3,
+            index: 4,
             desc: '2. b. If the above is yes, disclose whether targets set under the PAT scheme have been achieved. In case targets have not been achieved, provide the remedial action taken, if any.',
             type: QuestionType.TEXT,
           },
           {
-            index: 4,
+            index: 5,
             desc: '3. Provide details of the following disclosures related to water, in the following format:',
             type: QuestionType.TABLE,
             answer_table: [
@@ -5085,8 +5320,8 @@ export const companySectionsTemplate: Section[] = [
                         1,
                         0,
                       ),
-                      new Cell('', true, 1, 1, 1, 'DIV', ['6$1', '0$0$1$0']),
-                      new Cell('', true, 1, 1, 2, 'DIV', ['6$2', '0$0$1$1']),
+                      new Cell('', true, 1, 1, 1, 'SUB', ['7$1', '6$0$17$1']),
+                      new Cell('', true, 1, 1, 2, 'SUB', ['7$2', '6$0$17$2']),
                     ],
                     false,
                     8,
@@ -5100,27 +5335,56 @@ export const companySectionsTemplate: Section[] = [
                         1,
                         0,
                       ),
-                      new Cell('', true, 1, 1, 1, 'MUL', ['8$1', '22.4']),
-                      new Cell('', true, 1, 1, 2, 'MUL', ['8$2', '22.4']),
+                      new Cell('', true, 1, 1, 1, 'DIV', ['8$1', '0$0$1$0']),
+                      new Cell('', true, 1, 1, 2, 'DIV', ['8$2', '0$0$1$1']),
                     ],
                     false,
                     9,
                   ),
-                  ...[
-                    'Water intensity per rupee of turnover adjusted for Purchasing Power Parity (PPP) (Total water consumption / Revenue from operations adjusted for PPP)',
-                    'Water intensity in terms of physical output',
-                    'Water intensity (optional) – the relevant metric may be selected by the entity',
-                  ].map(
-                    (firstCell: string, rowNo: number) =>
-                      new Row(
-                        [
-                          new Cell(firstCell, false, 1, 1, 0),
-                          new Cell('', true, 1, 1, 1),
-                          new Cell('', true, 1, 1, 2),
-                        ],
+                  new Row(
+                    [
+                      new Cell(
+                        'Water intensity per rupee of turnover adjusted for Purchasing Power Parity (PPP) (Total water consumption / Revenue from operations adjusted for PPP)',
                         false,
-                        rowNo + 2,
+                        1,
+                        1,
+                        0,
                       ),
+                      new Cell('', true, 1, 1, 1, 'MUL', ['8$1', '22.4']),
+                      new Cell('', true, 1, 1, 2, 'MUL', ['8$2', '22.4']),
+                    ],
+                    false,
+                    10,
+                  ),
+                  new Row(
+                    [
+                      new Cell(
+                        'Water intensity in terms of physical output',
+                        false,
+                        1,
+                        1,
+                        0,
+                      ),
+                      new Cell('', true, 1, 1, 1, 'DIV', ['10$1', '1$0$1$0']),
+                      new Cell('', true, 1, 1, 2, 'DIV', ['10$2', '1$0$1$1']),
+                    ],
+                    false,
+                    11,
+                  ),
+                  new Row(
+                    [
+                      new Cell(
+                        'Water intensity (optional) – the relevant metric may be selected by the entity',
+                        false,
+                        1,
+                        1,
+                        0,
+                      ),
+                      new Cell('', true, 1, 1, 1),
+                      new Cell('', true, 1, 1, 2),
+                    ],
+                    false,
+                    12,
                   ),
                 ],
                 false,
@@ -5128,7 +5392,7 @@ export const companySectionsTemplate: Section[] = [
             ],
           },
           {
-            index: 5,
+            index: 6,
             desc: '4. Provide the following details related to water discharged:',
             type: QuestionType.TABLE,
             answer_table: [
@@ -5342,12 +5606,12 @@ export const companySectionsTemplate: Section[] = [
             ],
           },
           {
-            index: 6,
+            index: 7,
             desc: '5. Has the entity implemented a mechanism for Zero Liquid Discharge? If yes, provide details of its coverage and implementation.',
             type: QuestionType.TEXT,
           },
           {
-            index: 7,
+            index: 8,
             desc: '6. Please provide details of air emissions (other than GHG emissions) by the entity, in the following format:',
             type: QuestionType.TABLE,
             answer_table: [
@@ -5392,7 +5656,7 @@ export const companySectionsTemplate: Section[] = [
             ],
           },
           {
-            index: 8,
+            index: 9,
             desc: '7. Provide details of greenhouse gas emissions (Scope 1 and Scope 2 emissions) & its intensity, in the following format:',
             type: QuestionType.TABLE,
             answer_table: [
@@ -5438,27 +5702,41 @@ export const companySectionsTemplate: Section[] = [
                   ),
                   new Row(
                     [
-                      'Total Scope 1 and Scope 2 emission intensity per rupee of turnover (Total Scope 1 and Scope 2 GHG emissions / Revenue from operations)',
-                      '',
-                      '',
-                      '',
-                    ].map(
-                      (value, ind: number) =>
-                        new Cell(value, value === '', 1, 1, ind),
-                    ),
+                      new Cell(
+                        'Total Scope 1 and Scope 2 emission intensity per rupee of turnover (Total Scope 1 and Scope 2 GHG emissions / Revenue from operations)',
+                        false,
+                        1,
+                        1,
+                        0,
+                      ),
+                      new Cell('', false, 1, 1, 1),
+                      new Cell('', true, 1, 1, 2, 'SUMDIVIDE', [
+                        '1$2',
+                        '2$2',
+                        '0$0$1$0',
+                      ]),
+                      new Cell('', true, 1, 1, 3, 'SUMDIVIDE', [
+                        '1$3',
+                        '2$3',
+                        '0$0$1$1',
+                      ]),
+                    ],
                     false,
                     3,
                   ),
                   new Row(
                     [
-                      'Total Scope 1 and Scope 2 emission intensity per rupee of turnover adjusted',
-                      '',
-                      '',
-                      '',
-                    ].map(
-                      (value, ind: number) =>
-                        new Cell(value, value === '', 1, 1, ind),
-                    ),
+                      new Cell(
+                        'Total Scope 1 and Scope 2 emission intensity per rupee of turnover adjusted for Purchasing Power Parity (PPP) (Total Scope 1 and Scope 2 GHG emissions / Revenue from operations)',
+                        false,
+                        1,
+                        1,
+                        0,
+                      ),
+                      new Cell('', false, 1, 1, 1),
+                      new Cell('', true, 1, 1, 2, 'MUL', ['3$2', '22.4']),
+                      new Cell('', true, 1, 1, 3, 'MUL', ['3$3', '22.4']),
+                    ],
                     false,
                     4,
                   ),
@@ -5507,12 +5785,12 @@ export const companySectionsTemplate: Section[] = [
             ],
           },
           {
-            index: 9,
+            index: 10,
             type: QuestionType.TEXT,
             desc: '8. Does the entity have any project related to reducing Green House Gas emission? If Yes, then provide details. ',
           },
           {
-            index: 10,
+            index: 11,
             desc: '9. Provide details related to waste management by the entity, in the following format:',
             type: QuestionType.TABLE,
             answer_table: [
@@ -5529,13 +5807,14 @@ export const companySectionsTemplate: Section[] = [
                   ),
                   new Row(
                     [
-                      new Cell(
-                        'Total Waste generated (in metric tonnes)',
-                        false,
-                        1,
-                        3,
-                        0,
-                      ),
+                      {
+                        data: 'Total Waste generated (in metric tonnes)',
+                        isUpdateable: false,
+                        rowSpan: 1,
+                        colSpan: 3,
+                        index: 0,
+                        isHeading: true,
+                      },
                     ],
                     false,
                     1,
@@ -5604,8 +5883,8 @@ export const companySectionsTemplate: Section[] = [
                         1,
                         0,
                       ),
-                      new Cell('', false, 1, 1, 1, 'DIV', ['10$1', '0$0$1$0']),
-                      new Cell('', false, 1, 1, 2, 'DIV', ['10$2', '0$0$1$1']),
+                      new Cell('', true, 1, 1, 1, 'DIV', ['10$1', '0$0$1$0']),
+                      new Cell('', true, 1, 1, 2, 'DIV', ['10$2', '0$0$1$1']),
                     ],
                     false,
                     11,
@@ -5619,14 +5898,28 @@ export const companySectionsTemplate: Section[] = [
                         1,
                         0,
                       ),
-                      new Cell('', false, 1, 1, 1, 'MUL', ['11$1', '22.4']),
-                      new Cell('', false, 1, 1, 2, 'MUL', ['11$2', '22.4 ']),
+                      new Cell('', true, 1, 1, 1, 'MUL', ['11$1', '22.4']),
+                      new Cell('', true, 1, 1, 2, 'MUL', ['11$2', '22.4 ']),
                     ],
                     false,
                     12,
                   ),
+                  new Row(
+                    [
+                      new Cell(
+                        'Waste intensity in terms of physical output',
+                        false,
+                        1,
+                        1,
+                        0,
+                      ),
+                      new Cell('', true, 1, 1, 1, 'DIV', ['10$1', '1$0$1$0']),
+                      new Cell('', true, 1, 1, 2, 'DIV', ['10$2', '1$0$1$1']),
+                    ],
+                    false,
+                    13,
+                  ),
                   ...[
-                    'Waste intensity in terms of physical output',
                     'Waste intensity (optional) – the relevant metric may be selected by the entity',
                   ].map(
                     (firstCell: string, rowNo: number) =>
@@ -5643,19 +5936,29 @@ export const companySectionsTemplate: Section[] = [
 
                   new Row(
                     [
-                      new Cell(
-                        'For each category of waste generated, total waste recovered through recycling, re-using or other recovery operations (in metric tonnes)',
-                        false,
-                        1,
-                        3,
-                        0,
-                      ),
+                      {
+                        data: 'For each category of waste generated, total waste recovered through recycling, re-using or other recovery operations (in metric tonnes)',
+                        isUpdateable: false,
+                        rowSpan: 1,
+                        colSpan: 3,
+                        index: 0,
+                        isHeading: true,
+                      },
                     ],
                     false,
                     15,
                   ),
                   new Row(
-                    [new Cell('Category of waste', false, 1, 3, 0)],
+                    [
+                      {
+                        data: 'Category of waste',
+                        isUpdateable: false,
+                        rowSpan: 1,
+                        colSpan: 3,
+                        index: 0,
+                        isHeading: true,
+                      },
+                    ],
                     false,
                     16,
                   ),
@@ -5695,13 +5998,14 @@ export const companySectionsTemplate: Section[] = [
 
                   new Row(
                     [
-                      new Cell(
-                        'For each category of waste generated, total waste disposed by nature of disposal method (in metric tonnes)',
-                        false,
-                        1,
-                        3,
-                        0,
-                      ),
+                      {
+                        data: 'For each category of waste generated, total waste disposed by nature of disposal method (in metric tonnes)',
+                        isUpdateable: false,
+                        rowSpan: 1,
+                        colSpan: 3,
+                        index: 0,
+                        isHeading: true,
+                      },
                     ],
                     false,
                     21,
@@ -5746,12 +6050,12 @@ export const companySectionsTemplate: Section[] = [
             ],
           },
           {
-            index: 11,
+            index: 12,
             type: QuestionType.TEXT,
             desc: '10. Briefly describe the waste management practices adopted in your establishments. Describe the strategy adopted by your company to reduce usage of hazardous and toxic chemicals in your products and processes and the practices adopted to manage such wastes.',
           },
           {
-            index: 12,
+            index: 13,
             desc: '11. If the entity has operations/offices in/around ecologically sensitive areas (such as national parks, wildlife sanctuaries, biosphere reserves, wetlands, biodiversity hotspots, forests,  coastal regulation zones etc.) where environmental approvals / clearances are required, please specify details in the following format:',
             type: QuestionType.TABLE,
             answer_table: [
@@ -5781,7 +6085,7 @@ export const companySectionsTemplate: Section[] = [
             ],
           },
           {
-            index: 13,
+            index: 14,
             desc: '12. Details of environmental impact assessments of projects undertaken by the entity based on applicable laws, in the current financial year:',
             type: QuestionType.TABLE,
             answer_table: [
@@ -5814,7 +6118,7 @@ export const companySectionsTemplate: Section[] = [
             ],
           },
           {
-            index: 14,
+            index: 15,
             desc: '13. Is the entity compliant with the applicable environmental law/ regulations/ guidelines in India; such as the Water (Prevention and Control of Pollution) Act, Air (Prevention and Control of Pollution) Act, Environment protection act and rules thereunder (Y/N). If not, provide details of all such non-compliances, in the following format:',
             type: QuestionType.TABLE,
             answer_table: [
@@ -5848,7 +6152,7 @@ export const companySectionsTemplate: Section[] = [
           },
           {
             heading: 'Leadership Indicators',
-            index: 15,
+            index: 16,
             desc: '1. Water withdrawal, consumption and discharge in areas of water stress (in kilolitres): \n For each facility / plant located in areas of water stress, provide the following information: \n(i) Name of the area \n(ii) Nature of operations \n(iii) Water withdrawal, consumption and discharge in the following format:',
             type: QuestionType.TABLE,
             answer_table: [
@@ -5867,13 +6171,14 @@ export const companySectionsTemplate: Section[] = [
                   ),
                   new Row(
                     [
-                      new Cell(
-                        'Water withdrawal by source (in kilolitres)',
-                        false,
-                        1,
-                        3,
-                        0,
-                      ),
+                      {
+                        data: 'Water withdrawal by source (in kilolitres)',
+                        isUpdateable: false,
+                        rowSpan: 1,
+                        colSpan: 3,
+                        index: 0,
+                        isHeading: true,
+                      },
                     ],
                     false,
                     1,
@@ -5902,13 +6207,14 @@ export const companySectionsTemplate: Section[] = [
                   ),
                   new Row(
                     [
-                      new Cell(
-                        'Water discharge by destination and level of treatment (in kilolitres)',
-                        false,
-                        1,
-                        3,
-                        0,
-                      ),
+                      {
+                        data: 'Water discharge by destination and level of treatment (in kilolitres)',
+                        isUpdateable: false,
+                        rowSpan: 1,
+                        colSpan: 3,
+                        index: 0,
+                        isHeading: true,
+                      },
                     ],
                     false,
                     11,
@@ -5945,13 +6251,14 @@ export const companySectionsTemplate: Section[] = [
 
                   new Row(
                     [
-                      new Cell(
-                        'For each category of waste generated, total waste disposed by nature of disposal method (in metric tonnes)',
-                        false,
-                        1,
-                        3,
-                        0,
-                      ),
+                      {
+                        data: 'For each category of waste generated, total waste disposed by nature of disposal method (in metric tonnes)',
+                        isUpdateable: false,
+                        rowSpan: 1,
+                        colSpan: 3,
+                        index: 0,
+                        isHeading: true,
+                      },
                     ],
                     false,
                     28,
@@ -5980,7 +6287,7 @@ export const companySectionsTemplate: Section[] = [
             ],
           },
           {
-            index: 16,
+            index: 17,
             desc: '2. Please provide details of total Scope 3 emissions & its intensity, in the following format:',
             type: QuestionType.TABLE,
             answer_table: [
@@ -6056,8 +6363,8 @@ export const companySectionsTemplate: Section[] = [
                         0,
                       ),
                       new Cell('', true, 1, 1, 1),
-                      new Cell('', true, 1, 1, 2),
-                      new Cell('', true, 1, 1, 3),
+                      new Cell('', true, 1, 1, 2, 'DIV', ['1$2', '1$0$1$0']),
+                      new Cell('', true, 1, 1, 3, 'DIV', ['1$3', '1$0$1$1']),
                     ],
                     false,
                     3,
@@ -6068,12 +6375,12 @@ export const companySectionsTemplate: Section[] = [
             ],
           },
           {
-            index: 17,
+            index: 18,
             desc: '3. With respect to the ecologically sensitive areas reported at Question 11 of Essential Indicators above, provide details of significant direct & indirect impact of the entity on biodiversity in such areas along-with prevention and remediation activities. ',
             type: QuestionType.TEXT,
           },
           {
-            index: 18,
+            index: 19,
             desc: '4. If the entity has undertaken any specific initiatives or used innovative technology or solutions to improve resource efficiency, or reduce impact due to emissions / effluent discharge / waste generated, please provide details of the same as well as outcome of such initiatives, as per the following format:',
             type: QuestionType.TABLE,
             answer_table: [
@@ -6103,17 +6410,17 @@ export const companySectionsTemplate: Section[] = [
             ],
           },
           {
-            index: 19,
+            index: 20,
             desc: '5. Does the entity have a business continuity and disaster management plan? Give details in 100 words/ web link.',
             type: QuestionType.TEXT,
           },
           {
-            index: 20,
+            index: 21,
             desc: '6. Disclose any significant adverse impact to the environment, arising from the value chain of the entity. What mitigation or adaptation measures have been taken by the entity in this regard.',
             type: QuestionType.TEXT,
           },
           {
-            index: 21,
+            index: 22,
             desc: '7. Percentage of value chain partners (by value of business done with such partners) that were assessed for environmental impacts.',
             type: QuestionType.TEXT,
           },
@@ -6499,8 +6806,14 @@ export const companySectionsTemplate: Section[] = [
                         1,
                         0,
                       ),
-                      new Cell('', true, 1, 1, 1, 'PERCENTAGE', ['10$1', '11$1']),
-                      new Cell('', true, 1, 1, 2, 'PERCENTAGE', ['10$2', '11$2']),
+                      new Cell('', true, 1, 1, 1, 'PERCENTAGE', [
+                        '10$1',
+                        '11$1',
+                      ]),
+                      new Cell('', true, 1, 1, 2, 'PERCENTAGE', [
+                        '10$2',
+                        '11$2',
+                      ]),
                     ],
                     false,
                     12,
@@ -6544,8 +6857,14 @@ export const companySectionsTemplate: Section[] = [
                         1,
                         0,
                       ),
-                      new Cell('', true, 1, 1, 1, 'PERCENTAGE', ['14$1', '15$1']),
-                      new Cell('', true, 1, 1, 2, 'PERCENTAGE', ['14$2', '15$2']),
+                      new Cell('', true, 1, 1, 1, 'PERCENTAGE', [
+                        '14$1',
+                        '15$1',
+                      ]),
+                      new Cell('', true, 1, 1, 2, 'PERCENTAGE', [
+                        '14$2',
+                        '15$2',
+                      ]),
                     ],
                     false,
                     16,
