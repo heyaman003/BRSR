@@ -164,7 +164,6 @@ const fetchQuestionStats = async (companyId: string) =>{
   }catch(e){
     if(e instanceof Error)
       toast.error(e.message)
-    console.log(e);
     throw e;
   }
 }

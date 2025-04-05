@@ -140,24 +140,11 @@ export const companySectionsTemplate: Section[] = [
       },
       {
         title: 'II. Products / services',
-        // id: 'Finance',
-        // type: 'tabular',
-        // isFixedLength: false,
-        // progress: [37, 178],
-        // inProgress: true,
-        // tabletype: 1,
         questions: [
           {
             index: 0,
             type: QuestionType.TABLE,
             desc: '16.Details of business activities (accounting for 90% of the turnover):',
-            // tabulardata: [
-            //   ['S. No.', 'number'],
-            //   ['Description of Main Activity', 'text'],
-            //   ['Description of Business Activity', 'text'],
-            //   ['% of Turnover of the entity', 'number'],
-            // ],
-            // defaultLength: 7,
             answer_table: [
               new Table(
                 [
@@ -356,15 +343,15 @@ export const companySectionsTemplate: Section[] = [
                       new Cell('Particulars', false, 2, 1, 0),
                       new Cell('Total (A)', false, 2, 1, 1),
                       new Cell('Male', false, 1, 2, 2),
-                      new Cell('Female', false, 1, 2, 3),
+                      new Cell('Female', false, 1, 2, 2),
                     ],
                     true,
                     0,
                   ),
                   new Row(
                     [
-                      new Cell('No. (B)', false, 2, 1, 0),
-                      new Cell('% (B / A)', false, 2, 1, 1),
+                      new Cell('No. (B)', false, 1, 1, 0),
+                      new Cell('% (B / A)', false, 1, 1, 1),
                       new Cell('No. (C)', false, 1, 1, 2),
                       new Cell('% (C / A)', false, 1, 2, 3),
                     ],
@@ -379,12 +366,12 @@ export const companySectionsTemplate: Section[] = [
                           new Cell(firstCol, false, 1, 1, 0),
                           new Cell('', true, 1, 1, 1),
                           new Cell('', true, 1, 1, 2),
-                          new Cell('', true, 1, 1, 3, Operation.DIV, [
+                          new Cell('', true, 1, 1, 3, Operation.PERCENTAGE, [
                             `${rowNo + 3}$2`,
                             `${rowNo + 3}$1`,
                           ]),
                           new Cell('', true, 1, 1, 4),
-                          new Cell('', true, 1, 1, 5, Operation.DIV, [
+                          new Cell('', true, 1, 1, 5, Operation.PERCENTAGE, [
                             `${rowNo + 3}$4`,
                             `${rowNo + 3}$1`,
                           ]),
@@ -398,9 +385,9 @@ export const companySectionsTemplate: Section[] = [
                       new Cell('Total employees (D + E)', false, 1, 1, 0),
                       new Cell('', true, 1, 1, 1, 'ADD', ['3$1', '4$1']),
                       new Cell('', true, 1, 1, 2, 'ADD', ['3$2', '4$2']),
-                      new Cell('', true, 1, 1, 3, 'DIV', ['5$2', '5$1']),
+                      new Cell('', true, 1, 1, 3, 'PERCENTAGE', ['5$2', '5$1']),
                       new Cell('', true, 1, 1, 4, 'ADD', ['3$4', '4$4']),
-                      new Cell('', true, 1, 1, 5, 'DIV', ['5$4', '5$1'])
+                      new Cell('', true, 1, 1, 5, 'PERCENTAGE', ['5$4', '5$1']),
                     ],
                     false,
                     5,
@@ -413,12 +400,12 @@ export const companySectionsTemplate: Section[] = [
                           new Cell(firstCol, false, 1, 1, 0),
                           new Cell('', true, 1, 1, 1),
                           new Cell('', true, 1, 1, 2),
-                          new Cell('', true, 1, 1, 3, Operation.DIV, [
+                          new Cell('', true, 1, 1, 3, Operation.PERCENTAGE, [
                             `${rowNo + 7}$2`,
                             `${rowNo + 7}$1`,
                           ]),
                           new Cell('', true, 1, 1, 4),
-                          new Cell('', true, 1, 1, 5, Operation.DIV, [
+                          new Cell('', true, 1, 1, 5, Operation.PERCENTAGE, [
                             `${rowNo + 7}$4`,
                             `${rowNo + 7}$1`,
                           ]),
@@ -432,16 +419,19 @@ export const companySectionsTemplate: Section[] = [
                       new Cell('Total employees (F + G)', false, 1, 1, 0),
                       new Cell('', true, 1, 1, 1, 'ADD', ['7$1', '8$1']),
                       new Cell('', true, 1, 1, 2, 'ADD', ['7$2', '8$2']),
-                      new Cell('', true, 1, 1, 3, 'DIV', ['9$2', '9$1']),
+                      new Cell('', true, 1, 1, 3, 'PERCENTAGE', ['9$2', '9$1']),
                       new Cell('', true, 1, 1, 4, 'ADD', ['7$4', '8$4']),
-                      new Cell('', true, 1, 1, 5, 'DIV', ['9$4', '9$1'])
+                      new Cell('', true, 1, 1, 5, 'PERCENTAGE', ['9$4', '9$1']),
                     ],
                     false,
                     9,
                   ),
+                ],
+                false,
+              ),
 
-
-
+              new Table(
+                [
                   new Row(
                     [
                       new Cell('Particulars', false, 2, 1, 0),
@@ -474,12 +464,12 @@ export const companySectionsTemplate: Section[] = [
                           new Cell(firstCol, false, 1, 1, 0),
                           new Cell('', true, 1, 1, 1),
                           new Cell('', true, 1, 1, 2),
-                          new Cell('', true, 1, 1, 3, Operation.DIV, [
+                          new Cell('', true, 1, 1, 3, Operation.PERCENTAGE, [
                             `${rowNo + 3}$2`,
                             `${rowNo + 3}$1`,
                           ]),
                           new Cell('', true, 1, 1, 4),
-                          new Cell('', true, 1, 1, 5, Operation.DIV, [
+                          new Cell('', true, 1, 1, 5, Operation.PERCENTAGE, [
                             `${rowNo + 3}$4`,
                             `${rowNo + 3}$1`,
                           ]),
@@ -493,9 +483,9 @@ export const companySectionsTemplate: Section[] = [
                       new Cell('Total employees (D + E)', false, 1, 1, 0),
                       new Cell('', true, 1, 1, 1, 'ADD', ['3$1', '4$1']),
                       new Cell('', true, 1, 1, 2, 'ADD', ['3$2', '4$2']),
-                      new Cell('', true, 1, 1, 3, 'DIV', ['5$2', '5$1']),
+                      new Cell('', true, 1, 1, 3, 'PERCENTAGE', ['5$2', '5$1']),
                       new Cell('', true, 1, 1, 4, 'ADD', ['3$4', '4$4']),
-                      new Cell('', true, 1, 1, 5, 'DIV', ['5$4', '5$1'])
+                      new Cell('', true, 1, 1, 5, 'PERCENTAGE', ['5$4', '5$1']),
                     ],
                     false,
                     15,
@@ -512,12 +502,12 @@ export const companySectionsTemplate: Section[] = [
                           new Cell(firstCol, false, 1, 1, 0),
                           new Cell('', true, 1, 1, 1),
                           new Cell('', true, 1, 1, 2),
-                          new Cell('', true, 1, 1, 3, Operation.DIV, [
+                          new Cell('', true, 1, 1, 3, Operation.PERCENTAGE, [
                             `${rowNo + 7}$2`,
                             `${rowNo + 7}$1`,
                           ]),
                           new Cell('', true, 1, 1, 4),
-                          new Cell('', true, 1, 1, 5, Operation.DIV, [
+                          new Cell('', true, 1, 1, 5, Operation.PERCENTAGE, [
                             `${rowNo + 7}$4`,
                             `${rowNo + 7}$1`,
                           ]),
@@ -531,16 +521,16 @@ export const companySectionsTemplate: Section[] = [
                       new Cell('Total employees (F + G)', false, 1, 1, 0),
                       new Cell('', true, 1, 1, 1, 'ADD', ['7$1', '8$1']),
                       new Cell('', true, 1, 1, 2, 'ADD', ['7$2', '8$2']),
-                      new Cell('', true, 1, 1, 3, 'DIV', ['9$2', '9$1']),
+                      new Cell('', true, 1, 1, 3, 'PERCENTAGE', ['9$2', '9$1']),
                       new Cell('', true, 1, 1, 4, 'ADD', ['7$4', '8$4']),
-                      new Cell('', true, 1, 1, 5, 'DIV', ['9$4', '9$1'])
+                      new Cell('', true, 1, 1, 5, 'PERCENTAGE', ['9$4', '9$1']),
                     ],
                     false,
                     19,
                   ),
                 ],
                 false,
-              )
+              ),
             ],
             // employee: {
             //   colFirstData: [
@@ -591,7 +581,7 @@ export const companySectionsTemplate: Section[] = [
                             (_, cellNo: number) =>
                               new Cell('', true, 1, 1, cellNo + 1),
                           ),
-                          new Cell('', true, 1, 1, 3, Operation.DIV, [
+                          new Cell('', true, 1, 1, 3, Operation.PERCENTAGE, [
                             `${ind + 2}$2`,
                             `${ind + 2}$1`,
                           ]),
@@ -1835,7 +1825,7 @@ export const companySectionsTemplate: Section[] = [
                     false,
                     20,
                   ),
-                  
+
                   new Row(
                     [
                       new Cell(
@@ -2355,27 +2345,27 @@ export const companySectionsTemplate: Section[] = [
                           new Cell(firstCol, false, 1, 1, 0),
                           new Cell('', true, 1, 1, 1),
                           new Cell('', true, 1, 1, 2),
-                          new Cell('', true, 1, 1, 3, Operation.DIV, [
+                          new Cell('', true, 1, 1, 3, Operation.PERCENTAGE, [
                             `${rowNo + 4}$2`,
                             `${rowNo + 4}$1`,
                           ]),
                           new Cell('', true, 1, 1, 4),
-                          new Cell('', true, 1, 1, 5, Operation.DIV, [
+                          new Cell('', true, 1, 1, 5, Operation.PERCENTAGE, [
                             `${rowNo + 4}$4`,
                             `${rowNo + 4}$1`,
                           ]),
                           new Cell('', true, 1, 1, 6),
-                          new Cell('', true, 1, 1, 7, Operation.DIV, [
+                          new Cell('', true, 1, 1, 7, Operation.PERCENTAGE, [
                             `${rowNo + 4}$6`,
                             `${rowNo + 4}$1`,
                           ]),
                           new Cell('', true, 1, 1, 8),
-                          new Cell('', true, 1, 1, 9, Operation.DIV, [
+                          new Cell('', true, 1, 1, 9, Operation.PERCENTAGE, [
                             `${rowNo + 4}$8`,
                             `${rowNo + 4}$1`,
                           ]),
                           new Cell('', true, 1, 1, 10),
-                          new Cell('', true, 1, 1, 11, Operation.DIV, [
+                          new Cell('', true, 1, 1, 11, Operation.PERCENTAGE, [
                             `${rowNo + 4}$10`,
                             `${rowNo + 4}$1`,
                           ]),
@@ -2389,15 +2379,15 @@ export const companySectionsTemplate: Section[] = [
                       new Cell('Total', false, 1, 1, 0),
                       new Cell('', true, 1, 1, 1, 'ADD', ['4$1', '5$1']),
                       new Cell('', true, 1, 1, 2, 'ADD', ['4$2', '5$2']),
-                      new Cell('', true, 1, 1, 3, 'DIV', ['6$2', '6$1']),
+                      new Cell('', true, 1, 1, 3, 'PERCENTAGE', ['6$2', '6$1']),
                       new Cell('', true, 1, 1, 4, 'ADD', ['4$4', '5$4']),
-                      new Cell('', true, 1, 1, 5, 'DIV', ['6$4', '6$1']),
+                      new Cell('', true, 1, 1, 5, 'PERCENTAGE', ['6$4', '6$1']),
                       new Cell('', true, 1, 1, 6, 'ADD', ['4$6', '5$6']),
-                      new Cell('', true, 1, 1, 7, 'DIV', ['6$6', '6$1']),
+                      new Cell('', true, 1, 1, 7, 'PERCENTAGE', ['6$6', '6$1']),
                       new Cell('', true, 1, 1, 8, 'ADD', ['4$8', '5$8']),
-                      new Cell('', true, 1, 1, 9, 'DIV', ['6$8', '6$1']),
+                      new Cell('', true, 1, 1, 9, 'PERCENTAGE', ['6$8', '6$1']),
                       new Cell('', true, 1, 1, 10, 'ADD', ['4$10', '5$10']),
-                      new Cell('', true, 1, 1, 11, 'DIV', ['6$10', '6$1']),
+                      new Cell('', true, 1, 1, 11, 'PERCENTAGE', ['6$10', '6$1']),
                     ],
                     false,
                     6,
@@ -2414,27 +2404,27 @@ export const companySectionsTemplate: Section[] = [
                           new Cell(firstCol, false, 1, 1, 0),
                           new Cell('', true, 1, 1, 1),
                           new Cell('', true, 1, 1, 2),
-                          new Cell('', true, 1, 1, 3, Operation.DIV, [
+                          new Cell('', true, 1, 1, 3, Operation.PERCENTAGE, [
                             `${rowNo + 8}$2`,
                             `${rowNo + 8}$1`,
                           ]),
                           new Cell('', true, 1, 1, 4),
-                          new Cell('', true, 1, 1, 5, Operation.DIV, [
+                          new Cell('', true, 1, 1, 5, Operation.PERCENTAGE, [
                             `${rowNo + 8}$4`,
                             `${rowNo + 8}$1`,
                           ]),
                           new Cell('', true, 1, 1, 6),
-                          new Cell('', true, 1, 1, 7, Operation.DIV, [
+                          new Cell('', true, 1, 1, 7, Operation.PERCENTAGE, [
                             `${rowNo + 8}$6`,
                             `${rowNo + 8}$1`,
                           ]),
                           new Cell('', true, 1, 1, 8),
-                          new Cell('', true, 1, 1, 9, Operation.DIV, [
+                          new Cell('', true, 1, 1, 9, Operation.PERCENTAGE, [
                             `${rowNo + 8}$8`,
                             `${rowNo + 8}$1`,
                           ]),
                           new Cell('', true, 1, 1, 10),
-                          new Cell('', true, 1, 1, 11, Operation.DIV, [
+                          new Cell('', true, 1, 1, 11, Operation.PERCENTAGE, [
                             `${rowNo + 8}$10`,
                             `${rowNo + 8}$1`,
                           ]),
@@ -2448,15 +2438,15 @@ export const companySectionsTemplate: Section[] = [
                       new Cell('Total', false, 1, 1, 0),
                       new Cell('', true, 1, 1, 1, 'ADD', ['8$1', '9$1']),
                       new Cell('', true, 1, 1, 2, 'ADD', ['8$2', '9$2']),
-                      new Cell('', true, 1, 1, 3, 'DIV', ['10$2', '10$1']),
+                      new Cell('', true, 1, 1, 3, 'PERCENTAGE', ['10$2', '10$1']),
                       new Cell('', true, 1, 1, 4, 'ADD', ['8$4', '9$4']),
-                      new Cell('', true, 1, 1, 5, 'DIV', ['10$4', '10$1']),
+                      new Cell('', true, 1, 1, 5, 'PERCENTAGE', ['10$4', '10$1']),
                       new Cell('', true, 1, 1, 6, 'ADD', ['8$6', '9$6']),
-                      new Cell('', true, 1, 1, 7, 'DIV', ['10$6', '10$1']),
+                      new Cell('', true, 1, 1, 7, 'PERCENTAGE', ['10$6', '10$1']),
                       new Cell('', true, 1, 1, 8, 'ADD', ['8$8', '9$8']),
-                      new Cell('', true, 1, 1, 9, 'DIV', ['10$8', '10$1']),
+                      new Cell('', true, 1, 1, 9, 'PERCENTAGE', ['10$8', '10$1']),
                       new Cell('', true, 1, 1, 10, 'ADD', ['8$10', '9$10']),
-                      new Cell('', true, 1, 1, 11, 'DIV', ['10$10', '10$1']),
+                      new Cell('', true, 1, 1, 11, 'PERCENTAGE', ['10$10', '10$1']),
                     ],
                     false,
                     10,
@@ -2531,27 +2521,27 @@ export const companySectionsTemplate: Section[] = [
                           new Cell(firstCol, false, 1, 1, 0),
                           new Cell('', true, 1, 1, 1),
                           new Cell('', true, 1, 1, 2),
-                          new Cell('', true, 1, 1, 3, Operation.DIV, [
+                          new Cell('', true, 1, 1, 3, Operation.PERCENTAGE, [
                             `${rowNo + 4}$2`,
                             `${rowNo + 4}$1`,
                           ]),
                           new Cell('', true, 1, 1, 4),
-                          new Cell('', true, 1, 1, 5, Operation.DIV, [
+                          new Cell('', true, 1, 1, 5, Operation.PERCENTAGE, [
                             `${rowNo + 4}$4`,
                             `${rowNo + 4}$1`,
                           ]),
                           new Cell('', true, 1, 1, 6),
-                          new Cell('', true, 1, 1, 7, Operation.DIV, [
+                          new Cell('', true, 1, 1, 7, Operation.PERCENTAGE, [
                             `${rowNo + 4}$6`,
                             `${rowNo + 4}$1`,
                           ]),
                           new Cell('', true, 1, 1, 8),
-                          new Cell('', true, 1, 1, 9, Operation.DIV, [
+                          new Cell('', true, 1, 1, 9, Operation.PERCENTAGE, [
                             `${rowNo + 4}$8`,
                             `${rowNo + 4}$1`,
                           ]),
                           new Cell('', true, 1, 1, 10),
-                          new Cell('', true, 1, 1, 11, Operation.DIV, [
+                          new Cell('', true, 1, 1, 11, Operation.PERCENTAGE, [
                             `${rowNo + 4}$10`,
                             `${rowNo + 4}$1`,
                           ]),
@@ -2565,15 +2555,15 @@ export const companySectionsTemplate: Section[] = [
                       new Cell('Total', false, 1, 1, 0),
                       new Cell('', true, 1, 1, 1, 'ADD', ['4$1', '5$1']),
                       new Cell('', true, 1, 1, 2, 'ADD', ['4$2', '5$2']),
-                      new Cell('', true, 1, 1, 3, 'DIV', ['6$2', '6$1']),
+                      new Cell('', true, 1, 1, 3, 'PERCENTAGE', ['6$2', '6$1']),
                       new Cell('', true, 1, 1, 4, 'ADD', ['4$4', '5$4']),
-                      new Cell('', true, 1, 1, 5, 'DIV', ['6$4', '6$1']),
+                      new Cell('', true, 1, 1, 5, 'PERCENTAGE', ['6$4', '6$1']),
                       new Cell('', true, 1, 1, 6, 'ADD', ['4$6', '5$6']),
-                      new Cell('', true, 1, 1, 7, 'DIV', ['6$6', '6$1']),
+                      new Cell('', true, 1, 1, 7, 'PERCENTAGE', ['6$6', '6$1']),
                       new Cell('', true, 1, 1, 8, 'ADD', ['4$8', '5$8']),
-                      new Cell('', true, 1, 1, 9, 'DIV', ['6$8', '6$1']),
+                      new Cell('', true, 1, 1, 9, 'PERCENTAGE', ['6$8', '6$1']),
                       new Cell('', true, 1, 1, 10, 'ADD', ['4$10', '5$10']),
-                      new Cell('', true, 1, 1, 11, 'DIV', ['6$10', '6$1']),
+                      new Cell('', true, 1, 1, 11, 'PERCENTAGE', ['6$10', '6$1']),
                     ],
                     false,
                     6,
@@ -2590,17 +2580,17 @@ export const companySectionsTemplate: Section[] = [
                           new Cell(firstCol, false, 1, 1, 0),
                           new Cell('', true, 1, 1, 1),
                           new Cell('', true, 1, 1, 2),
-                          new Cell('', true, 1, 1, 3, Operation.DIV, [
+                          new Cell('', true, 1, 1, 3, Operation.PERCENTAGE, [
                             `${rowNo + 8}$2`,
                             `${rowNo + 8}$1`,
                           ]),
                           new Cell('', true, 1, 1, 4),
-                          new Cell('', true, 1, 1, 5, Operation.DIV, [
+                          new Cell('', true, 1, 1, 5, Operation.PERCENTAGE, [
                             `${rowNo + 8}$4`,
                             `${rowNo + 8}$1`,
                           ]),
                           new Cell('', true, 1, 1, 6),
-                          new Cell('', true, 1, 1, 7, Operation.DIV, [
+                          new Cell('', true, 1, 1, 7, Operation.PERCENTAGE, [
                             `${rowNo + 8}$6`,
                             `${rowNo + 8}$1`,
                           ]),
@@ -2610,7 +2600,7 @@ export const companySectionsTemplate: Section[] = [
                             `${rowNo + 8}$1`,
                           ]),
                           new Cell('', true, 1, 1, 10),
-                          new Cell('', true, 1, 1, 11, Operation.DIV, [
+                          new Cell('', true, 1, 1, 11, Operation.PERCENTAGE, [
                             `${rowNo + 8}$10`,
                             `${rowNo + 8}$1`,
                           ]),
@@ -2624,15 +2614,15 @@ export const companySectionsTemplate: Section[] = [
                       new Cell('Total', false, 1, 1, 0),
                       new Cell('', true, 1, 1, 1, 'ADD', ['8$1', '9$1']),
                       new Cell('', true, 1, 1, 2, 'ADD', ['8$2', '9$2']),
-                      new Cell('', true, 1, 1, 3, 'DIV', ['10$2', '10$1']),
+                      new Cell('', true, 1, 1, 3, 'PERCENTAGE', ['10$2', '10$1']),
                       new Cell('', true, 1, 1, 4, 'ADD', ['8$4', '9$4']),
-                      new Cell('', true, 1, 1, 5, 'DIV', ['10$4', '10$1']),
+                      new Cell('', true, 1, 1, 5, 'PERCENTAGE', ['10$4', '10$1']),
                       new Cell('', true, 1, 1, 6, 'ADD', ['8$6', '9$6']),
-                      new Cell('', true, 1, 1, 7, 'DIV', ['10$6', '10$1']),
+                      new Cell('', true, 1, 1, 7, 'PERCENTAGE', ['10$6', '10$1']),
                       new Cell('', true, 1, 1, 8, 'ADD', ['8$8', '9$8']),
-                      new Cell('', true, 1, 1, 9, 'DIV', ['10$8', '10$1']),
+                      new Cell('', true, 1, 1, 9, 'PERCENTAGE', ['10$8', '10$1']),
                       new Cell('', true, 1, 1, 10, 'ADD', ['8$10', '9$10']),
-                      new Cell('', true, 1, 1, 11, 'DIV', ['10$10', '10$1']),
+                      new Cell('', true, 1, 1, 11, 'PERCENTAGE', ['10$10', '10$1']),
                     ],
                     false,
                     10,
@@ -3012,10 +3002,10 @@ export const companySectionsTemplate: Section[] = [
                       new Cell('Total Permanent Employee', false, 1, 1, 0),
                       new Cell('', true, 1, 1, 1, 'ADD', ['3$1', '4$1']),
                       new Cell('', true, 1, 1, 2, 'ADD', ['3$2', '4$2']),
-                      new Cell('', true, 1, 1, 3, 'DIV', ['2$2', '2$1']),
-                      new Cell('', true, 1, 1, 4, 'ADD', ['3$4', '4$4']),
+                      new Cell('', true, 1, 1, 3, 'PERCENTAGE', ['2$2', '2$1']),
+                      new Cell('', true, 1, 1, 4, 'PERCENTAGE', ['3$4', '4$4']),
                       new Cell('', true, 1, 1, 5, 'ADD', ['3$5', '4$5']),
-                      new Cell('', true, 1, 1, 6, 'DIV', ['2$5', '2$4']),
+                      new Cell('', true, 1, 1, 6, 'PERCENTAGE', ['2$5', '2$4']),
                     ],
                     false,
                     2,
@@ -3027,13 +3017,13 @@ export const companySectionsTemplate: Section[] = [
                           new Cell(firstCol, false, 1, 1, 0),
                           new Cell('', true, 1, 1, 1),
                           new Cell('', true, 1, 1, 2),
-                          new Cell('', true, 1, 1, 3, Operation.DIV, [
+                          new Cell('', true, 1, 1, 3, Operation.PERCENTAGE, [
                             `${rowNo + 3}$2`,
                             `${rowNo + 3}$1`,
                           ]),
                           new Cell('', true, 1, 1, 4),
                           new Cell('', true, 1, 1, 5),
-                          new Cell('', true, 1, 1, 6, Operation.DIV, [
+                          new Cell('', true, 1, 1, 6, Operation.PERCENTAGE, [
                             `${rowNo + 3}$4`,
                             `${rowNo + 3}$3`,
                           ]),
@@ -3048,10 +3038,10 @@ export const companySectionsTemplate: Section[] = [
                       new Cell('Total Permanent Employee', false, 1, 1, 0),
                       new Cell('', true, 1, 1, 1, 'ADD', ['6$1', '7$1']),
                       new Cell('', true, 1, 1, 2, 'ADD', ['6$2', '7$2']),
-                      new Cell('', true, 1, 1, 3, 'DIV', ['5$2', '5$1']),
+                      new Cell('', true, 1, 1, 3, 'PERCENTAGE', ['5$2', '5$1']),
                       new Cell('', true, 1, 1, 4, 'ADD', ['6$4', '7$4']),
                       new Cell('', true, 1, 1, 5, 'ADD', ['6$5', '7$5']),
-                      new Cell('', true, 1, 1, 6, 'DIV', ['5$5', '5$4']),
+                      new Cell('', true, 1, 1, 6, 'PERCENTAGE', ['5$5', '5$4']),
                     ],
                     false,
                     5,
@@ -3063,13 +3053,13 @@ export const companySectionsTemplate: Section[] = [
                           new Cell(firstCol, false, 1, 1, 0),
                           new Cell('', true, 1, 1, 1),
                           new Cell('', true, 1, 1, 2),
-                          new Cell('', true, 1, 1, 3, Operation.DIV, [
+                          new Cell('', true, 1, 1, 3, Operation.PERCENTAGE, [
                             `${rowNo + 3}$2`,
                             `${rowNo + 3}$1`,
                           ]),
                           new Cell('', true, 1, 1, 4),
                           new Cell('', true, 1, 1, 5),
-                          new Cell('', true, 1, 1, 6, Operation.DIV, [
+                          new Cell('', true, 1, 1, 6, Operation.PERCENTAGE, [
                             `${rowNo + 3}$4`,
                             `${rowNo + 3}$3`,
                           ]),
@@ -3160,23 +3150,23 @@ export const companySectionsTemplate: Section[] = [
                           new Cell(firstCol, false, 1, 1, 0),
                           new Cell('', true, 1, 1, 1),
                           new Cell('', true, 1, 1, 2),
-                          new Cell('', true, 1, 1, 3, Operation.DIV, [
+                          new Cell('', true, 1, 1, 3, Operation.PERCENTAGE, [
                             `${rowNo + 4}$2`,
                             `${rowNo + 4}$1`,
                           ]),
                           new Cell('', true, 1, 1, 4),
-                          new Cell('', true, 1, 1, 5, Operation.DIV, [
+                          new Cell('', true, 1, 1, 5, Operation.PERCENTAGE, [
                             `${rowNo + 4}$4`,
                             `${rowNo + 4}$1`,
                           ]),
                           new Cell('', true, 1, 1, 6),
                           new Cell('', true, 1, 1, 7),
-                          new Cell('', true, 1, 1, 8, Operation.DIV, [
+                          new Cell('', true, 1, 1, 8, Operation.PERCENTAGE, [
                             `${rowNo + 4}$7`,
                             `${rowNo + 4}$6`,
                           ]),
                           new Cell('', true, 1, 1, 9),
-                          new Cell('', true, 1, 1, 10, Operation.DIV, [
+                          new Cell('', true, 1, 1, 10, Operation.PERCENTAGE, [
                             `${rowNo + 4}$9`,
                             `${rowNo + 4}$6`,
                           ]),
@@ -3190,14 +3180,14 @@ export const companySectionsTemplate: Section[] = [
                       new Cell('Total', false, 1, 1, 0),
                       new Cell('', true, 1, 1, 1, 'ADD', ['4$1', '5$1']),
                       new Cell('', true, 1, 1, 2, 'ADD', ['4$2', '5$2']),
-                      new Cell('', true, 1, 1, 3, 'DIV', ['6$2', '6$1']),
+                      new Cell('', true, 1, 1, 3, 'PERCENTAGE', ['6$2', '6$1']),
                       new Cell('', true, 1, 1, 4, 'ADD', ['4$4', '5$4']),
-                      new Cell('', true, 1, 1, 5, 'DIV', ['6$4', '6$1']),
+                      new Cell('', true, 1, 1, 5, 'PERCENTAGE', ['6$4', '6$1']),
                       new Cell('', true, 1, 1, 6, 'ADD', ['4$6', '5$6']),
                       new Cell('', true, 1, 1, 7, 'ADD', ['4$7', '5$7']),
-                      new Cell('', true, 1, 1, 8, 'DIV', ['6$7', '6$6']),
+                      new Cell('', true, 1, 1, 8, 'PERCENTAGE', ['6$7', '6$6']),
                       new Cell('', true, 1, 1, 9, 'ADD', ['4$9', '5$9']),
-                      new Cell('', true, 1, 1, 10, 'DIV', ['6$9', '6$6']),
+                      new Cell('', true, 1, 1, 10, 'PERCENTAGE', ['6$9', '6$6']),
                     ],
                     false,
                     6,
@@ -3210,23 +3200,23 @@ export const companySectionsTemplate: Section[] = [
                           new Cell(firstCol, false, 1, 1, 0),
                           new Cell('', true, 1, 1, 1),
                           new Cell('', true, 1, 1, 2),
-                          new Cell('', true, 1, 1, 3, Operation.DIV, [
+                          new Cell('', true, 1, 1, 3, Operation.PERCENTAGE, [
                             `${rowNo + 7}$2`,
                             `${rowNo + 7}$1`,
                           ]),
                           new Cell('', true, 1, 1, 4),
-                          new Cell('', true, 1, 1, 5, Operation.DIV, [
+                          new Cell('', true, 1, 1, 5, Operation.PERCENTAGE, [
                             `${rowNo + 7}$4`,
                             `${rowNo + 7}$1`,
                           ]),
                           new Cell('', true, 1, 1, 6),
                           new Cell('', true, 1, 1, 7),
-                          new Cell('', true, 1, 1, 8, Operation.DIV, [
+                          new Cell('', true, 1, 1, 8, Operation.PERCENTAGE, [
                             `${rowNo + 7}$7`,
                             `${rowNo + 7}$6`,
                           ]),
                           new Cell('', true, 1, 1, 9),
-                          new Cell('', true, 1, 1, 10, Operation.DIV, [
+                          new Cell('', true, 1, 1, 10, Operation.PERCENTAGE, [
                             `${rowNo + 7}$9`,
                             `${rowNo + 7}$6`,
                           ]),
@@ -3240,14 +3230,14 @@ export const companySectionsTemplate: Section[] = [
                       new Cell('Total', false, 1, 1, 0),
                       new Cell('', true, 1, 1, 1, 'ADD', ['8$1', '7$1']),
                       new Cell('', true, 1, 1, 2, 'ADD', ['8$2', '7$2']),
-                      new Cell('', true, 1, 1, 3, 'DIV', ['9$2', '9$1']),
+                      new Cell('', true, 1, 1, 3, 'PERCENTAGE', ['9$2', '9$1']),
                       new Cell('', true, 1, 1, 4, 'ADD', ['8$4', '7$4']),
-                      new Cell('', true, 1, 1, 5, 'DIV', ['9$4', '9$1']),
+                      new Cell('', true, 1, 1, 5, 'PERCENTAGE', ['9$4', '9$1']),
                       new Cell('', true, 1, 1, 6, 'ADD', ['8$6', '7$6']),
                       new Cell('', true, 1, 1, 7, 'ADD', ['8$7', '7$7']),
-                      new Cell('', true, 1, 1, 8, 'DIV', ['9$7', '9$6']),
+                      new Cell('', true, 1, 1, 8, 'PERCENTAGE', ['9$7', '9$6']),
                       new Cell('', true, 1, 1, 9, 'ADD', ['8$9', '7$9']),
-                      new Cell('', true, 1, 1, 10, 'DIV', ['9$9', '9$6']),
+                      new Cell('', true, 1, 1, 10, 'PERCENTAGE', ['9$9', '9$6']),
                     ],
                     false,
                     9,
@@ -3311,13 +3301,13 @@ export const companySectionsTemplate: Section[] = [
                           new Cell(firstCol, false, 1, 1, 0),
                           new Cell('', true, 1, 1, 1),
                           new Cell('', true, 1, 1, 2),
-                          new Cell('', true, 1, 1, 3, Operation.DIV, [
+                          new Cell('', true, 1, 1, 3, Operation.PERCENTAGE, [
                             `${rowNo + 3}$2`,
                             `${rowNo + 3}$1`,
                           ]),
                           new Cell('', true, 1, 1, 4),
                           new Cell('', true, 1, 1, 5),
-                          new Cell('', true, 1, 1, 6, Operation.DIV, [
+                          new Cell('', true, 1, 1, 6, Operation.PERCENTAGE, [
                             `${rowNo + 3}$5`,
                             `${rowNo + 3}$4`,
                           ]),
@@ -3331,10 +3321,10 @@ export const companySectionsTemplate: Section[] = [
                       new Cell('Total', false, 1, 1, 0),
                       new Cell('', true, 1, 1, 1, 'ADD', ['4$1', '3$1']),
                       new Cell('', true, 1, 1, 2, 'ADD', ['4$2', '3$2']),
-                      new Cell('', true, 1, 1, 3, 'DIV', ['5$2', '5$1']),
+                      new Cell('', true, 1, 1, 3, 'PERCENTAGE', ['5$2', '5$1']),
                       new Cell('', true, 1, 1, 4, 'ADD', ['4$4', '3$4']),
                       new Cell('', true, 1, 1, 5, 'ADD', ['4$5', '3$5']),
-                      new Cell('', true, 1, 1, 6, 'DIV', ['5$5', '5$4']),
+                      new Cell('', true, 1, 1, 6, 'PERCENTAGE', ['5$5', '5$4']),
                     ],
                     false,
                     5,
@@ -3347,13 +3337,13 @@ export const companySectionsTemplate: Section[] = [
                           new Cell(firstCol, false, 1, 1, 0),
                           new Cell('', true, 1, 1, 1),
                           new Cell('', true, 1, 1, 2),
-                          new Cell('', true, 1, 1, 3, Operation.DIV, [
+                          new Cell('', true, 1, 1, 3, Operation.PERCENTAGE, [
                             `${rowNo + 7}$2`,
                             `${rowNo + 7}$1`,
                           ]),
                           new Cell('', true, 1, 1, 4),
                           new Cell('', true, 1, 1, 5),
-                          new Cell('', true, 1, 1, 6, Operation.DIV, [
+                          new Cell('', true, 1, 1, 6, Operation.PERCENTAGE, [
                             `${rowNo + 7}$5`,
                             `${rowNo + 7}$4`,
                           ]),
@@ -3367,10 +3357,10 @@ export const companySectionsTemplate: Section[] = [
                       new Cell('Total', false, 1, 1, 0),
                       new Cell('', true, 1, 1, 1, 'ADD', ['8$1', '7$1']),
                       new Cell('', true, 1, 1, 2, 'ADD', ['8$2', '7$2']),
-                      new Cell('', true, 1, 1, 3, 'DIV', ['9$2', '9$1']),
+                      new Cell('', true, 1, 1, 3, 'PERCENTAGE', ['9$2', '9$1']),
                       new Cell('', true, 1, 1, 4, 'ADD', ['8$4', '7$4']),
                       new Cell('', true, 1, 1, 5, 'ADD', ['8$5', '7$5']),
-                      new Cell('', true, 1, 1, 6, 'DIV', ['9$5', '9$4']),
+                      new Cell('', true, 1, 1, 6, 'PERCENTAGE', ['9$5', '9$4']),
                     ],
                     false,
                     9,
@@ -3903,13 +3893,13 @@ export const companySectionsTemplate: Section[] = [
                           new Cell(firstCol, false, 1, 1, 0),
                           new Cell('', true, 1, 1, 1),
                           new Cell('', true, 1, 1, 2),
-                          new Cell('', true, 1, 1, 3, Operation.DIV, [
+                          new Cell('', true, 1, 1, 3, Operation.PERCENTAGE, [
                             `${rowNo + 3}$2`,
                             `${rowNo + 3}$1`,
                           ]),
                           new Cell('', true, 1, 1, 4),
                           new Cell('', true, 1, 1, 5),
-                          new Cell('', true, 1, 1, 6, Operation.DIV, [
+                          new Cell('', true, 1, 1, 6, Operation.PERCENTAGE, [
                             `${rowNo + 3}$5`,
                             `${rowNo + 3}$4`,
                           ]),
@@ -3929,7 +3919,7 @@ export const companySectionsTemplate: Section[] = [
                         `4$${2}`,
                         `3$${2}`,
                       ]),
-                      new Cell('', true, 1, 1, 3, Operation.DIV, [
+                      new Cell('', true, 1, 1, 3, Operation.PERCENTAGE, [
                         `5$${2}`,
                         `5$${1}`,
                       ]),
@@ -3941,7 +3931,7 @@ export const companySectionsTemplate: Section[] = [
                         `4$${5}`,
                         `3$${5}`,
                       ]),
-                      new Cell('', true, 1, 1, 6, Operation.DIV, [
+                      new Cell('', true, 1, 1, 6, Operation.PERCENTAGE, [
                         `5$${5}`,
                         `5$${4}`,
                       ]),
@@ -3957,13 +3947,13 @@ export const companySectionsTemplate: Section[] = [
                           new Cell(firstCol, false, 1, 1, 0),
                           new Cell('', true, 1, 1, 1),
                           new Cell('', true, 1, 1, 2),
-                          new Cell('', true, 1, 1, 3, Operation.DIV, [
+                          new Cell('', true, 1, 1, 3, Operation.PERCENTAGE, [
                             `${rowNo + 7}$2`,
                             `${rowNo + 7}$1`,
                           ]),
                           new Cell('', true, 1, 1, 4),
                           new Cell('', true, 1, 1, 5),
-                          new Cell('', true, 1, 1, 6, Operation.DIV, [
+                          new Cell('', true, 1, 1, 6, Operation.PERCENTAGE, [
                             `${rowNo + 7}$5`,
                             `${rowNo + 7}$4`,
                           ]),
@@ -3983,7 +3973,7 @@ export const companySectionsTemplate: Section[] = [
                         `8$${2}`,
                         `7$${2}`,
                       ]),
-                      new Cell('', true, 1, 1, 3, Operation.DIV, [
+                      new Cell('', true, 1, 1, 3, Operation.PERCENTAGE, [
                         `9$${2}`,
                         `9$${1}`,
                       ]),
@@ -3995,7 +3985,7 @@ export const companySectionsTemplate: Section[] = [
                         `8$${5}`,
                         `7$${5}`,
                       ]),
-                      new Cell('', true, 1, 1, 6, Operation.DIV, [
+                      new Cell('', true, 1, 1, 6, Operation.PERCENTAGE, [
                         `9$${5}`,
                         `9$${4}`,
                       ]),
@@ -4069,68 +4059,65 @@ export const companySectionsTemplate: Section[] = [
                       ].map(
                         (heading: string, colNo: number) =>
                           new Cell(heading, false, 1, 1, colNo),
-                        
                       ),
                     ],
                     true,
                     2,
                   ),
+                  new Row([new Cell('Employees', false, 1, 1, 11)], false, 3),
                   new Row(
-                    [new Cell("Employees", false, 1, 1, 11)], false, 3
+                    [
+                      new Cell('Permanent', false, 1, 1, 0),
+                      new Cell('', true, 1, 1, 1, 'ADD', ['5$1', '6$1']),
+                      new Cell('', true, 1, 1, 2, 'ADD', ['5$2', '6$2']),
+                      new Cell('', true, 1, 1, 3, Operation.PERCENTAGE, [
+                        `4$2`,
+                        `4$1`,
+                      ]),
+                      new Cell('', true, 1, 1, 4, 'ADD', ['5$4', '6$4']),
+                      new Cell('', true, 1, 1, 5, Operation.PERCENTAGE, [
+                        `4$4`,
+                        `4$1`,
+                      ]),
+                      new Cell('', true, 1, 1, 6, 'ADD', ['5$6', '6$6']),
+                      new Cell('', true, 1, 1, 7, 'ADD', ['5$7', '6$7']),
+                      new Cell('', true, 1, 1, 8, Operation.PERCENTAGE, [
+                        `4$7`,
+                        `4$6`,
+                      ]),
+                      new Cell('', true, 1, 1, 9, 'ADD', ['5$9', '6$9']),
+                      new Cell('', true, 1, 1, 10, Operation.PERCENTAGE, [
+                        `4$9`,
+                        `4$6`,
+                      ]),
+                    ],
+                    false,
+                    4,
                   ),
-                  new Row([
-                    new Cell('Permanent', false, 1, 1, 0 ),
-                    new Cell('', true, 1, 1, 1, 'ADD', ['5$1', '6$1']),
-                          new Cell('', true, 1, 1, 2, 'ADD', ['5$2', '6$2']),
-                          new Cell('', true, 1, 1, 3, Operation.DIV, [
-                            `4$2`,
-                            `4$1`,
-                          ]),
-                          new Cell('', true, 1, 1, 4, 'ADD', ['5$4', '6$4']),
-                          new Cell('', true, 1, 1, 5, Operation.DIV, [
-                            `4$4`,
-                            `4$1`,
-                          ]),
-                          new Cell('', true, 1, 1, 6, 'ADD', ['5$6', '6$6']),
-                          new Cell('', true, 1, 1, 7, 'ADD', ['5$7', '6$7']),
-                          new Cell('', true, 1, 1, 8, Operation.DIV, [
-                            `4$7`,
-                            `4$6`,
-                          ]),
-                          new Cell('', true, 1, 1, 9, 'ADD', ['5$9', '6$9']),
-                          new Cell('', true, 1, 1, 10, Operation.DIV, [
-                            `4$9`,
-                            `4$6`,
-                          ]),
-
-                  ], false, 4),
-                  ...[
-                    'Male',
-                    'Female',
-                  ].map(
+                  ...['Male', 'Female'].map(
                     (firstCol: string, rowNo: number) =>
                       new Row(
                         [
                           new Cell(firstCol, false, 1, 1, 0),
                           new Cell('', true, 1, 1, 1),
                           new Cell('', true, 1, 1, 2),
-                          new Cell('', true, 1, 1, 3, Operation.DIV, [
+                          new Cell('', true, 1, 1, 3, Operation.PERCENTAGE, [
                             `${rowNo + 5}$2`,
                             `${rowNo + 5}$1`,
                           ]),
                           new Cell('', true, 1, 1, 4),
-                          new Cell('', true, 1, 1, 5, Operation.DIV, [
+                          new Cell('', true, 1, 1, 5, Operation.PERCENTAGE, [
                             `${rowNo + 5}$4`,
                             `${rowNo + 5}$1`,
                           ]),
                           new Cell('', true, 1, 1, 6),
                           new Cell('', true, 1, 1, 7),
-                          new Cell('', true, 1, 1, 8, Operation.DIV, [
+                          new Cell('', true, 1, 1, 8, Operation.PERCENTAGE, [
                             `${rowNo + 5}$7`,
                             `${rowNo + 5}$6`,
                           ]),
                           new Cell('', true, 1, 1, 9),
-                          new Cell('', true, 1, 1, 10, Operation.DIV, [
+                          new Cell('', true, 1, 1, 10, Operation.PERCENTAGE, [
                             `${rowNo + 5}$9`,
                             `${rowNo + 5}$6`,
                           ]),
@@ -4140,122 +4127,122 @@ export const companySectionsTemplate: Section[] = [
                       ),
                   ),
 
-                  new Row([
-                    new Cell('Permanent', false, 1, 1, 0 ),
-                    new Cell('', true, 1, 1, 1, 'ADD', ['8$1', '9$1']),
-                          new Cell('', true, 1, 1, 2, 'ADD', ['8$2', '9$2']),
-                          new Cell('', true, 1, 1, 3, Operation.DIV, [
-                            `7$2`,
-                            `7$1`,
-                          ]),
-                          new Cell('', true, 1, 1, 4, 'ADD', ['8$4', '9$4']),
-                          new Cell('', true, 1, 1, 5, Operation.DIV, [
-                            `7$4`,
-                            `7$1`,
-                          ]),
-                          new Cell('', true, 1, 1, 6, 'ADD', ['8$6', '9$6']),
-                          new Cell('', true, 1, 1, 7, 'ADD', ['8$7', '9$7']),
-                          new Cell('', true, 1, 1, 8, Operation.DIV, [
-                            `7$7`,
-                            `7$6`,
-                          ]),
-                          new Cell('', true, 1, 1, 9, 'ADD', ['8$9', '9$9']),
-                          new Cell('', true, 1, 1, 10, Operation.DIV, [
-                            `7$9`,
-                            `7$6`,
-                          ]),
-
-                  ], false, 7),
-                  ...[
-                    'Male',
-                    'Female',
-                  ].map(
+                  new Row(
+                    [
+                      new Cell('Permanent', false, 1, 1, 0),
+                      new Cell('', true, 1, 1, 1, 'ADD', ['8$1', '9$1']),
+                      new Cell('', true, 1, 1, 2, 'ADD', ['8$2', '9$2']),
+                      new Cell('', true, 1, 1, 3, Operation.PERCENTAGE, [
+                        `7$2`,
+                        `7$1`,
+                      ]),
+                      new Cell('', true, 1, 1, 4, 'ADD', ['8$4', '9$4']),
+                      new Cell('', true, 1, 1, 5, Operation.PERCENTAGE, [
+                        `7$4`,
+                        `7$1`,
+                      ]),
+                      new Cell('', true, 1, 1, 6, 'ADD', ['8$6', '9$6']),
+                      new Cell('', true, 1, 1, 7, 'ADD', ['8$7', '9$7']),
+                      new Cell('', true, 1, 1, 8, Operation.PERCENTAGE, [
+                        `7$7`,
+                        `7$6`,
+                      ]),
+                      new Cell('', true, 1, 1, 9, 'ADD', ['8$9', '9$9']),
+                      new Cell('', true, 1, 1, 10, Operation.PERCENTAGE, [
+                        `7$9`,
+                        `7$6`,
+                      ]),
+                    ],
+                    false,
+                    7,
+                  ),
+                  ...['Male', 'Female'].map(
                     (firstCol: string, rowNo: number) =>
                       new Row(
                         [
                           new Cell(firstCol, false, 1, 1, 0),
                           new Cell('', true, 1, 1, 1),
                           new Cell('', true, 1, 1, 2),
-                          new Cell('', true, 1, 1, 3, Operation.DIV, [
+                          new Cell('', true, 1, 1, 3, Operation.PERCENTAGE, [
                             `${rowNo + 8}$2`,
                             `${rowNo + 8}$1`,
                           ]),
                           new Cell('', true, 1, 1, 4),
-                          new Cell('', true, 1, 1, 5, Operation.DIV, [
+                          new Cell('', true, 1, 1, 5, Operation.PERCENTAGE, [
                             `${rowNo + 8}$4`,
                             `${rowNo + 8}$1`,
                           ]),
                           new Cell('', true, 1, 1, 6),
                           new Cell('', true, 1, 1, 7),
-                          new Cell('', true, 1, 1, 8, Operation.DIV, [
+                          new Cell('', true, 1, 1, 8, Operation.PERCENTAGE, [
                             `${rowNo + 8}$7`,
                             `${rowNo + 8}$6`,
                           ]),
                           new Cell('', true, 1, 1, 9),
-                          new Cell('', true, 1, 1, 10, Operation.DIV, [
+                          new Cell('', true, 1, 1, 10, Operation.PERCENTAGE, [
                             `${rowNo + 8}$9`,
                             `${rowNo + 8}$6`,
                           ]),
                         ],
                         false,
-                        rowNo + 8
+                        rowNo + 8,
                       ),
                   ),
                   new Row([new Cell('Workers', false, 1, 11, 0)], false, 10),
-                  
-                  new Row([
-                    new Cell('Permanent', false, 1, 1, 0 ),
-                    new Cell('', true, 1, 1, 1, 'ADD', ['12$1', '13$1']),
-                          new Cell('', true, 1, 1, 2, 'ADD', ['12$2', '13$2']),
-                          new Cell('', true, 1, 1, 3, Operation.DIV, [
-                            `11$2`,
-                            `11$1`,
-                          ]),
-                          new Cell('', true, 1, 1, 4, 'ADD', ['12$4', '13$4']),
-                          new Cell('', true, 1, 1, 5, Operation.DIV, [
-                            `11$4`,
-                            `11$1`,
-                          ]),
-                          new Cell('', true, 1, 1, 6, 'ADD', ['12$6', '13$6']),
-                          new Cell('', true, 1, 1, 7, 'ADD', ['12$7', '13$7']),
-                          new Cell('', true, 1, 1, 8, Operation.DIV, [
-                            `11$7`,
-                            `11$6`,
-                          ]),
-                          new Cell('', true, 1, 1, 9, 'ADD', ['12$9', '13$9']),
-                          new Cell('', true, 1, 1, 10, Operation.DIV, [
-                            `11$9`,
-                            `11$6`,
-                          ]),
 
-                  ], false, 11),
-                  ...[
-                    'Male',
-                    'Female',
-                  ].map(
+                  new Row(
+                    [
+                      new Cell('Permanent', false, 1, 1, 0),
+                      new Cell('', true, 1, 1, 1, 'ADD', ['12$1', '13$1']),
+                      new Cell('', true, 1, 1, 2, 'ADD', ['12$2', '13$2']),
+                      new Cell('', true, 1, 1, 3, Operation.PERCENTAGE, [
+                        `11$2`,
+                        `11$1`,
+                      ]),
+                      new Cell('', true, 1, 1, 4, 'ADD', ['12$4', '13$4']),
+                      new Cell('', true, 1, 1, 5, Operation.PERCENTAGE, [
+                        `11$4`,
+                        `11$1`,
+                      ]),
+                      new Cell('', true, 1, 1, 6, 'ADD', ['12$6', '13$6']),
+                      new Cell('', true, 1, 1, 7, 'ADD', ['12$7', '13$7']),
+                      new Cell('', true, 1, 1, 8, Operation.PERCENTAGE, [
+                        `11$7`,
+                        `11$6`,
+                      ]),
+                      new Cell('', true, 1, 1, 9, 'ADD', ['12$9', '13$9']),
+                      new Cell('', true, 1, 1, 10, Operation.PERCENTAGE, [
+                        `11$9`,
+                        `11$6`,
+                      ]),
+                    ],
+                    false,
+                    11,
+                  ),
+                  ...['Male', 'Female'].map(
                     (firstCol: string, rowNo: number) =>
                       new Row(
                         [
                           new Cell(firstCol, false, 1, 1, 0),
                           new Cell('', true, 1, 1, 1),
                           new Cell('', true, 1, 1, 2),
-                          new Cell('', true, 1, 1, 3, Operation.DIV, [
+                          new Cell('', true, 1, 1, 3, Operation.PERCENTAGE, [
                             `${rowNo + 12}$2`,
                             `${rowNo + 12}$1`,
                           ]),
                           new Cell('', true, 1, 1, 4),
-                          new Cell('', true, 1, 1, 5, Operation.DIV, [
+                          new Cell('', true, 1, 1, 5, Operation.PERCENTAGE, [
                             `${rowNo + 12}$4`,
                             `${rowNo + 12}$1`,
                           ]),
                           new Cell('', true, 1, 1, 6),
                           new Cell('', true, 1, 1, 7),
-                          new Cell('', true, 1, 1, 8, Operation.DIV, [
+                          new Cell('', true, 1, 1, 8, Operation.PERCENTAGE, [
                             `${rowNo + 12}$7`,
                             `${rowNo + 12}$6`,
                           ]),
                           new Cell('', true, 1, 1, 9),
-                          new Cell('', true, 1, 1, 10, Operation.DIV, [
+                          new Cell('', true, 1, 1, 10, Operation.PERCENTAGE, [
                             `${rowNo + 12}$9`,
                             `${rowNo + 12}$6`,
                           ]),
@@ -4265,65 +4252,65 @@ export const companySectionsTemplate: Section[] = [
                       ),
                   ),
 
-                  new Row([
-                    new Cell('Other than Permanent', false, 1, 1, 0 ),
-                    new Cell('', true, 1, 1, 1, 'ADD', ['15$1', '16$1']),
-                          new Cell('', true, 1, 1, 2, 'ADD', ['15$2', '16$2']),
-                          new Cell('', true, 1, 1, 3, Operation.DIV, [
-                            `14$2`,
-                            `14$1`,
-                          ]),
-                          new Cell('', true, 1, 1, 4, 'ADD', ['15$4', '16$4']),
-                          new Cell('', true, 1, 1, 5, Operation.DIV, [
-                            `14$4`,
-                            `14$1`,
-                          ]),
-                          new Cell('', true, 1, 1, 6, 'ADD', ['15$6', '16$6']),
-                          new Cell('', true, 1, 1, 7, 'ADD', ['15$7', '16$7']),
-                          new Cell('', true, 1, 1, 8, Operation.DIV, [
-                            `14$7`,
-                            `14$6`,
-                          ]),
-                          new Cell('', true, 1, 1, 9, 'ADD', ['15$9', '16$9']),
-                          new Cell('', true, 1, 1, 10, Operation.DIV, [
-                            `14$9`,
-                            `14$6`,
-                          ]),
-
-                  ], false, 14),
-                  ...[
-                    'Male',
-                    'Female',
-                  ].map(
+                  new Row(
+                    [
+                      new Cell('Other than Permanent', false, 1, 1, 0),
+                      new Cell('', true, 1, 1, 1, 'ADD', ['15$1', '16$1']),
+                      new Cell('', true, 1, 1, 2, 'ADD', ['15$2', '16$2']),
+                      new Cell('', true, 1, 1, 3, Operation.PERCENTAGE, [
+                        `14$2`,
+                        `14$1`,
+                      ]),
+                      new Cell('', true, 1, 1, 4, 'ADD', ['15$4', '16$4']),
+                      new Cell('', true, 1, 1, 5, Operation.PERCENTAGE, [
+                        `14$4`,
+                        `14$1`,
+                      ]),
+                      new Cell('', true, 1, 1, 6, 'ADD', ['15$6', '16$6']),
+                      new Cell('', true, 1, 1, 7, 'ADD', ['15$7', '16$7']),
+                      new Cell('', true, 1, 1, 8, Operation.PERCENTAGE, [
+                        `14$7`,
+                        `14$6`,
+                      ]),
+                      new Cell('', true, 1, 1, 9, 'ADD', ['15$9', '16$9']),
+                      new Cell('', true, 1, 1, 10, Operation.PERCENTAGE, [
+                        `14$9`,
+                        `14$6`,
+                      ]),
+                    ],
+                    false,
+                    14,
+                  ),
+                  ...['Male', 'Female'].map(
                     (firstCol: string, rowNo: number) =>
                       new Row(
                         [
                           new Cell(firstCol, false, 1, 1, 0),
                           new Cell('', true, 1, 1, 1),
                           new Cell('', true, 1, 1, 2),
-                          new Cell('', true, 1, 1, 3, Operation.DIV, [
+                          new Cell('', true, 1, 1, 3, Operation.PERCENTAGE, [
                             `${rowNo + 15}$2`,
                             `${rowNo + 15}$1`,
                           ]),
                           new Cell('', true, 1, 1, 4),
-                          new Cell('', true, 1, 1, 5, Operation.DIV, [
+                          new Cell('', true, 1, 1, 5, Operation.PERCENTAGE, [
                             `${rowNo + 15}$4`,
                             `${rowNo + 15}$1`,
                           ]),
                           new Cell('', true, 1, 1, 6),
                           new Cell('', true, 1, 1, 7),
-                          new Cell('', true, 1, 1, 8, Operation.DIV, [
+                          new Cell('', true, 1, 1, 8, Operation.PERCENTAGE, [
                             `${rowNo + 15}$7`,
                             `${rowNo + 15}$6`,
                           ]),
                           new Cell('', true, 1, 1, 9),
-                          new Cell('', true, 1, 1, 10, Operation.DIV, [
+                          new Cell('', true, 1, 1, 10, Operation.PERCENTAGE, [
                             `${rowNo + 15}$9`,
                             `${rowNo + 15}$6`,
                           ]),
                         ],
                         false,
-                        rowNo + 15
+                        rowNo + 15,
                       ),
                   ),
                 ],
@@ -4610,8 +4597,8 @@ export const companySectionsTemplate: Section[] = [
                         1,
                         0,
                       ),
-                      new Cell('', true, 1, 1, 1, 'DIV', ['1$1', '2$1']),
-                      new Cell('', true, 1, 1, 2, 'DIV', ['1$2', '2$2']),
+                      new Cell('', true, 1, 1, 1, 'PERCENTAGE', ['1$1', '2$1']),
+                      new Cell('', true, 1, 1, 2, 'PERCENTAGE', ['1$2', '2$2']),
                     ],
                     false,
                     3,
@@ -4763,6 +4750,31 @@ export const companySectionsTemplate: Section[] = [
           {
             heading: 'Essential Indicators',
             index: 0,
+            desc: 'Revenue from operations (in Rs.)',
+            type: QuestionType.TABLE,
+            answer_table: [
+              new Table(
+                [
+                  new Row(
+                    [
+                      new Cell('FY __', false, 1, 1, 0),
+                      new Cell('PY __', false, 1, 1, 0),
+                    ],
+                    true,
+                    0,
+                  ),
+                  new Row(
+                    [new Cell('', true, 1, 1, 0), new Cell('', true, 1, 1, 1)],
+                    false,
+                    1,
+                  ),
+                ],
+                false,
+              ),
+            ],
+          },
+          {
+            index: 1,
             desc: '1. Details of total energy consumption (in Joules or multiples) and energy intensity, in the following format:',
             type: QuestionType.TABLE,
             answer_table: [
@@ -4798,16 +4810,6 @@ export const companySectionsTemplate: Section[] = [
                     'Total electricity consumption (A)',
                     'Total fuel consumption (B)',
                     'Energy consumption through other sources (C)',
-                    // 'From non-renewable sources',
-                    // 'Total electricity consumption (D)',
-                    // 'Total fuel consumption (E)',
-                    // 'Energy consumption through other sources (F)',
-                    // 'Total energy consumed from nonrenewable sources (D+E+F)',
-                    // 'Total energy consumed (A+B+C+D+E+F)',
-                    // 'Energy intensity per rupee of turnover (Total energy consumed / Revenue from operations)',
-                    // 'Energy intensity per rupee of turnover adjusted for Purchasing Power Parity (PPP) (Total energy consumed / Revenue from operations adjusted for PPP)',
-                    // 'Energy intensity in terms of physical output',
-                    // 'Energy intensity (optional) – the relevant metric may be selected by the entity',
                   ].map(
                     (firstCell: string, rowNo: number) =>
                       new Row(
@@ -4916,9 +4918,49 @@ export const companySectionsTemplate: Section[] = [
                     false,
                     11,
                   ),
+                  new Row(
+                    [
+                      new Cell(
+                        'Energy intensity per rupee of turnover (Total energy consumed / Revenue from operations)',
+                        false,
+                        1,
+                        1,
+                        0,
+                      ),
+                      new Cell('', true, 1, 1, 1, Operation.DIV, [
+                        '11$1',
+                        '0$0$1$0',
+                      ]),
+                      new Cell('', true, 1, 1, 2, Operation.DIV, [
+                        '11$2',
+                        '0$0$1$1',
+                      ]),
+                    ],
+                    false,
+                    12,
+                  ),
+                  new Row(
+                    [
+                      new Cell(
+                        'Energy intensity per rupee of turnover adjusted for Purchasing Power Parity (PPP) (Total energy consumed / Revenue from operations adjusted for PPP)',
+                        false,
+                        1,
+                        1,
+                        0,
+                      ),
+                      new Cell('', true, 1, 1, 1, Operation.MUL, [
+                        '12$1',
+                        '22.4',
+                      ]),
+                      new Cell('', true, 1, 1, 2, Operation.MUL, [
+                        '12$2',
+                        '22.4',
+                      ]),
+                    ],
+                    false,
+                    13,
+                  ),
                   ...[
-                    'Energy intensity per rupee of turnover (Total energy consumed / Revenue from operations)',
-                    'Energy intensity per rupee of turnover adjusted for Purchasing Power Parity (PPP) (Total energy consumed / Revenue from operations adjusted for PPP)',
                     'Energy intensity in terms of physical output',
                     'Energy intensity (optional) – the relevant metric may be selected by the entity',
                   ].map(
@@ -4930,7 +4972,7 @@ export const companySectionsTemplate: Section[] = [
                           new Cell('', true, 1, 1, 2),
                         ],
                         false,
-                        rowNo + 12,
+                        rowNo + 14,
                       ),
                   ),
                 ],
@@ -4939,17 +4981,17 @@ export const companySectionsTemplate: Section[] = [
             ],
           },
           {
-            index: 1,
+            index: 2,
             desc: '2. a. Does the entity have any sites / facilities identified as designated consumers (DCs) under the Performance, Achieve and Trade (PAT) Scheme of the Government of India?',
             type: QuestionType.BOOLEAN,
           },
           {
-            index: 2,
+            index: 3,
             desc: '2. b. If the above is yes, disclose whether targets set under the PAT scheme have been achieved. In case targets have not been achieved, provide the remedial action taken, if any.',
             type: QuestionType.TEXT,
           },
           {
-            index: 3,
+            index: 4,
             desc: '3. Provide details of the following disclosures related to water, in the following format:',
             type: QuestionType.TABLE,
             answer_table: [
@@ -4995,12 +5037,6 @@ export const companySectionsTemplate: Section[] = [
                     '(iii) Third party water',
                     '(iv) Seawater / desalinated water',
                     '(v) Others',
-                    // 'Total volume of water withdrawal (in kilolitres) (i + ii + iii + iv + v)',
-                    // 'Total volume of water consumption (in kilolitres)',
-                    // 'Water intensity per rupee of turnover (Total water consumption / Revenue from operations)',
-                    // 'Water intensity per rupee of turnover adjusted for Purchasing Power Parity (PPP) (Total water consumption / Revenue from operations adjusted for PPP)',
-                    // 'Water intensity in terms of physical output',
-                    // 'Water intensity (optional) – the relevant metric may be selected by the entity',
                   ].map(
                     (firstCell: string, rowNo: number) =>
                       new Row(
@@ -5040,9 +5076,37 @@ export const companySectionsTemplate: Section[] = [
                     false,
                     7,
                   ),
+                  new Row(
+                    [
+                      new Cell(
+                        'Total volume of water consumption (in kilolitres)',
+                        false,
+                        1,
+                        1,
+                        0,
+                      ),
+                      new Cell('', true, 1, 1, 1, 'DIV', ['6$1', '0$0$1$0']),
+                      new Cell('', true, 1, 1, 2, 'DIV', ['6$2', '0$0$1$1']),
+                    ],
+                    false,
+                    8,
+                  ),
+                  new Row(
+                    [
+                      new Cell(
+                        'Water intensity per rupee of turnover (Total water consumption / Revenue from operations)',
+                        false,
+                        1,
+                        1,
+                        0,
+                      ),
+                      new Cell('', true, 1, 1, 1, 'MUL', ['8$1', '22.4']),
+                      new Cell('', true, 1, 1, 2, 'MUL', ['8$2', '22.4']),
+                    ],
+                    false,
+                    9,
+                  ),
                   ...[
-                    'Total volume of water consumption (in kilolitres)',
-                    'Water intensity per rupee of turnover (Total water consumption / Revenue from operations)',
                     'Water intensity per rupee of turnover adjusted for Purchasing Power Parity (PPP) (Total water consumption / Revenue from operations adjusted for PPP)',
                     'Water intensity in terms of physical output',
                     'Water intensity (optional) – the relevant metric may be selected by the entity',
@@ -5064,7 +5128,7 @@ export const companySectionsTemplate: Section[] = [
             ],
           },
           {
-            index: 4,
+            index: 5,
             desc: '4. Provide the following details related to water discharged:',
             type: QuestionType.TABLE,
             answer_table: [
@@ -5104,23 +5168,18 @@ export const companySectionsTemplate: Section[] = [
                     true,
                     1,
                   ),
+                  new Row(
+                    [
+                      new Cell('(i) Surface water', false, 1, 1, 0),
+                      new Cell('', true, 1, 1, 1, 'ADD', ['4$1', '3$1']),
+                      new Cell('', true, 1, 1, 2, 'ADD', ['4$2', '3$2']),
+                    ],
+                    false,
+                    2,
+                  ),
                   ...[
-                    '(i) Surface water',
                     ' No treatment',
                     'With treatment – please specify level of treatment',
-                    '(ii) To Groundwater',
-                    'No treatment',
-                    'With treatment – please specify level of treatment',
-                    '(iii) To Seawater',
-                    'No treatment',
-                    'With treatment – please specify level of treatment',
-                    '(iv) Sent to third-parties ',
-                    'No treatment',
-                    'With treatment – please specify level of treatment',
-                    '(v) Others',
-                    'No treatment',
-                    'With treatment – please specify level of treatment',
-                    'Total water discharged (in kilolitres) ',
                   ].map(
                     (firstCell: string, rowNo: number) =>
                       new Row(
@@ -5130,8 +5189,152 @@ export const companySectionsTemplate: Section[] = [
                           new Cell('', true, 1, 1, 2),
                         ],
                         false,
-                        2 + rowNo,
+                        3 + rowNo,
                       ),
+                  ),
+
+                  new Row(
+                    [
+                      new Cell('(ii) To Groundwater', false, 1, 1, 0),
+                      new Cell('', true, 1, 1, 1, 'ADD', ['6$1', '7$1']),
+                      new Cell('', true, 1, 1, 2, 'ADD', ['6$2', '7$2']),
+                    ],
+                    false,
+                    5,
+                  ),
+                  ...[
+                    'No treatment',
+                    'With treatment – please specify level of treatment',
+                    // '(iii) To Seawater',
+                    // 'No treatment',
+                    // 'With treatment – please specify level of treatment',
+                    // '(iv) Sent to third-parties ',
+                    // 'No treatment',
+                    // 'With treatment – please specify level of treatment',
+                    // '(v) Others',
+                    // 'No treatment',
+                    // 'With treatment – please specify level of treatment',
+                    // 'Total water discharged (in kilolitres) ',
+                  ].map(
+                    (firstCell: string, rowNo: number) =>
+                      new Row(
+                        [
+                          new Cell(firstCell, false, 1, 1, 0),
+                          new Cell('', true, 1, 1, 1),
+                          new Cell('', true, 1, 1, 2),
+                        ],
+                        false,
+                        6 + rowNo,
+                      ),
+                  ),
+
+                  new Row(
+                    [
+                      new Cell('(iii) To Seawater', false, 1, 1, 0),
+                      new Cell('', true, 1, 1, 1, 'ADD', ['9$1', '10$1']),
+                      new Cell('', true, 1, 1, 2, 'ADD', ['9$2', '10$2']),
+                    ],
+                    false,
+                    8,
+                  ),
+                  ...[
+                    'No treatment',
+                    'With treatment – please specify level of treatment',
+                    // '(iv) Sent to third-parties ',
+                    // 'No treatment',
+                    // 'With treatment – please specify level of treatment',
+                    // '(v) Others',
+                    // 'No treatment',
+                    // 'With treatment – please specify level of treatment',
+                    // 'Total water discharged (in kilolitres) ',
+                  ].map(
+                    (firstCell: string, rowNo: number) =>
+                      new Row(
+                        [
+                          new Cell(firstCell, false, 1, 1, 0),
+                          new Cell('', true, 1, 1, 1),
+                          new Cell('', true, 1, 1, 2),
+                        ],
+                        false,
+                        9 + rowNo,
+                      ),
+                  ),
+
+                  new Row(
+                    [
+                      new Cell('(iv) Sent to third-parties', false, 1, 1, 0),
+                      new Cell('', true, 1, 1, 1, 'ADD', ['12$1', '13$1']),
+                      new Cell('', true, 1, 1, 2, 'ADD', ['12$2', '13$2']),
+                    ],
+                    false,
+                    11,
+                  ),
+                  ...[
+                    'No treatment',
+                    'With treatment – please specify level of treatment',
+                  ].map(
+                    (firstCell: string, rowNo: number) =>
+                      new Row(
+                        [
+                          new Cell(firstCell, false, 1, 1, 0),
+                          new Cell('', true, 1, 1, 1),
+                          new Cell('', true, 1, 1, 2),
+                        ],
+                        false,
+                        12 + rowNo,
+                      ),
+                  ),
+
+                  new Row(
+                    [
+                      new Cell('(v) Others', false, 1, 1, 0),
+                      new Cell('', true, 1, 1, 1, 'ADD', ['15$1', '16$1']),
+                      new Cell('', true, 1, 1, 2, 'ADD', ['15$2', '16$2']),
+                    ],
+                    false,
+                    14,
+                  ),
+                  ...[
+                    'No treatment',
+                    'With treatment – please specify level of treatment',
+                  ].map(
+                    (firstCell: string, rowNo: number) =>
+                      new Row(
+                        [
+                          new Cell(firstCell, false, 1, 1, 0),
+                          new Cell('', true, 1, 1, 1),
+                          new Cell('', true, 1, 1, 2),
+                        ],
+                        false,
+                        15 + rowNo,
+                      ),
+                  ),
+                  new Row(
+                    [
+                      new Cell(
+                        'Total water discharged (in kilolitres',
+                        false,
+                        1,
+                        1,
+                        0,
+                      ),
+                      new Cell('', true, 1, 1, 1, 'ADD', [
+                        '14$1',
+                        '11$1',
+                        '8$1',
+                        '5$1',
+                        '2$1',
+                      ]),
+                      new Cell('', true, 1, 1, 2, 'ADD', [
+                        '14$2',
+                        '11$2',
+                        '8$2',
+                        '5$2',
+                        '2$2',
+                      ]),
+                    ],
+                    false,
+                    17,
                   ),
                 ],
                 false,
@@ -5139,12 +5342,12 @@ export const companySectionsTemplate: Section[] = [
             ],
           },
           {
-            index: 5,
+            index: 6,
             desc: '5. Has the entity implemented a mechanism for Zero Liquid Discharge? If yes, provide details of its coverage and implementation.',
             type: QuestionType.TEXT,
           },
           {
-            index: 6,
+            index: 7,
             desc: '6. Please provide details of air emissions (other than GHG emissions) by the entity, in the following format:',
             type: QuestionType.TABLE,
             answer_table: [
@@ -5189,7 +5392,7 @@ export const companySectionsTemplate: Section[] = [
             ],
           },
           {
-            index: 7,
+            index: 8,
             desc: '7. Provide details of greenhouse gas emissions (Scope 1 and Scope 2 emissions) & its intensity, in the following format:',
             type: QuestionType.TABLE,
             answer_table: [
@@ -5304,12 +5507,12 @@ export const companySectionsTemplate: Section[] = [
             ],
           },
           {
-            index: 8,
+            index: 9,
             type: QuestionType.TEXT,
             desc: '8. Does the entity have any project related to reducing Green House Gas emission? If Yes, then provide details. ',
           },
           {
-            index: 9,
+            index: 10,
             desc: '9. Provide details related to waste management by the entity, in the following format:',
             type: QuestionType.TABLE,
             answer_table: [
@@ -5346,10 +5549,6 @@ export const companySectionsTemplate: Section[] = [
                     'Radioactive waste (F)',
                     'Other Hazardous waste. Please specify, if any. (G)',
                     'Other Non-hazardous waste generated (H). Please specify, if any. (Break-up by composition i.e. by materials relevant to the sector)',
-                    // 'Waste intensity per rupee of turnover (Total waste generated / Revenue from operations)',
-                    // 'Waste intensity per rupee of turnover adjusted for Purchasing Power Parity (PPP) (Total waste generated / Revenue from operations adjusted for PPP)',
-                    // 'Waste intensity in terms of physical output',
-                    // 'Waste intensity (optional) – the relevant metric may be selected by the entity',
                   ].map(
                     (firstCell: string, rowNo: number) =>
                       new Row(
@@ -5396,10 +5595,37 @@ export const companySectionsTemplate: Section[] = [
                     false,
                     10,
                   ),
-
+                  new Row(
+                    [
+                      new Cell(
+                        'Waste intensity per rupee of turnover (Total waste generated / Revenue from operations)',
+                        false,
+                        1,
+                        1,
+                        0,
+                      ),
+                      new Cell('', false, 1, 1, 1, 'DIV', ['10$1', '0$0$1$0']),
+                      new Cell('', false, 1, 1, 2, 'DIV', ['10$2', '0$0$1$1']),
+                    ],
+                    false,
+                    11,
+                  ),
+                  new Row(
+                    [
+                      new Cell(
+                        'Waste intensity per rupee of turnover adjusted for Purchasing Power Parity (PPP) (Total waste generated / Revenue from operations adjusted for PPP)',
+                        false,
+                        1,
+                        1,
+                        0,
+                      ),
+                      new Cell('', false, 1, 1, 1, 'MUL', ['11$1', '22.4']),
+                      new Cell('', false, 1, 1, 2, 'MUL', ['11$2', '22.4 ']),
+                    ],
+                    false,
+                    12,
+                  ),
                   ...[
-                    'Waste intensity per rupee of turnover (Total waste generated / Revenue from operations)',
-                    'Waste intensity per rupee of turnover adjusted for Purchasing Power Parity (PPP) (Total waste generated / Revenue from operations adjusted for PPP)',
                     'Waste intensity in terms of physical output',
                     'Waste intensity (optional) – the relevant metric may be selected by the entity',
                   ].map(
@@ -5411,7 +5637,7 @@ export const companySectionsTemplate: Section[] = [
                           new Cell('', true, 1, 1, 2),
                         ],
                         false,
-                        rowNo + 11,
+                        rowNo + 13,
                       ),
                   ),
 
@@ -5520,12 +5746,12 @@ export const companySectionsTemplate: Section[] = [
             ],
           },
           {
-            index: 10,
+            index: 11,
             type: QuestionType.TEXT,
             desc: '10. Briefly describe the waste management practices adopted in your establishments. Describe the strategy adopted by your company to reduce usage of hazardous and toxic chemicals in your products and processes and the practices adopted to manage such wastes.',
           },
           {
-            index: 11,
+            index: 12,
             desc: '11. If the entity has operations/offices in/around ecologically sensitive areas (such as national parks, wildlife sanctuaries, biosphere reserves, wetlands, biodiversity hotspots, forests,  coastal regulation zones etc.) where environmental approvals / clearances are required, please specify details in the following format:',
             type: QuestionType.TABLE,
             answer_table: [
@@ -5555,7 +5781,7 @@ export const companySectionsTemplate: Section[] = [
             ],
           },
           {
-            index: 12,
+            index: 13,
             desc: '12. Details of environmental impact assessments of projects undertaken by the entity based on applicable laws, in the current financial year:',
             type: QuestionType.TABLE,
             answer_table: [
@@ -5588,7 +5814,7 @@ export const companySectionsTemplate: Section[] = [
             ],
           },
           {
-            index: 13,
+            index: 14,
             desc: '13. Is the entity compliant with the applicable environmental law/ regulations/ guidelines in India; such as the Water (Prevention and Control of Pollution) Act, Air (Prevention and Control of Pollution) Act, Environment protection act and rules thereunder (Y/N). If not, provide details of all such non-compliances, in the following format:',
             type: QuestionType.TABLE,
             answer_table: [
@@ -5622,7 +5848,7 @@ export const companySectionsTemplate: Section[] = [
           },
           {
             heading: 'Leadership Indicators',
-            index: 14,
+            index: 15,
             desc: '1. Water withdrawal, consumption and discharge in areas of water stress (in kilolitres): \n For each facility / plant located in areas of water stress, provide the following information: \n(i) Name of the area \n(ii) Nature of operations \n(iii) Water withdrawal, consumption and discharge in the following format:',
             type: QuestionType.TABLE,
             answer_table: [
@@ -5754,7 +5980,7 @@ export const companySectionsTemplate: Section[] = [
             ],
           },
           {
-            index: 15,
+            index: 16,
             desc: '2. Please provide details of total Scope 3 emissions & its intensity, in the following format:',
             type: QuestionType.TABLE,
             answer_table: [
@@ -5796,10 +6022,10 @@ export const companySectionsTemplate: Section[] = [
                         false,
                         1,
                         1,
-                        2,
+                        1,
                       ),
+                      new Cell('', true, 1, 1, 2),
                       new Cell('', true, 1, 1, 3),
-                      new Cell('', true, 1, 1, 4),
                     ],
                     false,
                     1,
@@ -5814,8 +6040,8 @@ export const companySectionsTemplate: Section[] = [
                         0,
                       ),
                       new Cell('', true, 1, 1, 1),
-                      new Cell('', true, 1, 1, 2),
-                      new Cell('', true, 1, 1, 3),
+                      new Cell('', true, 1, 1, 2, 'DIV', ['1$2', '0$0$1$0']),
+                      new Cell('', true, 1, 1, 3, 'DIV', ['1$3', '0$0$1$1']),
                     ],
                     false,
                     2,
@@ -5842,12 +6068,12 @@ export const companySectionsTemplate: Section[] = [
             ],
           },
           {
-            index: 16,
+            index: 17,
             desc: '3. With respect to the ecologically sensitive areas reported at Question 11 of Essential Indicators above, provide details of significant direct & indirect impact of the entity on biodiversity in such areas along-with prevention and remediation activities. ',
             type: QuestionType.TEXT,
           },
           {
-            index: 17,
+            index: 18,
             desc: '4. If the entity has undertaken any specific initiatives or used innovative technology or solutions to improve resource efficiency, or reduce impact due to emissions / effluent discharge / waste generated, please provide details of the same as well as outcome of such initiatives, as per the following format:',
             type: QuestionType.TABLE,
             answer_table: [
@@ -5877,17 +6103,17 @@ export const companySectionsTemplate: Section[] = [
             ],
           },
           {
-            index: 18,
+            index: 19,
             desc: '5. Does the entity have a business continuity and disaster management plan? Give details in 100 words/ web link.',
             type: QuestionType.TEXT,
           },
           {
-            index: 19,
+            index: 20,
             desc: '6. Disclose any significant adverse impact to the environment, arising from the value chain of the entity. What mitigation or adaptation measures have been taken by the entity in this regard.',
             type: QuestionType.TEXT,
           },
           {
-            index: 20,
+            index: 21,
             desc: '7. Percentage of value chain partners (by value of business done with such partners) that were assessed for environmental impacts.',
             type: QuestionType.TEXT,
           },
@@ -6191,8 +6417,8 @@ export const companySectionsTemplate: Section[] = [
                         1,
                         0,
                       ),
-                      new Cell('', true, 1, 1, 1, 'DIV', ['2$1', '3$1']),
-                      new Cell('', true, 1, 1, 2, 'DIV', ['2$2', '3$2']),
+                      new Cell('', true, 1, 1, 1, 'PERCENTAGE', ['2$1', '3$1']),
+                      new Cell('', true, 1, 1, 2, 'PERCENTAGE', ['2$2', '3$2']),
                     ],
                     false,
                     4,
@@ -6232,8 +6458,8 @@ export const companySectionsTemplate: Section[] = [
                         1,
                         0,
                       ),
-                      new Cell('', true, 1, 1, 1, 'DIV', ['6$1', '7$1']),
-                      new Cell('', true, 1, 1, 2, 'DIV', ['6$2', '7$2']),
+                      new Cell('', true, 1, 1, 1, 'PERCENTAGE', ['6$1', '7$1']),
+                      new Cell('', true, 1, 1, 2, 'PERCENTAGE', ['6$2', '7$2']),
                     ],
                     false,
                     8,
@@ -6273,8 +6499,8 @@ export const companySectionsTemplate: Section[] = [
                         1,
                         0,
                       ),
-                      new Cell('', true, 1, 1, 1, 'DIV', ['10$1', '11$1']),
-                      new Cell('', true, 1, 1, 2, 'DIV', ['10$2', '11$2']),
+                      new Cell('', true, 1, 1, 1, 'PERCENTAGE', ['10$1', '11$1']),
+                      new Cell('', true, 1, 1, 2, 'PERCENTAGE', ['10$2', '11$2']),
                     ],
                     false,
                     12,
@@ -6318,8 +6544,8 @@ export const companySectionsTemplate: Section[] = [
                         1,
                         0,
                       ),
-                      new Cell('', true, 1, 1, 1, 'DIV', ['14$1', '15$1']),
-                      new Cell('', true, 1, 1, 2, 'DIV', ['14$2', '15$2']),
+                      new Cell('', true, 1, 1, 1, 'PERCENTAGE', ['14$1', '15$1']),
+                      new Cell('', true, 1, 1, 2, 'PERCENTAGE', ['14$2', '15$2']),
                     ],
                     false,
                     16,
@@ -6734,8 +6960,8 @@ export const companySectionsTemplate: Section[] = [
           {
             index: 13,
             desc: '4. b. Did your entity carry out any survey with regard to consumer satisfaction relating to the major products / services of the entity, significant locations of operation of the entity or the entity as a whole? (Yes/No)',
-            type: 'BOOLEAN'
-          }
+            type: 'BOOLEAN',
+          },
         ],
       },
     ],

@@ -26,7 +26,6 @@ export const loginUser = createAsyncThunk<
 >("auth/loginUser", async (credentials, { rejectWithValue }) => {
   try {
     const response = await loginUserAPI(credentials);
-    console.log("auth slice response--",response);
     sessionStorage.setItem("user", JSON.stringify(response));
     sessionStorage.setItem("isLoggedIn", "true");
     return response;
@@ -61,7 +60,6 @@ const authSlice = createSlice({
       .addCase(loginUser.fulfilled, (state, action) => {
         state.isLoading = false;
         state.user = action.payload;
-        console.log("logging user detailks and seeting---",action.payload)
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.isLoading = false;

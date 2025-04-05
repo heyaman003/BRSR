@@ -8,7 +8,9 @@ export enum QuestionType {
 
 export enum Operation {
   ADD = "ADD",
-  DIV = "DIV"
+  DIV = "DIV",
+  MUL = 'MUL',
+  PERCENTAGE = "PERCENTAGE",
 }
 
 export class Cell {

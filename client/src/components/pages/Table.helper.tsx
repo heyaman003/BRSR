@@ -10,7 +10,6 @@ import {
 import { Button } from "@/components/ui/button";
 
 export default function TableHelper({ section }: { section: any }) {
-  console.log(section);
 
   return (
     <div>
