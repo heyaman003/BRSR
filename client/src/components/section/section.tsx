@@ -1,15 +1,15 @@
 import ChatBox from "@/components/chat/ChatBox";
 import CommentSidebar from "../commentSidebar/comment.sidebar";
 import SustainabilityLoader from "@/components/component/SustainabiltyLoader";
-import BooleanInput from "@/components/Question/boolean.input";
-import TableUI from "@/components/Question/Table";
-import TextQuestionUI from "@/components/Question/Text";
+import BooleanInput from "../question/boolean.input";
+import TableUI from "../question/table";
+import TextQuestionUI from "../question/text";
 import { Button } from "@/components/ui/button";
 import { Question, SubSection, Table } from "@/models/models";
 import { plainToInstance } from "class-transformer";
 
 import {  Loader2, MessageSquareText } from "lucide-react";
-import React, { memo, useEffect, useLayoutEffect, useState } from "react";
+import React, { memo, useCallback, useEffect, useLayoutEffect, useState } from "react";
 import { toast } from "sonner";
 import {
   fetchSubsectionData,
@@ -27,7 +27,6 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId }) => {
   const [isLoaderVisible, setIsLoaderVisible] = useState(true);
   const [subsectionData, setSubsectionData] = useState<SubSection | null>(null);
   const [isSaving, setIsSaving] = useState<boolean>(false);
-
 
   const smoothScrollTo = (targetY: number, duration = 1000) => {
     const startY = window.scrollY;
@@ -169,6 +168,7 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId }) => {
                     question.answer_table &&
                     question.answer_table.map((table: Table) => (
                       <TableUI
+                        subsectionData={subsectionData}
                         getTableData={getTableData}
                         updateTableData={(updatedTableData: Table) => {
                           updateTableData(question.id, updatedTableData);
