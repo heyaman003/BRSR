@@ -110,7 +110,7 @@ model Table {
 
 model Row {
   id String @id @default(uuid())
-  isHeading Boolean
+  isHeading Boolean //Puts this row inside the table heading
   table Table @relation(name: "table-belongs-to", fields: [tableId], references: [id], onDelete: Cascade)
   tableId String 
   cells Cell[] @relation(name: "cell-belongs-to")
@@ -127,7 +127,8 @@ model Cell {
   rowId String
   index Int //Used to order the cells in response
   operation Operation?
-  operands String[] //Will have cell indexes in '{rowIndex}${columnIndex}' format
+  operands String[] @default([]) //Will have cell indexes in '{rowIndex}${columnIndex}' format
+  isHeading Boolean? @default(false) // Used to specially highlight the cell
 }
 
 
@@ -148,4 +149,6 @@ enum Operation {
   DIV
   MUL
   PERCENTAGE
+  SUMDIVIDE
+  SUB
 }

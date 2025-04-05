@@ -3,7 +3,7 @@ import { PrismaClient } from "@prisma/client";
 
 export class DbService extends PrismaClient implements OnModuleInit, OnModuleDestroy{
     constructor(){
-        super({log: ['query']})
+        super()
     }
     async onModuleDestroy() {
         await this.$disconnect();

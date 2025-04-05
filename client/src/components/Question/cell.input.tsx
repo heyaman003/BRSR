@@ -94,21 +94,31 @@ const performOperation = (operation: Operation, values: number[]): number => {
   switch (operation) {
     case Operation.ADD:
       values.forEach((value) => (answer += value));
-    break;
+      break;
     case Operation.MUL:
       values.forEach((value, ind) => (answer = ind === 0 ? value : answer * value));
       if (Number.isNaN(answer) || !Number.isFinite(answer)) answer = 0;
-    break;
+      break;
     case Operation.DIV:
       values.forEach((value, ind) => (answer = ind === 0 ? value : answer / value));
       if (Number.isNaN(answer) || !Number.isFinite(answer)) answer = 0;
-    break;
+      break;
     case Operation.PERCENTAGE:
       values.forEach(
         (value, ind) => (answer = ind === 0 ? value * 100 : answer / value)
       );
       if (Number.isNaN(answer) || !Number.isFinite(answer)) answer = 0;
-    break;
+      break;
+    case Operation.SUMDIVIDE:
+      answer = (values[0] + values[1]) / values[2];
+      if (Number.isNaN(answer) || !Number.isFinite(answer)) answer = 0;
+      break
+    case Operation.SUB:
+      values.forEach(
+        (value, ind) => (answer = ind === 0 ? value : answer - value)
+      );
+      if (Number.isNaN(answer) || !Number.isFinite(answer)) answer = 0;
+      break;
   }
   return answer;
 };

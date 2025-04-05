@@ -11,6 +11,8 @@ export enum Operation {
   DIV = "DIV",
   MUL = 'MUL',
   PERCENTAGE = "PERCENTAGE",
+  SUMDIVIDE = "SUMDIVIDE",
+  SUB = 'SUB',
 }
 
 export class Cell {
@@ -30,6 +32,8 @@ export class Cell {
   operation?: Operation;
   @Expose()
   operands?:string[]
+  @Expose()
+  isHeading?: boolean;
 
   constructor(
     id: string,

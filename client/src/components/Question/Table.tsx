@@ -12,16 +12,19 @@ import { memo, useCallback, useEffect, useState } from "react";
 import * as BSON from "bson";
 import { toast } from "sonner";
 import { Loader2, Trash2 } from "lucide-react";
+import { SubSection } from "@/models/models";
 const generateId = () => new BSON.ObjectId().toString();
 
 const TableUI = ({
   table,
   updateTableData,
-  getTableData
+  getTableData,
+  // subsectionData
 }: {
   table: TableType;
   updateTableData: (updatedTableData: TableType) => void;
-  getTableData: (questionIndex: number, tableIndex: number) => TableType | null
+  getTableData: (questionIndex: number, tableIndex: number) => TableType | null,
+  subsectionData: SubSection
 }) => {
   const [tableState, setTableState] = useState<TableType>(table);
   const [isSavingTableData, setIsSavingTableData] = useState<boolean>(false);
@@ -29,6 +32,11 @@ const TableUI = ({
   useEffect(() => {
     updateTableData(tableState);
   }, [tableState]);
+
+  // useEffect(() => {
+  //   console.log("TableUI: ", tableState);
+  //   setTableState(()=>{})
+  // }, [subsectionData]);
 
   const updateTableCell = useCallback(
     (rowId: string, cellId: string, newValue: string) => {
@@ -137,10 +145,10 @@ const TableUI = ({
                       key={cell.id}
                       colSpan={cell.colSpan}
                       rowSpan={cell.rowSpan}
-                      className="py-3"
+                      className={`py-3 ${cell.isHeading &&'bg-green-50 hover:bg-green-100'}`}
                     >
                       {!cell.isUpdateable ? (
-                        cell.data
+                        <span className={`inline-block w-full h-full ${cell.isHeading?'text-center font-semibold text-sm text-green-700':'text-left'}`}>{cell.data}</span>
                       ) : (
                         <CellInput
                           getTableData={getTableData}
