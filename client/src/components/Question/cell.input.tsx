@@ -1,41 +1,55 @@
-import { Operation } from "@/models/models";
-import { Table } from "@/types";
+import { updateCellData } from "@/features/activeSubsectionData/activeSubsectionSlice";
+import { Operation, SubSection } from "@/models/models";
+import { RootState } from "@/store/store";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
-import { toast } from "sonner";
+import { useDispatch, useSelector } from "react-redux";
 
 interface CellInputArgs {
-  updateTableCell: (rowId: string, cellId: string, newValue: string) => void;
   value: string;
-  rowId: string;
-  cellId: string;
-  tableState: Table;
+  rowIndex: number;
+  cellIndex: number;
   operation: Operation | null | undefined;
   operands: string[] | null | undefined;
-  getTableData: (questionIndex: number, tableIndex: number) => Table | null;
+  tableIndex: number;
+  questionIndex: number;
 }
 
 const CellInput: React.FC<CellInputArgs> = ({
   value,
-  updateTableCell,
-  rowId,
-  cellId,
-  tableState,
+  rowIndex,
+  cellIndex,
+  tableIndex,
+  questionIndex,
   operation,
   operands,
-  getTableData,
 }) => {
-  const [cellData, setCellData] = useState<string>(value);
+  const dispatch = useDispatch();
+
+  const subsection: SubSection = useSelector(
+    (state: RootState) => state.activeSubsection.data
+  );
 
   const getCellValue = useCallback(
-    (rowIndex: number, cellIndex: number, table: Table) => {
-      const cellData: string | undefined = table.rows
-        .find((row) => row.index === rowIndex)
+    (
+      questionIndex: number,
+      tableIndex: number,
+      rowIndex: number,
+      cellIndex: number
+    ) => {
+      const cellData: string | undefined = subsection.questions
+        ?.find((question) => question.index === questionIndex)
+        ?.answer_table?.[tableIndex]?.rows?.find(
+          (row) => row.index === rowIndex
+        )
         ?.cells.find((cell) => cell.index === cellIndex)?.data;
+
       if (!cellData) return 0;
       return parseFloat(cellData);
     },
-    [tableState]
+    [subsection]
   );
+
+  const [cellData, setCellData] = useState<string>(value);
 
   const debounceInputValueChangeRef = useRef<any>();
 
@@ -52,16 +66,12 @@ const CellInput: React.FC<CellInputArgs> = ({
           const tableIndex = parseFloat(operand.split("$")[1]);
           const rowIndex = parseFloat(operand.split("$")[2]);
           const colIndex = parseFloat(operand.split("$")[3]);
-          const tableData = getTableData(questionIndex, tableIndex);
-          if (!tableData) {
-            toast.error("Table not found");
-            return 0;
-          }
-          return getCellValue(rowIndex, colIndex, tableData);
+
+          return getCellValue(questionIndex, tableIndex, rowIndex, colIndex);
         } else {
           const rowIndex = parseFloat(operand.split("$")[0]);
           const colIndex = parseFloat(operand.split("$")[1]);
-          return getCellValue(rowIndex, colIndex, tableState);
+          return getCellValue(questionIndex, tableIndex, rowIndex, colIndex);
         }
       });
       if (valueOfOperands)
@@ -69,10 +79,18 @@ const CellInput: React.FC<CellInputArgs> = ({
     }, 200);
 
     return () => clearTimeout(debounceInputValueChangeRef.current);
-  }, [tableState]);
+  }, [subsection]);
 
   useEffect(() => {
-    updateTableCell(rowId, cellId, cellData);
+    dispatch(
+      updateCellData({
+        questionIndex: questionIndex,
+        tableIndex: tableIndex,
+        rowIndex: rowIndex,
+        cellIndex: cellIndex,
+        value: cellData,
+      })
+    );
   }, [cellData]);
 
   return (
@@ -96,11 +114,15 @@ const performOperation = (operation: Operation, values: number[]): number => {
       values.forEach((value) => (answer += value));
       break;
     case Operation.MUL:
-      values.forEach((value, ind) => (answer = ind === 0 ? value : answer * value));
+      values.forEach(
+        (value, ind) => (answer = ind === 0 ? value : answer * value)
+      );
       if (Number.isNaN(answer) || !Number.isFinite(answer)) answer = 0;
       break;
     case Operation.DIV:
-      values.forEach((value, ind) => (answer = ind === 0 ? value : answer / value));
+      values.forEach(
+        (value, ind) => (answer = ind === 0 ? value : answer / value)
+      );
       if (Number.isNaN(answer) || !Number.isFinite(answer)) answer = 0;
       break;
     case Operation.PERCENTAGE:
@@ -112,7 +134,7 @@ const performOperation = (operation: Operation, values: number[]): number => {
     case Operation.SUMDIVIDE:
       answer = (values[0] + values[1]) / values[2];
       if (Number.isNaN(answer) || !Number.isFinite(answer)) answer = 0;
-      break
+      break;
     case Operation.SUB:
       values.forEach(
         (value, ind) => (answer = ind === 0 ? value : answer - value)

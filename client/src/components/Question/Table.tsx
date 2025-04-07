@@ -8,84 +8,73 @@ import {
 } from "../ui/table";
 import { Cell, Row, Table as TableType } from "@/types";
 import CellInput from "./cell.input";
-import { memo, useCallback, useEffect, useState } from "react";
+import { memo, useState } from "react";
 import * as BSON from "bson";
 import { toast } from "sonner";
 import { Loader2, Trash2 } from "lucide-react";
-import { SubSection } from "@/models/models";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+import { updateTableData } from "@/features/activeSubsectionData/activeSubsectionSlice";
 const generateId = () => new BSON.ObjectId().toString();
 
 const TableUI = ({
-  table,
-  updateTableData,
-  getTableData,
-  // subsectionData
+  tableId,
+  questionId,
+  tableIndex,
+  questionIndex
 }: {
-  table: TableType;
-  updateTableData: (updatedTableData: TableType) => void;
-  getTableData: (questionIndex: number, tableIndex: number) => TableType | null,
-  subsectionData: SubSection
+  tableId: string;
+  questionId: string;
+  tableIndex: number,
+  questionIndex: number
 }) => {
-  const [tableState, setTableState] = useState<TableType>(table);
+  const dispatch = useDispatch();
+  const tableState: TableType = useSelector((state:RootState)=>state.activeSubsection.data.questions.find(question=>question.id===questionId)?.answer_table?.find(table=>table.id===tableId) as TableType)
   const [isSavingTableData, setIsSavingTableData] = useState<boolean>(false);
-
-  useEffect(() => {
-    updateTableData(tableState);
-  }, [tableState]);
-
-  // useEffect(() => {
-  //   console.log("TableUI: ", tableState);
-  //   setTableState(()=>{})
-  // }, [subsectionData]);
-
-  const updateTableCell = useCallback(
-    (rowId: string, cellId: string, newValue: string) => {
-      setTableState((table: TableType) => ({
-        ...table,
-        rows: table.rows.map((row: Row) =>
-          rowId === row.id
-            ? {
-                ...row,
-                cells: row.cells.map((cell: Cell) =>
-                  cell.id === cellId ? { ...cell, data: newValue } : cell
-                ),
-              }
-            : row
-        ),
-      }));
-    },
-    []
-  );
 
   const addRow = () => {
     const cellCount = tableState.rows[tableState.rows.length - 1].cells.length;
-    setTableState((table: TableType) => {
-      table.rows = [
-        ...table.rows,
-        new Row(
-          generateId(),
-          Array.from({ length: cellCount }).map(
-            (_, ind: number) => new Cell(generateId(), "", true, 1, 1, ind)
+    dispatch(
+      updateTableData({
+        questionId:questionId, 
+        tableData:{
+        ...tableState,
+        rows: [
+          ...tableState.rows,
+          new Row(
+            generateId(),
+            Array.from({ length: cellCount }).map(
+              (_, ind: number) => new Cell(generateId(), "", true, 1, 1, ind)
+            ),
+            false,
+            tableState.rows.length
           ),
-          false,
-          tableState.rows.length
-        ),
-      ];
-      return { ...table };
-    });
+        ]}})
+    )
+    //   table.rows = [
+    //     ...table.rows,
+    //     new Row(
+    //       generateId(),
+    //       Array.from({ length: cellCount }).map(
+    //         (_, ind: number) => new Cell(generateId(), "", true, 1, 1, ind)
+    //       ),
+    //       false,
+    //       tableState.rows.length
+    //     ),
+    //   ];
+    //   return { ...table };
+    // });
   };
   const deleteRow = (id: string) => {
-    setTableState((table: TableType) => {
-      table.rows = table?.rows.filter((row) => row.id != id);
-      return { ...table };
-    });
+    dispatch(updateTableData({ questionId, tableData: { ...tableState, rows: tableState.rows.filter((row) => row.id !== id) } }))
+
   };
 
   const saveTable = async () => {
     try {
       setIsSavingTableData(true);
       const raw = await fetch(
-        `${import.meta.env.VITE_SERVER_URI}/section/table/${table.id}`,
+        `${import.meta.env.VITE_SERVER_URI}/section/table/${tableState.id}`,
         {
           method: "POST",
           headers: {
@@ -118,8 +107,7 @@ const TableUI = ({
             .sort((a: Row, b: Row) => a.index - b.index)
             .map((row: Row) => (
               <TableRow key={row.id} className=" border-green-300">
-                {row.cells
-                  .sort((a, b) => a.index - b.index).map((cell: Cell) => (
+                {row.cells.map((cell: Cell) => (
                   <TableHead
                     key={cell.id}
                     colSpan={cell.colSpan}
@@ -135,11 +123,9 @@ const TableUI = ({
         <TableBody>
           {tableState.rows
             .filter((row: Row) => !row.isHeading)
-            .sort((a: Row, b: Row) => a.index - b.index)
             .map((row: Row) => (
               <TableRow key={row.id} className=" hover:bg-white border-green-30 bg-blue-50">
                 {row.cells
-                  .sort((a, b) => a.index - b.index)
                   .map((cell: Cell) => (
                     <TableCell
                       key={cell.id}
@@ -151,19 +137,18 @@ const TableUI = ({
                         <span className={`inline-block w-full h-full ${cell.isHeading?'text-center font-semibold text-sm text-green-700':'text-left'}`}>{cell.data}</span>
                       ) : (
                         <CellInput
-                          getTableData={getTableData}
                           value={cell.data}
-                          rowId={row.id}
-                          cellId={cell.id}
-                          updateTableCell={updateTableCell}
-                          tableState={tableState}
+                          rowIndex={row.index}
+                          cellIndex={cell.index}
                           operation={cell.operation}
                           operands = {cell.operands}
+                          tableIndex={tableIndex}
+                          questionIndex={questionIndex}
                         />
                       )}
                     </TableCell>
                   ))}
-                {table.isDynamic && (
+                {tableState.isDynamic && (
                     <button onClick={()=>deleteRow(row.id)} className="mt-1 bg-transparent hover:bg-transparent hover:text-red-500 p-2 rounded-full duration-0 text-red-300">
                       <Trash2 className="duration-0" size={20}/>
                     </button>
@@ -183,7 +168,7 @@ const TableUI = ({
             "Save Table"
           )}
         </button>
-        {table.isDynamic && (
+        {tableState.isDynamic && (
           <div>
             <button
               className=" px-8 py-2 text-white bg-green-500 font-bold rounded-sm mr-5 mt-2"

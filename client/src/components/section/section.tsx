@@ -6,27 +6,33 @@ import TableUI from "../question/table";
 import TextQuestionUI from "../question/text";
 import { Button } from "@/components/ui/button";
 import { Question, SubSection, Table } from "@/models/models";
-import { plainToInstance } from "class-transformer";
-
 import {  Loader2, MessageSquareText } from "lucide-react";
-import React, { memo, useCallback, useEffect, useLayoutEffect, useState } from "react";
+import React, { memo, useEffect, useLayoutEffect, useState } from "react";
 import { toast } from "sonner";
 import {
   fetchSubsectionData,
   updateSubsectionData,
 } from "@/utils/dataFetching";
 import { useSearchParams } from "react-router-dom";
-// import UnitConverter from "../calc/Main.calc";
+import { useDispatch, useSelector } from "react-redux";
+import { setActiveSubsection, updateTextAnswer } from "@/features/activeSubsectionData/activeSubsectionSlice";
+import { RootState } from "@/store/store";
+
+
+
 interface SectionUiArgs {
   subsectionId: string;
 }
 
 const Section: React.FC<SectionUiArgs> = ({ subsectionId }) => {
+  const dispatch = useDispatch();
+
   const [searchParams] = useSearchParams();
   const [loaderProgress, setLoaderProgress] = useState<number>(10);
   const [isLoaderVisible, setIsLoaderVisible] = useState(true);
-  const [subsectionData, setSubsectionData] = useState<SubSection | null>(null);
   const [isSaving, setIsSaving] = useState<boolean>(false);
+
+  const subsectionData: SubSection = useSelector((state: RootState)=>state.activeSubsection.data)
 
   const smoothScrollTo = (targetY: number, duration = 1000) => {
     const startY = window.scrollY;
@@ -62,42 +68,6 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId }) => {
   const [selectedQuestionForComment, setSelectedQuestionForComment] =
     useState<string>("");
 
-  const updateTableData = (questionId: string, tableData: Table) => {
-    setSubsectionData(
-      (subSection: SubSection | null) =>
-        subSection && {
-          ...subSection,
-          questions: subSection.questions.map((question: Question) =>
-            question.id === questionId
-              ? {
-                  ...question,
-                  answer_table: question.answer_table?.map((table: Table) =>
-                    table.id === tableData.id ? tableData : table
-                  ),
-                }
-              : question
-          ),
-        }
-    );
-  };
-
-  const getTableData = useCallback((questionIndex: number, tableIndex: number): Table | null => {
-    return subsectionData?.questions.find(question => question.index === questionIndex)?.answer_table?.[tableIndex] ?? null
-  }, [subsectionData])
-
-  const updateTextAnswer = (questionId: string, answer: string) => {
-    setSubsectionData(
-      (subsectionData: SubSection | null) =>
-        subsectionData && {
-          ...subsectionData,
-          questions: subsectionData.questions.map((question: Question) =>
-            question.id === questionId
-              ? { ...question, answer_text: answer }
-              : question
-          ),
-        }
-    );
-  };
 
   useEffect(() => {
     let timer: NodeJS.Timeout | null = null;
@@ -106,7 +76,7 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId }) => {
       setLoaderProgress(0);
       fetchSubsectionData(subsectionId, setLoaderProgress)
         .then((res: Object) => {
-          setSubsectionData(plainToInstance(SubSection, res));
+          dispatch(setActiveSubsection(res as SubSection));
         })
         .finally(() => {
           setLoaderProgress(100);
@@ -140,7 +110,6 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId }) => {
           </h1>
           {subsectionData.questions &&
             subsectionData.questions
-              .sort((a, b) => a.index - b.index)
               .map((question: Question) => (
                 <div className="mb-5 py-3" key={question.id} id={question.id}>
                   <h3 className="text-center font-semibold text-green-500 text-lg mb-4">
@@ -166,15 +135,13 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId }) => {
 
                   {question.type === "TABLE" &&
                     question.answer_table &&
-                    question.answer_table.map((table: Table) => (
+                    question.answer_table.map((table: Table, tableIndex: number) => (
                       <TableUI
-                        subsectionData={subsectionData}
-                        getTableData={getTableData}
-                        updateTableData={(updatedTableData: Table) => {
-                          updateTableData(question.id, updatedTableData);
-                        }}
                         key={table.id}
-                        table={table}
+                        tableId={table.id}
+                        questionId={question.id}
+                        tableIndex={tableIndex}
+                        questionIndex={question.index}
                       />
                     ))}
                   {question.type === "TEXT" && (
@@ -182,14 +149,14 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId }) => {
                       value={question.answer_text}
                       key={question.id}
                       updateTextAnswer={(answer: string) =>
-                        updateTextAnswer(question.id, answer)
+                        dispatch(updateTextAnswer({questionId:question.id, answer}))
                       }
                     />
                   )}
                   {question.type === "BOOLEAN" && (
                     <BooleanInput
                       updateAnswer={(answer: string) =>
-                        updateTextAnswer(question.id, answer)
+                        dispatch(updateTextAnswer({questionId:question.id, answer}))
                       }
                       answer={question.answer_text}
                     />
@@ -222,7 +189,7 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId }) => {
       )}
       <ChatBox />
       <CommentSidebar
-        setSubsectionData={setSubsectionData}
+        setSubsectionData={(subsectionData: SubSection)=>{dispatch(setActiveSubsection(subsectionData))}}
         closeSidebar={() => setSelectedQuestionForComment("")}
         questionId={selectedQuestionForComment}
       />
