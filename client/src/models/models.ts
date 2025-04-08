@@ -75,6 +75,9 @@ export class Table {
   id: string;
   @Type(() => Row)
   rows: Row[];
+
+  conflict?: Row[] | null; //Stores the  rows if any
+
   constructor(id: string, rows: Row[], isDynamic: boolean) {
     this.id = id;
     this.rows = rows;

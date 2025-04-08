@@ -1,7 +1,8 @@
 import { updateCellData } from "@/features/activeSubsectionData/activeSubsectionSlice";
+import useDebounce from "@/hooks/use-debounce";
 import { Operation, SubSection } from "@/models/models";
 import { RootState } from "@/store/store";
-import { memo, useCallback, useEffect, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 interface CellInputArgs {
@@ -29,6 +30,10 @@ const CellInput: React.FC<CellInputArgs> = ({
     (state: RootState) => state.activeSubsection.data
   );
 
+
+  /**
+   * This function is used to get the value of a cell in a table.
+   */
   const getCellValue = useCallback(
     (
       questionIndex: number,
@@ -51,13 +56,10 @@ const CellInput: React.FC<CellInputArgs> = ({
 
   const [cellData, setCellData] = useState<string>(value);
 
-  const debounceInputValueChangeRef = useRef<any>();
 
-  useEffect(() => {
-    clearTimeout(debounceInputValueChangeRef.current);
 
-    debounceInputValueChangeRef.current = setTimeout(() => {
-      if (!operation) return;
+  const calculateCellValue = useDebounce(()=>{
+    if (!operation) return;
       const valueOfOperands: number[] | undefined = operands?.map((operand) => {
         if (operand.split("$").length === 1) {
           return parseFloat(operand);
@@ -76,9 +78,11 @@ const CellInput: React.FC<CellInputArgs> = ({
       });
       if (valueOfOperands)
         setCellData("" + performOperation(operation, valueOfOperands));
-    }, 200);
+    }, 200
+  )
 
-    return () => clearTimeout(debounceInputValueChangeRef.current);
+  useEffect(() => {
+    calculateCellValue()
   }, [subsection]);
 
   useEffect(() => {
