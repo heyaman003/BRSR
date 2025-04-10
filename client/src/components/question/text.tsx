@@ -13,6 +13,11 @@ const TextQuestionUI: React.FC<TextQuestionUIArgs> = ({ updateTextAnswer, value 
     updateTextAnswer(answer);
   }, [answer]);
 
+  useEffect(()=>{
+    if(value!==answer && value)
+      setAnswer(value)
+  }, [value])
+
   return (
     <TextareaAutosize
     minRows={1}

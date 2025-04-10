@@ -104,6 +104,16 @@ const activeSubsectionSlice = createSlice({
       };
     },
 
+    addConflictToText: (state, action: PayloadAction<{questionId: string, data: string}>) => {
+      state.data = {
+        ...state.data,
+        questions: state.data.questions.map(question=>({
+          ...question,
+          ...(question.id === action.payload.questionId && {text_conflict: action.payload.data})
+        }))
+      }
+    },
+
     addConflictToTable: (state, action: PayloadAction<Table>) => {
       state.data = {
         ...state.data,
@@ -118,7 +128,7 @@ const activeSubsectionSlice = createSlice({
       };
     },
 
-    acceptCurrentChange: (state, action: PayloadAction<{tableId: string}>) =>{
+    acceptCurrentChangeTable: (state, action: PayloadAction<{tableId: string}>) =>{
       state.data = {
         ...state.data,
         questions: state.data.questions.map((question: Question) => ({
@@ -132,7 +142,7 @@ const activeSubsectionSlice = createSlice({
       };
     },
 
-    acceptIncomingChange: (state, action: PayloadAction<{tableId: string}>) =>{
+    acceptIncomingChangeTable: (state, action: PayloadAction<{tableId: string}>) =>{
 
       // if (rows)
       state.data = {
@@ -146,6 +156,27 @@ const activeSubsectionSlice = createSlice({
           ),
         })),
       };
+    },
+
+    acceptCurrentChangeText: (state, action: PayloadAction<{questionId: string}>) =>{
+      state.data = {
+        ...state.data,
+        questions: state.data.questions.map((question: Question) => ({
+          ...question,
+         ...(question.id === action.payload.questionId && {text_conflict: ""})
+        })),
+      };
+    },
+
+    acceptIncomingChangeText: (state, action: PayloadAction<{questionId: string}>) =>{
+      state.data = {
+        ...state.data,
+        questions: state.data.questions.map((question: Question) => ({
+          ...question,
+          ...(question.id === action.payload.questionId && {answer_text:question.text_conflict,
+          text_conflict: ""})
+        })),
+      };
     }
   },
 });
@@ -156,7 +187,10 @@ export const {
   updateTextAnswer,
   updateCellData,
   addConflictToTable,
-  acceptCurrentChange,
-  acceptIncomingChange
+  acceptIncomingChangeTable,
+  acceptCurrentChangeTable,
+  addConflictToText,
+  acceptCurrentChangeText,
+  acceptIncomingChangeText
 } = activeSubsectionSlice.actions;
 export const activeSubsectionReducer = activeSubsectionSlice.reducer;

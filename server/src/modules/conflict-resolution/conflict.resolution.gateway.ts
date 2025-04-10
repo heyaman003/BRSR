@@ -23,7 +23,7 @@ export default class ConflictResolutionGateway {
         this.server.to(companyId).emit('table-change', {doneBy: userId, table: tabledata});
     }
 
-    broadcastSubsectionChange(companyId: string, subsection: Subsection) {
-        this.server.to(companyId).emit('subsection-change', subsection);
+    broadcastTextChange(companyId: string, questionId: string, data: string, userId: string) {
+        this.server.to(companyId).emit('text-change', {doneBy: userId, data, questionId});
     }
 }

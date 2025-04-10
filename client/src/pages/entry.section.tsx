@@ -12,7 +12,7 @@ import SectionUI from "@/components/section/section";
 import { useSearchParams } from "react-router-dom";
 import { conflictResolutionSocket } from "@/utils/socket";
 import { Table } from "@/types";
-import { addConflictToTable } from "@/features/activeSubsectionData/activeSubsectionSlice";
+import { addConflictToTable, addConflictToText } from "@/features/activeSubsectionData/activeSubsectionSlice";
 export default function QuestionnairePage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [companyId, setCompanyId] = useState<string | null>(null);
@@ -65,7 +65,7 @@ export default function QuestionnairePage() {
      * @param doneBy UserId of the user who triggered the operation
      * @param table The updated table data
      */
-    const notifyConflict = ({
+    const notifyTableConflict = ({
       doneBy,
       table,
     }: {
@@ -77,11 +77,32 @@ export default function QuestionnairePage() {
       }
     };
 
+    /**
+     *
+     * @param doneBy UserId of the user who triggered the operation
+     * @param table The updated table data
+     */
+    const notifyTextConflict = ({
+      doneBy,
+      questionId,
+      data
+    }: {
+      questionId: string;
+      data: string;
+      doneBy: string;
+    }) => {
+      if(doneBy!==userId){
+        dispatch(addConflictToText({questionId, data}))
+      }
+    };
+
     if (companyId) {
       conflictResolutionSocket.emit("join-room", { roomId: companyId });
-      conflictResolutionSocket.on("table-change", notifyConflict);
+      conflictResolutionSocket.on("table-change", notifyTableConflict);
+      conflictResolutionSocket.on("text-change", notifyTextConflict);
       return () => {
-        conflictResolutionSocket.off("table-change", notifyConflict);
+        conflictResolutionSocket.off("table-change", notifyTableConflict);
+        conflictResolutionSocket.off("text-change", notifyTextConflict);
       };
     }
   }, [companyId]);

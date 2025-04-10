@@ -19,10 +19,15 @@ import {
 import { DbService } from 'src/utils/db.connections';
 import { Prisma, PrismaClient, QuestionType } from '@prisma/client';
 import { Omit } from '@prisma/client/runtime/library';
+import ConflictResolutionGateway from '../conflict-resolution/conflict.resolution.gateway';
 
 @Injectable()
 export class SectionRepository {
-  constructor(private readonly db: DbService, private readonly logger: ConsoleLogger) {}
+  constructor(
+    private readonly db: DbService,
+    private readonly logger: ConsoleLogger,
+    private conflictResolution: ConflictResolutionGateway,
+  ) {}
 
   async retrieveAllSectionData(sectionId: string): Promise<Section> {
     const data = await this.db.section.findUnique({
@@ -53,7 +58,12 @@ export class SectionRepository {
     return data;
   }
 
-  async updateSubsectionData(id: string, data: SubSectionDTO, userId: string) {
+  async updateSubsectionData(
+    id: string,
+    data: SubSectionDTO,
+    userId: string,
+    companyId: string,
+  ) {
     try {
       await this.db.$transaction(async (tx) => {
         await tx.subsection.update({
@@ -81,14 +91,34 @@ export class SectionRepository {
             },
           },
         });
+
+        data.questions.forEach((question) => {
+          if (question.type !== 'TABLE')
+            this.conflictResolution.broadcastTextChange(
+              companyId,
+              question.id,
+              question.answer_text,
+              userId,
+            );
+        });
+
         await Promise.all(
           data.questions.map(
             async (question) =>
               await Promise.all(
-                question.answer_table.map(
-                  async (table) =>
-                    await this.updateTableData(table.id, table, userId, tx),
-                ),
+                question.answer_table.map(async (table) => {
+                  const updatedTable = await this.updateTableData(
+                    table.id,
+                    table,
+                    userId,
+                    tx,
+                  );
+                  this.conflictResolution.broadcastTableChange(
+                    companyId,
+                    updatedTable,
+                    userId,
+                  );
+                }),
               ),
           ),
         );
@@ -128,7 +158,7 @@ export class SectionRepository {
         data: {
           question: {
             update: {
-              isAnswered:this.isTableCompletelyFilled(data),
+              isAnswered: this.isTableCompletelyFilled(data),
               history: {
                 create: {
                   user: {
@@ -183,12 +213,11 @@ export class SectionRepository {
         include: {
           rows: {
             include: {
-              cells: true
-            }
-          }
-        }
-      }, 
-    );
+              cells: true,
+            },
+          },
+        },
+      });
     } catch (e) {
       if (!(e instanceof HttpException)) {
         this.logger.log(e);
@@ -371,11 +400,14 @@ export class SectionRepository {
 
   private isTableCompletelyFilled(table: Table | TableModel): boolean {
     let flag: boolean = true;
-    table.rows.filter(row=>!row.isHeading).forEach((row: Row | RowModel) =>
-      row.cells.forEach(
-        (cell: Cell | CellModel) => (flag = flag && (cell.data ? true : false)),
-      ),
-    );
+    table.rows
+      .filter((row) => !row.isHeading)
+      .forEach((row: Row | RowModel) =>
+        row.cells.forEach(
+          (cell: Cell | CellModel) =>
+            (flag = flag && (cell.data ? true : false)),
+        ),
+      );
     return flag;
   }
 }

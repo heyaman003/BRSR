@@ -9,7 +9,7 @@ import {
 } from "../ui/table";
 import { DialogFooter } from "../ui/dialog";
 import { useDispatch } from "react-redux";
-import { acceptCurrentChange, acceptIncomingChange } from "@/features/activeSubsectionData/activeSubsectionSlice";
+import { acceptCurrentChangeTable, acceptIncomingChangeTable } from "@/features/activeSubsectionData/activeSubsectionSlice";
 
 interface Props {
   table: TableType;
@@ -143,13 +143,13 @@ const ConflictResolutionTable: React.FC<Props> = ({ table }) => {
       <DialogFooter>
         <button
           className=" px-8 py-2 text-white bg-red-500 font-bold rounded-sm mr-5 mt-2"
-          onClick={()=>dispatch(acceptCurrentChange({tableId: table.id}))}
+          onClick={()=>dispatch(acceptCurrentChangeTable({tableId: table.id}))}
         >
           Accept Current Change
         </button>
         <button
           className=" px-8 py-2 text-white bg-green-500 font-bold rounded-sm mr-5 mt-2"
-          onClick={()=>{dispatch(acceptIncomingChange({tableId: table.id}))}}
+          onClick={()=>{dispatch(acceptIncomingChangeTable({tableId: table.id}))}}
         >
           Accept Incoming Change
         </button>

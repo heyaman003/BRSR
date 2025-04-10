@@ -38,7 +38,8 @@ export class SectionService {
     data: SubSectionModel,
     userId: string,
   ) {
-    return await this.sectionRepository.updateSubsectionData(id, data, userId);
+    const companyId: string = await this.userService.getCompanyOfUser(userId);
+    await this.sectionRepository.updateSubsectionData(id, data, userId, companyId);
   }
 
   async extractSectionToPDF(sectionId: string): Promise<string> {

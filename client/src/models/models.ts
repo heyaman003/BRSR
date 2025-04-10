@@ -101,6 +101,8 @@ export class Question {
   index: number;
   @Expose()
   heading?: string;
+  @Expose()
+  text_conflict?: string;
 
   _count: {
     comments: number;
