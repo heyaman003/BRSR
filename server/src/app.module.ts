@@ -14,6 +14,7 @@ import { ChatModule } from './modules/chat/chat.module';
 import { CommentModule } from './modules/question-comments/comment.module';
 import { MyLogger } from './utils/logger';
 import { NotificationModule } from './modules/notification/notification.module';
+import { ConflictResolutionModule } from './modules/conflict-resolution/conflict.resolution.module';
 
 @Module({
   imports: [
@@ -32,7 +33,8 @@ import { NotificationModule } from './modules/notification/notification.module';
     }),
     ChatModule,
     CommentModule,
-    NotificationModule
+    NotificationModule,
+    ConflictResolutionModule
   ],
   controllers: [AppController, ChatController],
   providers: [

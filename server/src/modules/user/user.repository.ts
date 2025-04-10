@@ -210,4 +210,16 @@ export class UserRepository {
       throw e;
     }
   }
+
+  async getCompanyOfUser(userId: string) {
+    const user = await this.db.user.findUnique({
+      where:{
+        id: userId,
+      },
+      select: {
+        companyId: true
+      }
+    })
+    return user?.companyId
+  }
 }

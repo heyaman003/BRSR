@@ -100,7 +100,7 @@ export class SectionRepository {
   }
 
   async saveTableData(id: string, data: TableDTO, userId: string) {
-    await this.updateTableData(id, data, userId, this.db);
+    return await this.updateTableData(id, data, userId, this.db);
   }
 
   // Updates table data according to the context(obj) provided
@@ -121,7 +121,7 @@ export class SectionRepository {
         >,
   ) {
     try {
-      await obj.table.update({
+      return await obj.table.update({
         where: {
           id,
         },
@@ -180,7 +180,15 @@ export class SectionRepository {
             })),
           },
         },
-      });
+        include: {
+          rows: {
+            include: {
+              cells: true
+            }
+          }
+        }
+      }, 
+    );
     } catch (e) {
       if (!(e instanceof HttpException)) {
         this.logger.log(e);

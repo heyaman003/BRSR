@@ -41,13 +41,13 @@ export class SectionController {
   }
 
   @Post('/table/:tableId')
-  async updateTableData(
+  async upsertTableData(
     @Param('tableId', ParseUUIDPipe) id: string,
     @Body(ValidationPipe) data: TableModel,
     @Req() request: Request
   ) {
     const userId: string = request['user']['sub'];
-    await this.sectionService.createTable(id, data, userId);
+    await this.sectionService.upsertTable(id, data, userId);
     return new ResponseModel(201, 'Saved table data successfully');
   }
 
