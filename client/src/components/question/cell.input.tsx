@@ -30,6 +30,10 @@ const CellInput: React.FC<CellInputArgs> = ({
     (state: RootState) => state.activeSubsection.data
   );
 
+  useEffect(()=>{
+    if(value!==cellData)
+      setCellData(value)
+  }, [value])
 
   /**
    * This function is used to get the value of a cell in a table.

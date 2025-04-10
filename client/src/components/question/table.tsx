@@ -36,6 +36,7 @@ const TableUI = ({
         .find((question) => question.id === questionId)
         ?.answer_table?.find((table) => table.id === tableId) as TableType
   );
+
   const [isSavingTableData, setIsSavingTableData] = useState<boolean>(false);
   const conflict = useSelector(
     (state: RootState) =>
