@@ -25,9 +25,10 @@ import { RootState } from "@/store/store";
 
 interface SectionUiArgs {
   subsectionId: string;
+  companyId: string | null;
 }
 
-const Section: React.FC<SectionUiArgs> = ({ subsectionId }) => {
+const Section: React.FC<SectionUiArgs> = ({ subsectionId, companyId }) => {
   const dispatch = useDispatch();
 
   const [searchParams] = useSearchParams();
@@ -135,12 +136,14 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId }) => {
                     </span>
                   </button>
                 </div>
-
+                
+                {/* When question type is table */}
                 {question.type === "TABLE" &&
                   question.answer_table &&
                   question.answer_table.map(
                     (table: Table, tableIndex: number) => (
                       <TableUI
+                        companyId={companyId}
                         key={table.id}
                         tableId={table.id}
                         questionId={question.id}
@@ -149,6 +152,8 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId }) => {
                       />
                     )
                   )}
+
+                {/* When question type is a text */}
                 {question.type === "TEXT" && (
                   <>
                     <span className="flex gap-4 my-2 ml-1 w-[97%]">
@@ -164,37 +169,129 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId }) => {
                           )
                         }
                       />
+
+                      {/* When text question has conflicts - render the button to accept the current change */}
                       {question.text_conflict && (
-                        <Button onClick={()=>dispatch(acceptCurrentChangeText({questionId: question.id}))} className="bg-red-500 text-white font-semibold px-3 py-1 w-52">
+                        <Button
+                          onClick={() =>
+                            dispatch(
+                              acceptCurrentChangeText({
+                                questionId: question.id,
+                              })
+                            )
+                          }
+                          className="bg-red-500 hover:bg-red-600 text-white font-semibold px-3 py-1 w-52"
+                        >
                           Accept Current Change
                         </Button>
                       )}
                     </span>
+                    
+                    {/* When text question has conflicts -  render the incoming change */}
                     {question.text_conflict && (
                       <span className="flex gap-4 my-2 ml-1 w-[97%]">
-                        <div
-                          className={`ml-1 flex rounded-md border-input bg-background px-3 py-2 text-sm
-              file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground
-              disabled:cursor-not-allowed disabled:opacity-50 outline-none w-[97%] bg-green-100 border border-green-600 text-green-800`}
+                        <pre
+                          className={`ml-1 max-h-32 overflow-auto flex rounded-md border-input bg-background px-3 py-2 text-sm
+                          file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground
+                          disabled:cursor-not-allowed disabled:opacity-50 outline-none w-[97%] bg-green-100 border border-green-600 text-green-800`}
                         >
                           {question.text_conflict}
-                        </div>
-                        <Button onClick={()=>dispatch(acceptIncomingChangeText({questionId: question.id}))} className="bg-green-600 text-white font-semibold px-3 py-1 w-52">
+                        </pre>
+
+                        {/* Button to accept the incoming change */}
+                        <Button
+                          onClick={() =>
+                            dispatch(
+                              acceptIncomingChangeText({
+                                questionId: question.id,
+                              })
+                            )
+                          }
+                          className="bg-green-600 text-white font-semibold px-3 py-1 w-52"
+                        >
                           Accept Incoming Change
                         </Button>
                       </span>
                     )}
                   </>
                 )}
+
+                {/* When question type is boolean */}
                 {question.type === "BOOLEAN" && (
-                  <BooleanInput
-                    updateAnswer={(answer: string) =>
-                      dispatch(
-                        updateTextAnswer({ questionId: question.id, answer })
-                      )
-                    }
-                    answer={question.answer_text}
-                  />
+                  <>
+                    <div className="flex gap-4 pr-7">
+                      <BooleanInput
+                        updateAnswer={(answer: string) =>
+                          dispatch(
+                            updateTextAnswer({
+                              questionId: question.id,
+                              answer,
+                            })
+                          )
+                        }
+                        answer={question.answer_text}
+                      />
+
+                      {/* Button to accept the current change in case of conflict */}
+                      {question.text_conflict && (
+                        <Button
+                          onClick={() =>
+                            dispatch(
+                              acceptCurrentChangeText({
+                                questionId: question.id,
+                              })
+                            )
+                          }
+                          className="bg-red-500 hover:bg-red-600 text-white font-semibold px-3 py-1 w-52"
+                        >
+                          Accept Current Change
+                        </Button>
+                      )}
+                    </div>
+
+                    {/* Render Incoming change in case of conflicts */}
+                    {question.text_conflict && (
+                      <div className="flex pr-7 mt-4 gap-4">
+                        <button
+                          disabled={true}
+                          className={` ${
+                            question.text_conflict?.startsWith("1")
+                              ? "bg-green-600"
+                              : "bg-red-600"
+                          } rounded-sm px-8 py-2 text-gray-50 font-bold text-sm`}
+                        >
+                          {question.text_conflict?.startsWith("1")
+                            ? "Yes"
+                            : "No"}
+                        </button>
+
+                        <input
+                          placeholder="Reason"
+                          className=" flex-grow px-3 py-1 rounded-sm border border-gray-300"
+                          disabled={true}
+                          value={
+                            question.text_conflict
+                              ? question.text_conflict.substring(1)
+                              : ""
+                          }
+                        />
+
+                        {/* Button to accept the incoming conflict */}
+                        <Button
+                          onClick={() =>
+                            dispatch(
+                              acceptIncomingChangeText({
+                                questionId: question.id,
+                              })
+                            )
+                          }
+                          className="bg-green-600 text-white font-semibold px-3 py-1 w-52"
+                        >
+                          Accept Incoming Change
+                        </Button>
+                      </div>
+                    )}
+                  </>
                 )}
               </div>
             ))}
@@ -206,7 +303,7 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId }) => {
             disabled={isSaving}
             onClick={() => {
               setIsSaving(true);
-              toast.promise(updateSubsectionData(subsectionData), {
+              toast.promise(updateSubsectionData(subsectionData, companyId || ''), {
                 success: (res) => {
                   return res.message;
                 },

@@ -1,9 +1,10 @@
 import { ConsoleLogger } from "@nestjs/common";
 import { ConnectedSocket, MessageBody, SubscribeMessage, WebSocketGateway, WebSocketServer } from "@nestjs/websockets";
-import { Subsection, Table } from "@prisma/client";
+import { Table } from "@prisma/client";
 import { Server, Socket } from "socket.io";
 
 
+// Websocket listens to 8001 port
 @WebSocketGateway(8001, {namespace: 'conflict-resolution', cors: {
     origin: ['http://localhost:5173'],
     credentials: true

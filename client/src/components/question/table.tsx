@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { updateTableData } from "@/features/activeSubsectionData/activeSubsectionSlice";
 import ConflictResolutionDialog from "../conflict-resolution/conflict.resolution.dialog";
+import { useFetch } from "@/hooks/use-fetch";
 const generateId = () => new BSON.ObjectId().toString();
 
 const TableUI = ({
@@ -23,12 +24,16 @@ const TableUI = ({
   questionId,
   tableIndex,
   questionIndex,
+  companyId
 }: {
   tableId: string;
   questionId: string;
   tableIndex: number;
   questionIndex: number;
+  companyId: string | null;
 }) => {
+  const customFetch = useFetch();
+
   const dispatch = useDispatch();
   const tableState: TableType = useSelector(
     (state: RootState) =>
@@ -45,6 +50,8 @@ const TableUI = ({
       ]?.conflict
   );
 
+
+  // Function to add a row to a dynamic table
   const addRow = () => {
     const cellCount = tableState.rows[tableState.rows.length - 1].cells.length;
     dispatch(
@@ -66,20 +73,9 @@ const TableUI = ({
         },
       })
     );
-    //   table.rows = [
-    //     ...table.rows,
-    //     new Row(
-    //       generateId(),
-    //       Array.from({ length: cellCount }).map(
-    //         (_, ind: number) => new Cell(generateId(), "", true, 1, 1, ind)
-    //       ),
-    //       false,
-    //       tableState.rows.length
-    //     ),
-    //   ];
-    //   return { ...table };
-    // });
   };
+
+  // Function to delete a row from a dynamic table
   const deleteRow = (id: string) => {
     dispatch(
       updateTableData({
@@ -92,27 +88,14 @@ const TableUI = ({
     );
   };
 
-  const saveTable = async () => {
+  const saveTable = async (companyId: string) => {
     try {
       setIsSavingTableData(true);
-      const raw = await fetch(
-        `${import.meta.env.VITE_SERVER_URI}/section/table/${tableState.id}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-Csrf-Token": sessionStorage.getItem("X-Csrf-Token") || "",
-          },
-          credentials: "include",
-          body: JSON.stringify(tableState),
-        }
-      );
-
-      const res = await raw.json();
-
-      if (raw.status < 200 || raw.status > 399) throw new Error(res.message);
+      
+      const res = await customFetch(`/section/table/${tableState.id}/${companyId}`, {method: 'POST', body: tableState});
 
       toast.success(res.message);
+
     } catch (e) {
       if (e instanceof Error) toast.error(e.message);
     } finally {
@@ -203,7 +186,7 @@ const TableUI = ({
           <button
             disabled={conflict ? true : false}
             className=" px-8 py-2 text-white bg-yellow-500 font-bold rounded-sm mr-5 mt-2 disabled:bg-yellow-700 disabled:text-gray-200 disabled:cursor-not-allowed"
-            onClick={saveTable}
+            onClick={()=>saveTable(companyId || '')}
           >
             {isSavingTableData ? (
               <Loader2 className="animate-spin" />

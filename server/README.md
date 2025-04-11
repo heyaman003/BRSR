@@ -1,99 +1,102 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+In /src/modules folder all the modules are listed i.e.:
+  /auth - Includes the user authentication related APIs.
+  /chat - Pending (AI Chatbot)
+  /company - Includes the company details related APIs.
+  /conflict-resolution - Has the websocket endpoints related to conflict-resolution in      table and subsections.
+  /notification - Manages the notification system
+  /question-comments -  Manages the comment related feature
+  /section - Includes all the APIs related to subsection, question and table.
+  /user -  Manages all the user related APIs.
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Each module has their own repository, service, controller and module.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+Route information:
 
-## Description
+  /src/modules/auth:
+       
+       - POST "/auth/signin" - User signin.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+       - POST "/auth/logout" - Logout the current user.
 
-## Project setup
+       - GET "/auth/userdetails" -  Get the userdetails of the currently logged in user.
+    
+  /chat: 
 
-```bash
-$ npm install
-```
+  
+  /src/modules/company:
 
-## Compile and run the project
+       - POST "/company" - Creates a company. 
+       - GET "/company/all" - Lists all the companies. 
+       - GET "/company/:companyId" -  Lists the company details of a given company.
+       - DELETE "/company/:companyId" -  Deletes a given company.
+       - GET "/company/:companyId/sections" -  Lists the section details of a given company. i.e Sections, Subsections and Questions. * Not the answer to the questions.
+       - GET "/company/:companyId/questions/stats" - Lists the questions stats of the company. i.e. the total number of questions and total answered among them.
+        
+  /src/modules/conflict-resolution:
+      Contains the websocket endpoints related to conflict resolutions.
 
-```bash
-# development
-$ npm run start
+       - /conflict-resolution/join-room - Join a room in the conflict-resolution namespace.
 
-# watch mode
-$ npm run start:dev
+       - Method that broadcasts the table change in a room. (to be used by other services).
 
-# production mode
-$ npm run start:prod
-```
+       - Mathod that broadcasts text answer change in a room. (to be used by other services).
 
-## Run tests
+  /src/modules/notification:
+      Contains the logic regarding the user mention notification.
+        
+       - Server Sent Event - "/notification/mentions/:userId" - Add client to the set of active clients.
 
-```bash
-# unit tests
-$ npm run test
+       - GET - "/notification/mentions/:userId/close" - Remove client from the set of active clients.
 
-# e2e tests
-$ npm run test:e2e
+       - Method - sendNotification(userId, data) - Sends notification
+  
+  /src/modules/question-comment:
+      Contains the logic regarding the question comments feature.
+       
+       - POST - "/comment" - Adds a comment to the given question
 
-# test coverage
-$ npm run test:cov
-```
+       - GET - "/comment" - Lists all the comments corresponding to a question
 
-## Deployment
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+  /src/modules/section:
+      
+      - GET - "/section/subsection/:subsectionId" - Fetches the whole subsection data, i.e. all the questions, tables, rows and cells.
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+      - POST - "/section/subsection/:subsectionId" - Saves the subsection data.
 
-```bash
-$ npm install -g mau
-$ mau deploy
-```
+      - POST - "/section/table/:tableId" - Updates a table.
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+  /src/modules/section:
 
-## Resources
+      - GET - "/section/:sectionId/extract" - Exports the given section data to a pdf.
 
-Check out a few resources that may come in handy when working with NestJS:
+      - GET -  "/section/:qeustionId/hisotry" - Lists the history of a question.
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
 
-## Support
+  /src/modules/user:
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+      - POST - "/user/create/client" - Create an user with client role. Requires Admin or Superadmin privilege.
+      
+      - POST - "/user/create/client" - Create an user with client role. Requires Admin or Superadmin privilege.
 
-## Stay in touch
+      - POST - "/user/create/admin" - Create an user with role Admin. Requires Superadmin privilege.
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+      - DELETE - "/user/userId" - Deletes an user.
 
-## License
+      - GET - "/get/mentions" - Fetches all the mentions corresponding to an user.
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+
+
+In /src/utils all the utility files are present:
+
+    /src/utils/auth includes the authentication related utilites:
+
+        - auth.guard.ts - includes the authentication guard. This is a global guard applied to all routes in the application.
+
+        - public.decorator.ts - includes the custom decorator that marks any route as Public route. A public is used to bypass authentication on a route.
+
+        - roles.decorator.ts - decorator that sets the role for any route
+
+    /src/utils/interceptors includes all the interceptors in the application:
+
+        - /src/utils/interceptors/process-response.interceptor.ts has the interceptor that intercepts all the http response going out from the application and processes it. i.e. updates the statuscode and deletes empty body.

@@ -33,13 +33,13 @@ const doesSubsectionHaveConflict = (subsection: SubSection): boolean => {
   return false;
 };
 
-export const updateSubsectionData = async (subsectionData: SubSection) => {
+export const updateSubsectionData = async (subsectionData: SubSection, companyId: string) => {
   if(doesSubsectionHaveConflict(subsectionData))
     throw new Error("Please resolve all the conflicts first.")
   const raw = await fetch(
     `${import.meta.env.VITE_SERVER_URI}/section/subsection/${
       subsectionData.id
-    }`,
+    }/${companyId}`,
     {
       credentials: "include",
       method: "POST",

@@ -94,6 +94,7 @@ export class SectionRepository {
 
         data.questions.forEach((question) => {
           if (question.type !== 'TABLE')
+            // Broadcasting the answer change to corresponding company room
             this.conflictResolution.broadcastTextChange(
               companyId,
               question.id,
@@ -113,6 +114,7 @@ export class SectionRepository {
                     userId,
                     tx,
                   );
+                  // Broadcasting the table change to corresponding company room
                   this.conflictResolution.broadcastTableChange(
                     companyId,
                     updatedTable,

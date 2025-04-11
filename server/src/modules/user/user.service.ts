@@ -12,10 +12,6 @@ import { hash } from 'bcryptjs';
 export class UserService {
   constructor(private userRepository: UserRepository) {}
 
-  login(data: any) {
-    console.log(data);
-  }
-
   /**
    *
    * @param userId
@@ -63,7 +59,7 @@ export class UserService {
   }
 
   async getMentionDetails(mentionId: string) {
-    const mention = await this.userRepository.getMention(mentionId);
+    const mention = await this.userRepository.getMentionDetails(mentionId);
     if(!mention)
       throw new NotFoundException('Mention does not exist.');
     return this.convertToMentionDto(mention);

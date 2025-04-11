@@ -6,7 +6,7 @@ import { UserModule } from './modules/user/user.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './modules/auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
-import { AuthGuard } from './utils/auth/AuthGuard';
+import { AuthGuard } from './utils/auth/auth.guard';
 import { SectionModule } from './modules/section/section.module';
 import { ChatController } from './modules/chat/chat.controller';
 import { ChatService } from './modules/chat/chat.service';

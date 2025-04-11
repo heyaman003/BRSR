@@ -4,14 +4,12 @@ import { SectionRepository } from './section.repository';
 import { SubSectionModel, TableModel } from './section.dtos';
 import { generatePdf } from 'src/utils/convertToPdf';
 import ConflictResolutionGateway from '../conflict-resolution/conflict.resolution.gateway';
-import { UserService } from '../user/user.service';
 
 @Injectable()
 export class SectionService {
   constructor(
     private readonly sectionRepository: SectionRepository,
     private readonly conflicResolution: ConflictResolutionGateway,
-    private readonly userService: UserService,
   ) {}
   async getSubsections(id: string) {
     return await this.sectionRepository.getSubsectionData(id);
@@ -22,24 +20,35 @@ export class SectionService {
   }
 
   async upsertTable(
-    id: string,
+    tableId: string,
+    companyId: string,
     table: TableModel,
     userId: string,
   ): Promise<void> {
-    const [updatedTable, userCompanyId] = await Promise.all([
-      this.sectionRepository.saveTableData(id, table, userId),
-      this.userService.getCompanyOfUser(userId),
-    ]);
-    this.conflicResolution.broadcastTableChange(userCompanyId, updatedTable, userId);
+    const updatedTable = await this.sectionRepository.saveTableData(
+      tableId,
+      table,
+      userId,
+    );
+    this.conflicResolution.broadcastTableChange(
+      companyId,
+      updatedTable,
+      userId,
+    );
   }
 
   async updateSubsectionData(
-    id: string,
+    subsectionId: string,
+    companyId: string,
     data: SubSectionModel,
     userId: string,
   ) {
-    const companyId: string = await this.userService.getCompanyOfUser(userId);
-    await this.sectionRepository.updateSubsectionData(id, data, userId, companyId);
+    await this.sectionRepository.updateSubsectionData(
+      subsectionId,
+      data,
+      userId,
+      companyId,
+    );
   }
 
   async extractSectionToPDF(sectionId: string): Promise<string> {

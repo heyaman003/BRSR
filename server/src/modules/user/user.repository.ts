@@ -117,6 +117,10 @@ export class UserRepository {
     }
   }
 
+  /**
+   * Fetches all the mentions involving the given user
+   * @param userId 
+   */
   async getMentions(userId: string) {
     try {
       return await this.db.user.findUnique({
@@ -166,7 +170,11 @@ export class UserRepository {
     }
   }
 
-  async getMention(mentionId: string) {
+  /**
+   * Fetches the details of a mention
+   * @param mentionId 
+   */
+  async getMentionDetails(mentionId: string) {
     try {
       return await this.db.mention.findUnique({
         where: { id: mentionId },
@@ -211,6 +219,10 @@ export class UserRepository {
     }
   }
 
+  /**
+   * Fetches the companyId corresponding to an user 
+   * @param userId
+   */
   async getCompanyOfUser(userId: string) {
     const user = await this.db.user.findUnique({
       where:{

@@ -137,7 +137,7 @@ export default function QuestionnairePage() {
               activeSection={activeSection}
               setActiveSection={setActiveSection}
             />
-            <SectionUI subsectionId={activeSubsection} />
+            <SectionUI subsectionId={activeSubsection} companyId={companyId} />
           </div>
         </div>
       </div>
