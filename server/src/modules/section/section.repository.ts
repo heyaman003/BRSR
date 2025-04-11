@@ -16,7 +16,7 @@ import {
   RowModel,
   CellModel,
 } from './section.dtos';
-import { DbService } from 'src/utils/db.connections';
+import { DbService } from 'prisma/db.connections';
 import { Prisma, PrismaClient, QuestionType } from '@prisma/client';
 import { Omit } from '@prisma/client/runtime/library';
 import ConflictResolutionGateway from '../conflict-resolution/conflict.resolution.gateway';

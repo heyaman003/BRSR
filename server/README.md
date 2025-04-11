@@ -1,4 +1,6 @@
+
 In /src/modules folder all the modules are listed i.e.:
+
   /auth - Includes the user authentication related APIs.
   /chat - Pending (AI Chatbot)
   /company - Includes the company details related APIs.
@@ -100,3 +102,8 @@ In /src/utils all the utility files are present:
     /src/utils/interceptors includes all the interceptors in the application:
 
         - /src/utils/interceptors/process-response.interceptor.ts has the interceptor that intercepts all the http response going out from the application and processes it. i.e. updates the statuscode and deletes empty body.
+
+
+    /src/utils/convertToPdf.ts contains method for exporting a subsection to a PDF
+
+

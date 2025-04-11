@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { Role, User } from '@prisma/client';
 import { CreateUserDto, UserRole } from 'src/modules/user/user.dtos';
-import { DbService } from 'src/utils/db.connections';
+import { DbService } from 'prisma/db.connections';
 
 @Injectable()
 export class UserRepository {

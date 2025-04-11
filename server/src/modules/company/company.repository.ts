@@ -6,7 +6,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { User, Company } from '@prisma/client';
-import { DbService } from 'src/utils/db.connections';
+import { DbService } from 'prisma/db.connections';
 import { Section } from '../section/initialData';
 import { SectionService } from '../section/section.service';
 
