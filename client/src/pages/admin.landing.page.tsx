@@ -14,10 +14,7 @@ const AdminLandingPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState<Boolean>(true);
   const [viewMode, setViewMode] = useState<String>("list");
 
-  // const onCompanyCreated=(company:{ id: number; name: string })=>{
-  //   console.log("new company created",company);
-  //   setCompanies((prev) => ([...prev, company])); // ✅ Handles null case
-  //     }
+  
   useEffect(() => {
     fetchAllCompanies().then((companies) => {
       setCompanies(companies);

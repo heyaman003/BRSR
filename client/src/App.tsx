@@ -45,10 +45,18 @@ function App() {
         <div>
           <Toaster richColors />
           <Routes>
+            {/* Landing page */}
             <Route path="/" element={<Home />} />
+            
+            {/* Main page for client */}
             <Route path="/brsr-making" element={<Homepage />} />
+
             <Route path="/login" element={<LoginForm onLogin={handleLogin} />} />
+
+            {/* Page that lists all the users of a company */}
             <Route path="/company" element={<CompanyUser />} />
+
+            {/* Main page for superadmin*/}
             <Route path="/admin/brsr" element={<AdminCompany />} />
           </Routes>
         </div>
