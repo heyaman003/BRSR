@@ -25,6 +25,26 @@ const MentionsDropdown: React.FC<MentionsContainerProps> = ({ userId }) => {
   const customFetch = useFetch();
   const navigate = useNavigate();
 
+
+
+const fetchMentions = async () => {
+  const res = await customFetch(`/user/mentions`, {
+    method: 'GET'
+  });
+  return res.data;
+};
+
+const closeNotificationListenerAPI = (userId: string) => {
+  customFetch(
+    `/notification/mentions/${userId}/close`,
+    {
+      method: 'GET',
+      keepalive: true
+    }
+  );
+};
+
+
   // Listening to mention notifications
   const [mentions, setMentions] = useState<Mention[]>([]);
   const [open, setOpen] = useState(false);
@@ -172,28 +192,3 @@ const MentionsDropdown: React.FC<MentionsContainerProps> = ({ userId }) => {
 };
 
 export default MentionsDropdown;
-
-const fetchMentions = async () => {
-  const raw = await fetch(`${import.meta.env.VITE_SERVER_URI}/user/mentions`, {
-    credentials: "include",
-    headers: {
-      "X-Csrf-Token": sessionStorage.getItem("X-Csrf-Token") || "",
-    },
-  });
-  const res = await raw.json();
-  return res.data;
-};
-
-const closeNotificationListenerAPI = (userId: string) => {
-  fetch(
-    `${import.meta.env.VITE_SERVER_URI}/notification/mentions/${userId}/close`,
-    {
-
-      credentials: "include",
-      keepalive: true,
-      headers: {
-        "X-Csrf-Token": sessionStorage.getItem("X-Csrf-Token") || "",
-      },
-    }
-  );
-};

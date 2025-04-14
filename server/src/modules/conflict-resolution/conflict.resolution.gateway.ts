@@ -5,10 +5,10 @@ import { Server, Socket } from "socket.io";
 
 
 // Websocket listens to 8001 port
-@WebSocketGateway(8001, {namespace: 'conflict-resolution', cors: {
+@WebSocketGateway(parseInt(process.env.WS_PORT || '8001'), {namespace: 'conflict-resolution', ...(process.env.PROFILE==='dev' && {cors: {
     origin: ['http://localhost:5173'],
     credentials: true
-}})
+}})})
 export default class ConflictResolutionGateway {
     @WebSocketServer()
     server: Server

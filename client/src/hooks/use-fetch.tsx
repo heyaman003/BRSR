@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 /**
  * Custom hook for fetching API data that bstracts the need of attaching CSRF and security related headers with every request decreasing redundancy in code.
@@ -10,10 +11,12 @@ export const useFetch = () => {
     endpoint: string,
     {
       method,
-      body
+      body,
+      keepalive = false
     }: {
       method: "POST" | "GET" | "PUT" | "DELETE" | "PATCH";
       body?: any;
+      keepalive?: boolean
     }
   ): Promise<any> => {
 
@@ -27,6 +30,7 @@ export const useFetch = () => {
       headers,
       credentials: "include", //Attaches the csrf and security related cookie with the request
       ...(body && { body: JSON.stringify(body) }),
+      keepalive
     });
 
     // When not loggedin navigate to /login page
@@ -35,9 +39,14 @@ export const useFetch = () => {
       throw new Error("Unauthorized: Please login again.");
     }
 
+    if(response.status === 404) {
+      navigate("/notfound")
+    }
+
     const data = await response.json();
 
     if (response.status > 399 || response.status < 200) {
+      toast.error("Something went wrong.")
       throw new Error(data.message);
     }
     return data;

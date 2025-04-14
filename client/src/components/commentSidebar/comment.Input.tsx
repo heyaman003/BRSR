@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { useFetch } from "@/hooks/use-fetch";
 import { User } from "@/lib/types";
 import { Comment } from "@/models/models";
 import { RootState } from "@/store/store";
@@ -22,10 +23,55 @@ const CommentInput: React.FC<CommentInputProps> = ({
   const companyId = useSelector(
     (root: RootState) => root.auth.user?.data?.companyId
   );
+  const customFetch = useFetch()
   const [users, setUsers] = useState<User[]>([]);
   const [commentText, setCommentText] = useState<string>("");
   const [isAddingComment, setIsAddingComment] = useState<boolean>(false);
   const [mentions, setMentions] = useState<MentionItem[]>([]);
+
+  const loadCompanyUsers = async (
+    companyId: string | null
+  ): Promise<Object | void> => {
+    try {
+      if (!companyId) throw new Error("Company not found.");
+
+
+      const res = await customFetch(
+        `/company/${companyId}`,
+        {
+          method: "GET",
+        }
+      );
+
+      if (res.statusCode > 399 || res.statusCode < 200) throw new Error(res.message);
+      return res.data.users;
+    } catch (e) {
+      console.log(e);
+      throw e;
+    }
+  };
+
+  async function addComent(
+    questionId: string,
+    comment: string,
+    mentions: string[]
+  ) {
+    try {
+      const res = await customFetch(`/comment`, {
+        method: "POST",
+        body: {
+          questionId,
+          data: comment,
+          mentions,
+        }
+      });
+      if (res.statusCode < 200 || res.statusCode >= 400) throw new Error(res.message);
+      return res.data;
+    } catch (e) {
+      if (e instanceof Error) toast.error(e.message);
+      throw e;
+    }
+  }
 
   useEffect(() => {
     if (companyId)
@@ -47,20 +93,20 @@ const CommentInput: React.FC<CommentInputProps> = ({
         style={{
           "&multiLine": {
             control: {
-                fontSize: 14
+              fontSize: 14,
             },
             highlighter: {
               padding: 9,
               border: "2px solid green",
-              height: '80px',
-              borderRadius: '5px',
+              height: "80px",
+              borderRadius: "5px",
             },
             input: {
               padding: 9,
               border: "2px solid green",
-              borderRadius: '5px',
-              height: '80px',
-              color: '#2e2e2e'
+              borderRadius: "5px",
+              height: "80px",
+              color: "#2e2e2e",
             },
           },
         }}
@@ -68,7 +114,7 @@ const CommentInput: React.FC<CommentInputProps> = ({
         value={commentText}
         onChange={(_e, newValue, _newTextValue, mentions) => {
           setCommentText(newValue);
-          setMentions(mentions)
+          setMentions(mentions);
         }}
         customSuggestionsContainer={(children) => (
           <ul className="focus:border-4">{children}</ul>
@@ -79,8 +125,8 @@ const CommentInput: React.FC<CommentInputProps> = ({
           appendSpaceOnAdd={true}
           trigger={"@"}
           style={{
-            backgroundColor: 'rgb(187 247 208)',
-            color: "white"
+            backgroundColor: "rgb(187 247 208)",
+            color: "white",
           }}
           data={users.map((user) => ({ id: user.id, display: user.name }))}
           renderSuggestion={(
@@ -105,7 +151,11 @@ const CommentInput: React.FC<CommentInputProps> = ({
         disabled={isAddingComment}
         onClick={() => {
           setIsAddingComment(true);
-          addComent(questionId, commentText, mentions.map(mention=>mention.id))
+          addComent(
+            questionId,
+            commentText,
+            mentions.map((mention) => mention.id)
+          )
             .then((res) => {
               setComments((prevComments: Comment[]) => [res, ...prevComments]);
               setCommentText("");
@@ -128,52 +178,3 @@ const CommentInput: React.FC<CommentInputProps> = ({
 };
 
 export default CommentInput;
-
-const loadCompanyUsers = async (
-  companyId: string | null
-): Promise<Object | void> => {
-  try {
-    if (!companyId) throw new Error("Company not found.");
-
-    const raw = await fetch(
-      `${import.meta.env.VITE_SERVER_URI}/company/${companyId}`,
-      {
-        credentials: "include",
-        headers: {
-          "X-Csrf-Token": sessionStorage.getItem("X-Csrf-Token") || "",
-        },
-      }
-    );
-    const res = await raw.json();
-
-    if (raw.status > 399 || raw.status < 200) throw new Error(res.message);
-    return res.data.users;
-  } catch (e) {
-    console.log(e);
-    throw e;
-  }
-};
-
-async function addComent(questionId: string, comment: string, mentions: string[]) {
-  try {
-    const raw = await fetch(`${import.meta.env.VITE_SERVER_URI}/comment`, {
-      method: "POST",
-      credentials: "include",
-      body: JSON.stringify({
-        questionId,
-        data: comment,
-        mentions
-      }),
-      headers: {
-        "Content-Type": "application/json",
-        "X-Csrf-Token": sessionStorage.getItem("X-Csrf-Token") || "",
-      },
-    });
-    const res = await raw.json();
-    if (raw.status < 200 || raw.status >= 400) throw new Error(res.message);
-    return res.data;
-  } catch (e) {
-    if (e instanceof Error) toast.error(e.message);
-    throw e;
-  }
-}

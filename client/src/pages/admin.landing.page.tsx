@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import CompanyCard from "@/components/component/company.card";
 import CompanyTabs from "@/components/component/CompanyTabs";
 import CreateCompanyForm from "@/components/create.company.form";
+import { useFetch } from "@/hooks/use-fetch";
 
 interface Company {
   id: string;
@@ -13,6 +14,16 @@ const AdminLandingPage: React.FC = () => {
   const [companies, setCompanies] = useState<Company[]>([]);
   const [isLoading, setIsLoading] = useState<Boolean>(true);
   const [viewMode, setViewMode] = useState<String>("list");
+  const customFetch = useFetch();
+
+
+  const fetchAllCompanies = async () => {
+    const res = await customFetch(`/company/all`, {
+      method: 'GET'
+    });
+
+    return res.data;
+  };
 
   
   useEffect(() => {
@@ -121,13 +132,3 @@ const LoadingSkeleton = () => {
 
 export default AdminLandingPage;
 
-const fetchAllCompanies = async () => {
-  const raw = await fetch(`${import.meta.env.VITE_SERVER_URI}/company/all`, {
-    credentials: "include",
-    headers: { "X-Csrf-Token": sessionStorage.getItem("X-Csrf-Token") || "" },
-  });
-
-  const res = await raw.json();
-
-  return res.data;
-};

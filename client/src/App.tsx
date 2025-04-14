@@ -7,19 +7,22 @@ import Home from "@/components/pages/Home";
 import CompanyUser from "@/pages/company.user";
 import { Toaster } from "sonner";
 import AdminCompany from "./pages/admin.brsr";
+import NotFound from "./pages/notfound";
 
 function App() {
   const [_isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoadingCsrf, setIsLoadingCsrf] = useState(true);
   const navigate = useNavigate();
 
-  // Check login state on component mount
   useEffect(() => {
+  // Check login state on component mount
     const storedLoginStatus = sessionStorage.getItem("isLoggedInEmailer");
     if (storedLoginStatus === "true") {
       setIsLoggedIn(true);
     }
     setIsLoadingCsrf(true);
+
+    // Acquire CSRF token
     fetch(import.meta.env.VITE_SERVER_URI + "/csrf", {
       method: "HEAD",
       credentials: "include",
@@ -56,8 +59,10 @@ function App() {
             {/* Page that lists all the users of a company */}
             <Route path="/company" element={<CompanyUser />} />
 
-            {/* Main page for superadmin*/}
+            {/* Main page for superadmin */}
             <Route path="/admin/brsr" element={<AdminCompany />} />
+
+            <Route path="*" element={<NotFound/>}/>
           </Routes>
         </div>
       )}

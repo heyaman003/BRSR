@@ -16,7 +16,7 @@ interface CreateCompanyFormProps {
 const CreateCompanyForm: React.FC<CreateCompanyFormProps> = ({
   addCompanyToLocalState,
 }) => {
-  const fetch = useFetch();
+  const customFetch = useFetch();
   const [companyName, setCompanyName] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -28,7 +28,7 @@ const CreateCompanyForm: React.FC<CreateCompanyFormProps> = ({
     }
     setLoading(true);
     toast.promise(
-      fetch(`/company`, {
+      customFetch(`/company`, {
         method: "POST",
         body: { name: companyName.trim() },
       }),

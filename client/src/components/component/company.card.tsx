@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import ConfirmDialog from "./confirm.dialog";
+import { useFetch } from "@/hooks/use-fetch";
 
 interface CompanyCardProps {
   id: string;
@@ -19,10 +20,24 @@ const CompanyCard: React.FC<CompanyCardProps> = ({
   className,
   removeCompanyFromLocalState,
 }) => {
+  const customFetch = useFetch();
   const [isHovered, setIsHovered] = useState(false);
   const [showConfirm, setShowConfirm] = useState<boolean>(false);
 
   const navigate = useNavigate();
+
+
+const deleteCompany = async (companyId: string) => {
+  const res = await customFetch(
+    `/company/${companyId}`,
+    {
+      method: "DELETE",
+    }
+  );
+  if (res.statusCode < 200 || res.statusCode >= 400) throw new Error(res.message);
+  return res.message;
+};
+
 
   return (
     <motion.div
@@ -113,17 +128,3 @@ const CompanyCard: React.FC<CompanyCardProps> = ({
 };
 
 export default CompanyCard;
-
-const deleteCompany = async (companyId: string) => {
-  const raw = await fetch(
-    `${import.meta.env.VITE_SERVER_URI}/company/${companyId}`,
-    {
-      method: "DELETE",
-      credentials: "include",
-      headers: { "X-Csrf-Token": sessionStorage.getItem("X-Csrf-Token") || "" },
-    }
-  );
-  const res = await raw.json();
-  if (raw.status < 200 || raw.status >= 400) throw new Error(res.message);
-  return res.message;
-};

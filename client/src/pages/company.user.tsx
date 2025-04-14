@@ -12,28 +12,30 @@ import { plainToInstance } from "class-transformer";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { updateCompany} from "@/features/auth/authSlice"
-
-const loadUserData = async (companyId: string | null): Promise<Object | void> => {
-  try {
-    if(!companyId)
-      throw new Error('Company not found.')
-
-    const raw = await fetch(
-      `${import.meta.env.VITE_SERVER_URI}/company/${companyId}`,
-      { credentials: "include", headers: {'X-Csrf-Token': sessionStorage.getItem('X-Csrf-Token') || ''} },
-    );
-    const res = await raw.json();
-
-    if (raw.status > 399 || raw.status < 200) throw new Error(res.message);
-
-    return res.data;
-  } catch (e) {
-    console.log(e);
-  }
-};
+import { useFetch } from "@/hooks/use-fetch";
 
 
 const CompanyUser = () => {
+  const customFetch = useFetch();
+
+  const loadUserData = async (companyId: string | null): Promise<Object | void> => {
+    try {
+      if(!companyId)
+        throw new Error('Company not found.')
+  
+      const res = await customFetch(
+        `/company/${companyId}`,
+        { method: 'GET' },
+      );
+  
+      if (res.statusCode > 399 || res.statusCode < 200) throw new Error(res.message);
+  
+      return res.data;
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   // Reading the company id from the query string
   const[searchParams, setSearchParams] = useSearchParams();
 
