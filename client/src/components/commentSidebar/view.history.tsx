@@ -11,10 +11,9 @@ const ViewHistory = ({ questionId }: { questionId: string }) => {
   const [histories, setHistories] = useState<History[]>([]);
 
   const fetchHistory = async (questionId: string) => {
-    const raw = await customFetch(`/section/${questionId}/history`, {
+    const res = await customFetch(`/section/${questionId}/history`, {
       method: "GET",
     });
-    const res = await raw.json();
     return res.data;
   };
 
@@ -24,6 +23,7 @@ const ViewHistory = ({ questionId }: { questionId: string }) => {
         setHistories(plainToInstance(History, history) as History[])
       );
   }, [questionId]);
+
   return (
     <ul>
       {histories.map((history) => (

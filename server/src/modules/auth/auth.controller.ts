@@ -18,6 +18,7 @@ export class AuthController {
         response.cookie('authorization', `Bearer ${userdetails.accessToken}`, {httpOnly: true, sameSite: this.PROFILE==='dev'?"lax":"strict", secure: false, maxAge: 60*60000*24})
         return new ResponseModel(200, 'Successfully signed in.', userdetails.userdetails);
     }
+    
     @Post("logout")
     async logout(@Res({passthrough: true}) response: Response): Promise<ResponseModel> {
         response.cookie('authorization', "", {maxAge: 0});
