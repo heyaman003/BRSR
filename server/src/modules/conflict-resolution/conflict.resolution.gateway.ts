@@ -3,11 +3,10 @@ import { ConnectedSocket, MessageBody, SubscribeMessage, WebSocketGateway, WebSo
 import { Table } from "@prisma/client";
 import { Server, Socket } from "socket.io";
 
-
 // Websocket listens to 8001 port
-@WebSocketGateway(parseInt(process.env.WS_PORT || '8001'), {namespace: 'conflict-resolution', ...(process.env.PROFILE==='dev' && {cors: {
+@WebSocketGateway(parseInt(process.env.WS_PORT || '8001'), {namespace: 'conflict-resolution', path:process.env.WS_PATH, ...(process.env.PROFILE==='dev' && {cors: {
     origin: ['http://localhost:5173'],
-    credentials: true
+    credentials: true,
 }})})
 export default class ConflictResolutionGateway {
     @WebSocketServer()
