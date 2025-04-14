@@ -15,17 +15,31 @@ import { useEffect, useState } from "react";
 import { Comment, SubSection } from "@/models/models";
 import { toast } from "sonner";
 import { plainToInstance } from "class-transformer";
+import { useFetch } from "@/hooks/use-fetch";
 
 const CommentSidebar = ({
   questionId,
   closeSidebar,
 }: {
   questionId: string;
-  setSubsectionData: (subsection:SubSection) => void;
+  setSubsectionData: (subsection: SubSection) => void;
   closeSidebar: () => void;
 }) => {
   const [comments, setComments] = useState<Comment[]>([]);
+  const customFetch = useFetch();
 
+  async function fetchComments(questionId: string) {
+    try {
+      const res = await customFetch(`/comment?question=${questionId}`, {
+        method: "GET",
+      });
+      if (res.statusCode < 200 || res.statusCode >= 400) throw new Error(res.message);
+      return res.data;
+    } catch (e) {
+      if (e instanceof Error) toast.error(e.message);
+      throw e;
+    }
+  }
 
   useEffect(() => {
     if (questionId)
@@ -33,7 +47,6 @@ const CommentSidebar = ({
         setComments(plainToInstance(Comment, comment) as Comment[])
       );
   }, [questionId]);
-
 
   return (
     <SidebarProvider
@@ -83,7 +96,7 @@ const CommentSidebar = ({
         </SidebarContent>
 
         <SidebarFooter className="relative">
-          <CommentInput questionId={questionId} setComments={setComments}/>
+          <CommentInput questionId={questionId} setComments={setComments} />
         </SidebarFooter>
       </Sidebar>
     </SidebarProvider>
@@ -91,26 +104,3 @@ const CommentSidebar = ({
 };
 
 export default CommentSidebar;
-
-
-
-
-async function fetchComments(questionId: string) {
-  try {
-    const raw = await fetch(
-      `${import.meta.env.VITE_SERVER_URI}/comment?question=${questionId}`,
-      {
-        credentials: "include",
-        headers: {
-          "X-Csrf-Token": sessionStorage.getItem("X-Csrf-Token") || "",
-        },
-      }
-    );
-    const res = await raw.json();
-    if (raw.status < 200 || raw.status >= 400) throw new Error(res.message);
-    return res.data;
-  } catch (e) {
-    if (e instanceof Error) toast.error(e.message);
-    throw e;
-  }
-}

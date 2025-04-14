@@ -6,7 +6,7 @@ import TableUI from "@/components/question/table";
 import TextQuestionUI from "@/components/question/text";
 import { Button } from "@/components/ui/button";
 import { Question, SubSection, Table } from "@/models/models";
-import {  Loader2, MessageSquareText } from "lucide-react";
+import { Loader2, MessageSquareText } from "lucide-react";
 import React, { memo, useEffect, useLayoutEffect, useState } from "react";
 import { toast } from "sonner";
 import {
@@ -15,16 +15,20 @@ import {
 } from "@/utils/dataFetching";
 import { useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { setActiveSubsection, updateTextAnswer } from "@/features/activeSubsectionData/activeSubsectionSlice";
+import {
+  acceptCurrentChangeText,
+  acceptIncomingChangeText,
+  setActiveSubsection,
+  updateTextAnswer,
+} from "@/features/activeSubsectionData/activeSubsectionSlice";
 import { RootState } from "@/store/store";
-
-
 
 interface SectionUiArgs {
   subsectionId: string;
+  companyId: string | null;
 }
 
-const Section: React.FC<SectionUiArgs> = ({ subsectionId }) => {
+const Section: React.FC<SectionUiArgs> = ({ subsectionId, companyId }) => {
   const dispatch = useDispatch();
 
   const [searchParams] = useSearchParams();
@@ -32,7 +36,9 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId }) => {
   const [isLoaderVisible, setIsLoaderVisible] = useState(true);
   const [isSaving, setIsSaving] = useState<boolean>(false);
 
-  const subsectionData: SubSection = useSelector((state: RootState)=>state.activeSubsection.data)
+  const subsectionData: SubSection = useSelector(
+    (state: RootState) => state.activeSubsection.data
+  );
 
   const smoothScrollTo = (targetY: number, duration = 1000) => {
     const startY = window.scrollY;
@@ -67,7 +73,6 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId }) => {
 
   const [selectedQuestionForComment, setSelectedQuestionForComment] =
     useState<string>("");
-
 
   useEffect(() => {
     let timer: NodeJS.Timeout | null = null;
@@ -109,60 +114,187 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId }) => {
             {subsectionData.title}
           </h1>
           {subsectionData.questions &&
-            subsectionData.questions
-              .map((question: Question) => (
-                <div className="mb-5 py-3" key={question.id} id={question.id}>
-                  <h3 className="text-center font-semibold text-green-500 text-lg mb-4">
-                    {question.heading}
-                  </h3>
-                  <div className="flex gap-3 justify-between w-[96%]">
-                    <p
-                      className={`text-sm mb-2 text-green-800 font-semibold
+            subsectionData.questions.map((question: Question) => (
+              <div className="mb-5 py-3" key={question.id} id={question.id}>
+                <h3 className="text-center font-semibold text-green-500 text-lg mb-4">
+                  {question.heading}
+                </h3>
+                <div className="flex gap-3 justify-between w-[96%]">
+                  <p
+                    className={`text-sm mb-2 text-green-800 font-semibold
                       `}
-                    >
-                      {question.desc}
-                    </p>
-                    <button
-                      onClick={() => setSelectedQuestionForComment(question.id)}
-                      className="flex items-center gap-1 text-yellow-600 hover:text-yellow-700 transition-colors text-sm font-medium"
-                    >
-                      <MessageSquareText size={18} />
-                      <span className="text-base">
-                        {question._count.comments}
-                      </span>
-                    </button>
-                  </div>
-
-                  {question.type === "TABLE" &&
-                    question.answer_table &&
-                    question.answer_table.map((table: Table, tableIndex: number) => (
+                  >
+                    {question.desc}
+                  </p>
+                  <button
+                    onClick={() => setSelectedQuestionForComment(question.id)}
+                    className="flex items-center gap-1 text-yellow-600 hover:text-yellow-700 transition-colors text-sm font-medium"
+                  >
+                    <MessageSquareText size={18} />
+                    <span className="text-base">
+                      {question._count.comments}
+                    </span>
+                  </button>
+                </div>
+                
+                {/* When question type is table */}
+                {question.type === "TABLE" &&
+                  question.answer_table &&
+                  question.answer_table.map(
+                    (table: Table, tableIndex: number) => (
                       <TableUI
+                        companyId={companyId}
                         key={table.id}
                         tableId={table.id}
                         questionId={question.id}
                         tableIndex={tableIndex}
                         questionIndex={question.index}
                       />
-                    ))}
-                  {question.type === "TEXT" && (
-                    <TextQuestionUI
-                      value={question.answer_text}
-                      key={question.id}
-                      updateTextAnswer={(answer: string) =>
-                        dispatch(updateTextAnswer({questionId:question.id, answer}))
-                      }
-                    />
+                    )
                   )}
-                  {question.type === "BOOLEAN" && (
-                    <BooleanInput
-                      updateAnswer={(answer: string) =>
-                        dispatch(updateTextAnswer({questionId:question.id, answer}))
-                      }
-                      answer={question.answer_text}
-                    />
-                  )}
-                </div>
-              ))}
+
+                {/* When question type is a text */}
+                {question.type === "TEXT" && (
+                  <>
+                    <span className="flex gap-4 my-2 ml-1 w-[97%]">
+                      <TextQuestionUI
+                        value={question.answer_text}
+                        key={question.id}
+                        updateTextAnswer={(answer: string) =>
+                          dispatch(
+                            updateTextAnswer({
+                              questionId: question.id,
+                              answer,
+                            })
+                          )
+                        }
+                      />
+
+                      {/* When text question has conflicts - render the button to accept the current change */}
+                      {question.text_conflict && (
+                        <Button
+                          onClick={() =>
+                            dispatch(
+                              acceptCurrentChangeText({
+                                questionId: question.id,
+                              })
+                            )
+                          }
+                          className="bg-red-500 hover:bg-red-600 text-white font-semibold px-3 py-1 w-52"
+                        >
+                          Accept Current Change
+                        </Button>
+                      )}
+                    </span>
+                    
+                    {/* When text question has conflicts -  render the incoming change */}
+                    {question.text_conflict && (
+                      <span className="flex gap-4 my-2 ml-1 w-[97%]">
+                        <pre
+                          className={`ml-1 max-h-32 overflow-auto flex rounded-md border-input bg-background px-3 py-2 text-sm
+                          file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground
+                          disabled:cursor-not-allowed disabled:opacity-50 outline-none w-[97%] bg-green-100 border border-green-600 text-green-800`}
+                        >
+                          {question.text_conflict}
+                        </pre>
+
+                        {/* Button to accept the incoming change */}
+                        <Button
+                          onClick={() =>
+                            dispatch(
+                              acceptIncomingChangeText({
+                                questionId: question.id,
+                              })
+                            )
+                          }
+                          className="bg-green-600 text-white font-semibold px-3 py-1 w-52"
+                        >
+                          Accept Incoming Change
+                        </Button>
+                      </span>
+                    )}
+                  </>
+                )}
+
+                {/* When question type is boolean */}
+                {question.type === "BOOLEAN" && (
+                  <>
+                    <div className="flex gap-4 pr-7">
+                      <BooleanInput
+                        updateAnswer={(answer: string) =>
+                          dispatch(
+                            updateTextAnswer({
+                              questionId: question.id,
+                              answer,
+                            })
+                          )
+                        }
+                        answer={question.answer_text}
+                      />
+
+                      {/* Button to accept the current change in case of conflict */}
+                      {question.text_conflict && (
+                        <Button
+                          onClick={() =>
+                            dispatch(
+                              acceptCurrentChangeText({
+                                questionId: question.id,
+                              })
+                            )
+                          }
+                          className="bg-red-500 hover:bg-red-600 text-white font-semibold px-3 py-1 w-52"
+                        >
+                          Accept Current Change
+                        </Button>
+                      )}
+                    </div>
+
+                    {/* Render Incoming change in case of conflicts */}
+                    {question.text_conflict && (
+                      <div className="flex pr-7 mt-4 gap-4">
+                        <button
+                          disabled={true}
+                          className={` ${
+                            question.text_conflict?.startsWith("1")
+                              ? "bg-green-600"
+                              : "bg-red-600"
+                          } rounded-sm px-8 py-2 text-gray-50 font-bold text-sm`}
+                        >
+                          {question.text_conflict?.startsWith("1")
+                            ? "Yes"
+                            : "No"}
+                        </button>
+
+                        <input
+                          placeholder="Reason"
+                          className=" flex-grow px-3 py-1 rounded-sm border border-gray-300"
+                          disabled={true}
+                          value={
+                            question.text_conflict
+                              ? question.text_conflict.substring(1)
+                              : ""
+                          }
+                        />
+
+                        {/* Button to accept the incoming conflict */}
+                        <Button
+                          onClick={() =>
+                            dispatch(
+                              acceptIncomingChangeText({
+                                questionId: question.id,
+                              })
+                            )
+                          }
+                          className="bg-green-600 text-white font-semibold px-3 py-1 w-52"
+                        >
+                          Accept Incoming Change
+                        </Button>
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
+            ))}
         </div>
       )}
       {subsectionData && (
@@ -171,7 +303,7 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId }) => {
             disabled={isSaving}
             onClick={() => {
               setIsSaving(true);
-              toast.promise(updateSubsectionData(subsectionData), {
+              toast.promise(updateSubsectionData(subsectionData, companyId || ''), {
                 success: (res) => {
                   return res.message;
                 },
@@ -179,7 +311,7 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId }) => {
                   return err.message;
                 },
                 finally: () => setIsSaving(false),
-              })
+              });
             }}
             className=" bg-yellow-500 hover:bg-yellow-600 w-24 text-white font-bold px-8 py-2 rounded-sm"
           >
@@ -189,7 +321,9 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId }) => {
       )}
       <ChatBox />
       <CommentSidebar
-        setSubsectionData={(subsectionData: SubSection)=>{dispatch(setActiveSubsection(subsectionData))}}
+        setSubsectionData={(subsectionData: SubSection) => {
+          dispatch(setActiveSubsection(subsectionData));
+        }}
         closeSidebar={() => setSelectedQuestionForComment("")}
         questionId={selectedQuestionForComment}
       />

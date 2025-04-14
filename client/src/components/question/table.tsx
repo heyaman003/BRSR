@@ -15,82 +15,87 @@ import { Loader2, Trash2 } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { updateTableData } from "@/features/activeSubsectionData/activeSubsectionSlice";
+import ConflictResolutionDialog from "../conflict-resolution/conflict.resolution.dialog";
+import { useFetch } from "@/hooks/use-fetch";
 const generateId = () => new BSON.ObjectId().toString();
 
 const TableUI = ({
   tableId,
   questionId,
   tableIndex,
-  questionIndex
+  questionIndex,
+  companyId
 }: {
   tableId: string;
   questionId: string;
-  tableIndex: number,
-  questionIndex: number
+  tableIndex: number;
+  questionIndex: number;
+  companyId: string | null;
 }) => {
-  const dispatch = useDispatch();
-  const tableState: TableType = useSelector((state:RootState)=>state.activeSubsection.data.questions.find(question=>question.id===questionId)?.answer_table?.find(table=>table.id===tableId) as TableType)
-  const [isSavingTableData, setIsSavingTableData] = useState<boolean>(false);
+  const customFetch = useFetch();
 
+  const dispatch = useDispatch();
+  const tableState: TableType = useSelector(
+    (state: RootState) =>
+      state.activeSubsection.data.questions
+        .find((question) => question.id === questionId)
+        ?.answer_table?.find((table) => table.id === tableId) as TableType
+  );
+
+  const [isSavingTableData, setIsSavingTableData] = useState<boolean>(false);
+  const conflict = useSelector(
+    (state: RootState) =>
+      state.activeSubsection.data.questions?.[questionIndex]?.answer_table?.[
+        tableIndex
+      ]?.conflict
+  );
+
+
+  // Function to add a row to a dynamic table
   const addRow = () => {
     const cellCount = tableState.rows[tableState.rows.length - 1].cells.length;
     dispatch(
       updateTableData({
-        questionId:questionId, 
-        tableData:{
-        ...tableState,
-        rows: [
-          ...tableState.rows,
-          new Row(
-            generateId(),
-            Array.from({ length: cellCount }).map(
-              (_, ind: number) => new Cell(generateId(), "", true, 1, 1, ind)
+        questionId: questionId,
+        tableData: {
+          ...tableState,
+          rows: [
+            ...tableState.rows,
+            new Row(
+              generateId(),
+              Array.from({ length: cellCount }).map(
+                (_, ind: number) => new Cell(generateId(), "", true, 1, 1, ind)
+              ),
+              false,
+              tableState.rows.length
             ),
-            false,
-            tableState.rows.length
-          ),
-        ]}})
-    )
-    //   table.rows = [
-    //     ...table.rows,
-    //     new Row(
-    //       generateId(),
-    //       Array.from({ length: cellCount }).map(
-    //         (_, ind: number) => new Cell(generateId(), "", true, 1, 1, ind)
-    //       ),
-    //       false,
-    //       tableState.rows.length
-    //     ),
-    //   ];
-    //   return { ...table };
-    // });
+          ],
+        },
+      })
+    );
   };
+
+  // Function to delete a row from a dynamic table
   const deleteRow = (id: string) => {
-    dispatch(updateTableData({ questionId, tableData: { ...tableState, rows: tableState.rows.filter((row) => row.id !== id) } }))
-
+    dispatch(
+      updateTableData({
+        questionId,
+        tableData: {
+          ...tableState,
+          rows: tableState.rows.filter((row) => row.id !== id),
+        },
+      })
+    );
   };
 
-  const saveTable = async () => {
+  const saveTable = async (companyId: string) => {
     try {
       setIsSavingTableData(true);
-      const raw = await fetch(
-        `${import.meta.env.VITE_SERVER_URI}/section/table/${tableState.id}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-Csrf-Token": sessionStorage.getItem("X-Csrf-Token") || "",
-          },
-          credentials: "include",
-          body: JSON.stringify(tableState),
-        }
-      );
-
-      const res = await raw.json();
-
-      if (raw.status < 200 || raw.status > 399) throw new Error(res.message);
+      
+      const res = await customFetch(`/section/table/${tableState.id}/${companyId}`, {method: 'POST', body: tableState});
 
       toast.success(res.message);
+
     } catch (e) {
       if (e instanceof Error) toast.error(e.message);
     } finally {
@@ -124,50 +129,72 @@ const TableUI = ({
           {tableState.rows
             .filter((row: Row) => !row.isHeading)
             .map((row: Row) => (
-              <TableRow key={row.id} className=" hover:bg-white border-green-30 bg-blue-50">
-                {row.cells
-                  .map((cell: Cell) => (
-                    <TableCell
-                      key={cell.id}
-                      colSpan={cell.colSpan}
-                      rowSpan={cell.rowSpan}
-                      className={`py-3 ${cell.isHeading &&'bg-green-50 hover:bg-green-100'}`}
-                    >
-                      {!cell.isUpdateable ? (
-                        <span className={`inline-block w-full h-full ${cell.isHeading?'text-center font-semibold text-sm text-green-700':'text-left'}`}>{cell.data}</span>
-                      ) : (
-                        <CellInput
-                          value={cell.data}
-                          rowIndex={row.index}
-                          cellIndex={cell.index}
-                          operation={cell.operation}
-                          operands = {cell.operands}
-                          tableIndex={tableIndex}
-                          questionIndex={questionIndex}
-                        />
-                      )}
-                    </TableCell>
-                  ))}
+              <TableRow
+                key={row.id}
+                className=" hover:bg-white border-green-30 bg-blue-50"
+              >
+                {row.cells.map((cell: Cell) => (
+                  <TableCell
+                    key={cell.id}
+                    colSpan={cell.colSpan}
+                    rowSpan={cell.rowSpan}
+                    className={`py-3 ${
+                      cell.isHeading && "bg-green-50 hover:bg-green-100"
+                    }`}
+                  >
+                    {!cell.isUpdateable ? (
+                      <span
+                        className={`inline-block w-full h-full ${
+                          cell.isHeading
+                            ? "text-center font-semibold text-sm text-green-700"
+                            : "text-left"
+                        }`}
+                      >
+                        {cell.data}
+                      </span>
+                    ) : (
+                      <CellInput
+                        value={cell.data}
+                        rowIndex={row.index}
+                        cellIndex={cell.index}
+                        operation={cell.operation}
+                        operands={cell.operands}
+                        tableIndex={tableIndex}
+                        questionIndex={questionIndex}
+                      />
+                    )}
+                  </TableCell>
+                ))}
                 {tableState.isDynamic && (
-                    <button onClick={()=>deleteRow(row.id)} className="mt-1 bg-transparent hover:bg-transparent hover:text-red-500 p-2 rounded-full duration-0 text-red-300">
-                      <Trash2 className="duration-0" size={20}/>
-                    </button>
+                  <button
+                    onClick={() => deleteRow(row.id)}
+                    className="mt-1 bg-transparent hover:bg-transparent hover:text-red-500 p-2 rounded-full duration-0 text-red-300"
+                  >
+                    <Trash2 className="duration-0" size={20} />
+                  </button>
                 )}
               </TableRow>
             ))}
         </TableBody>
       </Table>
       <div className="flex justify-end">
-        <button
-          className=" px-8 py-2 text-white bg-yellow-500 font-bold rounded-sm mr-5 mt-2"
-          onClick={saveTable}
-        >
-          {isSavingTableData ? (
-            <Loader2 className="animate-spin" />
-          ) : (
-            "Save Table"
-          )}
-        </button>
+        {conflict && (
+          <ConflictResolutionDialog table={tableState}/>
+        )}
+
+        {
+          <button
+            disabled={conflict ? true : false}
+            className=" px-8 py-2 text-white bg-yellow-500 font-bold rounded-sm mr-5 mt-2 disabled:bg-yellow-700 disabled:text-gray-200 disabled:cursor-not-allowed"
+            onClick={()=>saveTable(companyId || '')}
+          >
+            {isSavingTableData ? (
+              <Loader2 className="animate-spin" />
+            ) : (
+              "Save Table"
+            )}
+          </button>
+        }
         {tableState.isDynamic && (
           <div>
             <button

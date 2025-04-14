@@ -8,12 +8,6 @@ import ResponseModel from "src/utils/ResponseModel";
 export class UserController {
     constructor(private userService: UserService){}
 
-    @Post("login")
-    login(@Body(ValidationPipe) data: CreateUserDto): ResponseModel{
-        this.userService.login(data)
-        return new ResponseModel(200, "Ok");
-    }
-
     @Post("create")
     @Role(UserRole.ADMIN)
     async createUser(@Body(ValidationPipe) userdetails: CreateUserDto, @Req() request: Request): Promise<ResponseModel> {

@@ -5,27 +5,27 @@ import CompanyCard from "@/components/component/company.card";
 import CompanyTabs from "@/components/component/CompanyTabs";
 import CreateCompanyForm from "@/components/create.company.form";
 import { ArrowLeftCircle } from "lucide-react";
+import { useFetch } from "@/hooks/use-fetch";
 interface Company {
   id: string;
   name: string;
 }
 
-const fetchAllCompanies = async () => {
-  const raw = await fetch(`${import.meta.env.VITE_SERVER_URI}/company/all`, {
-    credentials: "include",
-
-    headers: { "X-Csrf-Token": sessionStorage.getItem("X-Csrf-Token") || "" },
-  });
-
-  const res = await raw.json();
-
-  return res.data;
-};
-
 const Index: React.FC = () => {
   const [companies, setCompanies] = useState<Company[]>([]);
   const [isLoading, setIsLoading] = useState<Boolean>(true);
   const [viewMode, setViewMode] = useState<String>("list");
+  const customFetch = useFetch();
+
+  const fetchAllCompanies = async () => {
+    const raw = await customFetch(`/company/all`, {
+      method: "GET",
+    });
+  
+    const res = await raw.json();
+  
+    return res.data;
+  };
 
   // const onCompanyCreated=(company:{ id: number; name: string })=>{
   //   console.log("new company created",company);

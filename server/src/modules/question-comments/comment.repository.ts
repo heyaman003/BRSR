@@ -6,7 +6,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { AddCommentDTO } from './comment.dtos';
-import { DbService } from 'src/utils/db.connections';
+import { DbService } from 'prisma/db.connections';
 import { Comment } from '@prisma/client';
 
 @Injectable()

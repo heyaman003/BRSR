@@ -20,7 +20,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { User } from "@/lib/types";
-import { plainToInstance } from "class-transformer";
 import {
   Select,
   SelectItem,
@@ -31,6 +30,8 @@ import {
 } from "../ui/select";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
+import { useFetch } from "@/hooks/use-fetch";
+import { plainToInstance } from "class-transformer";
 
 const formSchema = z.object({
   name: z.string().min(1),
@@ -46,6 +47,7 @@ export default function CreateUserForm({
   companyId: string;
   addUserToState: (user: User) => void;
 }) {
+  const customFetch = useFetch();
   const role = useSelector((state: RootState) => state?.auth?.user?.data.role);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -57,14 +59,37 @@ export default function CreateUserForm({
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    createUser(companyId, values).then((res: User) => {
-      form.resetField("name");
-      form.resetField("email");
-      form.resetField("password");
-      form.resetField('role')
-      addUserToState(plainToInstance(User, res) as User);
+
+const createUser = async (
+  companyId: string,
+  data: { name: string; email: string; password: string }
+) => {
+    const res = await customFetch(`/user/create`, {
+      method: "POST",
+      body: { ...data, company: companyId },
     });
+
+    if (res.statusCode < 200 || res.statusCode >= 400)
+      throw new Error(
+        Array.isArray(res.message) ? res.message[0] : res.message
+      );
+    return res;
+};
+
+
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    toast.promise(createUser(companyId, values), {
+      loading: "Creating user...",
+      success: (res)=>{
+        form.resetField("name");
+        form.resetField("email");
+        form.resetField("password");
+        form.resetField('role');
+        addUserToState(plainToInstance(User, res.data) as unknown as User);
+        return res.message;
+      },
+      error:(err)=>err.message || 'Something went wrong.'
+    })
   }
 
   return (
@@ -170,32 +195,3 @@ export default function CreateUserForm({
     </Dialog>
   );
 }
-
-const createUser = async (
-  companyId: string,
-  data: { name: string; email: string; password: string }
-) => {
-  try {
-    const raw = await fetch(`${import.meta.env.VITE_SERVER_URI}/user/create`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-Csrf-Token": sessionStorage.getItem("X-Csrf-Token") || "",
-      },
-      body: JSON.stringify({ ...data, company: companyId }),
-      credentials: "include",
-    });
-
-    const res = await raw.json();
-
-    if (raw.status < 200 || raw.status >= 400)
-      throw new Error(
-        Array.isArray(res.message) ? res.message[0] : res.message
-      );
-    toast.success(res.message);
-    return res.data;
-  } catch (e) {
-    if (e instanceof Error) toast.error(e.message);
-    throw e;
-  }
-};

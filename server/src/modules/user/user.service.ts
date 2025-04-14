@@ -1,21 +1,16 @@
 import {
-  BadRequestException,
   ConflictException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
 import { UserRepository } from 'src/modules/user/user.repository';
-import { Mention, User } from '@prisma/client';
+import { User } from '@prisma/client';
 import { CreateUserDto, GetUserDto, UserRole } from './user.dtos';
 import { hash } from 'bcryptjs';
 
 @Injectable()
 export class UserService {
   constructor(private userRepository: UserRepository) {}
-
-  login(data: any) {
-    console.log(data);
-  }
 
   /**
    *
@@ -64,10 +59,17 @@ export class UserService {
   }
 
   async getMentionDetails(mentionId: string) {
-    const mention = await this.userRepository.getMention(mentionId);
+    const mention = await this.userRepository.getMentionDetails(mentionId);
     if(!mention)
       throw new NotFoundException('Mention does not exist.');
     return this.convertToMentionDto(mention);
+  }
+
+  async getCompanyOfUser(userId: string): Promise<string> {
+    const company = await this.userRepository.getCompanyOfUser(userId);
+    if(!company)
+      throw new NotFoundException('Company does not exist.');
+    return company;
   }
 
   private convertToMentionDto(mention: any) {

@@ -26,9 +26,10 @@ export class SectionController {
     return new ResponseModel(200, 'Success', subsectionData);
   }
 
-  @Post('/subsection/:subsectionId')
+  @Post('/subsection/:subsectionId/:companyId')
   async updateSubsectionData(
-    @Param('subsectionId', ParseUUIDPipe) id: string,
+    @Param('companyId', ParseUUIDPipe) companyId: string,
+    @Param('subsectionId', ParseUUIDPipe) subsectionId: string,
     @Body(ValidationPipe) data: SubSectionModel,
     @Req() request: Request
   ) {
@@ -36,18 +37,19 @@ export class SectionController {
     return new ResponseModel(
       201,
       'Saved table data successfully',
-      await this.sectionService.updateSubsectionData(id, data, userId),
+      await this.sectionService.updateSubsectionData(subsectionId, companyId, data, userId),
     );
   }
 
-  @Post('/table/:tableId')
-  async updateTableData(
-    @Param('tableId', ParseUUIDPipe) id: string,
+  @Post('/table/:tableId/:companyId')
+  async upsertTableData(
+    @Param('tableId', ParseUUIDPipe) tableId: string,
+    @Param('companyId', ParseUUIDPipe) companyId: string,
     @Body(ValidationPipe) data: TableModel,
     @Req() request: Request
   ) {
     const userId: string = request['user']['sub'];
-    await this.sectionService.createTable(id, data, userId);
+    await this.sectionService.upsertTable(tableId, companyId, data, userId);
     return new ResponseModel(201, 'Saved table data successfully');
   }
 

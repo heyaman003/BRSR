@@ -16,13 +16,18 @@ import {
   RowModel,
   CellModel,
 } from './section.dtos';
-import { DbService } from 'src/utils/db.connections';
+import { DbService } from 'prisma/db.connections';
 import { Prisma, PrismaClient, QuestionType } from '@prisma/client';
 import { Omit } from '@prisma/client/runtime/library';
+import ConflictResolutionGateway from '../conflict-resolution/conflict.resolution.gateway';
 
 @Injectable()
 export class SectionRepository {
-  constructor(private readonly db: DbService, private readonly logger: ConsoleLogger) {}
+  constructor(
+    private readonly db: DbService,
+    private readonly logger: ConsoleLogger,
+    private conflictResolution: ConflictResolutionGateway,
+  ) {}
 
   async retrieveAllSectionData(sectionId: string): Promise<Section> {
     const data = await this.db.section.findUnique({
@@ -53,7 +58,12 @@ export class SectionRepository {
     return data;
   }
 
-  async updateSubsectionData(id: string, data: SubSectionDTO, userId: string) {
+  async updateSubsectionData(
+    id: string,
+    data: SubSectionDTO,
+    userId: string,
+    companyId: string,
+  ) {
     try {
       await this.db.$transaction(async (tx) => {
         await tx.subsection.update({
@@ -81,14 +91,36 @@ export class SectionRepository {
             },
           },
         });
+
+        data.questions.forEach((question) => {
+          if (question.type !== 'TABLE')
+            // Broadcasting the answer change to corresponding company room
+            this.conflictResolution.broadcastTextChange(
+              companyId,
+              question.id,
+              question.answer_text,
+              userId,
+            );
+        });
+
         await Promise.all(
           data.questions.map(
             async (question) =>
               await Promise.all(
-                question.answer_table.map(
-                  async (table) =>
-                    await this.updateTableData(table.id, table, userId, tx),
-                ),
+                question.answer_table.map(async (table) => {
+                  const updatedTable = await this.updateTableData(
+                    table.id,
+                    table,
+                    userId,
+                    tx,
+                  );
+                  // Broadcasting the table change to corresponding company room
+                  this.conflictResolution.broadcastTableChange(
+                    companyId,
+                    updatedTable,
+                    userId,
+                  );
+                }),
               ),
           ),
         );
@@ -100,7 +132,7 @@ export class SectionRepository {
   }
 
   async saveTableData(id: string, data: TableDTO, userId: string) {
-    await this.updateTableData(id, data, userId, this.db);
+    return await this.updateTableData(id, data, userId, this.db);
   }
 
   // Updates table data according to the context(obj) provided
@@ -121,14 +153,14 @@ export class SectionRepository {
         >,
   ) {
     try {
-      await obj.table.update({
+      return await obj.table.update({
         where: {
           id,
         },
         data: {
           question: {
             update: {
-              isAnswered:this.isTableCompletelyFilled(data),
+              isAnswered: this.isTableCompletelyFilled(data),
               history: {
                 create: {
                   user: {
@@ -178,6 +210,13 @@ export class SectionRepository {
               },
               where: { id: row.id },
             })),
+          },
+        },
+        include: {
+          rows: {
+            include: {
+              cells: true,
+            },
           },
         },
       });
@@ -363,11 +402,14 @@ export class SectionRepository {
 
   private isTableCompletelyFilled(table: Table | TableModel): boolean {
     let flag: boolean = true;
-    table.rows.filter(row=>!row.isHeading).forEach((row: Row | RowModel) =>
-      row.cells.forEach(
-        (cell: Cell | CellModel) => (flag = flag && (cell.data ? true : false)),
-      ),
-    );
+    table.rows
+      .filter((row) => !row.isHeading)
+      .forEach((row: Row | RowModel) =>
+        row.cells.forEach(
+          (cell: Cell | CellModel) =>
+            (flag = flag && (cell.data ? true : false)),
+        ),
+      );
     return flag;
   }
 }

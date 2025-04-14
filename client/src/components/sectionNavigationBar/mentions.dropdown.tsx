@@ -15,11 +15,36 @@ import { CircleUser } from "lucide-react";
 import TimeAgo from "react-timeago";
 import UnitConverter from "../calc/Main.calc";
 import { Button } from "@/components/ui/button";
+import { useFetch } from "@/hooks/use-fetch";
+import { useNavigate } from "react-router-dom";
 interface MentionsContainerProps {
   userId: string;
 }
 
 const MentionsDropdown: React.FC<MentionsContainerProps> = ({ userId }) => {
+  const customFetch = useFetch();
+  const navigate = useNavigate();
+
+
+
+const fetchMentions = async () => {
+  const res = await customFetch(`/user/mentions`, {
+    method: 'GET'
+  });
+  return res.data;
+};
+
+const closeNotificationListenerAPI = (userId: string) => {
+  customFetch(
+    `/notification/mentions/${userId}/close`,
+    {
+      method: 'GET',
+      keepalive: true
+    }
+  );
+};
+
+
   // Listening to mention notifications
   const [mentions, setMentions] = useState<Mention[]>([]);
   const [open, setOpen] = useState(false);
@@ -110,7 +135,7 @@ const MentionsDropdown: React.FC<MentionsContainerProps> = ({ userId }) => {
       <DropdownMenuContent className="w-80" side="left" align="start">
         <DropdownMenuLabel>Your Mentions</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuGroup>
+        <DropdownMenuGroup className="max-h-72 overflow-auto">
           {mentions
             .sort((a, b) =>
               (a.createdAt || new Date()) > (b.createdAt || new Date()) ? -1 : 1
@@ -145,7 +170,9 @@ const MentionsDropdown: React.FC<MentionsContainerProps> = ({ userId }) => {
           
         </DropdownMenuItem>
         <DropdownMenuItem className="text-sm hover:bg-gray-50 hover:border-0 hover:outline-0 p-2 cursor-pointer">
-          Logout
+          <button onClick={()=>customFetch(`/auth/logout`, {
+            method: 'POST'
+          }).then(()=>navigate('/login'))}>Logout</button>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -165,28 +192,3 @@ const MentionsDropdown: React.FC<MentionsContainerProps> = ({ userId }) => {
 };
 
 export default MentionsDropdown;
-
-const fetchMentions = async () => {
-  const raw = await fetch(`${import.meta.env.VITE_SERVER_URI}/user/mentions`, {
-    credentials: "include",
-    headers: {
-      "X-Csrf-Token": sessionStorage.getItem("X-Csrf-Token") || "",
-    },
-  });
-  const res = await raw.json();
-  return res.data;
-};
-
-const closeNotificationListenerAPI = (userId: string) => {
-  fetch(
-    `${import.meta.env.VITE_SERVER_URI}/notification/mentions/${userId}/close`,
-    {
-
-      credentials: "include",
-      keepalive: true,
-      headers: {
-        "X-Csrf-Token": sessionStorage.getItem("X-Csrf-Token") || "",
-      },
-    }
-  );
-};

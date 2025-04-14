@@ -1,10 +1,31 @@
+import { useFetch } from "@/hooks/use-fetch";
 import { RootState } from "@/store/store";
 import { Mail } from "lucide-react";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 
 const MentionUser = () => {
+  const customFetch = useFetch();
+  
     const companyId = useSelector((root: RootState)=>root.auth.user?.data?.companyId);
+
+    const loadCompanyUsers = async (companyId: string | null): Promise<Object | void> => {
+      try {
+        if(!companyId)
+          throw new Error('Company not found.')
+    
+        const res = await customFetch(
+          `/company/${companyId}`,
+          { method: 'GET' },
+        );
+    
+        if (res.statusCode > 399 || res.statusCode < 200) throw new Error(res.message);
+        return res.data.users;
+      } catch (e) {
+        console.log(e);
+        throw e;
+      }
+    };
 
     useEffect(()=>{
         loadCompanyUsers(companyId);
@@ -32,21 +53,3 @@ const MentionUser = () => {
 export default MentionUser;
 
 
-const loadCompanyUsers = async (companyId: string | null): Promise<Object | void> => {
-    try {
-      if(!companyId)
-        throw new Error('Company not found.')
-  
-      const raw = await fetch(
-        `${import.meta.env.VITE_SERVER_URI}/company/${companyId}`,
-        { credentials: "include", headers: {'X-Csrf-Token': sessionStorage.getItem('X-Csrf-Token') || ''} },
-      );
-      const res = await raw.json();
-  
-      if (raw.status > 399 || raw.status < 200) throw new Error(res.message);
-      return res.data.users;
-    } catch (e) {
-      console.log(e);
-      throw e;
-    }
-  };

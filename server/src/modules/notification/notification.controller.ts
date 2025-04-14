@@ -9,7 +9,7 @@ export class NotificationController {
   ) {}
 
   @Sse('/mentions/:userId')
-  sendNotification(@Param('userId') userId: string): Observable<any> {
+  addClient(@Param('userId') userId: string): Observable<any> {
     return this.notificationService.addClient(userId);
   }
 

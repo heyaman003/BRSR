@@ -75,6 +75,9 @@ export class Table {
   id: string;
   @Type(() => Row)
   rows: Row[];
+
+  conflict?: Row[] | null; //Stores the  rows if any
+
   constructor(id: string, rows: Row[], isDynamic: boolean) {
     this.id = id;
     this.rows = rows;
@@ -98,6 +101,8 @@ export class Question {
   index: number;
   @Expose()
   heading?: string;
+  @Expose()
+  text_conflict?: string;
 
   _count: {
     comments: number;

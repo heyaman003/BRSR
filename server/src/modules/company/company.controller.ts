@@ -53,6 +53,7 @@ export class CompanyController{
         return new ResponseModel(200, "Success", sections);
     }
 
+    // Returns the question stats of the company. i.e. The total number of questiona and number of questions answered.
     @Get("/:companyId/question/stats")
     async getQuestionStats(@Param("companyId", ParseUUIDPipe) companyId: string) {
         return new ResponseModel(200, "Success", await this.companyService.getQuestionStats(companyId));

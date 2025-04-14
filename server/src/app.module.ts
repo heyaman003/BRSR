@@ -6,7 +6,7 @@ import { UserModule } from './modules/user/user.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './modules/auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
-import { AuthGuard } from './utils/auth/AuthGuard';
+import { AuthGuard } from './utils/auth/auth.guard';
 import { SectionModule } from './modules/section/section.module';
 import { ChatController } from './modules/chat/chat.controller';
 import { ChatService } from './modules/chat/chat.service';
@@ -14,6 +14,7 @@ import { ChatModule } from './modules/chat/chat.module';
 import { CommentModule } from './modules/question-comments/comment.module';
 import { MyLogger } from './utils/logger';
 import { NotificationModule } from './modules/notification/notification.module';
+import { ConflictResolutionModule } from './modules/conflict-resolution/conflict.resolution.module';
 
 @Module({
   imports: [
@@ -32,7 +33,8 @@ import { NotificationModule } from './modules/notification/notification.module';
     }),
     ChatModule,
     CommentModule,
-    NotificationModule
+    NotificationModule,
+    ConflictResolutionModule
   ],
   controllers: [AppController, ChatController],
   providers: [

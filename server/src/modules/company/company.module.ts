@@ -3,7 +3,7 @@ import { CompanyController } from "src/modules/company/company.controller";
 import { CompanyRepository } from "src/modules/company/company.repository";
 import { CompanyService } from "src/modules/company/company.service";
 import { SectionModule } from "../section/section.module";
-import { DbModule } from "src/utils/db.connection.module";
+import { DbModule } from "prisma/db.connection.module";
 import { UserModule } from "../user/user.module";
 
 @Module({

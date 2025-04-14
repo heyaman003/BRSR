@@ -3,6 +3,7 @@ import { User } from "@/lib/types";
 import { Trash2 } from "lucide-react";
 import ConfirmDialog from "../component/confirm.dialog";
 import { toast } from "sonner";
+import { useFetch } from "@/hooks/use-fetch";
 
 interface UserCardProps {
   user: User;
@@ -14,6 +15,16 @@ const UserCard: React.FC<UserCardProps> = ({ user, index, deleteUserFromState })
   // Calculate delay for staggered animation
   const delay = `${index * 50}ms`;
   const [isOpen, setIsOpen] = useState<boolean>(false);
+
+  const customFetch = useFetch();
+
+
+  const deleteUser = async (userId: string) => {
+      const res = await customFetch(`/user/${userId}`, {method: 'DELETE'});
+      if (res.status < 200 || res.status >= 400) throw new Error(res.message);
+      return res.message
+  };
+  
 
   return (
     <div
@@ -83,10 +94,3 @@ const UserCard: React.FC<UserCardProps> = ({ user, index, deleteUserFromState })
 };
 
 export default UserCard;
-
-const deleteUser = async (userId: string) => {
-    const raw = await fetch(`${import.meta.env.VITE_SERVER_URI}/user/${userId}`, {method: 'DELETE', credentials: 'include', headers:{'X-Csrf-Token': sessionStorage.getItem('X-Csrf-Token') || ''}});
-    const res = await raw.json();
-    if (raw.status < 200 || raw.status >= 400) throw new Error(res.message);
-    return res.message
-};
