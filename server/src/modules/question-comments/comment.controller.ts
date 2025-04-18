@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Param, ParseUUIDPipe, Post, Query, Req, ValidationPipe } from "@nestjs/common";
-import { AddCommentDTO } from "./comment.dtos";
+import { AddCommentDTO ,AssignUserToQuestionDTO} from "./comment.dtos";
 import { Request } from "express";
 import { CommentService } from "./comment.service";
 import ResponseModel from "src/utils/ResponseModel";
@@ -16,6 +16,14 @@ export class CommentController {
 
         return new ResponseModel(201, "Added comment succesfully.", response);
     }
+    @Post("mentions")
+    async assignUser(@Body(ValidationPipe) assignUserData: AssignUserToQuestionDTO, @Req() request: Request) {
+        console.log(assignUserData,"the data is--")
+        const response = await this.commentService.assignUser(assignUserData);
+
+        return new ResponseModel(201, "Assign User to tthis question succesfully.", response);
+    }
+    
 
 
     @Get("")

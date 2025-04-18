@@ -103,6 +103,8 @@ export class Question {
   heading?: string;
   @Expose()
   text_conflict?: string;
+  @Expose()
+  assignedToId?: string;
 
   _count: {
     comments: number;

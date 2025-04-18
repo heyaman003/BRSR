@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { AddCommentDTO } from './comment.dtos';
+import { AddCommentDTO,AssignUserToQuestionDTO } from './comment.dtos';
 import { CommentRepository } from './comment.repository';
 import { Comment } from '@prisma/client';
 import { NotificationService } from '../notification/notification.service';
@@ -25,8 +25,12 @@ export class CommentService {
     }))
     return comment;
   }
-
+  
   async listAllComments(questionId: string): Promise<Comment[]> {
     return await this.commentRepository.listAllComents(questionId);
+  }
+
+  async assignUser(data: AssignUserToQuestionDTO) {
+    return await this.commentRepository.assignUser(data);
   }
 }

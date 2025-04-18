@@ -1,14 +1,19 @@
+import { RootState } from "@/store/store";
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import TextareaAutosize from 'react-textarea-autosize';
 
 interface TextQuestionUIArgs {
   updateTextAnswer: (answer: string) => void;
   value: string | undefined;
+  assignedToId:string | undefined
 }
 
-const TextQuestionUI: React.FC<TextQuestionUIArgs> = ({ updateTextAnswer, value }) => {
+const TextQuestionUI: React.FC<TextQuestionUIArgs> = ({ updateTextAnswer, value ,assignedToId}) => {
   const [answer, setAnswer] = useState(value || '');
-
+  const role: string = useSelector((state: RootState) => state.auth.user?.data.role);
+  const userId: string = useSelector((state: RootState) => state.auth.user?.data.id);
+   console.log("the value is-----",role,userId,assignedToId)
   useEffect(() => {
     updateTextAnswer(answer);
   }, [answer]);
@@ -22,7 +27,8 @@ const TextQuestionUI: React.FC<TextQuestionUIArgs> = ({ updateTextAnswer, value 
     <TextareaAutosize
     minRows={1}
     maxRows={5}
-  onChange={(e) => setAnswer(e.target.value)}
+    disabled={role === "CLIENT" && userId !== assignedToId}
+  onChange={(e) =>setAnswer(e.target.value)}
   value={answer}
   className={`resize-none ml-1 flex  rounded-md border border-input bg-background px-3 py-2 text-sm
               file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground

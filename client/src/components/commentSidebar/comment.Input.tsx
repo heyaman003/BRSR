@@ -28,7 +28,8 @@ const CommentInput: React.FC<CommentInputProps> = ({
   const [commentText, setCommentText] = useState<string>("");
   const [isAddingComment, setIsAddingComment] = useState<boolean>(false);
   const [mentions, setMentions] = useState<MentionItem[]>([]);
-
+ 
+  //load  the list of user  of that comapny
   const loadCompanyUsers = async (
     companyId: string | null
   ): Promise<Object | void> => {
@@ -57,6 +58,11 @@ const CommentInput: React.FC<CommentInputProps> = ({
     mentions: string[]
   ) {
     try {
+      console.log( "the id is,",{
+        questionId,
+        data: comment,
+        mentions,
+      })
       const res = await customFetch(`/comment`, {
         method: "POST",
         body: {

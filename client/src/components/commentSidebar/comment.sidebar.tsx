@@ -28,6 +28,8 @@ const CommentSidebar = ({
   const [comments, setComments] = useState<Comment[]>([]);
   const customFetch = useFetch();
 
+ //fetch the inital comment for that particular question using the questionId
+
   async function fetchComments(questionId: string) {
     try {
       const res = await customFetch(`/comment?question=${questionId}`, {
@@ -41,6 +43,7 @@ const CommentSidebar = ({
     }
   }
 
+//setComments is called everytime we change the question as that questcomment will come
   useEffect(() => {
     if (questionId)
       fetchComments(questionId).then((comment) =>

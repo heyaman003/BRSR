@@ -6,22 +6,17 @@ import TableUI from "@/components/question/table";
 import TextQuestionUI from "@/components/question/text";
 import { Button } from "@/components/ui/button";
 import { Question, SubSection, Table } from "@/models/models";
-import { Loader2, MessageSquareText } from "lucide-react";
+import { useFetch } from "@/hooks/use-fetch";
+import { Loader2, MessageSquareText, AtSign } from "lucide-react";
+import { User } from "@/lib/types";
 import React, { memo, useEffect, useLayoutEffect, useState } from "react";
 import { toast } from "sonner";
-import {
-  fetchSubsectionData,
-  updateSubsectionData,
-} from "@/utils/dataFetching";
+import {fetchSubsectionData,updateSubsectionData,} from "@/utils/dataFetching";
 import { useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  acceptCurrentChangeText,
-  acceptIncomingChangeText,
-  setActiveSubsection,
-  updateTextAnswer,
-} from "@/features/activeSubsectionData/activeSubsectionSlice";
+import {acceptCurrentChangeText,acceptIncomingChangeText,setActiveSubsection,updateTextAnswer} from "@/features/activeSubsectionData/activeSubsectionSlice";
 import { RootState } from "@/store/store";
+import MentionInput from "../user.mentioned";
 
 interface SectionUiArgs {
   subsectionId: string;
@@ -30,15 +25,41 @@ interface SectionUiArgs {
 
 const Section: React.FC<SectionUiArgs> = ({ subsectionId, companyId }) => {
   const dispatch = useDispatch();
-
+  const customFetch = useFetch();
   const [searchParams] = useSearchParams();
   const [loaderProgress, setLoaderProgress] = useState<number>(10);
   const [isLoaderVisible, setIsLoaderVisible] = useState(true);
   const [isSaving, setIsSaving] = useState<boolean>(false);
+  const [activeQuestionMention, setactiveQuestionMention] = useState<{id: string; isActive: boolean;}>({ id: "", isActive: false });
+  const [listUser, setUserList] = useState<User[]>([]);
+  const role: string = useSelector((state: RootState) => state.auth.user?.data.role);
+  const userId: string = useSelector((state: RootState) => state.auth.user?.data.id);
+  const subsectionData: SubSection = useSelector((state: RootState) => state.activeSubsection.data);
+ 
+  const loadUserData = async (
+    companyId: string | null
+  ): Promise<Object | void> => {
+    try {
+      if (!companyId) throw new Error("Company not found.");
 
-  const subsectionData: SubSection = useSelector(
-    (state: RootState) => state.activeSubsection.data
-  );
+      const res = await customFetch(`/company/${companyId}`, { method: "GET" });
+
+      if (res.statusCode > 399 || res.statusCode < 200)
+        throw new Error(res.message);
+
+      return res.data;
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  useEffect(() => {
+    role === "SUPERADMIN" &&
+      loadUserData(companyId).then((res: any) => {
+        setUserList(res.users);
+        console.log(res.users);
+      });
+  }, [companyId]);
 
   const smoothScrollTo = (targetY: number, duration = 1000) => {
     const startY = window.scrollY;
@@ -104,6 +125,9 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId, companyId }) => {
     }
   }, [searchParams, subsectionData]);
 
+  function setUserToMention(id: string): void {
+    setactiveQuestionMention({ id, isActive: !activeQuestionMention.isActive });
+  }
   return isLoaderVisible ? (
     <SustainabilityLoader progress={loaderProgress} />
   ) : (
@@ -121,22 +145,37 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId, companyId }) => {
                 </h3>
                 <div className="flex gap-3 justify-between w-[96%]">
                   <p
-                    className={`text-sm mb-2 text-green-800 font-semibold
+                    className={`text-sm mb-2 text-green-800 font-semibold w-[90%]
                       `}
                   >
                     {question.desc}
                   </p>
+                  {role == "SUPERADMIN" && (
+                    <button
+                      onClick={() => setUserToMention(question.id)}
+                      className="flex items-center gap-1 text-yellow-600 hover:text-yellow-700 transition-colors text-sm font-medium"
+                    >
+                      <AtSign size={18} />
+                      <span className="text-base">Assign</span>
+                    </button>
+                  )}
+                  <MentionInput
+                    question={question}
+                    activeQuestionMention={activeQuestionMention}
+                    users={listUser}
+                  />
                   <button
                     onClick={() => setSelectedQuestionForComment(question.id)}
                     className="flex items-center gap-1 text-yellow-600 hover:text-yellow-700 transition-colors text-sm font-medium"
                   >
                     <MessageSquareText size={18} />
+
                     <span className="text-base">
                       {question._count.comments}
                     </span>
                   </button>
                 </div>
-                
+
                 {/* When question type is table */}
                 {question.type === "TABLE" &&
                   question.answer_table &&
@@ -158,6 +197,8 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId, companyId }) => {
                   <>
                     <span className="flex gap-4 my-2 ml-1 w-[97%]">
                       <TextQuestionUI
+                       
+                        assignedToId={question.assignedToId}
                         value={question.answer_text}
                         key={question.id}
                         updateTextAnswer={(answer: string) =>
@@ -186,7 +227,7 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId, companyId }) => {
                         </Button>
                       )}
                     </span>
-                    
+
                     {/* When text question has conflicts -  render the incoming change */}
                     {question.text_conflict && (
                       <span className="flex gap-4 my-2 ml-1 w-[97%]">
@@ -303,15 +344,18 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId, companyId }) => {
             disabled={isSaving}
             onClick={() => {
               setIsSaving(true);
-              toast.promise(updateSubsectionData(subsectionData, companyId || ''), {
-                success: (res) => {
-                  return res.message;
-                },
-                error: (err) => {
-                  return err.message;
-                },
-                finally: () => setIsSaving(false),
-              });
+              toast.promise(
+                updateSubsectionData(subsectionData, companyId || ""),
+                {
+                  success: (res) => {
+                    return res.message;
+                  },
+                  error: (err) => {
+                    return err.message;
+                  },
+                  finally: () => setIsSaving(false),
+                }
+              );
             }}
             className=" bg-yellow-500 hover:bg-yellow-600 w-24 text-white font-bold px-8 py-2 rounded-sm"
           >

@@ -5,7 +5,7 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
-import { AddCommentDTO } from './comment.dtos';
+import { AddCommentDTO,AssignUserToQuestionDTO } from './comment.dtos';
 import { DbService } from 'prisma/db.connections';
 import { Comment } from '@prisma/client';
 
@@ -82,4 +82,19 @@ export class CommentRepository {
       throw new InternalServerErrorException(e);
     }
   }
+  
+  async assignUser(data: AssignUserToQuestionDTO) {
+    const { questionId, userId } = data;
+  
+    const updatedQuestion = await this.db.question.update({
+      where: { id: questionId },
+      data: { assignedToId: userId },
+      include: {
+        assignedTo: true,
+      },
+    });
+  
+    return updatedQuestion;
+  }
+
 }

@@ -11,3 +11,10 @@ export class AddCommentDTO {
     @IsArray()
     mentions: string[] //UserId
 }
+export class AssignUserToQuestionDTO {
+    @IsUUID()
+    questionId: string;
+  
+    @IsUUID()
+    userId: string;
+  }

@@ -231,12 +231,11 @@ export class SectionRepository {
   async getSubsectionData(id: string) {
     try {
       return await this.db.subsection.findUnique({
-        where: {
-          id,
-        },
+        where: { id },
         include: {
           questions: {
             include: {
+              assignedTo: true,
               _count: {
                 select: {
                   comments: true,
@@ -259,6 +258,7 @@ export class SectionRepository {
       throw new BadRequestException(e.message);
     }
   }
+  
 
   async createSection(section: Section, companyId: string) {
     const sectionId = (

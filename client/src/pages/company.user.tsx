@@ -40,7 +40,7 @@ const CompanyUser = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [mounted, setMounted] = useState(false);
   const [companyData, setCompanyData] = useState<Company>();
-
+  
   // Generate random leaves for animation
   const [leaves, setLeaves] = useState<React.ReactNode[]>([]);
 
