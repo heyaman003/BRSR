@@ -33,7 +33,6 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId, companyId }) => {
   const [activeQuestionMention, setactiveQuestionMention] = useState<{id: string; isActive: boolean;}>({ id: "", isActive: false });
   const [listUser, setUserList] = useState<User[]>([]);
   const role: string = useSelector((state: RootState) => state.auth.user?.data.role);
-  const userId: string = useSelector((state: RootState) => state.auth.user?.data.id);
   const subsectionData: SubSection = useSelector((state: RootState) => state.activeSubsection.data);
  
   const loadUserData = async (
