@@ -24,13 +24,15 @@ const TableUI = ({
   questionId,
   tableIndex,
   questionIndex,
-  companyId
+  companyId,
+  assignedToId,
 }: {
   tableId: string;
   questionId: string;
   tableIndex: number;
   questionIndex: number;
   companyId: string | null;
+  assignedToId:string | undefined;
 }) => {
   const customFetch = useFetch();
 
@@ -155,12 +157,14 @@ const TableUI = ({
                     ) : (
                       <CellInput
                         value={cell.data}
+                        assignedToId={assignedToId}
                         rowIndex={row.index}
                         cellIndex={cell.index}
                         operation={cell.operation}
                         operands={cell.operands}
                         tableIndex={tableIndex}
                         questionIndex={questionIndex}
+                        
                       />
                     )}
                   </TableCell>

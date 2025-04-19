@@ -8,9 +8,10 @@ type MentionInputProps = {
   activeQuestionMention: { isActive: boolean; id: string };
   question: { id: string };
   users: User[];
+  setactiveQuestionMention: React.Dispatch<React.SetStateAction<{ isActive: boolean; id: string }>>;
 };
 
-const MentionInput: React.FC<MentionInputProps> = ({ activeQuestionMention, question, users }) => {
+const MentionInput: React.FC<MentionInputProps> = ({ activeQuestionMention, question, users ,setactiveQuestionMention}) => {
   const customFetch=useFetch();
   const [listUser, setUserList] = useState<User[]>([]);
   const [inputValue, setInputValue] = useState('');
@@ -44,6 +45,9 @@ const MentionInput: React.FC<MentionInputProps> = ({ activeQuestionMention, ques
         }
       });
       if (res.statusCode < 200 || res.statusCode >= 400) throw new Error(res.message);
+      toast.success(res.message);
+      setInputValue('');
+      setactiveQuestionMention({ ...activeQuestionMention,isActive: false, });
       return res.data;
     } catch (e) {
       if (e instanceof Error) toast.error(e.message);

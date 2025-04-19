@@ -13,6 +13,7 @@ interface CellInputArgs {
   operands: string[] | null | undefined;
   tableIndex: number;
   questionIndex: number;
+  assignedToId:string | undefined;
 }
 
 const CellInput: React.FC<CellInputArgs> = ({
@@ -23,12 +24,15 @@ const CellInput: React.FC<CellInputArgs> = ({
   questionIndex,
   operation,
   operands,
+  assignedToId
 }) => {
   const dispatch = useDispatch();
 
   const subsection: SubSection = useSelector(
     (state: RootState) => state.activeSubsection.data
   );
+  const userId: string = useSelector((state: RootState) => state.auth.user?.data.id);
+  const role: string = useSelector((state: RootState) => state.auth.user?.data.role);
 
   useEffect(()=>{
     if(value!==cellData)
@@ -103,7 +107,8 @@ const CellInput: React.FC<CellInputArgs> = ({
 
   return (
     <input
-      disabled={operation ? true : false}
+    disabled={!!operation || (role === "CLIENT" && userId !== assignedToId)}
+
       onChange={(e) => setCellData(e.target.value)}
       value={cellData}
       className=" disabled:bg-gray-50 border disabled:border-gray-300 hover:bg-white focus:bg-white border-green-400 bg-green-50 text-green-900 px-2 py-1 w-full 

@@ -161,6 +161,7 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId, companyId }) => {
                   <MentionInput
                     question={question}
                     activeQuestionMention={activeQuestionMention}
+                    setactiveQuestionMention={setactiveQuestionMention}
                     users={listUser}
                   />
                   <button
@@ -182,6 +183,7 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId, companyId }) => {
                     (table: Table, tableIndex: number) => (
                       <TableUI
                         companyId={companyId}
+                        assignedToId={question.assignedToId}
                         key={table.id}
                         tableId={table.id}
                         questionId={question.id}
