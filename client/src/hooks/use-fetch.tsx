@@ -44,7 +44,7 @@ export const useFetch = () => {
     }
 
     const data = await response.json();
-
+   console.log(data);
     if (response.status > 399 || response.status < 200) {
       toast.error("Something went wrong.")
       throw new Error(data.message);

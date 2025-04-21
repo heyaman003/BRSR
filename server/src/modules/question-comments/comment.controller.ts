@@ -21,7 +21,7 @@ export class CommentController {
         console.log(assignUserData,"the data is--")
         const response = await this.commentService.assignUser(assignUserData);
 
-        return new ResponseModel(201, "Assign User to tthis question succesfully.", response);
+        return new ResponseModel(201, "Assign User to this question succesfully.", response);
     }
     
 

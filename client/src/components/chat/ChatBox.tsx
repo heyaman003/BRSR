@@ -8,6 +8,7 @@ interface Message {
   id: string;
   type: 'user' | 'bot';
   content: string;
+  isTyping?: boolean;
 }
 
 const ChatBox: React.FC = () => {
@@ -20,9 +21,10 @@ const ChatBox: React.FC = () => {
     }
   ]);
   const [inputValue, setInputValue] = useState('');
-  const [isTyping, setIsTyping] = useState(false);
+  const [isBotTyping, setIsBotTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const typingTimeoutRef = useRef<NodeJS.Timeout>();
   
   const toggleChat = () => {
     setIsOpen(prev => !prev);
@@ -38,8 +40,53 @@ const ChatBox: React.FC = () => {
       inputRef.current.focus();
     }
   }, [messages, isOpen]);
+
+  useEffect(() => {
+    if (!isBotTyping) return;
   
-  const handleSubmit = (e: React.FormEvent) => {
+    const lastMessage = messages[messages.length - 1];
+    if (!lastMessage || lastMessage.type !== 'bot' || !lastMessage.isTyping) return;
+  
+    const fullResponse = lastMessage.content;
+    let currentText = '';
+    let charIndex = 0;
+  
+    const typeNextChar = () => {
+      if (charIndex >= fullResponse.length) {
+        setMessages(prev => [
+          ...prev.slice(0, -1),
+          { ...lastMessage, content: fullResponse, isTyping: false }
+        ]);
+        setIsBotTyping(false);
+        return;
+      }
+  
+      currentText += fullResponse[charIndex];
+      charIndex++;
+  
+      setMessages(prev => [
+        ...prev.slice(0, -1),
+        { ...lastMessage, content: currentText, isTyping: true }
+      ]);
+  
+      const baseDelay = 30;
+      const variableDelay = Math.random() * 50;
+      const delay = baseDelay + variableDelay;
+  
+      typingTimeoutRef.current = setTimeout(typeNextChar, delay);
+    };
+  
+    typeNextChar();
+
+    return () => {
+      if (typingTimeoutRef.current) {
+        clearTimeout(typingTimeoutRef.current);
+      }
+    };
+  }, [isBotTyping, messages]);
+  
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!inputValue.trim()) return;
@@ -53,29 +100,57 @@ const ChatBox: React.FC = () => {
     
     setMessages(prev => [...prev, userMessage]);
     setInputValue('');
-    setIsTyping(true);
     
-    // Simulate bot response after a delay
-    setTimeout(() => {
-      const botResponses = [
-        "I'm here to help with eco-friendly solutions.",
-        "Sustainability is at the core of what we do.",
-        "Let me find a green alternative for you.",
-        "Small changes can make a big environmental impact.",
-        "How else can I assist with your sustainability goals?"
-      ];
+    // Add temporary bot message with typing indicator
+    const botTypingMessage: Message = {
+      id: `typing-${Date.now()}`,
+      type: 'bot',
+      content: '',
+      isTyping: true
+    };
+    
+    setMessages(prev => [...prev, botTypingMessage]);
+    setIsBotTyping(true);
+    
+    try {
+      // Make API call to your backend for OpenAI response
+      const response = await fetch(`${import.meta.env.VITE_SERVER_URI}/chat/openai`, {
+        method: 'POST',
+        headers: {
+          "Content-Type": "application/json",
+          "X-Csrf-Token": sessionStorage.getItem("X-Csrf-Token") || "",
+        },
+        credentials: "include",
+        body: JSON.stringify({ question: inputValue }),
+      });
+
+      const data = await response.json();
+
+      // Replace typing message with actual response
+      setMessages(prev => [
+        ...prev.slice(0, -1),
+        {
+          id: `bot-${Date.now()}`,
+          type: 'bot',
+          content: data.answer,
+          isTyping: false
+        }
+      ]);
+      setIsBotTyping(false);
       
-      const randomResponse = botResponses[Math.floor(Math.random() * botResponses.length)];
-      
-      const botMessage: Message = {
-        id: Date.now().toString(),
-        type: 'bot',
-        content: randomResponse
-      };
-      
-      setMessages(prev => [...prev, botMessage]);
-      setIsTyping(false);
-    }, 1500);
+    } catch (error) {
+      console.error('Error fetching OpenAI response:', error);
+      setMessages(prev => [
+        ...prev.slice(0, -1),
+        {
+          id: `error-${Date.now()}`,
+          type: 'bot',
+          content: 'Sorry, I could not process your request. Please try again later.',
+          isTyping: false
+        }
+      ]);
+      setIsBotTyping(false);
+    }
   };
   
   return (
@@ -110,13 +185,9 @@ const ChatBox: React.FC = () => {
                 key={message.id}
                 type={message.type}
                 content={message.content}
+                isTyping={message.isTyping}
               />
             ))}
-            
-            {isTyping && (
-              <ChatMessage type="bot" content="" isTyping={true} />
-            )}
-            
             <div ref={messagesEndRef} />
           </div>
           
@@ -129,13 +200,14 @@ const ChatBox: React.FC = () => {
                 onChange={(e) => setInputValue(e.target.value)}
                 placeholder="Type your message..."
                 className="flex-1 bg-transparent outline-none text-sm"
+                disabled={isBotTyping}
               />
               <button
                 type="submit"
-                disabled={!inputValue.trim()}
+                disabled={!inputValue.trim() || isBotTyping}
                 className={cn(
                   "p-1.5 rounded-full transition-all duration-200",
-                  inputValue.trim() 
+                  inputValue.trim() && !isBotTyping
                     ? "bg-eco-leaf text-white" 
                     : "bg-gray-200 text-gray-500"
                 )}

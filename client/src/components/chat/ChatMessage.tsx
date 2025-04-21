@@ -26,15 +26,15 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ type, content, isTyping = fal
         )}
         
         <div className="flex-1">
-          {isTyping ? (
-            <div className="message-typing-indicator">
-              <div className="typing-dot"></div>
-              <div className="typing-dot"></div>
-              <div className="typing-dot"></div>
-            </div>
-          ) : (
-            <p>{content}</p>
-          )}
+        {isTyping ? (
+          <div className="flex space-x-2">
+            <span className="w-2 h-2 rounded-full bg-gray-400 animate-pulse" />
+            <span className="w-2 h-2 rounded-full bg-gray-400 animate-pulse [animation-delay:0.2s]" />
+            <span className="w-2 h-2 rounded-full bg-gray-400 animate-pulse [animation-delay:0.4s]" />
+          </div>
+        ) : (
+          <p className="whitespace-pre-wrap">{content}</p>
+        )}
         </div>
         
         {type === 'user' && (

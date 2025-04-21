@@ -234,4 +234,18 @@ export class UserRepository {
     })
     return user?.companyId
   }
+  async getUserWithAssignedQuestions(userId: string) {
+    const userWithQuestions = await this.db.user.findUnique({
+      where: { id: userId },
+      include: {
+        assignedQuestions: true, // 👈 this includes the related assigned questions
+      },
+    });
+
+    if (!userWithQuestions) {
+      throw new Error('User not found');
+    }
+
+    return userWithQuestions.assignedQuestions;
+  }
 }

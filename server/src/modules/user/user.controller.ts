@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpStatus, Param, ParseUUIDPipe, Post, Req, UnauthorizedException, ValidationPipe } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpStatus, Logger, Param, ParseUUIDPipe, Post, Req, UnauthorizedException, ValidationPipe } from "@nestjs/common";
 import { CreateUserDto, UserRole } from "src/modules/user/user.dtos";
 import { UserService } from "src/modules/user/user.service";
 import { Role } from "src/utils/auth/roles.decorator";
@@ -48,6 +48,15 @@ export class UserController {
         const userId: string = request['user']['sub'];
         const mentions = await this.userService.getMentions(userId);
         return new ResponseModel(HttpStatus.OK, "Success", mentions);
+    }
+    
+    @Get("/assigned-questions")
+    async getUserWithAssignedQuestions(@Req() request: Request): Promise<ResponseModel> {
+        Logger.log(request['user']);
+        const userId: string = request['user']['sub'];
+        const getUserWithAssignedQuestions = await this.userService.getUserWithAssignedQuestions(userId);
+        console.log(getUserWithAssignedQuestions, "getUserWithAssignedQuestions");
+        return new ResponseModel(HttpStatus.OK, "Success", getUserWithAssignedQuestions);
     }
     
 }

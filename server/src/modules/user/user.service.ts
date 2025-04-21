@@ -65,6 +65,13 @@ export class UserService {
     return this.convertToMentionDto(mention);
   }
 
+  async getUserWithAssignedQuestions(userId: string) {
+    const assignQuestion = await this.userRepository.getUserWithAssignedQuestions(userId);
+    if(!userId)
+      throw new NotFoundException('Mention does not exist.');
+      return assignQuestion.map((q) => this.convertAssignedQuestionToDto(q));
+    }
+
   async getCompanyOfUser(userId: string): Promise<string> {
     const company = await this.userRepository.getCompanyOfUser(userId);
     if(!company)
@@ -83,7 +90,20 @@ export class UserService {
       createdAt: mention.comment.createdAt,
     }
   }
-
+  private convertAssignedQuestionToDto(question: any) {
+    return {
+      id: question.id,
+      heading: question.heading,
+      description: question.desc,
+      type: question.type,
+      answer: question.answer_text,
+      assignedToId: question.assignedToId,
+      subsectionId: question.subsectionId,
+      index: question.index,
+      isAnswered: question.isAnswered
+    };
+  }
+  
   convertToDto(user: User): GetUserDto {
     return {
       id: user.id,

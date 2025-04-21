@@ -155,7 +155,9 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId, companyId }) => {
                       className="flex items-center gap-1 text-yellow-600 hover:text-yellow-700 transition-colors text-sm font-medium"
                     >
                       <AtSign size={18} />
-                      <span className="text-base">Assign</span>
+                      <span className="text-base">{
+                          listUser.find(user => user?.id === question?.assignedToId)?.name || 'assign'
+                         }</span>
                     </button>
                   )}
                   <MentionInput

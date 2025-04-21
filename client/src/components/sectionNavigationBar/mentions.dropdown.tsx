@@ -38,6 +38,12 @@ const MentionsDropdown: React.FC<MentionsContainerProps> = ({ userId }) => {
     });
     return res.data;
   };
+  const fetchAssignQuestions = async () => {
+    const res = await customFetch(`/user/assigned-questions`, {
+      method: "GET",
+    });
+    return res.data;
+  };
 
   const closeNotificationListenerAPI = (userId: string) => {
     customFetch(`/notification/mentions/${userId}/close`, {
@@ -55,6 +61,7 @@ const MentionsDropdown: React.FC<MentionsContainerProps> = ({ userId }) => {
 
   useEffect(() => {
     fetchMentions().then((res) => setMentions(res));
+    fetchAssignQuestions().then((res) => console.log(res) );
   }, []);
 
   useEffect(() => {
