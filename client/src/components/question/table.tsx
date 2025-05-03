@@ -104,7 +104,18 @@ const TableUI = ({
       setIsSavingTableData(false);
     }
   };
-
+  const formatCellData = (value: any) => {
+    const num = parseFloat(value);
+    if (!isNaN(num)) {
+      let x=Number.isInteger(num) ? num : num.toFixed(2);
+      console.log("Value: ", value, "Parsed Number: ", num,x);
+      return x;
+    }
+  
+    return value;
+  };
+  
+  
   return (
     <div className="mb-1 py-3 rounded-md">
       <Table>
@@ -152,11 +163,11 @@ const TableUI = ({
                             : "text-left"
                         }`}
                       >
-                        {cell.data}
+                         {formatCellData(cell.data)}
                       </span>
                     ) : (
                       <CellInput
-                        value={cell.data}
+                        value={formatCellData(cell.data)}
                         assignedToId={assignedToId}
                         rowIndex={row.index}
                         cellIndex={cell.index}

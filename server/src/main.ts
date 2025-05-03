@@ -14,7 +14,7 @@ async function bootstrap() {
 
   if (PROFILE === 'dev')
     app.enableCors({
-      origin: ['http://localhost:5173', 'http://172.16.16.68:5173'],
+      origin: ['http://localhost:5173'],
       credentials: true,
       exposedHeaders: ['X-Csrf-Token', 'Content-Type'],
       allowedHeaders: ['X-Csrf-Token', 'Content-Type'],

@@ -55,9 +55,9 @@ const CellInput: React.FC<CellInputArgs> = ({
           (row) => row.index === rowIndex
         )
         ?.cells.find((cell) => cell.index === cellIndex)?.data;
-
+ 
       if (!cellData) return 0;
-      return parseFloat(cellData);
+      return Number(parseFloat(cellData).toFixed(2));
     },
     [subsection]
   );
@@ -70,7 +70,7 @@ const CellInput: React.FC<CellInputArgs> = ({
     if (!operation) return;
       const valueOfOperands: number[] | undefined = operands?.map((operand) => {
         if (operand.split("$").length === 1) {
-          return parseFloat(operand);
+          return Number(parseFloat(operand).toFixed(2));
         } else if (operand.split("$").length === 4) {
           const questionIndex = parseFloat(operand.split("$")[0]);
           const tableIndex = parseFloat(operand.split("$")[1]);
@@ -155,5 +155,5 @@ const performOperation = (operation: Operation, values: number[]): number => {
       if (Number.isNaN(answer) || !Number.isFinite(answer)) answer = 0;
       break;
   }
-  return answer;
+  return Number(answer.toFixed(2))
 };

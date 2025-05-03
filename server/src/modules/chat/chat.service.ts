@@ -30,9 +30,30 @@ export class ChatService {
     const metadata = texts.map((text, index) => ({ id: index }));
     this.vectorStore = await MemoryVectorStore.fromTexts(texts, metadata, embeddings);
   }
+  async answerFromVectorStore(question: string): Promise<any> {
+    const embeddings = new OpenAIEmbeddings({
+      openAIApiKey: process.env.OPENAI_API_KEY,
+    });
 
+    const retriever = this.vectorStore.asRetriever();
+    const chatModel = new ChatOpenAI({
+      openAIApiKey: process.env.OPENAI_API_KEY,
+      temperature: 0.5,
+      modelName: 'gpt-3.5-turbo',
+    });
 
+    const response = await chatModel.call([
+      new SystemMessage('You are an expert assistant in BRSR (Business Responsibility and Sustainability Reporting). Answer in simple terms with accurate references to BRSR practices.'),
+      new HumanMessage(question),
+    ]);
 
+    console.log('Response from Vector Store:', response);
+    return {
+      mode: 'vectorstore',
+      question,
+      answer: response.text,
+    };
+  }
   async answerFromOpenAI(question: string): Promise<any> {
     const chatModel = new ChatOpenAI({
       openAIApiKey: process.env.OPENAI_API_KEY,

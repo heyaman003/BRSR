@@ -3040,7 +3040,7 @@ export const companySectionsTemplate: Section[] = [
                     [
                       new Cell('Category', false, 2, 1, 0),
                       new Cell(
-                        'FY _____ (Current Financial Year)',
+                        'FY 2024-25 (Current Financial Year)',
                         false,
                         1,
                         3,
@@ -3187,7 +3187,7 @@ export const companySectionsTemplate: Section[] = [
                         1,
                       ),
                       new Cell(
-                        'FY _____ Current Previous Year',
+                        'FY 2023-24 Current Previous Year',
                         false,
                         1,
                         5,
@@ -3381,7 +3381,7 @@ export const companySectionsTemplate: Section[] = [
                         1,
                       ),
                       new Cell(
-                        'FY _____ Current Previous Year',
+                        'FY 2023-24 Current Previous Year',
                         false,
                         1,
                         3,
@@ -3620,7 +3620,7 @@ export const companySectionsTemplate: Section[] = [
                     [
                       new Cell('', false, 2, 1, 0),
                       new Cell(
-                        'FY _____ (Current Financial Year)',
+                        'FY 2024-25 (Current Financial Year)',
                         false,
                         1,
                         3,
@@ -3775,7 +3775,7 @@ export const companySectionsTemplate: Section[] = [
                   new Row(
                     [
                       new Cell(
-                        'FY _____ (Current Financial Year)',
+                        'FY 2024-25 (Current Financial Year)',
                         false,
                         1,
                         1,
@@ -3789,7 +3789,7 @@ export const companySectionsTemplate: Section[] = [
                         1,
                       ),
                       new Cell(
-                        'FY _____ (Current Financial Year)',
+                        'FY 2024-25 (Current Financial Year)',
                         false,
                         1,
                         1,
@@ -3985,7 +3985,7 @@ export const companySectionsTemplate: Section[] = [
                     [
                       new Cell('Category', false, 2, 1, 0),
                       new Cell(
-                        'FY _____ (Current Financial Year)',
+                        'FY 2024-25 (Current Financial Year)',
                         false,
                         1,
                         3,
@@ -4183,7 +4183,7 @@ export const companySectionsTemplate: Section[] = [
                         1,
                       ),
                       new Cell(
-                        'FY _____ Current Previous Year',
+                        'FY 2023-24 Current Previous Year',
                         false,
                         1,
                         5,
@@ -4949,8 +4949,8 @@ export const companySectionsTemplate: Section[] = [
                 [
                   new Row(
                     [
-                      new Cell('FY __', false, 1, 1, 0),
-                      new Cell('PY __', false, 1, 1, 0),
+                      new Cell('FY 2024-25', false, 1, 1, 0),
+                      new Cell('PY 2023-24', false, 1, 1, 0),
                     ],
                     true,
                     0,
@@ -4974,8 +4974,8 @@ export const companySectionsTemplate: Section[] = [
                 [
                   new Row(
                     [
-                      new Cell('FY __', false, 1, 1, 0),
-                      new Cell('PY __', false, 1, 1, 0),
+                      new Cell('FY 2024-25', false, 1, 1, 0),
+                      new Cell('PY 2023-24', false, 1, 1, 0),
                     ],
                     true,
                     0,
@@ -5001,14 +5001,14 @@ export const companySectionsTemplate: Section[] = [
                     [
                       new Cell('Parameter', false, 1, 1, 0),
                       new Cell(
-                        'FY _____ (Current Financial Year)',
+                        'FY 2024-25 (Current Financial Year)',
                         false,
                         1,
                         1,
                         1,
                       ),
                       new Cell(
-                        'FY ______(Previous Financial Year)',
+                        'FY 2024-25____(Previous Financial Year)',
                         false,
                         1,
                         1,
@@ -5236,14 +5236,14 @@ export const companySectionsTemplate: Section[] = [
                     [
                       new Cell('Parameter', false, 1, 1, 0),
                       new Cell(
-                        'FY _____ (Current Financial Year)',
+                        'FY 2024-25 (Current Financial Year)',
                         false,
                         1,
                         1,
                         1,
                       ),
                       new Cell(
-                        'FY ______(Previous Financial Year)',
+                        'FY 2024-25____(Previous Financial Year)',
                         false,
                         1,
                         1,
@@ -5402,14 +5402,14 @@ export const companySectionsTemplate: Section[] = [
                     [
                       new Cell('Parameter', false, 1, 1, 0),
                       new Cell(
-                        'FY _____ (Current Financial Year)',
+                        'FY 2024-25 (Current Financial Year)',
                         false,
                         1,
                         1,
                         1,
                       ),
                       new Cell(
-                        'FY ______(Previous Financial Year)',
+                        'FY 2024-25____(Previous Financial Year)',
                         false,
                         1,
                         1,
@@ -5621,8 +5621,8 @@ export const companySectionsTemplate: Section[] = [
                     [
                       'Parameter',
                       'Please specify unit',
-                      'FY _____ (Current Financial Year)',
-                      'FY ______ (Previous Financial Year)',
+                      'FY 2024-25 (Current Financial Year)',
+                      'FY 2024-25____ (Previous Financial Year)',
                     ].map(
                       (value, ind: number) => new Cell(value, false, 1, 1, ind),
                     ),
@@ -5666,8 +5666,8 @@ export const companySectionsTemplate: Section[] = [
                     [
                       'Parameter',
                       'Unit',
-                      'FY _____ (Current Financial Year)',
-                      'FY ______ (Previous Financial Year)',
+                      'FY 2024-25 (Current Financial Year)',
+                      'FY 2024-25____ (Previous Financial Year)',
                     ].map(
                       (value, ind: number) => new Cell(value, false, 1, 1, ind),
                     ),
@@ -5786,8 +5786,8 @@ export const companySectionsTemplate: Section[] = [
                   new Row(
                     [
                       'Parameter',
-                      'FY _____ (Current Financial Year)',
-                      'FY ______ (Previous Financial Year)',
+                      'FY 2024-25 (Current Financial Year)',
+                      'FY 2024-25____ (Previous Financial Year)',
                     ].map((value) => new Cell(value, false, 1, 1, 0)),
                     true,
                     0,
@@ -6148,8 +6148,8 @@ export const companySectionsTemplate: Section[] = [
                   new Row(
                     [
                       'Parameter',
-                      'FY _____ (Current Financial Year)',
-                      'FY ______ (Previous Financial Year)',
+                      'FY 2024-25 (Current Financial Year)',
+                      'FY 2024-25____ (Previous Financial Year)',
                     ].map(
                       (value, ind: number) => new Cell(value, false, 1, 1, ind),
                     ),
@@ -6285,14 +6285,14 @@ export const companySectionsTemplate: Section[] = [
                       new Cell('Parameter', false, 1, 1, 0),
                       new Cell('Unit', false, 1, 1, 1),
                       new Cell(
-                        'FY _____ (Current Financial Year)',
+                        'FY 2024-25 (Current Financial Year)',
                         false,
                         1,
                         1,
                         2,
                       ),
                       new Cell(
-                        'FY ______ (Previous Financial Year)',
+                        'FY 2024-25____ (Previous Financial Year)',
                         false,
                         1,
                         1,
@@ -7114,7 +7114,7 @@ export const companySectionsTemplate: Section[] = [
                     [
                       new Cell('', false, 2, 1, 0),
                       new Cell(
-                        'FY _____ (Current Financial Year)',
+                        'FY 2024-25 (Current Financial Year)',
                         false,
                         1,
                         2,
