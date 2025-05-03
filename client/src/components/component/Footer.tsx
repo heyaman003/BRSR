@@ -22,15 +22,15 @@ const Footer = () => {
                     <h2 className="text-2xl font-bold">Contact Us</h2>
                     <div className="mt-3 space-y-4  text-sm">
                         <div>
-                            <p className="font-semibold">Padmeja Ganjoo</p>
-                            <a className="opacity-80" href="mailto:padmeja@kalolwala.com">padmeja@kalolwala.com</a>
+                            <p className="font-semibold">Kalolwala And Associates</p>
+                            <a className="opacity-80" href="mailto:info@kalolwala.com">info@kalolwala.com</a>
                             <p className="opacity-80">+91 9096314764</p>
                         </div>
-                        <div>
+                        {/* <div>
                             <p className="font-semibold">Navdip Patel</p>
                             <a className="opacity-80" href="mailto:navdip@kalolwala.com">navdip@kalolwala.com</a>
                             <p className="opacity-80">+91 7621843450</p>
-                        </div>
+                        </div> */}
                     </div>
                     </div>
                 </div>

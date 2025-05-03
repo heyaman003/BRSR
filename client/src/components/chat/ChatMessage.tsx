@@ -6,7 +6,7 @@ type MessageType = 'user' | 'bot';
 
 interface ChatMessageProps {
   type: MessageType;
-  content: string;
+  content: string; 
   isTyping?: boolean;
 }
 

@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 
 const Hero = () => {
     return (
-        <section className="w-full bg-gradient-to-b from-[#d8eee8] to-[#f3f7d9] mx-auto px-6 py-2">
+        <section className="w-full bg-gradient-to-b from-[#d8eee8] to-[#f3f7d9] mx-auto px-6 py-2 pt-[100px] md:pt-0">
             <div className="container md:flex items-center justify-center h-screen mx-auto">
                 {/* Left Column - Text Content */}
                 <div className="w-full md:w-1/2 mb-6 md:mb-0 text-center md:text-left">
@@ -12,7 +12,7 @@ const Hero = () => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6 }}
                     >
-                        <h2 className="text-4xl md:text-6xl font-bold text-[#333333] leading-tight mb-6">
+                        <h2 className="text-2xl md:text-4xl lg:text-6xl  font-bold text-[#333333] leading-tight mb-6">
                             Business<br />Responsibility and<br />Sustainability<br />Reporting
                         </h2>
 

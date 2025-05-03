@@ -16,7 +16,7 @@ export default function Navbar() {
 
   return (
     <nav
-      className={`fixed w-full z-50 transition-all duration-300 ${
+      className={`fixed w-full z-50 transition-all duration-300 h-[100px] ${
         isScrolled
           ? "bg-white/50 backdrop-blur-lg shadow-md"
           : "bg-transparent"
@@ -26,7 +26,7 @@ export default function Navbar() {
         {/* Logo */}
         <div className="text-2xl flex items-center gap-4 font-bold text-gray-800">
           <img src="./logo.svg" alt="Logo" />
-          <span className="md:text-3xl text-3xl text-[#14532D]">BRSR Reporter</span>
+          <span className="md:text-3xl text-xl  text-[#14532D]">BRSR Reporter</span>
         </div>
 
         {/* Desktop Links */}

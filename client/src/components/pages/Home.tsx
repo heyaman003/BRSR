@@ -9,7 +9,7 @@ import ReportPrep from "@/components/component/ReportPrep";
 
 const Home = () => {
   return (
-    <div>
+    <div className="relative">
       <Navbar />
       <Hero />
       <Overview />

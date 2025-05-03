@@ -20,15 +20,15 @@ const evolution = [
 ]
 const Overview = () => {
     return (
-        <div className="bg-gradient-to-t from-[#d8eee8] to-[#f3f7d9] mx-auto px-6 py-16">
+        <div className="bg-gradient-to-t from-[#d8eee8] to-[#f3f7d9] mx-auto px-6 py-16 hidden md:block ">
             <div className="md:flex items-center justify-center container mx-auto">
-                <div className="md:w-[40%]">
+                <div className="w-full md:w-[40%]">
                     <div className="relative w-fit border-2 border-black">
                         <img src="./overview1.jpg" alt="" />
                         <img src="./overview2.png" className="absolute top-1/3 left-[60%]" alt="" />
                     </div>
                 </div>
-                <div className="md:w-[60%]">
+                <div className=" w-full md:w-[60%]">
                     <h1 className="text-4xl mb-4 font-semibold">Overview</h1>
                     <p className="text-2xl w-[70%]">
                         Business Responsibility and Sustainability Reporting (BRSR) represents SEBI’s enhanced

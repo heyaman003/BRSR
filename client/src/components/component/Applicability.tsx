@@ -19,12 +19,12 @@ const Applicability = () => {
         <div className="mx-auto py-16">
             <div className="mx-auto bg-gray-100">
                 <div className="container mx-auto py-16 text-center overflow-hidden">
-                    <h1 className="text-4xl mb-4 font-semibold">APPLICABILITY</h1>
-                    <p className="text-2xl w-[70%] mx-auto">
+                    <h1 className="md:text-4xl md:mb-4 font-semibold">APPLICABILITY</h1>
+                    <p className="md:text-2xl md:w-[70%] mx-auto">
                         Current Requirement: Top 1000 listed companies by market capitalization must file BRSR
                         reports
                     </p>
-                    <div className="md:flex mt-16 mx-auto w-full justify-between gap-10 relative">
+                    <div className="flex mt-16 mx-auto w-full justify-between gap-10 relative">
                         {images.map((img, index) => (
                             <motion.div
                                 key={index}
@@ -42,15 +42,15 @@ const Applicability = () => {
                 </div>
             </div>
             <div className="my-10 mx-auto container text-center">
-                <h1 className="text-4xl mb-4 font-semibold">SUBMISSION REQUIREMENTS</h1>
-                <p className="text-2xl w-[70%] mx-auto">
+                <h1 className="md:text-4xl mb-4 font-semibold">SUBMISSION REQUIREMENTS</h1>
+                <p className="md:text-2xl md:w-[70%] mx-auto">
                     Reports must be submitted as part of annual reports to SEBI, starting from financial year
                     2022-23. Companies are encouraged to adopt early for leadership in sustainability reporting.
                 </p>
             </div>
             <div className="my-16 mx-auto container text-center">
-                <h1 className="text-4xl mb-4 font-semibold">BUSINESS VALUE</h1>
-                <p className="text-2xl w-[70%] mx-auto">
+                <h1 className="md:text-4xl mb-4 font-semibold">BUSINESS VALUE</h1>
+                <p className="md:text-2xl md:w-[70%] mx-auto">
                     Advantages of BRSR
                 </p>
                 <div className="mx-auto my-16">
