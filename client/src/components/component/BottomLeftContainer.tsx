@@ -1,11 +1,12 @@
 import React from 'react'
 import { Button } from '../ui/button'
 import { toast } from "sonner";
-import {extractToPdf, extractToWords} from "@/utils/pdfgenerate";
+import { extractToWords} from "@/utils/pdfgenerate";
 interface BottomLeftContainerProps {
     activeSection: string,
 }
 const BottomLeftContainer: React.FC<BottomLeftContainerProps> = ({  activeSection}) => {
+  console.log(activeSection)
   return (
     <div className="flex  pb-6">
         {/* <Button
