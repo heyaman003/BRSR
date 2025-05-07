@@ -5231,7 +5231,7 @@ export const companySectionsTemplate: Section[] = [
                         1,
                       ),
                       new Cell(
-                        'FY 2024-25____(Previous Financial Year)',
+                        'FY 2023-24 (Previous Financial Year)',
                         false,
                         1,
                         1,
