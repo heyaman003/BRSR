@@ -52,6 +52,26 @@ export class SectionController {
     await this.sectionService.upsertTable(tableId, companyId, data, userId);
     return new ResponseModel(201, 'Saved table data successfully');
   }
+  // Promise<StreamableFile>
+  @Get('/extract-to-word')
+  async extractSectionToWords(
+  ) {
+    const data: string =
+      await this.sectionService.extractSectionToWords();
+      console.log(data)
+    // try {
+    //   const stream = createReadStream(path);
+    //   return new StreamableFile(stream, {
+    //     type: 'application/pdf',
+    //   });
+    // } finally {
+    //   rm(path, (err)=>{
+    //     if(err)
+    //       this.logger.log(err)
+    //   })
+    // }
+    return new ResponseModel(200, 'Success', data);
+  }
 
   @Get(':sectionId/extract')
   async extractSectionToPDF(

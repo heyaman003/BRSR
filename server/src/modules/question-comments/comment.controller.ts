@@ -18,9 +18,8 @@ export class CommentController {
     }
     @Post("mentions")
     async assignUser(@Body(ValidationPipe) assignUserData: AssignUserToQuestionDTO, @Req() request: Request) {
-        console.log(assignUserData,"the data is--")
-        const response = await this.commentService.assignUser(assignUserData);
-
+        const userId: string = request['user']['sub'];
+        const response = await this.commentService.assignUser(assignUserData,userId);
         return new ResponseModel(201, "Assign User to this question succesfully.", response);
     }
     

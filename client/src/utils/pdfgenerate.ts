@@ -34,3 +34,38 @@ export const extractToPdf = async (sectionId: string) => {
     return 'Extracted section to PDF successfully.'
 
 };
+
+export const extractToWords = async () => {
+    const raw = await fetch(
+      `${import.meta.env.VITE_SERVER_URI}/section/extract-to-word`,
+      {
+        headers: {
+          'X-Csrf-Token': sessionStorage.getItem('X-Csrf-Token') || ''
+        },
+        credentials: 'include'
+      }
+    );
+
+
+    if(raw.status<200 || raw.status>=400){
+      const res = await raw.json()
+      throw new Error(res.message);
+    }
+
+    const blob: Blob = await raw.blob();
+
+    const url: string = window.URL.createObjectURL(blob);
+
+    const a: HTMLAnchorElement = document.createElement('a');
+
+    a.href = url;
+
+    document.body.appendChild(a);
+
+    a.click();
+
+    a.remove()
+
+    return 'Extracted section to PDF successfully.'
+
+};

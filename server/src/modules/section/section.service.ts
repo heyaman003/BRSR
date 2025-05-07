@@ -4,6 +4,7 @@ import { SectionRepository } from './section.repository';
 import { SubSectionModel, TableModel } from './section.dtos';
 import { generatePdf } from 'src/utils/convertToPdf';
 import ConflictResolutionGateway from '../conflict-resolution/conflict.resolution.gateway';
+// import { generateDocx } from 'convertToDocs';
 
 @Injectable()
 export class SectionService {
@@ -55,6 +56,12 @@ export class SectionService {
     const data = await this.sectionRepository.retrieveAllSectionData(sectionId);
     const pdfPath = await generatePdf(data);
     return pdfPath;
+  }
+  async extractSectionToWords(): Promise<string> {
+    const data = await this.sectionRepository.retrieveAllSectionsData();
+    // const pdfPath = await generateDocx(data: Section[]);
+    console.log(data),"The data inside the service";
+    return data.toString();
   }
 
   async getHistory(questionId: string) {

@@ -13,6 +13,7 @@ export class NotificationService {
             if (!this.clients[userId]) {
                 this.clients[userId] = new Subject();
             }
+            this.logger.log(userId, 'the userId is while iniillazing is');
             return this.clients[userId].asObservable();
         } catch (error) {
             this.logger.error('Error adding client:', error);
@@ -21,6 +22,7 @@ export class NotificationService {
     }
 
     removeClient(userId: string) {
+        this.logger.log(userId, 'the userId is while iniillazing is');
         try {
             if (this.clients[userId]) {
                 this.clients[userId].complete();
@@ -36,6 +38,18 @@ export class NotificationService {
         try {
             if (this.clients[userId]) {
                 this.clients[userId].next(JSON.stringify({data}));
+            }
+        } catch (error) {
+            this.logger.error('Error sending notification:', error);
+            throw error;
+        }
+    }
+    sendNotificationMentions(userId: string, data: any) {
+        console.log(" sendNotificationMentions is called",userId,data,this.clients)
+        try {
+            if (this.clients[userId]) {
+                this.clients[userId].next(JSON.stringify({data}));
+                this.logger.log("notification sent to mentions", data)
             }
         } catch (error) {
             this.logger.error('Error sending notification:', error);

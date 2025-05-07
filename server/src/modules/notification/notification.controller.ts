@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Sse } from '@nestjs/common';
+import { ConsoleLogger, Controller, Get, Param, Sse } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { NotificationService } from './notification.service';
 
@@ -6,10 +6,12 @@ import { NotificationService } from './notification.service';
 export class NotificationController {
   constructor(
     private readonly notificationService: NotificationService,
+    private readonly logger: ConsoleLogger
   ) {}
 
   @Sse('/mentions/:userId')
   addClient(@Param('userId') userId: string): Observable<any> {
+    this.logger.log(userId, 'the userId is while iniillazing is');
     return this.notificationService.addClient(userId);
   }
 

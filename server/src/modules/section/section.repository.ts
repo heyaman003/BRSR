@@ -57,6 +57,36 @@ export class SectionRepository {
 
     return data;
   }
+  async retrieveAllSectionsData(): Promise<Section[]> {
+    const data = await this.db.section.findMany({
+      include: {
+        subsections: {
+          include: {
+            questions: {
+              include: {
+                answer_table: {
+                  include: {
+                    rows: {
+                      include: {
+                        cells: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+  
+    if (!data || data.length === 0) {
+      throw new NotFoundException('No sections found.');
+    }
+  
+    return data;
+  }
+  
 
   async updateSubsectionData(
     id: string,

@@ -52,7 +52,6 @@ export const conversionData: ConversionData = {
       { value: 'megajoule', label: 'Megajoule (MJ)' },
     ],
     conversions: [
-      // Energy conversions as per image
       { from: 'joule', to: 'gigajoule', factor: 0.000000001 },
       { from: 'gigajoule', to: 'joule', factor: 1000000000 },
       { from: 'kilowatt-hour', to: 'gigajoule', factor: 0.0036 },
@@ -61,7 +60,6 @@ export const conversionData: ConversionData = {
       { from: 'gigajoule', to: 'megawatt-hour', factor: 0.27778 },
       { from: 'tonne', to: 'megajoule', factor: 4184 },
       { from: 'tonne', to: 'gigajoule', factor: 4.184 },
-      // Additional conversions for completeness
       { from: 'megajoule', to: 'gigajoule', factor: 0.001 },
       { from: 'gigajoule', to: 'megajoule', factor: 1000 },
     ],

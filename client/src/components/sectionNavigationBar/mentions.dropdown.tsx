@@ -83,6 +83,7 @@ const MentionsDropdown: React.FC<MentionsContainerProps> = ({ userId }) => {
 
       eventSource.onmessage = (event) => {
         const { data } = JSON.parse(event.data);
+        console.log("Mentions data", data);
         setMentions((prevMentions) => [data, ...prevMentions]);
       };
 
