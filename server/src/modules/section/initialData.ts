@@ -5610,7 +5610,7 @@ export const companySectionsTemplate: Section[] = [
                       'Parameter',
                       'Please specify unit',
                       'FY 2024-25 (Current Financial Year)',
-                      'FY 2024-25____ (Previous Financial Year)',
+                      'FY 2023-24 (Previous Financial Year)',
                     ].map(
                       (value, ind: number) => new Cell(value, false, 1, 1, ind),
                     ),
@@ -5655,7 +5655,7 @@ export const companySectionsTemplate: Section[] = [
                       'Parameter',
                       'Unit',
                       'FY 2024-25 (Current Financial Year)',
-                      'FY 2024-25____ (Previous Financial Year)',
+                      'FY 2023-24 (Previous Financial Year)',
                     ].map(
                       (value, ind: number) => new Cell(value, false, 1, 1, ind),
                     ),
@@ -5775,7 +5775,7 @@ export const companySectionsTemplate: Section[] = [
                     [
                       'Parameter',
                       'FY 2024-25 (Current Financial Year)',
-                      'FY 2024-25____ (Previous Financial Year)',
+                      'FY 2023-24 (Previous Financial Year)',
                     ].map((value) => new Cell(value, false, 1, 1, 0)),
                     true,
                     0,
@@ -6137,7 +6137,7 @@ export const companySectionsTemplate: Section[] = [
                     [
                       'Parameter',
                       'FY 2024-25 (Current Financial Year)',
-                      'FY 2024-25____ (Previous Financial Year)',
+                      'FY 2023-24 (Previous Financial Year)',
                     ].map(
                       (value, ind: number) => new Cell(value, false, 1, 1, ind),
                     ),
@@ -6280,7 +6280,7 @@ export const companySectionsTemplate: Section[] = [
                         2,
                       ),
                       new Cell(
-                        'FY 2024-25____ (Previous Financial Year)',
+                        'FY 2023-24 (Previous Financial Year)',
                         false,
                         1,
                         1,
