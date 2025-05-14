@@ -103,7 +103,35 @@ const activeSubsectionSlice = createSlice({
         ),
       };
     },
-
+    updateQuestionApproval:(state, action)=>{
+      const { questionId } = action.payload;
+      state.data = {
+        ...state.data,
+        questions: state.data.questions.map((question: Question) =>
+          question.id === questionId
+            ?{ ...question, isApproved: true }
+            : question
+        ),
+      };
+    },
+    updateQuestionData: (state, action) => {
+      const { questionId,data } = action.payload;
+      console.log("updateQuestionData",questionId,data);
+      state.data = {
+        ...state.data,
+        questions: state.data.questions.map((question: Question) =>{
+          if(question.id === questionId){
+            const  newquestiondata= {...question, ...data}
+            console.log("updateQuestionData",questionId,data,newquestiondata);
+            return { ...question, ...data }
+          }
+          
+          else return  question
+        }
+      ),   
+      };
+    },
+    
     addConflictToText: (state, action: PayloadAction<{questionId: string, data: string}>) => {
       state.data = {
         ...state.data,
@@ -185,6 +213,8 @@ export const {
   setActiveSubsection,
   updateTableData,
   updateTextAnswer,
+  updateQuestionApproval,
+  updateQuestionData,
   updateCellData,
   addConflictToTable,
   acceptIncomingChangeTable,

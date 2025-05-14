@@ -18,3 +18,6 @@ export class AssignUserToQuestionDTO {
     @IsUUID()
     userId: string;
   }
+  export class AssignApproveUserToQuestionDTO extends AssignUserToQuestionDTO {
+    
+  }

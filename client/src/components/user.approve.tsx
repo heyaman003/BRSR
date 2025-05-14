@@ -4,17 +4,14 @@ import { useFetch } from "@/hooks/use-fetch";
 import { toast } from "sonner";
 import { useDispatch } from "react-redux";
 import { updateQuestionData } from '@/features/activeSubsectionData/activeSubsectionSlice';
-
-// import {useSelector} from "react-redux";
-// import { RootState } from "@/store/store";
 type MentionInputProps = {
-  activeQuestionMention: { isActive: boolean; id: string };
+ activeQuestionApproval: { isActive: boolean; id: string };
   question: { id: string };
   users: User[];
-  setactiveQuestionMention: React.Dispatch<React.SetStateAction<{ isActive: boolean; id: string }>>;
+  setactiveQuestionApproval: React.Dispatch<React.SetStateAction<{ isActive: boolean; id: string }>>;
 };
 
-const MentionInput: React.FC<MentionInputProps> = ({ activeQuestionMention, question, users ,setactiveQuestionMention}) => {
+const ApprovalInput: React.FC<MentionInputProps> = ({ activeQuestionApproval, question, users ,setactiveQuestionApproval}) => {
   const customFetch=useFetch();
   const dispatch=useDispatch();
   const [listUser, setUserList] = useState<User[]>([]);
@@ -41,7 +38,7 @@ const MentionInput: React.FC<MentionInputProps> = ({ activeQuestionMention, ques
     userId:String
   ) {
     try {
-      const res = await customFetch(`/comment/mentions`, {
+      const res = await customFetch(`/comment/approve`, {
         method: "POST",
         body: {
           questionId,
@@ -51,8 +48,8 @@ const MentionInput: React.FC<MentionInputProps> = ({ activeQuestionMention, ques
       if (res.statusCode < 200 || res.statusCode >= 400) throw new Error(res.message);
       toast.success(res.message);
       setInputValue('');
-      dispatch(updateQuestionData({questionId, data:{ assignedTo:res.data.assignedTo,assignedToId:res.data.assignedToId}}));
-      setactiveQuestionMention({ ...activeQuestionMention,isActive: false, });
+      setactiveQuestionApproval({ ...activeQuestionApproval,isActive: false, });
+      dispatch(updateQuestionData({questionId, data:{ approveTo:res.data.approveTo,approveToId:res.data.approveToId}}));
       return res.data;
     } catch (e) {
       if (e instanceof Error) toast.error(e.message);
@@ -69,8 +66,8 @@ const MentionInput: React.FC<MentionInputProps> = ({ activeQuestionMention, ques
   };
 
   return (
-    activeQuestionMention.isActive &&
-    activeQuestionMention.id === question.id && (
+    activeQuestionApproval.isActive &&
+    activeQuestionApproval.id === question.id && (
       <div className="flex space-x-2">
         <span className="text-base relative">
           <input
@@ -105,4 +102,4 @@ const MentionInput: React.FC<MentionInputProps> = ({ activeQuestionMention, ques
   );
 };
 
-export default MentionInput;
+export default ApprovalInput;

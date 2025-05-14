@@ -265,7 +265,28 @@ export class SectionRepository {
         include: {
           questions: {
             include: {
-              assignedTo: true,
+              assignedTo: {
+                select: {
+                  id: true,
+                  name: true,
+                  email: true,
+                  role: true,
+                  companyId: true,
+                  createdAt: true,
+                  updatedAt: true,
+                },
+              },
+              approveTo: {
+                select: {
+                  id: true,
+                  name: true,
+                  email: true,
+                  role: true,
+                  companyId: true,
+                  createdAt: true,
+                  updatedAt: true,
+                },
+              },
               _count: {
                 select: {
                   comments: true,
@@ -442,4 +463,27 @@ export class SectionRepository {
       );
     return flag;
   }
+  async updateSingleQuestion(
+    questionId: string,
+    data: QuestionModel,
+    userId: string,
+  ) {
+    await this.db.question.update({
+      where: { id: questionId },
+      data: {
+        isAnswered: this.isQuestionAnswered(data),
+        answer_text: data.answer_text ?? null,
+        isApproved: true,
+        history: {
+          create: {
+            user: {
+              connect: {
+                id: userId,
+              },
+            },
+          },
+        },
+      },
+    });
+  } 
 }

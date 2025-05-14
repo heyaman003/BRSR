@@ -96,5 +96,19 @@ export class CommentRepository {
   
     return updatedQuestion;
   }
+  
+  async approveUser(data: AssignUserToQuestionDTO) {
+    const { questionId, userId } = data;
+  
+    const updatedQuestion = await this.db.question.update({
+      where: { id: questionId },
+      data: { approveToId: userId },
+      include: {
+        approveTo: true,
+      },
+    });
+  
+    return updatedQuestion;
+  }
 
 }

@@ -5,6 +5,7 @@ import {
   Get,
   Param,
   ParseUUIDPipe,
+  Patch,
   Post,
   Req,
   StreamableFile,
@@ -12,7 +13,7 @@ import {
 } from '@nestjs/common';
 import { SectionService } from './section.service';
 import ResponseModel from 'src/utils/ResponseModel';
-import { SubSectionModel, TableModel } from './section.dtos';
+import { QuestionModel, SubSectionModel, TableModel } from './section.dtos';
 import { createReadStream, rm } from 'fs';
 import { Request } from 'express';
 
@@ -97,4 +98,20 @@ export class SectionController {
     const history = await this.sectionService.getHistory(questionId);
     return new ResponseModel(200, "Success", history);
   }
+  @Patch(':companyId/subsection/:subsectionId/question/:questionId')
+  async updateQuestion(
+    @Param('subsectionId', ParseUUIDPipe) subsectionId: string,
+    @Param('questionId', ParseUUIDPipe) questionId: string,
+    @Param('companyId', ParseUUIDPipe) companyId: string,
+
+    @Body(ValidationPipe) data: QuestionModel,
+    @Req() req: Request // to extract user ID or company ID if needed
+  ) {
+    this.logger.log(data,subsectionId, "the data in the updateSingleQuestion method")
+    const userId: string = req['user']['sub'];  
+    await this.sectionService.updateSingleQuestion(questionId, data, userId, companyId);
+  
+    return new ResponseModel(200, 'Question updated successfully');
+  }
+  
 }

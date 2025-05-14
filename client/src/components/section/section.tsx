@@ -7,7 +7,7 @@ import TextQuestionUI from "@/components/question/text";
 import { Button } from "@/components/ui/button";
 import { Question, SubSection, Table } from "@/models/models";
 import { useFetch } from "@/hooks/use-fetch";
-import { Loader2, MessageSquareText, AtSign } from "lucide-react";
+import { Loader2, MessageSquareText } from "lucide-react";
 import { User } from "@/lib/types";
 import React, { memo, useEffect, useLayoutEffect, useState } from "react";
 import { toast } from "sonner";
@@ -16,7 +16,7 @@ import { useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {acceptCurrentChangeText,acceptIncomingChangeText,setActiveSubsection,updateTextAnswer} from "@/features/activeSubsectionData/activeSubsectionSlice";
 import { RootState } from "@/store/store";
-import MentionInput from "../user.mentioned";
+import QuestionComponent from "../ui/dropdown.compoent";
 
 interface SectionUiArgs {
   subsectionId: string;
@@ -31,6 +31,7 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId, companyId }) => {
   const [isLoaderVisible, setIsLoaderVisible] = useState(true);
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [activeQuestionMention, setactiveQuestionMention] = useState<{id: string; isActive: boolean;}>({ id: "", isActive: false });
+  const [activeQuestionApproval, setactiveQuestionApproval] = useState<{id: string; isActive: boolean;}>({ id: "", isActive: false });
   const [listUser, setUserList] = useState<User[]>([]);
   const role: string = useSelector((state: RootState) => state.auth.user?.data.role);
   const subsectionData: SubSection = useSelector((state: RootState) => state.activeSubsection.data);
@@ -127,6 +128,11 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId, companyId }) => {
   function setUserToMention(id: string): void {
     setactiveQuestionMention({ id, isActive: !activeQuestionMention.isActive });
   }
+
+  function setUserApproval(id: string): void {
+    setactiveQuestionApproval({ id, isActive: !activeQuestionApproval.isActive });
+  }
+
   return isLoaderVisible ? (
     <SustainabilityLoader progress={loaderProgress} />
   ) : (
@@ -139,9 +145,13 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId, companyId }) => {
           {subsectionData.questions &&
             subsectionData.questions.map((question: Question) => (
               <div className="mb-5 py-3" key={question.id} id={question.id}>
+                <div className="flex">
                 <h3 className="text-center font-semibold text-green-500 text-lg mb-4">
-                  {question.heading}
+                 
                 </h3>
+                
+                </div>
+               
                 <div className="flex gap-3 justify-between w-[96%]">
                   <p
                     className={`text-sm mb-2 text-green-800 font-semibold w-[90%]
@@ -149,29 +159,12 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId, companyId }) => {
                   >
                     {question.desc}
                   </p>
-                  {role == "SUPERADMIN" && (
-                    <button
-                      onClick={() => setUserToMention(question.id)}
-                      className="flex items-center gap-1 text-yellow-600 hover:text-yellow-700 transition-colors text-sm font-medium"
-                    >
-                      <AtSign size={18} />
-                      <span className="text-base">{
-                          listUser.find(user => user?.id === question?.assignedToId)?.name || 'assign'
-                         }</span>
-                    </button>
-                  )}
-                  <MentionInput
-                    question={question}
-                    activeQuestionMention={activeQuestionMention}
-                    setactiveQuestionMention={setactiveQuestionMention}
-                    users={listUser}
-                  />
+                  <QuestionComponent  question ={question} listUser={listUser} role={role} setUserToMention={setUserToMention} setUserApproval={setUserApproval} activeQuestionMention={activeQuestionMention} setactiveQuestionMention={setactiveQuestionMention} activeQuestionApproval={activeQuestionApproval} setactiveQuestionApproval={setactiveQuestionApproval} />
                   <button
                     onClick={() => setSelectedQuestionForComment(question.id)}
                     className="flex items-center gap-1 text-yellow-600 hover:text-yellow-700 transition-colors text-sm font-medium"
                   >
                     <MessageSquareText size={18} />
-
                     <span className="text-base">
                       {question._count.comments}
                     </span>
@@ -204,6 +197,9 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId, companyId }) => {
                         assignedToId={question.assignedToId}
                         value={question.answer_text}
                         key={question.id}
+
+                        approveToId={question.approveToId}
+                        question={question}
                         updateTextAnswer={(answer: string) =>
                           dispatch(
                             updateTextAnswer({
@@ -353,7 +349,7 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId, companyId }) => {
                   success: (res) => {
                     return res.message;
                   },
-                  error: (err) => {
+                    error: (err) => {
                     return err.message;
                   },
                   finally: () => setIsSaving(false),

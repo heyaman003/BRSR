@@ -1,5 +1,5 @@
 import { ConsoleLogger, Injectable } from '@nestjs/common';
-import { AddCommentDTO,AssignUserToQuestionDTO } from './comment.dtos';
+import { AddCommentDTO,AssignApproveUserToQuestionDTO,AssignUserToQuestionDTO } from './comment.dtos';
 import { CommentRepository } from './comment.repository';
 import { Comment } from '@prisma/client';
 import { NotificationService } from '../notification/notification.service';
@@ -42,5 +42,15 @@ export class CommentService {
    }
     
        return await this.commentRepository.assignUser(data);
+  }
+
+  async approveUser(data: AssignApproveUserToQuestionDTO,userId: string) {
+   try {
+        this.logger.log(data, "the data in AssignApproveUserToQuestionDTO is ")
+        this.notificationService.sendNotificationMentions(data.userId,data);
+   } catch (error) {
+    this.logger.log(error.message);
+   }
+       return await this.commentRepository.approveUser(data);
   }
 }

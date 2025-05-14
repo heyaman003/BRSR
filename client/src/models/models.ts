@@ -105,7 +105,10 @@ export class Question {
   text_conflict?: string;
   @Expose()
   assignedToId?: string;
-
+  @Expose()
+  approveToId?: string;
+  @Expose()
+  isApproved: boolean = false;
   _count: {
     comments: number;
   };
@@ -117,7 +120,8 @@ export class Question {
     answer_table: Table[],
     answer_text: string,
     index: number,
-    _count: { comments: number }
+    _count: { comments: number },
+    isApproved: boolean = false
   ) {
     this.type = type;
     this.id = id;
@@ -126,6 +130,7 @@ export class Question {
     this.answer_table = answer_table;
     this.answer_text = answer_text;
     this._count = _count;
+    this.isApproved=isApproved
   }
 }
 

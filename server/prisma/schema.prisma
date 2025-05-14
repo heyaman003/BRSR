@@ -26,6 +26,7 @@ model User {
   comments Comment[] @relation(name: "commented-by")
   history History[] @relation(name: "saved-by")
   assignedQuestions Question[] @relation(name: "assigned-questions")
+  approveQuestions Question[] @relation(name: "approve-questions")
   mentionedIn Mention[] @relation(name: "mentioned-in") //Set of all mentions where user was mentioned by someone
 }
 
@@ -71,6 +72,9 @@ model Question {
   isAnswered Boolean @default(false)
   assignedTo   User?   @relation(name: "assigned-questions", fields: [assignedToId], references: [id])
   assignedToId String?
+  approveTo   User?   @relation(name: "approve-questions", fields: [approveToId], references: [id])
+  approveToId String?
+  isApproved Boolean @default(false)
 }
 
 model History{

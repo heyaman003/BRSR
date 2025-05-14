@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Section } from './initialData';
 import { SectionRepository } from './section.repository';
-import { SubSectionModel, TableModel } from './section.dtos';
+import { QuestionModel, SubSectionModel, TableModel } from './section.dtos';
 import { generatePdf } from 'src/utils/convertToPdf';
 import ConflictResolutionGateway from '../conflict-resolution/conflict.resolution.gateway';
 // import { generateDocx } from 'convertToDocs';
@@ -66,5 +66,9 @@ export class SectionService {
 
   async getHistory(questionId: string) {
     return await this.sectionRepository.getHistory(questionId);
+  }
+  async updateSingleQuestion(questionId:string, data:QuestionModel, userId:string, companyId:string){
+    console.log(companyId,data, "the data in the updateSingleQuestion method")
+    return await this.sectionRepository.updateSingleQuestion(questionId,data,userId);
   }
 }
