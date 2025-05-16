@@ -82,9 +82,6 @@ const QuestionComponent: React.FC<QuestionComponentProps> = ({
           users={listUser}
         />
       )}
-
-      {/* Heading or content */}
-      <div>{question.heading}</div>
     </div>
   );
 };

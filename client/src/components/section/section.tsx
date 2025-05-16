@@ -147,7 +147,7 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId, companyId }) => {
               <div className="mb-5 py-3" key={question.id} id={question.id}>
                 <div className="flex">
                 <h3 className="text-center font-semibold text-green-500 text-lg mb-4">
-                 
+                  {question.heading}
                 </h3>
                 
                 </div>
