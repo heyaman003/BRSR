@@ -40,8 +40,8 @@ export class UserService {
   ): Promise<GetUserDto> {
     newUser.password = await hash(newUser.password, 12);
 
-    if(await this.userRepository.doesEmailExist(newUser.email))
-      throw new ConflictException('Email already exists.')
+    // if(await this.userRepository.doesEmailExist(newUser.email))
+    //   throw new ConflictException('Email already exists.')
 
     const user: User = await this.userRepository.createUser(newUser, role);
 

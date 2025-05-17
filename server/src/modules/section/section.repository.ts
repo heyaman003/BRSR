@@ -215,7 +215,7 @@ export class SectionRepository {
                 cells: {
                   createMany: {
                     data: row.cells.map((cell) => ({
-                      data: cell.data,
+                      data: String(cell.data),
                       rowSpan: cell['rowSpan'],
                       colSpan: cell['colSpan'],
                       id: cell.id,
@@ -230,7 +230,7 @@ export class SectionRepository {
                   update: row.cells.map((cell) => ({
                     where: { id: cell.id },
                     data: {
-                      data: cell.data,
+                      data: String(cell.data),
                       rowSpan: cell['rowSpan'],
                       colSpan: cell['colSpan'],
                       isUpdateable: cell['isUpdateable'],
