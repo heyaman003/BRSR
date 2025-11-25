@@ -5,44 +5,44 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
-import { AddCommentDTO,AssignUserToQuestionDTO } from './comment.dtos';
+import { AddCommentDTO, AssignUserToQuestionDTO } from './comment.dtos';
 import { DbService } from 'prisma/db.connections';
 import { Comment } from '@prisma/client';
 
 @Injectable()
 export class CommentRepository {
-  constructor(private readonly db: DbService, private readonly logger:ConsoleLogger) {}
+  constructor(
+    private readonly db: DbService,
+    private readonly logger: ConsoleLogger,
+  ) {}
 
-  async addComment(
-    commentData: AddCommentDTO,
-    userId: string,
-  ) {
+  async addComment(commentData: AddCommentDTO, userId: string) {
     try {
       return await this.db.comment.create({
         data: {
           data: commentData.data,
           questionId: commentData.questionId,
           userId,
-          mentions:{
-            create: commentData.mentions.map((userId)=>({
-              user:{
-                connect:{
-                  id: userId
-                }
+          mentions: {
+            create: commentData.mentions.map((userId) => ({
+              user: {
+                connect: {
+                  id: userId,
+                },
               },
             })),
-          }
+          },
         },
         include: {
           mentions: true,
-            user: {
-                select: {
-                    id: true,
-                    name: true,
-                    email: true
-                }
-            }
-        }
+          user: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+            },
+          },
+        },
       });
     } catch (e) {
       if (!(e instanceof HttpException)) this.logger.log(e.message);
@@ -54,22 +54,22 @@ export class CommentRepository {
     try {
       const question = await this.db.question.findUnique({
         where: {
-          id: questionId
+          id: questionId,
         },
         include: {
           comments: {
             include: {
-                user: {
-                    select: {
-                        id: true,
-                        name: true,
-                        email: true
-                    }
-                }
+              user: {
+                select: {
+                  id: true,
+                  name: true,
+                  email: true,
+                },
+              },
             },
             orderBy: {
-              createdAt: 'desc'
-            }
+              createdAt: 'desc',
+            },
           },
         },
       });
@@ -82,10 +82,10 @@ export class CommentRepository {
       throw new InternalServerErrorException(e);
     }
   }
-  
+
   async assignUser(data: AssignUserToQuestionDTO) {
     const { questionId, userId } = data;
-  
+
     const updatedQuestion = await this.db.question.update({
       where: { id: questionId },
       data: { assignedToId: userId },
@@ -93,13 +93,13 @@ export class CommentRepository {
         assignedTo: true,
       },
     });
-  
+
     return updatedQuestion;
   }
-  
+
   async approveUser(data: AssignUserToQuestionDTO) {
     const { questionId, userId } = data;
-  
+
     const updatedQuestion = await this.db.question.update({
       where: { id: questionId },
       data: { approveToId: userId },
@@ -107,8 +107,7 @@ export class CommentRepository {
         approveTo: true,
       },
     });
-  
+
     return updatedQuestion;
   }
-
 }

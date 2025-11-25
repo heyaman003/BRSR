@@ -22,7 +22,6 @@ export class AuthService {
     password: string,
   ): Promise<{ userdetails: GetUserDto; accessToken: string }> {
     try {
-
       const userdetails: User = await this.userService.getUserdetails(email);
       if (!(await this.isValidPassword(password, userdetails.password)))
         throw new UnauthorizedException('Invalid password.');
@@ -41,12 +40,15 @@ export class AuthService {
 
   private async generateJWT(user: User): Promise<string> {
     try {
-      return await this.jwtService.signAsync({
-        sub: user['id'],
-        role: user.role,
-      }, {
-        expiresIn: '24h'
-      });
+      return await this.jwtService.signAsync(
+        {
+          sub: user['id'],
+          role: user.role,
+        },
+        {
+          expiresIn: '24h',
+        },
+      );
     } catch (e) {
       throw new InternalServerErrorException(e.message);
     }
@@ -63,8 +65,7 @@ export class AuthService {
     }
   }
 
-
-  async getUserdetails(userId: string):Promise<GetUserDto> {
+  async getUserdetails(userId: string): Promise<GetUserDto> {
     const userdetails: GetUserDto = await this.userService.getUser(userId);
     return userdetails;
   }

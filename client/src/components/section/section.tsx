@@ -34,6 +34,7 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId, companyId }) => {
   const [activeQuestionApproval, setactiveQuestionApproval] = useState<{id: string; isActive: boolean;}>({ id: "", isActive: false });
   const [listUser, setUserList] = useState<User[]>([]);
   const role: string = useSelector((state: RootState) => state.auth.user?.data.role);
+  const userId: string = useSelector((state: RootState) => state.auth.user?.data?.id);
   const subsectionData: SubSection = useSelector((state: RootState) => state.activeSubsection.data);
  
   const loadUserData = async (
@@ -143,7 +144,18 @@ const Section: React.FC<SectionUiArgs> = ({ subsectionId, companyId }) => {
             {subsectionData.title}
           </h1>
           {subsectionData.questions &&
-            subsectionData.questions.map((question: Question) => (
+            // Filter questions based on user role: CLIENT sees only assigned questions, ADMIN/SUPERADMIN see all
+            subsectionData.questions
+              .filter((question: Question) => {
+                if (role === "ADMIN" || role === "SUPERADMIN") {
+                  return true; // Show all questions for admin and superadmin
+                }
+                if (role === "CLIENT" && userId) {
+                  return question.assignedToId === userId; // Show only assigned questions for client
+                }
+                return false;
+              })
+              .map((question: Question) => (
               <div className="mb-5 py-3" key={question.id} id={question.id}>
                 <div className="flex">
                 <h3 className="text-center font-semibold text-green-500 text-lg mb-4">

@@ -1,23 +1,28 @@
-import { IsArray, IsNotEmpty, IsString, IsUUID, Validate, ValidateNested } from "class-validator";
+import {
+  IsArray,
+  IsNotEmpty,
+  IsString,
+  IsUUID,
+  Validate,
+  ValidateNested,
+} from 'class-validator';
 
 export class AddCommentDTO {
-    @IsUUID()
-    questionId: string;
+  @IsUUID()
+  questionId: string;
 
-    @IsString()
-    @IsNotEmpty()
-    data: string;
+  @IsString()
+  @IsNotEmpty()
+  data: string;
 
-    @IsArray()
-    mentions: string[] //UserId
+  @IsArray()
+  mentions: string[]; //UserId
 }
 export class AssignUserToQuestionDTO {
-    @IsUUID()
-    questionId: string;
-  
-    @IsUUID()
-    userId: string;
-  }
-  export class AssignApproveUserToQuestionDTO extends AssignUserToQuestionDTO {
-    
-  }
+  @IsUUID()
+  questionId: string;
+
+  @IsUUID()
+  userId: string;
+}
+export class AssignApproveUserToQuestionDTO extends AssignUserToQuestionDTO {}

@@ -1,8 +1,8 @@
-import { Module } from "@nestjs/common";
-import ConflictResolutionGateway from "./conflict.resolution.gateway";
+import { Module } from '@nestjs/common';
+import ConflictResolutionGateway from './conflict.resolution.gateway';
 
 @Module({
-    providers: [ConflictResolutionGateway],
-    exports: [ConflictResolutionGateway],
+  providers: [ConflictResolutionGateway],
+  exports: [ConflictResolutionGateway],
 })
 export class ConflictResolutionModule {}

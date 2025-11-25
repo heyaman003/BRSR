@@ -82,7 +82,7 @@ export class CompanyRepository {
       throw new BadRequestException(e.message);
     }
   }
-  
+
   async getCompanyDetails(companyId: string): Promise<Company | null> {
     try {
       return await this.db.company.findUnique({
@@ -108,7 +108,7 @@ export class CompanyRepository {
     try {
       await this.db.company.delete({ where: { id: companyId } });
     } catch (e) {
-      this.logger.log(e)
+      this.logger.log(e);
       throw new InternalServerErrorException();
     }
   }
@@ -165,7 +165,7 @@ export class CompanyRepository {
         answered: await this.getTotalAnsweredQuestionsCount(companyId),
       };
     } catch (e) {
-      this.logger.log(e)
+      this.logger.log(e);
       throw new InternalServerErrorException();
     }
   }
@@ -203,5 +203,4 @@ export class CompanyRepository {
 
     return total;
   }
-  
 }

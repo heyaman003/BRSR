@@ -34,7 +34,7 @@ import { ConflictResolutionModule } from './modules/conflict-resolution/conflict
     ChatModule,
     CommentModule,
     NotificationModule,
-    ConflictResolutionModule
+    ConflictResolutionModule,
   ],
   controllers: [AppController, ChatController],
   providers: [

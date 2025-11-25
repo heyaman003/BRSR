@@ -1,4 +1,11 @@
-import { ConsoleLogger, Controller, Head, Post, Req, Res } from '@nestjs/common';
+import {
+  ConsoleLogger,
+  Controller,
+  Head,
+  Post,
+  Req,
+  Res,
+} from '@nestjs/common';
 import { AppService } from './app.service';
 import { Public } from './utils/auth/public.decorator';
 import { doubleCsrf } from 'csrf-csrf';
@@ -8,10 +15,10 @@ import { Response } from 'express';
 export class AppController {
   generateCsrfToken: Function;
   constructor(private readonly appService: AppService) {
-    const {generateToken} = doubleCsrf({
+    const { generateToken } = doubleCsrf({
       getSecret: () => 'hello world',
-      ignoredMethods: []
-    })
+      ignoredMethods: [],
+    });
 
     this.generateCsrfToken = generateToken;
   }
@@ -24,8 +31,8 @@ export class AppController {
 
   @Head('/csrf')
   @Public()
-  generateToken(@Req() request: any, @Res() response: Response) : void {
-    const token =  request.csrfToken();
+  generateToken(@Req() request: any, @Res() response: Response): void {
+    const token = request.csrfToken();
     response.set('X-Csrf-Token', token);
     response.send();
   }

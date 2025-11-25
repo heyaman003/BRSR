@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { ChevronRight, ChevronDown, UserCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SubSection } from "@/models/models";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 
 type MainNavigationProps = {
@@ -10,6 +12,8 @@ type MainNavigationProps = {
 }
 const MainNavigationforC: React.FC<MainNavigationProps> = ({subsections,setActiveSubsection}) => {
   const [activeSection, setActiveSection] = useState<String | null>(null);
+  const role: string = useSelector((state: RootState) => state.auth.user?.data.role);
+  const userId: string = useSelector((state: RootState) => state.auth.user?.data?.id);
   // const [loaderProgress, setLoaderProgress] = useState<number>(10);
   const toggleSection = (sectionId:any) => {
     setActiveSubsection(sectionId);
@@ -46,7 +50,19 @@ const MainNavigationforC: React.FC<MainNavigationProps> = ({subsections,setActiv
                 activeSection === section.id ? "active" : ""
               )}
             >
-              {section.questions.sort((a, b)=>a.index-b.index).map((qus, index) => (
+              {section.questions &&
+                section.questions
+                  .filter((qus) => {
+                    // Filter questions based on user role: CLIENT sees only assigned questions, ADMIN/SUPERADMIN see all
+                    if (role === "ADMIN" || role === "SUPERADMIN") {
+                      return true; // Show all questions for admin and superadmin
+                    }
+                    if (role === "CLIENT" && userId) {
+                      return qus.assignedToId === userId; // Show only assigned questions for client
+                    }
+                    return false;
+                  })
+                  .sort((a, b)=>a.index-b.index).map((qus, index) => (
                 <div
                   key={qus.id}
                   className="subsection"

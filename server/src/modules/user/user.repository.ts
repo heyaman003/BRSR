@@ -18,16 +18,18 @@ export class UserRepository {
 
   async doesEmailExist(email: string): Promise<Boolean> {
     try {
-      const userId = (await this.db.user.findUnique({
-        where: {
-          email: email
-        },
-        select: {
-          id: true
-        }
-      }))?.id;
+      const userId = (
+        await this.db.user.findUnique({
+          where: {
+            email: email,
+          },
+          select: {
+            id: true,
+          },
+        })
+      )?.id;
 
-      return userId?true:false;
+      return userId ? true : false;
     } catch (e) {
       if (!(e instanceof HttpException)) {
         this.logger.error(e.message, e.stack);
@@ -119,7 +121,7 @@ export class UserRepository {
 
   /**
    * Fetches all the mentions involving the given user
-   * @param userId 
+   * @param userId
    */
   async getMentions(userId: string) {
     try {
@@ -172,7 +174,7 @@ export class UserRepository {
 
   /**
    * Fetches the details of a mention
-   * @param mentionId 
+   * @param mentionId
    */
   async getMentionDetails(mentionId: string) {
     try {
@@ -220,19 +222,19 @@ export class UserRepository {
   }
 
   /**
-   * Fetches the companyId corresponding to an user 
+   * Fetches the companyId corresponding to an user
    * @param userId
    */
   async getCompanyOfUser(userId: string) {
     const user = await this.db.user.findUnique({
-      where:{
+      where: {
         id: userId,
       },
       select: {
-        companyId: true
-      }
-    })
-    return user?.companyId
+        companyId: true,
+      },
+    });
+    return user?.companyId;
   }
   async getUserWithAssignedQuestions(userId: string) {
     const userWithQuestions = await this.db.user.findUnique({

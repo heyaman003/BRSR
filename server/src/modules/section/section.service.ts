@@ -60,15 +60,24 @@ export class SectionService {
   async extractSectionToWords(): Promise<string> {
     const data = await this.sectionRepository.retrieveAllSectionsData();
     // const pdfPath = await generateDocx(data: Section[]);
-    console.log(data),"The data inside the service";
+    (console.log(data), 'The data inside the service');
     return data.toString();
   }
 
   async getHistory(questionId: string) {
     return await this.sectionRepository.getHistory(questionId);
   }
-  async updateSingleQuestion(questionId:string, data:QuestionModel, userId:string, companyId:string){
-    console.log(companyId,data, "the data in the updateSingleQuestion method")
-    return await this.sectionRepository.updateSingleQuestion(questionId,data,userId);
+  async updateSingleQuestion(
+    questionId: string,
+    data: QuestionModel,
+    userId: string,
+    companyId: string,
+  ) {
+    console.log(companyId, data, 'the data in the updateSingleQuestion method');
+    return await this.sectionRepository.updateSingleQuestion(
+      questionId,
+      data,
+      userId,
+    );
   }
 }

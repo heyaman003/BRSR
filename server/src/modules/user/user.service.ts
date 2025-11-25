@@ -55,27 +55,27 @@ export class UserService {
   async getMentions(userId: string) {
     const mentions = await this.userRepository.getMentions(userId);
     if (!mentions) throw new NotFoundException('User does not exist.');
-    return mentions.mentionedIn.map((mention) => this.convertToMentionDto(mention));
+    return mentions.mentionedIn.map((mention) =>
+      this.convertToMentionDto(mention),
+    );
   }
 
   async getMentionDetails(mentionId: string) {
     const mention = await this.userRepository.getMentionDetails(mentionId);
-    if(!mention)
-      throw new NotFoundException('Mention does not exist.');
+    if (!mention) throw new NotFoundException('Mention does not exist.');
     return this.convertToMentionDto(mention);
   }
 
   async getUserWithAssignedQuestions(userId: string) {
-    const assignQuestion = await this.userRepository.getUserWithAssignedQuestions(userId);
-    if(!userId)
-      throw new NotFoundException('Mention does not exist.');
-      return assignQuestion.map((q) => this.convertAssignedQuestionToDto(q));
-    }
+    const assignQuestion =
+      await this.userRepository.getUserWithAssignedQuestions(userId);
+    if (!userId) throw new NotFoundException('Mention does not exist.');
+    return assignQuestion.map((q) => this.convertAssignedQuestionToDto(q));
+  }
 
   async getCompanyOfUser(userId: string): Promise<string> {
     const company = await this.userRepository.getCompanyOfUser(userId);
-    if(!company)
-      throw new NotFoundException('Company does not exist.');
+    if (!company) throw new NotFoundException('Company does not exist.');
     return company;
   }
 
@@ -88,7 +88,7 @@ export class UserService {
       sectionId: mention.comment.question.subsection.section.id,
       companyId: mention.comment.question.subsection.section.companyId,
       createdAt: mention.comment.createdAt,
-    }
+    };
   }
   private convertAssignedQuestionToDto(question: any) {
     return {
@@ -100,10 +100,10 @@ export class UserService {
       assignedToId: question.assignedToId,
       subsectionId: question.subsectionId,
       index: question.index,
-      isAnswered: question.isAnswered
+      isAnswered: question.isAnswered,
     };
   }
-  
+
   convertToDto(user: User): GetUserDto {
     return {
       id: user.id,

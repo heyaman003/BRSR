@@ -43,6 +43,10 @@ async function bootstrap() {
   });
   app.use(doubleCsrfProtection);
 
-  await app.listen(process.env.PORT ?? 3000);
+  await app.listen(process.env.PORT ?? 3000,()=>{
+    console.log(`Server is running on port ${process.env.PORT ?? 3000}`);
+    console.log(`WebSocket is running on port ${process.env.WS_PORT ?? 8010}`);
+    console.log(`WebSocket path is ${process.env.WS_PATH ?? '/ws'}`);
+  });
 }
 bootstrap();

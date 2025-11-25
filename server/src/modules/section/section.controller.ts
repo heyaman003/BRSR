@@ -19,7 +19,10 @@ import { Request } from 'express';
 
 @Controller('section')
 export class SectionController {
-  constructor(private readonly sectionService: SectionService, private readonly logger: ConsoleLogger) {}
+  constructor(
+    private readonly sectionService: SectionService,
+    private readonly logger: ConsoleLogger,
+  ) {}
 
   @Get('/subsection/:subsectionId')
   async getSubsectionData(@Param('subsectionId', ParseUUIDPipe) id: string) {
@@ -32,13 +35,18 @@ export class SectionController {
     @Param('companyId', ParseUUIDPipe) companyId: string,
     @Param('subsectionId', ParseUUIDPipe) subsectionId: string,
     @Body(ValidationPipe) data: SubSectionModel,
-    @Req() request: Request
+    @Req() request: Request,
   ) {
     const userId: string = request['user']['sub'];
     return new ResponseModel(
       201,
       'Saved table data successfully',
-      await this.sectionService.updateSubsectionData(subsectionId, companyId, data, userId),
+      await this.sectionService.updateSubsectionData(
+        subsectionId,
+        companyId,
+        data,
+        userId,
+      ),
     );
   }
 
@@ -47,7 +55,7 @@ export class SectionController {
     @Param('tableId', ParseUUIDPipe) tableId: string,
     @Param('companyId', ParseUUIDPipe) companyId: string,
     @Body(ValidationPipe) data: TableModel,
-    @Req() request: Request
+    @Req() request: Request,
   ) {
     const userId: string = request['user']['sub'];
     await this.sectionService.upsertTable(tableId, companyId, data, userId);
@@ -55,11 +63,9 @@ export class SectionController {
   }
   // Promise<StreamableFile>
   @Get('/extract-to-word')
-  async extractSectionToWords(
-  ) {
-    const data: string =
-      await this.sectionService.extractSectionToWords();
-      console.log(data)
+  async extractSectionToWords() {
+    const data: string = await this.sectionService.extractSectionToWords();
+    console.log(data);
     // try {
     //   const stream = createReadStream(path);
     //   return new StreamableFile(stream, {
@@ -86,17 +92,16 @@ export class SectionController {
         type: 'application/pdf',
       });
     } finally {
-      rm(path, (err)=>{
-        if(err)
-          this.logger.log(err)
-      })
+      rm(path, (err) => {
+        if (err) this.logger.log(err);
+      });
     }
   }
 
   @Get(':question/history')
   async getHistory(@Param('question', ParseUUIDPipe) questionId: string) {
     const history = await this.sectionService.getHistory(questionId);
-    return new ResponseModel(200, "Success", history);
+    return new ResponseModel(200, 'Success', history);
   }
   @Patch(':companyId/subsection/:subsectionId/question/:questionId')
   async updateQuestion(
@@ -105,13 +110,21 @@ export class SectionController {
     @Param('companyId', ParseUUIDPipe) companyId: string,
 
     @Body(ValidationPipe) data: QuestionModel,
-    @Req() req: Request // to extract user ID or company ID if needed
+    @Req() req: Request, // to extract user ID or company ID if needed
   ) {
-    this.logger.log(data,subsectionId, "the data in the updateSingleQuestion method")
-    const userId: string = req['user']['sub'];  
-    await this.sectionService.updateSingleQuestion(questionId, data, userId, companyId);
-  
+    this.logger.log(
+      data,
+      subsectionId,
+      'the data in the updateSingleQuestion method',
+    );
+    const userId: string = req['user']['sub'];
+    await this.sectionService.updateSingleQuestion(
+      questionId,
+      data,
+      userId,
+      companyId,
+    );
+
     return new ResponseModel(200, 'Question updated successfully');
   }
-  
 }

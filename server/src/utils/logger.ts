@@ -1,8 +1,8 @@
-import { ConsoleLogger, Global, Module } from "@nestjs/common";
+import { ConsoleLogger, Global, Module } from '@nestjs/common';
 
 @Global()
 @Module({
-    providers: [ConsoleLogger],
-    exports: [ConsoleLogger],
+  providers: [ConsoleLogger],
+  exports: [ConsoleLogger],
 })
 export class MyLogger {}

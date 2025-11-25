@@ -79,14 +79,13 @@ export class SectionRepository {
         },
       },
     });
-  
+
     if (!data || data.length === 0) {
       throw new NotFoundException('No sections found.');
     }
-  
+
     return data;
   }
-  
 
   async updateSubsectionData(
     id: string,
@@ -309,7 +308,6 @@ export class SectionRepository {
       throw new BadRequestException(e.message);
     }
   }
-  
 
   async createSection(section: Section, companyId: string) {
     const sectionId = (
@@ -485,5 +483,5 @@ export class SectionRepository {
         },
       },
     });
-  } 
+  }
 }

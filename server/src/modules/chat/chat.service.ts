@@ -13,7 +13,7 @@ export class ChatService {
   private vectorStore: MemoryVectorStore;
 
   constructor() {
-    this.initVectorStore();
+    // this.initVectorStore();
   }
 
   async initVectorStore() {
@@ -28,7 +28,11 @@ export class ChatService {
     ];
 
     const metadata = texts.map((text, index) => ({ id: index }));
-    this.vectorStore = await MemoryVectorStore.fromTexts(texts, metadata, embeddings);
+    this.vectorStore = await MemoryVectorStore.fromTexts(
+      texts,
+      metadata,
+      embeddings,
+    );
   }
   async answerFromVectorStore(question: string): Promise<any> {
     const embeddings = new OpenAIEmbeddings({
@@ -43,7 +47,9 @@ export class ChatService {
     });
 
     const response = await chatModel.call([
-      new SystemMessage('You are an expert assistant in BRSR (Business Responsibility and Sustainability Reporting). Answer in simple terms with accurate references to BRSR practices.'),
+      new SystemMessage(
+        'You are an expert assistant in BRSR (Business Responsibility and Sustainability Reporting). Answer in simple terms with accurate references to BRSR practices.',
+      ),
       new HumanMessage(question),
     ]);
 
@@ -62,12 +68,14 @@ export class ChatService {
     });
 
     const messages = [
-      new SystemMessage('You are an expert assistant in BRSR (Business Responsibility and Sustainability Reporting). Answer in simple terms with accurate references to BRSR practices.'),
+      new SystemMessage(
+        'You are an expert assistant in BRSR (Business Responsibility and Sustainability Reporting). Answer in simple terms with accurate references to BRSR practices.',
+      ),
       new HumanMessage(question),
     ];
 
     const response = await chatModel.call(messages);
-     console.log('Response from OpenAI:', response);
+    console.log('Response from OpenAI:', response);
     return {
       mode: 'openai',
       question,
@@ -75,4 +83,3 @@ export class ChatService {
     };
   }
 }
-

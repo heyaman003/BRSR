@@ -6,7 +6,7 @@ import { NotificationService } from './notification.service';
 export class NotificationController {
   constructor(
     private readonly notificationService: NotificationService,
-    private readonly logger: ConsoleLogger
+    private readonly logger: ConsoleLogger,
   ) {}
 
   @Sse('/mentions/:userId')
